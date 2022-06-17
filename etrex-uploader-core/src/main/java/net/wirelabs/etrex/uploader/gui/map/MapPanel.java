@@ -29,13 +29,13 @@ import java.util.List;
 public class MapPanel extends EventAwarePanel {
     
     private final JXMapViewer mapViewer = new JXMapViewer();
-    private final GPXPainter gpxPainter; 
+    private final TrackPainter trackPainter;
 
     public MapPanel() {
         log.info("Initializing map panel");
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
-        gpxPainter = new GPXPainter(mapViewer);
+        trackPainter = new TrackPainter(mapViewer);
         add(mapViewer, "cell 0 0,grow");
 
         configureTileFactory();
@@ -76,21 +76,21 @@ public class MapPanel extends EventAwarePanel {
 
         if (evt.getEventType().equals(EventType.MAP_DISPLAY_GPX_FILE) && evt.getPayload() instanceof File) {
             SwingUtilities.invokeLater(() -> {
-                PaintResult result = gpxPainter.paintRouteFromGpxFile((File) evt.getPayload());
+                PaintResult result = trackPainter.paintTrackFromGpxFile((File) evt.getPayload());
                 displayErrorMessage(result);
             });
         }
         
         if (evt.getEventType().equals(EventType.MAP_DISPLAY_FIT_FILE) && evt.getPayload() instanceof File) {
             SwingUtilities.invokeLater(() -> {
-                PaintResult result = gpxPainter.paintRouteFromFitFile((File) evt.getPayload());
+                PaintResult result = trackPainter.paintTrackFromFitFile((File) evt.getPayload());
                 displayErrorMessage(result);
             });
         }
         
         if (evt.getEventType().equals(EventType.MAP_DISPLAY_TRACK) && evt.getPayload() instanceof List) {
             SwingUtilities.invokeLater(() -> {
-                PaintResult result = gpxPainter.paintRouteFromTrackPoints((List) evt.getPayload());
+                PaintResult result = trackPainter.paintTrackFromTrackPoints((List) evt.getPayload());
                 displayErrorMessage(result);
             });
         }
