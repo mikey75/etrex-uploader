@@ -15,7 +15,7 @@ public class DeviceStatusLabel extends JLabel {
             if (deviceList.isEmpty()) {
                 setText("Wait for device " + string[0]);
                 string[0] += ".";
-                if (string[0].length() > 10) {
+                if (string[0].length() > 3) {
                     string[0] = ".";
                 }
             }

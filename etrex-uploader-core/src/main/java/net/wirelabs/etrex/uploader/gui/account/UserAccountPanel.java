@@ -38,7 +38,7 @@ public class UserAccountPanel extends BorderedPanel {
         try {
             SummaryAthlete athlete = stravaService.getCurrentAthlete();
             label.setText(athlete.getFirstname() + " " + athlete.getLastname());
-            String profilePicFilename = athlete.getProfileMedium();
+            String profilePicFilename = athlete.getProfile();
             BufferedImage img = ImageIO.read(new URL(profilePicFilename));
             imageLabel.setIcon(new ImageIcon(img));
         } catch (IOException e) {
