@@ -1,0 +1,6 @@
+/.idea/**
+**/target/**
+**/*.iml
+**/logs/**/*log.*
+/config/**
+**/src/main/resources/application-local.properties
