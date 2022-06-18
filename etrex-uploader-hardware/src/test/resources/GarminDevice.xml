@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Device xmlns="http://www.garmin.com/xmlschemas/GarminDevice/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.garmin.com/xmlschemas/GarminDevice/v2 http://www.garmin.com/xmlschemas/GarminDevicev2.xsd">
+    <Model>
+        <PartNumber>006-B3445-00</PartNumber>
+        <SoftwareVersion>270</SoftwareVersion>
+        <Description>eTrex 32x</Description>
+    </Model>
+    <Id>3403532495</Id>
+</Device>
