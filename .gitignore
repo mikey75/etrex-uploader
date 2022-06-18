@@ -4,3 +4,7 @@
 **/logs/**/*log.*
 /config/**
 **/src/main/resources/application-local.properties
+/target/
+/bin/
+/etrex-uploader-core/logs/*.log
+/etrex-uploader-core/config.properties
