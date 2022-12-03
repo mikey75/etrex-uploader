@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.api.token;
+package net.wirelabs.etrex.uploader.strava.tokenmanager;
 
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;

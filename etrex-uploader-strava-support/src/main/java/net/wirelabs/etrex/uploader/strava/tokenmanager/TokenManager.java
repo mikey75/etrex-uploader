@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.api.token;
+package net.wirelabs.etrex.uploader.strava.tokenmanager;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

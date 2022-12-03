@@ -5,7 +5,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
-import net.wirelabs.etrex.uploader.strava.api.token.TokenManager;
+import net.wirelabs.etrex.uploader.strava.tokenmanager.TokenManager;
 
 import java.util.Map;
 

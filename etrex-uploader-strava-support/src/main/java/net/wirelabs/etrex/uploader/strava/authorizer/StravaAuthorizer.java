@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiCaller;
-import net.wirelabs.etrex.uploader.strava.api.token.TokenManager;
+import net.wirelabs.etrex.uploader.strava.tokenmanager.TokenManager;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 import java.awt.*;
 import java.io.IOException;
