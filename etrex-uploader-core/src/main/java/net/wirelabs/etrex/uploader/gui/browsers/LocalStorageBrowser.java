@@ -7,7 +7,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
-import net.wirelabs.eventbus.Event;
+import net.wirelabs.etrex.uploader.eventbus.Event;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

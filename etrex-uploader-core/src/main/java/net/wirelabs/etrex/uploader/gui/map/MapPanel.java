@@ -7,7 +7,7 @@ import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.eventbus.Event;
+import net.wirelabs.etrex.uploader.eventbus.Event;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;

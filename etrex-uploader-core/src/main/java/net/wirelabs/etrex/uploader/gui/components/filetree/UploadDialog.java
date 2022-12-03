@@ -11,7 +11,7 @@ import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 import net.wirelabs.etrex.uploader.system.FileService;
 
-import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.eventbus.EventBus;
 
 import javax.swing.*;
 import java.awt.*;

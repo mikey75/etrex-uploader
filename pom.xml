@@ -9,11 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>etrex-uploader-eventbus</module>
+      
         <module>etrex-uploader-core</module>
-        <module>etrex-uploader-hardware</module>
-        <module>etrex-uploader-common</module>
-        <module>etrex-uploader-strava-support</module>
+       
     </modules>
 
     <properties>

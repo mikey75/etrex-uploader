@@ -11,7 +11,7 @@ import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.eventbus.EventBus;
 
 import javax.swing.*;
 import java.awt.*;
