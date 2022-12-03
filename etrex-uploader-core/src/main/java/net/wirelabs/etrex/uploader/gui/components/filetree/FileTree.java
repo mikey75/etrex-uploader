@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.components.filetree;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.system.utils.MapUtil;
+import net.wirelabs.etrex.uploader.gui.map.MapUtil;
 
 
 import javax.swing.*;

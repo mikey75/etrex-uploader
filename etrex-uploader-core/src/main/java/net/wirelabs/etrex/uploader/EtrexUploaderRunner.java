@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.StravaConnector;
 
 import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
-import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.eventbus.EventBus;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;

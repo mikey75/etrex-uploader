@@ -16,8 +16,8 @@ import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.model.strava.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
-import net.wirelabs.etrex.uploader.system.utils.MapUtil;
-import net.wirelabs.eventbus.Event;
+import net.wirelabs.etrex.uploader.gui.map.MapUtil;
+import net.wirelabs.etrex.uploader.eventbus.Event;
 
 
 

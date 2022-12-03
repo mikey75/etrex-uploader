@@ -9,7 +9,7 @@ import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.hardware.GarminHardwareInfo;
-import net.wirelabs.eventbus.Event;
+import net.wirelabs.etrex.uploader.eventbus.Event;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
