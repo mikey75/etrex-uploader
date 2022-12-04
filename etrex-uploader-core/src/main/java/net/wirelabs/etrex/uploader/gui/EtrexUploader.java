@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.ApplictationContext;
-import net.wirelabs.etrex.uploader.gui.account.AthleteInfo;
+import net.wirelabs.etrex.uploader.gui.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.activitiestable.ActivitiesPanel;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
 import net.wirelabs.etrex.uploader.gui.browsers.LocalStorageBrowser;
@@ -42,7 +42,7 @@ public class EtrexUploader extends JFrame {
         registerWindowCloseListener(ctx);
 
         splash.update("Initializing Strava GUI components");
-        athletePanel = new AthleteInfo(ctx.getStravaService());
+        athletePanel = new UserAccountPanel(ctx.getStravaService());
         activitiesPanel = new ActivitiesPanel(ctx.getStravaService());
 
         splash.update("Initializing browsers");
