@@ -11,10 +11,10 @@ cache:
 build:
   stage: build
   script:
-    - mvn compile
+    - mvn $MAVEN_OPTS clean package 
 
-test:
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS test
+#test:
+#  stage: test
+#  script:
+#    - mvn $MAVEN_CLI_OPTS test
 
