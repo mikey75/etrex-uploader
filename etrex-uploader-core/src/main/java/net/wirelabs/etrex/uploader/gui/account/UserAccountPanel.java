@@ -17,41 +17,34 @@ import java.net.URL;
 /**
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class AthleteInfo extends BorderedPanel {
+public class UserAccountPanel extends BorderedPanel {
 
     private final JLabel label = new JLabel("Getting data");
     private final JLabel imageLabel = new JLabel("");
     private final IStravaService stravaService;
-
-    public AthleteInfo(IStravaService stravaService) {
+    
+    public UserAccountPanel(IStravaService stravaService) {
         super("My profile");
         this.stravaService = stravaService;
         setLayout(new MigLayout("", "[]", "[][]"));
         add(label, "cell 0 0,growx");
         add(imageLabel, "cell 0 1,alignx center");
-        updateAthleteInfo();
+        
+        SwingUtilities.invokeLater(this::getUserAccountData);
 
     }
-
-    private void updateAthleteInfo()  {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                SummaryAthlete athlete = stravaService.getCurrentAthlete();
-                updateProfileData(athlete);
-            } catch (StravaApiException e) {
-                SwingUtils.errorMsg(e.getMessage());
-            }
-        });
-    }
-
-    private void updateProfileData(SummaryAthlete athlete) {
-        label.setText(athlete.getFirstname() + " " + athlete.getLastname());
+    
+    private void getUserAccountData() {
         try {
+            SummaryAthlete athlete = stravaService.getCurrentAthlete();
+            label.setText(athlete.getFirstname() + " " + athlete.getLastname());
             String profilePicFilename = athlete.getProfileMedium();
             BufferedImage img = ImageIO.read(new URL(profilePicFilename));
             imageLabel.setIcon(new ImageIcon(img));
         } catch (IOException e) {
             imageLabel.setText("Couldn't get profile picture");
+        } catch (StravaApiException e) {
+            SwingUtils.errorMsg(e.getMessage());
         }
     }
 
