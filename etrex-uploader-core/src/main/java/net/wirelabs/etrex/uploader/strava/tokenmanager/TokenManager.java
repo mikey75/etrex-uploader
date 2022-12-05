@@ -35,6 +35,9 @@ public class TokenManager extends StravaApiCaller {
     }
 
     public void getNewAccessTokenIfExpired() throws StravaApiException {
+        if (configuration.getStravaAccessToken().isBlank() || configuration.getStravaRefreshToken().isBlank()) {
+            throw new StravaApiException("Tokens unavailable, application will run without strava");
+        }
         // if a new token is issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized(this) {

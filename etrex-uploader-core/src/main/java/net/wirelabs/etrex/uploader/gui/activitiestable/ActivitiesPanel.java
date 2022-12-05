@@ -13,7 +13,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.model.strava.SummaryActivity;
+import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;

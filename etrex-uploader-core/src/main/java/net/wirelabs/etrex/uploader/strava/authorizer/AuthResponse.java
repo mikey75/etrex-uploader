@@ -4,7 +4,7 @@ package net.wirelabs.etrex.uploader.strava.authorizer;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
-import net.wirelabs.etrex.uploader.model.strava.SummaryAthlete;
+import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 
 @Getter
 @Setter

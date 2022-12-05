@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.activitiestable;
 
-import net.wirelabs.etrex.uploader.model.strava.SummaryActivity;
+import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
