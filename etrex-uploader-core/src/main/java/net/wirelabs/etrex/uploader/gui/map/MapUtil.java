@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
-import net.wirelabs.etrex.uploader.model.strava.SummaryActivity;
+import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.eventbus.EventBus;
 import org.jxmapviewer.viewer.GeoPosition;
 

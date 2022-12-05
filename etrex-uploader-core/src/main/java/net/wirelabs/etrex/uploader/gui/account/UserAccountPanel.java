@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui.account;
 
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
-import net.wirelabs.etrex.uploader.model.strava.SummaryAthlete;
+import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
