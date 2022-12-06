@@ -18,7 +18,7 @@ public interface IStravaService {
 
     List<SummaryActivity> getCurrentAthleteActivities() throws StravaApiException;
 
-    Upload uploadActivity(File file, String name, String desc, String type) throws StravaApiException;
+    Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaApiException;
 
     ActivityStats getAthleteStats(Long id) throws StravaApiException;
 }
