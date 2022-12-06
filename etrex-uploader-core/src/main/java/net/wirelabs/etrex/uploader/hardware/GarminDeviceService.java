@@ -117,7 +117,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         if (!registeredRoots.contains(drive)) {
             registeredRoots.add(drive);
             EventBus.publish(EventType.EVT_DRIVE_REGISTERED, drive);
-            tryFindAndParseGarminDeviceXml(drive);
+            publishHardwareInfoIfAvailable(drive);
             log.info("Garmin drive {} connected", drive);
         }
     }
@@ -147,7 +147,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
     }
 
-    private void tryFindAndParseGarminDeviceXml(File drive) {
+    private void publishHardwareInfoIfAvailable(File drive) {
 
         try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
 
@@ -156,7 +156,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
             if (deviceXmlFile.isPresent()) {
                 DeviceT device = parseDeviceXml(deviceXmlFile.get().toFile()).getValue();
-                processDeviceInfo(device);
+                publishGarminHardwareInfo(device, drive);
             } else {
                 log.warn("Can't find " + Constants.GARMIN_DEVICE_XML);
             }
@@ -179,18 +179,16 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         return !registeredRoots.contains(file) && isExistingGarminDrive(file);
     }
 
-    private void processDeviceInfo(DeviceT device) {
+    private void publishGarminHardwareInfo(DeviceT device, File drive) {
         GarminHardwareInfo info = new GarminHardwareInfo(
                 device.getModel().getDescription(),
                 String.valueOf(device.getModel().getSoftwareVersion()),
                 device.getModel().getPartNumber(),
                 String.valueOf(device.getId()));
-        publishFoundHardwareInfo(info);
+        EventBus.publish(EventType.EVT_HARDWARE_INFO_AVAILABLE, info);
+        EventBus.publish(EventType.EVT_FOUND_GARMIN_SYSTEM_DRIVE, drive);
     }
 
-    void publishFoundHardwareInfo(GarminHardwareInfo info) {
-        EventBus.publish(EventType.EVT_HARDWARE_INFO_AVAILABLE, info);
-    }
 
     JAXBElement<DeviceT> parseDeviceXml(File file) throws JAXBException {
 

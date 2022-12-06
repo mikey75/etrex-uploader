@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
+import com.sun.source.tree.Tree;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
@@ -11,17 +12,12 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 @Slf4j
@@ -52,6 +48,11 @@ public class FileTree extends JTree {
         setShowsRootHandles(false);
         setEditable(false);
 
+    }
+
+    public List<TreeNode> getRootNodes() {
+        FileNode topNode = (FileNode) treeModel.getRoot();
+        return Collections.list(topNode.children());
     }
 
     public void loadModel() {

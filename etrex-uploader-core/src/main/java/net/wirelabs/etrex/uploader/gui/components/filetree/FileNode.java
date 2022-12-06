@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.gui.components.filetree;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
@@ -14,6 +15,8 @@ public class FileNode extends DefaultMutableTreeNode {
     @Getter
     private File file;
     boolean isSystemRoot;
+    @Setter
+    boolean isGarminSystemDrive;
 
     FileNode(Object a) {
         super(a);
