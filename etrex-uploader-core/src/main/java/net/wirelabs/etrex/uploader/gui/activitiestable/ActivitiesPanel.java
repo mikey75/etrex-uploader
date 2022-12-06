@@ -13,6 +13,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
@@ -40,7 +41,7 @@ public class ActivitiesPanel extends EventAwarePanel {
     @Override
     protected void onEvent(Event evt) {
         if (evt.getEventType() == EventType.EVT_ACTIVITY_UPLOADED) {
-           updateActivities();
+            updateActivities();
         }
     }
 
@@ -78,11 +79,11 @@ public class ActivitiesPanel extends EventAwarePanel {
     }
 
     private void updateActivities() {
-        SwingUtilities.invokeLater(() -> {
+        ThreadUtils.runAsync(() -> {
             try {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, 30);
-                activitiesTable.setData(activities);
+                SwingUtilities.invokeLater(()-> activitiesTable.setData(activities));
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             } catch (StravaApiException e) {
                 SwingUtils.errorMsg(e.getMessage());
