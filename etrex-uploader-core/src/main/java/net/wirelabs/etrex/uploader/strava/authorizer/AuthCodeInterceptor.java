@@ -37,12 +37,18 @@ public class AuthCodeInterceptor extends NanoHTTPD {
     // this method is called when Strava OAuth application authorization page redirects after allowing access
     // the GET url contains authCode which we'll exchange for access token
     public Response serve(IHTTPSession session) {
-
-        if (session.getMethod() == Method.GET && session.getParms().get("code") != null) {
-            authCode = session.getParms().get("code");
-            return newFixedLengthResponse(AUTHORIZATION_OK_MSG);
+        if (session.getParameters().containsKey("code")) {
+            String incomingCode = session.getParameters().get("code").get(0);
+            if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
+                authCode = incomingCode;
+                return staticResponse(AUTHORIZATION_OK_MSG);
+            }
         }
-        return newFixedLengthResponse(AUTHORIZATION_FAIL_MSG);
+        return staticResponse(AUTHORIZATION_FAIL_MSG);
+    }
+
+    private Response staticResponse(String authorizationOkMsg) {
+        return newFixedLengthResponse(authorizationOkMsg);
     }
 
 }
