@@ -9,11 +9,11 @@ import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.hardware.threads.BaseStoppableRunnable;
 import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 
 import net.wirelabs.etrex.uploader.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.eventbus.Sleeper;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -143,27 +143,31 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
     private void tryFindAndParseGarminDeviceXml(File drive) {
 
-        List<Path> result;
-
         try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
 
-            result = walk.filter(f -> f.toFile().getName().equals(Constants.GARMIN_DEVICE_XML))
-                    .collect(Collectors.toList());
-
-            if (result.size() == 1) {
-                DeviceT device = parseDeviceXml(result.get(0).toFile()).getValue();
-                GarminHardwareInfo info = new GarminHardwareInfo(
-                        device.getModel().getDescription(),
-                        String.valueOf(device.getModel().getSoftwareVersion()),
-                        device.getModel().getPartNumber(),
-                        String.valueOf(device.getId()));
-                publishFoundHardwareInfo(info);
+            Stream<Path> result = walk.filter(f -> f.toFile().getName().equals(Constants.GARMIN_DEVICE_XML));
+            Optional<Path> deviceXmlFile = result.findFirst();
+            
+            if (deviceXmlFile.isPresent()) {
+                DeviceT device = parseDeviceXml(deviceXmlFile.get().toFile()).getValue();
+                processDeviceInfo(device);
+            } else {
+                log.warn("Can't find " + Constants.GARMIN_DEVICE_XML);
             }
         } catch (IOException e) {
             log.error("I/O error {}", e.getMessage(), e);
         } catch (JAXBException e) {
             log.error("XML parsing failed {}", e.getMessage(), e);
         }
+    }
+
+    private void processDeviceInfo(DeviceT device) {
+        GarminHardwareInfo info = new GarminHardwareInfo(
+                device.getModel().getDescription(),
+                String.valueOf(device.getModel().getSoftwareVersion()),
+                device.getModel().getPartNumber(),
+                String.valueOf(device.getId()));
+        publishFoundHardwareInfo(info);
     }
 
     void publishFoundHardwareInfo(GarminHardwareInfo info) {
