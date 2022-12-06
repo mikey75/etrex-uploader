@@ -13,12 +13,8 @@ import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.squareup.okhttp.MultipartBuilder.FORM;
+import java.net.URLConnection;
+import java.util.*;
 
 
 @Slf4j
@@ -31,7 +27,7 @@ public class StravaService extends StravaApi implements IStravaService {
     private final String STRAVA_ATHLETES_ENDPOINT = apiBaseUrl + "/athletes";
     private final String STRAVA_ATHLETE_ACTIVITIES_ENDPOINT = apiBaseUrl +"/athlete/activities";
 
-    public final String STRAVA_UPLOAD_ENDPOINT = "/uploads";
+    public final String STRAVA_UPLOAD_ENDPOINT = apiBaseUrl + "/uploads";
 
     public StravaService(Configuration configuration) {
         super(configuration);
@@ -73,7 +69,7 @@ public class StravaService extends StravaApi implements IStravaService {
     }
 
     @Override
-    public Upload uploadActivity(File file, String name, String desc, String type) throws StravaApiException {
+    public Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaApiException {
 
         Upload u = uploadActivityRequest(file, name, desc, type);
 
@@ -93,13 +89,15 @@ public class StravaService extends StravaApi implements IStravaService {
 
     }
 
-    private Upload uploadActivityRequest(File file, String name, String description, String type) throws StravaApiException {
+    private Upload uploadActivityRequest(File file, String name, String description, SportType sportType) throws StravaApiException {
 
+        String dataType = guessContentTypeFromFile(file);
+        String fileFormat = guessFileFormat(file);       
         RequestBody uploadBody = new MultipartBuilder().type(MultipartBuilder.FORM)
-                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("application/xml"), file))
-                .addFormDataPart("data_type", "gpx") //todo: make autodetect
+                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse(dataType), file))
+                .addFormDataPart("data_type", fileFormat)
                 .addFormDataPart("name", name)
-                .addFormDataPart("sport_type", type)
+                .addFormDataPart("sport_type", sportType.getValue())
                 .addFormDataPart("description", description)
                 .build();
 
@@ -115,6 +113,18 @@ public class StravaService extends StravaApi implements IStravaService {
 
     }
 
+    private String guessFileFormat(File file) {
+        String fname = file.getName().toLowerCase();
+        if (fname.endsWith(".gpx")) return "gpx";
+        if (fname.endsWith(".tcx")) return "tcx";
+        if (fname.endsWith(".fit")) return "fit";
+        return "";
+    }
+
+    public String guessContentTypeFromFile(File file) {
+        String contentType = URLConnection.guessContentTypeFromName(file.getName());
+        return Objects.requireNonNullElse(contentType, "application/octet-stream");
+    }
 }
     
 

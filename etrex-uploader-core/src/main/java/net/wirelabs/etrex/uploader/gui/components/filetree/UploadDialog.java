@@ -6,6 +6,7 @@ import net.miginfocom.swing.MigLayout;
 
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
@@ -27,15 +28,10 @@ public class UploadDialog extends JDialog {
 
     private File trackFile;
     private final JTextField activityTitleTextField;
-    private final JComboBox<String> activityTypeCombo;
+    private final JComboBox<SportType> activityTypeCombo;
     private final JTextArea activityDesctiptionArea;
 
-    private final String[] stravaActivityTypes = {"Ride", "MountainBikeRide", "Walk", "Hike", "Run", "EBikeRide",
-            "EMountainBikeRide", "Canoeing", "Kayaking", "AlpineSki", "BackcountrySki", "Crossfit", "Elliptical",
-            "Golf", "Handcycle", "IceSkate", "InlineSkate", "Kitesurf", "NordicSki", "RockClimbing", "RollerSki",
-            "Rowing", "Sail", "Skateboard", "Snowboard", "Snowshoe", "Soccer", "StairStepper", "StandUpPaddling",
-            "Surfing", "Swim", "TrailRun", "Velomobile", "VirtualRide", "VirtualRun", "WeightTraining", "Wheelchair",
-            "Windsurf", "Workout", "Yoga"};
+    
     private final JLabel lblActivityName;
     private final JLabel lblActivityType;
     private final JLabel lblActivityDescription;
@@ -56,7 +52,7 @@ public class UploadDialog extends JDialog {
         activityDesctiptionArea = new JTextArea();
         btnOk = new JButton("Upload");
         btnCancel = new JButton("Cancel");
-        activityTypeCombo = new JComboBox<>(stravaActivityTypes);
+        activityTypeCombo = new JComboBox<>(SportType.values());
 
         setModal(true);
         setSize(600, 300);
@@ -95,7 +91,7 @@ public class UploadDialog extends JDialog {
 
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Upload upload = stravaService.uploadActivity(trackFile, activityTitleTextField.getText(),
-                    activityDesctiptionArea.getText(), (String) activityTypeCombo.getSelectedItem());
+                    activityDesctiptionArea.getText(), (SportType) activityTypeCombo.getSelectedItem());
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             if (upload.getActivityId() != null) {
                 handleSuccessfulUpload(upload);
@@ -134,7 +130,7 @@ public class UploadDialog extends JDialog {
     public void clearInputAndStatus() {
         activityDesctiptionArea.setText("");
         activityTitleTextField.setText("");
-        activityTypeCombo.setSelectedIndex(0);
+        activityTypeCombo.setSelectedItem(SportType.RIDE);
 
     }
 
