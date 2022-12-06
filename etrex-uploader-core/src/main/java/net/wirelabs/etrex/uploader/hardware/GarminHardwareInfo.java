@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.File;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -13,8 +15,10 @@ public class GarminHardwareInfo {
     private String softwareVersion;
     private String partNumber;
     private String serialNumber;
-    
-    GarminHardwareInfo(String description, String softwareVersion, String partNumber, String serialNumber) {
+    private File drive;
+
+    GarminHardwareInfo(File drive, String description, String softwareVersion, String partNumber, String serialNumber) {
+        this.drive = drive;
         this.description = description;
         this.softwareVersion = softwareVersion;
         this.partNumber = partNumber;
