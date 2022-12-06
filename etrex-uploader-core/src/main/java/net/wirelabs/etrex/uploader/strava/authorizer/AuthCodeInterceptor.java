@@ -47,8 +47,8 @@ public class AuthCodeInterceptor extends NanoHTTPD {
         return staticResponse(AUTHORIZATION_FAIL_MSG);
     }
 
-    private Response staticResponse(String authorizationOkMsg) {
-        return newFixedLengthResponse(authorizationOkMsg);
+    private Response staticResponse(String authorizationStatusMessage) {
+        return newFixedLengthResponse(authorizationStatusMessage);
     }
 
 }
