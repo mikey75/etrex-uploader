@@ -1,8 +1,9 @@
 package net.wirelabs.etrex.uploader.eventbus;
 
-import lombok.Getter;
-
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import lombok.Getter;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 
 
 /**
