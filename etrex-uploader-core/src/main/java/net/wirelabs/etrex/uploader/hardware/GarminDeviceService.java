@@ -117,9 +117,14 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         if (!registeredRoots.contains(drive)) {
             registeredRoots.add(drive);
             EventBus.publish(EventType.EVT_DRIVE_REGISTERED, drive);
-            publishHardwareInfoIfAvailable(drive);
+            Optional<GarminHardwareInfo> hardwareInfo = getHardwareInfo(drive);
+            hardwareInfo.ifPresent(this::publishFoundHardwareInfo);
             log.info("Garmin drive {} connected", drive);
         }
+    }
+
+    void publishFoundHardwareInfo(GarminHardwareInfo info) {
+        EventBus.publish(EventType.EVT_HARDWARE_INFO_AVAILABLE, info);
     }
 
     private boolean isExistingGarminDrive(File drive) {
@@ -147,7 +152,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
     }
 
-    private void publishHardwareInfoIfAvailable(File drive) {
+    private Optional<GarminHardwareInfo> getHardwareInfo(File drive) {
 
         try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
 
@@ -156,7 +161,12 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
             if (deviceXmlFile.isPresent()) {
                 DeviceT device = parseDeviceXml(deviceXmlFile.get().toFile()).getValue();
-                publishGarminHardwareInfo(device, drive);
+                GarminHardwareInfo garminInfo = new GarminHardwareInfo(drive,
+                        device.getModel().getDescription(),
+                        String.valueOf(device.getModel().getSoftwareVersion()),
+                        device.getModel().getPartNumber(),
+                        String.valueOf(device.getId()));
+                return Optional.of(garminInfo);
             } else {
                 log.warn("Can't find " + Constants.GARMIN_DEVICE_XML);
             }
@@ -165,6 +175,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         } catch (JAXBException e) {
             log.error("XML parsing failed {}", e.getMessage(), e);
         }
+        return Optional.empty();
     }
 
     private boolean isGarminDeviceXmlFile(Path filePath) {
@@ -178,17 +189,6 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     private boolean isNewGarminDrive(File file) {
         return !registeredRoots.contains(file) && isExistingGarminDrive(file);
     }
-
-    private void publishGarminHardwareInfo(DeviceT device, File drive) {
-        GarminHardwareInfo info = new GarminHardwareInfo(
-                device.getModel().getDescription(),
-                String.valueOf(device.getModel().getSoftwareVersion()),
-                device.getModel().getPartNumber(),
-                String.valueOf(device.getId()));
-        EventBus.publish(EventType.EVT_HARDWARE_INFO_AVAILABLE, info);
-        EventBus.publish(EventType.EVT_FOUND_GARMIN_SYSTEM_DRIVE, drive);
-    }
-
 
     JAXBElement<DeviceT> parseDeviceXml(File file) throws JAXBException {
 

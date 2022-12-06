@@ -65,6 +65,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
 
         if (evt.getEventType() == EventType.EVT_HARDWARE_INFO_AVAILABLE) {
             updateGarminInfo(evt);
+            findAndMarkFileNodeAsSystemDrive(evt);
         }
 
         if (evt.getEventType() == EventType.EVT_DRIVE_UNREGISTERED) {
@@ -76,18 +77,15 @@ public class GarminDeviceBrowser extends EventAwarePanel {
             registerDriveInBrowser(evt);
         }
 
-        if (evt.getEventType() == EventType.EVT_FOUND_GARMIN_SYSTEM_DRIVE) {
-            findAndMarkFileNodeAsSystemDrive(evt);
-        }
-
     }
 
     private void findAndMarkFileNodeAsSystemDrive(Event evt) {
-        File file = (File) evt.getPayload();
+
+        GarminHardwareInfo hwInfo = (GarminHardwareInfo) evt.getPayload();
 
         for (TreeNode t:  tree.getRootNodes()) {
             FileNode fn = (FileNode) t;
-            if (fn.getFile().getPath().equals(file.getPath())) {
+            if (fn.getFile().getPath().equals(hwInfo.getDrive().getPath())) {
                 fn.setGarminSystemDrive(true);
             }
         }
@@ -129,7 +127,6 @@ public class GarminDeviceBrowser extends EventAwarePanel {
         return Arrays.asList(
                 EventType.EVT_DRIVE_REGISTERED,
                 EventType.EVT_DRIVE_UNREGISTERED,
-                EventType.EVT_FOUND_GARMIN_SYSTEM_DRIVE,
                 EventType.EVT_HARDWARE_INFO_AVAILABLE);
     }
 }
