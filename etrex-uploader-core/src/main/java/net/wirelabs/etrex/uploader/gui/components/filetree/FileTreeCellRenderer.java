@@ -15,6 +15,7 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
         Icon iconDir = new ImageIcon(getClass().getResource("/icons/places/folder.png"));
         Icon iconRegularFile = new ImageIcon(getClass().getResource("/icons/mimetypes/unknown.png"));
         Icon iconDisk = new ImageIcon(getClass().getResource("/icons/devices/drive-harddisk.png"));
+        Icon iconGarmin = new ImageIcon(getClass().getResource("/icons/garmin-triangle.png"));
         FileNode node = (FileNode) value;
         Icon icon;
 
@@ -33,8 +34,11 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
             File userobject = node.getFile();
 
             if (userobject.isDirectory()) {
-
-                icon = node.isSystemRoot ? iconDisk : iconDir;
+                if (node.isGarminSystemDrive) {
+                    icon = iconGarmin;
+                } else {
+                    icon = node.isSystemRoot ? iconDisk : iconDir;
+                }
             } else {
                 icon = iconRegularFile;
             }
