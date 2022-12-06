@@ -87,27 +87,32 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
     private void findAndUnregisterMissingRoots(List<File> roots) {
 
-        ListUtils.findElementsOfANotPresentInB(registeredRoots, roots).forEach(this::unregisterDrive);
+        ListUtils.findElementsOfANotPresentInB(registeredRoots, roots)
+                .forEach(this::unregisterDrive);
     }
 
     private void findAndRegisterNewRoots(List<File> roots) {
 
-        roots.stream().filter(f -> !registeredRoots.contains(f) && isGarminDrive(f)).forEach(this::registerDrive);
+        roots.stream()
+                .filter(this::isNewGarminDrive)
+                .forEach(this::registerDrive);
     }
 
     private void registerAlreadyConnected(List<File> roots) {
 
-        roots.stream().filter(this::isGarminDrive).forEach(this::registerDrive);
+        roots.stream()
+                .filter(this::isExistingGarminDrive)
+                .forEach(this::registerDrive);
     }
 
-     void unregisterDrive(File drive) {
+    void unregisterDrive(File drive) {
 
         registeredRoots.remove(drive);
         EventBus.publish(EventType.EVT_DRIVE_UNREGISTERED, drive);
         log.info("Garmin drive {} disconnected", drive);
     }
 
-     void registerDrive(File drive) {
+    void registerDrive(File drive) {
 
         if (!registeredRoots.contains(drive)) {
             registeredRoots.add(drive);
@@ -117,15 +122,13 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         }
     }
 
-    private boolean isGarminDrive(File drive) {
+    private boolean isExistingGarminDrive(File drive) {
 
         if (fileExistsAndReadable(drive)) {
             List<File> files = FileUtils.listDirectory(drive);
             return files.stream()
-                    .anyMatch(f -> f.isDirectory() && f.getName().equalsIgnoreCase("GARMIN"));
+                    .anyMatch(this::isGarminDir);
         }
-
-        log.error("Failed waiting for drive {} being available", drive);
         return false;
     }
 
@@ -137,6 +140,9 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         while (!shouldExit.get() && !result && System.currentTimeMillis() < timeout) {
             result = file.exists() && file.canRead();
         }
+        if (!result) {
+            log.error("Failed waiting for drive {} being available", file);
+        }
         return result;
 
     }
@@ -145,9 +151,9 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
         try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
 
-            Stream<Path> result = walk.filter(f -> f.toFile().getName().equals(Constants.GARMIN_DEVICE_XML));
+            Stream<Path> result = walk.filter(this::isGarminDeviceXmlFile);
             Optional<Path> deviceXmlFile = result.findFirst();
-            
+
             if (deviceXmlFile.isPresent()) {
                 DeviceT device = parseDeviceXml(deviceXmlFile.get().toFile()).getValue();
                 processDeviceInfo(device);
@@ -159,6 +165,18 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         } catch (JAXBException e) {
             log.error("XML parsing failed {}", e.getMessage(), e);
         }
+    }
+
+    private boolean isGarminDeviceXmlFile(Path filePath) {
+        return filePath.toFile().getName().equals(Constants.GARMIN_DEVICE_XML);
+    }
+
+    private boolean isGarminDir(File f) {
+        return f.isDirectory() && f.getName().equalsIgnoreCase("GARMIN");
+    }
+
+    private boolean isNewGarminDrive(File file) {
+        return !registeredRoots.contains(file) && isExistingGarminDrive(file);
     }
 
     private void processDeviceInfo(DeviceT device) {
