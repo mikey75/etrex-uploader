@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui.components.filetree;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
+import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
 
 
 import javax.swing.*;
@@ -112,10 +113,12 @@ public class FileTree extends JTree {
         @Override
         public void treeExpanded(TreeExpansionEvent event) {
             final FileNode node = (FileNode) event.getPath().getLastPathComponent();
-            SwingUtilities.invokeLater(() -> {
-                    if (node != null) {
-                        expandNode(node);
-                        model.reload(node);
+            // run system thread for node expansion,
+            // but gui update (model.reload) in EDT
+            ThreadUtils.runAsync(() -> {
+                if (node != null) {
+                    expandNode(node);
+                    SwingUtilities.invokeLater(() -> model.reload(node));
                 }
             });
 
