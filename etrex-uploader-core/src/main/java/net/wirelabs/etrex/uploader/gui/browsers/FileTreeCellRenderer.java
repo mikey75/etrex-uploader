@@ -1,9 +1,12 @@
-package net.wirelabs.etrex.uploader.gui.components.filetree;
+package net.wirelabs.etrex.uploader.gui.browsers;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
+
+import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
     
@@ -12,10 +15,11 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                                                   boolean sel, boolean expanded, boolean leaf, int row,
                                                   boolean hasFocus) {
         
-        Icon iconDir = new ImageIcon(getClass().getResource("/icons/places/folder.png"));
-        Icon iconRegularFile = new ImageIcon(getClass().getResource("/icons/mimetypes/unknown.png"));
-        Icon iconDisk = new ImageIcon(getClass().getResource("/icons/devices/drive-harddisk.png"));
-        Icon iconGarmin = new ImageIcon(getClass().getResource("/icons/garmin-triangle.png"));
+        Icon iconDir = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/places/folder.png")));
+        Icon iconRegularFile = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/mimetypes/unknown.png")));
+        Icon iconDisk = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/devices/drive-harddisk.png")));
+        Icon iconGarmin = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/garmin-triangle.png")));
+        
         FileNode node = (FileNode) value;
         Icon icon;
 
@@ -34,10 +38,10 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
             File userobject = node.getFile();
 
             if (userobject.isDirectory()) {
-                if (node.isGarminSystemDrive) {
+                if (node.isGarminSystemDrive()) {
                     icon = iconGarmin;
                 } else {
-                    icon = node.isSystemRoot ? iconDisk : iconDir;
+                    icon = node.isSystemRoot() ? iconDisk : iconDir;
                 }
             } else {
                 icon = iconRegularFile;

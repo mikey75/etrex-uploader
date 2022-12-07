@@ -11,12 +11,13 @@ import java.io.File;
  * Created 9/14/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @NoArgsConstructor
+@Getter
+@Setter
 public class FileNode extends DefaultMutableTreeNode {
-    @Getter
+    
     private File file;
-    boolean isSystemRoot;
-    @Setter
-    boolean isGarminSystemDrive;
+    private boolean isSystemRoot;
+    private boolean isGarminSystemDrive;
 
     FileNode(Object a) {
         super(a);

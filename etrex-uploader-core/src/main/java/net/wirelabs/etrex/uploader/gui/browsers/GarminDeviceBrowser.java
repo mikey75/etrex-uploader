@@ -1,7 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeNode;
@@ -55,11 +58,16 @@ public class GarminDeviceBrowser extends EventAwarePanel {
         add(status, "cell 0 4");
         add(scrollPane, "cell 0 5,grow");
 
-        tree = new FileTree().withUploadDialog(uploadDialog);
+        tree = new FileTree(); 
+        
+        tree.setCellRenderer(new FileTreeCellRenderer());
+        tree.addTreeSelectionListener(new TrackSelectedListener());
+        
+        tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadDialog));
         scrollPane.setViewportView(tree);
         
     }
-
+    
     @Override
     protected void onEvent(Event evt) {
 
@@ -100,7 +108,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     private void unregisterDriveFromBrowser(Event evt) {
         File driveOnEvent = (File) evt.getPayload();
         garminDrives.remove(driveOnEvent);
-        tree.removeDrive(driveOnEvent);;
+        tree.removeDrive(driveOnEvent);
     }
 
     private void clearGarminInfo() {
