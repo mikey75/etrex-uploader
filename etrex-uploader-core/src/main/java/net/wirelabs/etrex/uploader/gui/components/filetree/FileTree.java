@@ -1,7 +1,5 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
-import com.sun.source.tree.Tree;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
 import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
@@ -23,9 +21,9 @@ import java.util.List;
 @Slf4j
 public class FileTree extends JTree {
 
+    private final FileNode treeTop;
     private DefaultTreeModel model;
-    @Setter
-    private List<File> roots;
+
     private UploadDialog uploadDialog;
 
     public FileTree withUploadDialog(UploadDialog uploadDialog) {
@@ -34,9 +32,11 @@ public class FileTree extends JTree {
         return this;
     }
 
-    public FileTree(List<File> roots) {
-        setRoots(roots);
-        loadModel();
+    public FileTree() {
+
+        treeTop = new FileNode();
+        model = new DefaultTreeModel(treeTop);
+        setModel(model);
 
         FileTreeCellRenderer renderer = new FileTreeCellRenderer();
         addTreeExpansionListener(new DirExpansionListener());
@@ -55,20 +55,27 @@ public class FileTree extends JTree {
         return Collections.list(topNode.children());
     }
 
-    public void loadModel() {
 
-        FileNode treeTop = new FileNode();
-        for (File root : roots) {
-            FileNode fileNode = new FileNode(root);
-            fileNode.isSystemRoot = true;
-            treeTop.add(fileNode);
-            expandNode(fileNode);
+    public void addDrive(File drive) {
+        FileNode fileNode = new FileNode(drive);
+        fileNode.isSystemRoot = true;
+        treeTop.add(fileNode);
+        expandNode(fileNode);
+        model.reload();
+    }
+
+    public void removeDrive(File drive) {
+        List<TreeNode> roots = getRootNodes();
+        for (TreeNode t: roots) {
+            FileNode fn = (FileNode) t;
+            if (fn.getFile().getPath().equals(drive.getPath())) {
+                treeTop.remove(fn);
+            }
         }
-
-        model = new DefaultTreeModel(treeTop);
-        setModel(model);
+        model.reload();
 
     }
+
 
     @Override
     public TreeModel getModel() {
@@ -107,6 +114,8 @@ public class FileTree extends JTree {
         }
 
     }
+
+
 
     // Make sure expansion is threaded and updating the tree model
     // only occurs within the event dispatching thread.
