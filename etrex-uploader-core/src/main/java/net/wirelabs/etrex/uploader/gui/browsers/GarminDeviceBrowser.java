@@ -55,7 +55,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
         add(status, "cell 0 4");
         add(scrollPane, "cell 0 5,grow");
 
-        tree = new FileTree(garminDrives).withUploadDialog(uploadDialog);
+        tree = new FileTree().withUploadDialog(uploadDialog);
         scrollPane.setViewportView(tree);
         
     }
@@ -94,15 +94,13 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     private void registerDriveInBrowser(Event evt) {
         File driveOnEvent = (File) evt.getPayload();
         garminDrives.add(driveOnEvent);
-        tree.setRoots(garminDrives);
-        tree.loadModel();
+        tree.addDrive(driveOnEvent);
     }
 
     private void unregisterDriveFromBrowser(Event evt) {
         File driveOnEvent = (File) evt.getPayload();
         garminDrives.remove(driveOnEvent);
-        tree.setRoots(garminDrives);
-        tree.loadModel();
+        tree.removeDrive(driveOnEvent);;
     }
 
     private void clearGarminInfo() {
