@@ -36,8 +36,8 @@ public class LocalStorageBrowser extends JPanel {
 
         File defaultStorageRoot = new File(configuration.getStorageRoot());
         fileTree.addDrive(defaultStorageRoot);
-        for (File f: getCustomStorageRoots()) {
-            fileTree.addDrive(f);
+        for (File root: getCustomStorageRoots()) {
+            fileTree.addDrive(root);
         }
     }
 
@@ -46,10 +46,10 @@ public class LocalStorageBrowser extends JPanel {
         List<File> customRoots = new ArrayList<>();
         String userRoots = configuration.getUserStorageRoots();
         if (userRoots != null && !userRoots.isEmpty()) {
-            String[] dirs = userRoots.split(",");
-            for (String d : dirs) {
-                File nf = new File(d);
-                customRoots.add(nf);
+            String[] roots = userRoots.split(",");
+            for (String root : roots) {
+                File newRoot = new File(root);
+                customRoots.add(newRoot);
             }
         }
         return customRoots;
