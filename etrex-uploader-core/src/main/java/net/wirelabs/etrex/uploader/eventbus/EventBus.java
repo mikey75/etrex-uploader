@@ -37,7 +37,7 @@ public class EventBus {
      * @param event event object
      */
     public static void publish(Event event) {
-        //log.debug("Event published: {}",event.getEventType());
+        
         Object evt = event.getEventType();
 
         if (subscribersByEventType.containsKey(evt)) {

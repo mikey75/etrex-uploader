@@ -1,15 +1,12 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.gui.map.MapUtil;
 import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
 
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,44 +18,22 @@ import java.util.List;
 @Slf4j
 public class FileTree extends JTree {
 
-    private final FileNode treeTop;
-    private DefaultTreeModel model;
-
-    private UploadDialog uploadDialog;
-
-    public FileTree withUploadDialog(UploadDialog uploadDialog) {
-        this.uploadDialog = uploadDialog;
-        addPopupMenu();
-        return this;
-    }
-
+    private final FileNode treeTop  = new FileNode();
+    private final DefaultTreeModel model= new DefaultTreeModel(treeTop);
+    
     public FileTree() {
-
-        treeTop = new FileNode();
-        model = new DefaultTreeModel(treeTop);
         setModel(model);
-
-        FileTreeCellRenderer renderer = new FileTreeCellRenderer();
-        addTreeExpansionListener(new DirExpansionListener());
-        addTreeSelectionListener(new DirSelectionListener());
+        addTreeExpansionListener(new DirExpansionListener()); // this is responsible for 'interacting with file tree' 
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-        setCellRenderer(renderer);
         setRootVisible(false);
         setShowsRootHandles(false);
         setEditable(false);
 
     }
 
-    public List<TreeNode> getRootNodes() {
-        FileNode topNode = (FileNode) treeModel.getRoot();
-        return Collections.list(topNode.children());
-    }
-
-
     public void addDrive(File drive) {
         FileNode fileNode = new FileNode(drive);
-        fileNode.isSystemRoot = true;
+        fileNode.setSystemRoot(true);
         treeTop.add(fileNode);
         expandNode(fileNode);
         model.reload();
@@ -73,19 +48,42 @@ public class FileTree extends JTree {
             }
         }
         model.reload();
-
     }
 
+    public void addPopupMenu(JPopupMenu popupMenu) {
 
-    @Override
-    public TreeModel getModel() {
-        return model;
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                tryPopup(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                tryPopup(e);
+            }
+
+            private void tryPopup(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    TreePath path = getPathForLocation(e.getX(), e.getY());
+                    Rectangle pathBounds = getUI().getPathBounds(FileTree.this, path);
+                    if (pathBounds != null && pathBounds.contains(e.getX(), e.getY())) {
+                        popupMenu.show(FileTree.this, pathBounds.x, pathBounds.y + pathBounds.height);
+                    }
+                }
+            }
+        });
+    }
+    
+    public List<TreeNode> getRootNodes() {
+        FileNode topNode = (FileNode) treeModel.getRoot();
+        return Collections.list(topNode.children());
     }
 
-    private void expandNode(FileNode thisNode) {
+    private void expandNode(FileNode nodeToExpand) {
 
-        thisNode.removeAllChildren();
-        List<File> files = listFiles(thisNode);
+        nodeToExpand.removeAllChildren();
+        List<File> files = listFiles(nodeToExpand);
 
         if (files.isEmpty()) {
             return;
@@ -93,8 +91,10 @@ public class FileTree extends JTree {
 
         for (File f : files) {
             FileNode fileNode = new FileNode(f);
-            thisNode.add(fileNode);
-            if (nodeHasContent(fileNode)) fileNode.add(new FileNode(new Boolean(true)));
+            nodeToExpand.add(fileNode);
+            if (nodeHasContent(fileNode)){
+                fileNode.add(new FileNode(Boolean.TRUE));
+            } 
         }
 
     }
@@ -114,9 +114,6 @@ public class FileTree extends JTree {
         }
 
     }
-
-
-
     // Make sure expansion is threaded and updating the tree model
     // only occurs within the event dispatching thread.
     private class DirExpansionListener implements TreeExpansionListener {
@@ -133,19 +130,10 @@ public class FileTree extends JTree {
             });
 
         }
-
         public void treeCollapsed(TreeExpansionEvent event) {
         }
-    }
 
-    private static class DirSelectionListener implements TreeSelectionListener {
-        @Override
-        public void valueChanged(TreeSelectionEvent event) {
-            FileNode node = (FileNode) event.getPath().getLastPathComponent();
-            MapUtil.drawTrackFromSelectedFileNode(node);
-        }
     }
-
     private static class DirectoriesFirstComparator implements Comparator<File> {
         @Override
         public int compare(File o1, File o2) {
@@ -160,44 +148,7 @@ public class FileTree extends JTree {
             // compare two pathnames lexicographically
             return o1.compareTo(o2);
         }
-    }
 
-    private void addPopupMenu() {
-
-        JPopupMenu menu = new JPopupMenu();
-        JMenuItem menuItem = new JMenuItem("Upload to Strava");
-
-        menuItem.addActionListener(e -> {
-            FileNode node = (FileNode) getLastSelectedPathComponent();
-            log.info("Uploading {}", node.getFile().getPath());
-            uploadDialog.setTrackFile(node.getFile());
-            uploadDialog.clearInputAndStatus();
-            uploadDialog.setVisible(true);
-
-        });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                tryPopup(e);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                tryPopup(e);
-            }
-
-            private void tryPopup(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    TreePath path = getPathForLocation(e.getX(), e.getY());
-                    Rectangle pathBounds = getUI().getPathBounds(FileTree.this, path);
-                    if (pathBounds != null && pathBounds.contains(e.getX(), e.getY())) {
-                        menu.add(menuItem);
-                        menu.show(FileTree.this, pathBounds.x, pathBounds.y + pathBounds.height);
-                    }
-                }
-            }
-        });
     }
 }
 
