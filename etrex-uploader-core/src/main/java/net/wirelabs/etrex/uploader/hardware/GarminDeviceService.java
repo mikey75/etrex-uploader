@@ -168,7 +168,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
                         String.valueOf(device.getId()));
                 return Optional.of(garminInfo);
             } else {
-                log.warn("Can't find " + Constants.GARMIN_DEVICE_XML);
+                log.warn("Can't find {} on drive {}", Constants.GARMIN_DEVICE_XML, drive);
             }
         } catch (IOException e) {
             log.error("I/O error {}", e.getMessage(), e);
