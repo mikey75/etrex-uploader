@@ -1,23 +1,22 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.tree.TreeNode;
-
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.eventbus.Event;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.hardware.GarminHardwareInfo;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.tree.TreeNode;
+import java.io.File;
+import java.util.*;
 
 
 /**
@@ -73,7 +72,6 @@ public class GarminDeviceBrowser extends EventAwarePanel {
 
         if (evt.getEventType() == EventType.EVT_HARDWARE_INFO_AVAILABLE) {
             updateGarminInfo(evt);
-            findAndMarkFileNodeAsSystemDrive(evt);
         }
 
         if (evt.getEventType() == EventType.EVT_DRIVE_UNREGISTERED) {
@@ -87,22 +85,17 @@ public class GarminDeviceBrowser extends EventAwarePanel {
 
     }
 
-    private void findAndMarkFileNodeAsSystemDrive(Event evt) {
 
-        GarminHardwareInfo hwInfo = (GarminHardwareInfo) evt.getPayload();
-
-        for (TreeNode t:  tree.getRootNodes()) {
-            FileNode fn = (FileNode) t;
-            if (fn.getFile().getPath().equals(hwInfo.getDrive().getPath())) {
-                fn.setGarminSystemDrive(true);
-            }
-        }
-    }
 
     private void registerDriveInBrowser(Event evt) {
         File driveOnEvent = (File) evt.getPayload();
         garminDrives.add(driveOnEvent);
         tree.addDrive(driveOnEvent);
+
+        if (driveHasDeviceXml(driveOnEvent)){
+            findAndMarkFileNodeAsSystemDrive(driveOnEvent);
+        }
+
     }
 
     private void unregisterDriveFromBrowser(Event evt) {
@@ -134,5 +127,23 @@ public class GarminDeviceBrowser extends EventAwarePanel {
                 EventType.EVT_DRIVE_REGISTERED,
                 EventType.EVT_DRIVE_UNREGISTERED,
                 EventType.EVT_HARDWARE_INFO_AVAILABLE);
+    }
+
+    public boolean driveHasDeviceXml(File drive) {
+
+        Optional<File> f = FileUtils.findSubdir(drive,"GARMIN");
+        return f.filter(file -> FileUtils.listDirectory(file).stream()
+                        .anyMatch(s -> s.getName().equals(Constants.GARMIN_DEVICE_XML)))
+                .isPresent();
+    }
+
+    private void findAndMarkFileNodeAsSystemDrive(File drive) {
+
+        for (TreeNode t:  tree.getRootNodes()) {
+            FileNode fn = (FileNode) t;
+            if (fn.getFile().getPath().equals(drive.getPath())) {
+                fn.setGarminSystemDrive(true);
+            }
+        }
     }
 }
