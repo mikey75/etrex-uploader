@@ -8,17 +8,14 @@ import java.io.File;
 
 @NoArgsConstructor
 @Getter
-@Setter
 public class GarminHardwareInfo {
 
     private String description;
     private String softwareVersion;
     private String partNumber;
     private String serialNumber;
-    private File drive;
 
-    GarminHardwareInfo(File drive, String description, String softwareVersion, String partNumber, String serialNumber) {
-        this.drive = drive;
+    GarminHardwareInfo(String description, String softwareVersion, String partNumber, String serialNumber) {
         this.description = description;
         this.softwareVersion = softwareVersion;
         this.partNumber = partNumber;

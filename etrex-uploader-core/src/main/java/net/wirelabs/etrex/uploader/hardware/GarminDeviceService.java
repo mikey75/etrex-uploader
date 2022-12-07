@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -49,6 +51,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         this.configuration = configuration;
         this.rootsProvider = rootsProvider;
     }
+
     // constructor with default provider
     public GarminDeviceService(Configuration configuration) {
         this.configuration = configuration;
@@ -117,8 +120,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         if (!registeredRoots.contains(drive)) {
             registeredRoots.add(drive);
             EventBus.publish(EventType.EVT_DRIVE_REGISTERED, drive);
-            Optional<GarminHardwareInfo> hardwareInfo = getHardwareInfo(drive);
-            hardwareInfo.ifPresent(this::publishFoundHardwareInfo);
+            findAndPublishHardwareInfo(drive);
             log.info("Garmin drive {} connected", drive);
         }
     }
@@ -152,7 +154,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
     }
 
-    private Optional<GarminHardwareInfo> getHardwareInfo(File drive) {
+    private void findAndPublishHardwareInfo(File drive) {
 
         try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
 
@@ -160,13 +162,8 @@ public class GarminDeviceService extends BaseStoppableRunnable {
             Optional<Path> deviceXmlFile = result.findFirst();
 
             if (deviceXmlFile.isPresent()) {
-                DeviceT device = parseDeviceXml(deviceXmlFile.get().toFile()).getValue();
-                GarminHardwareInfo garminInfo = new GarminHardwareInfo(drive,
-                        device.getModel().getDescription(),
-                        String.valueOf(device.getModel().getSoftwareVersion()),
-                        device.getModel().getPartNumber(),
-                        String.valueOf(device.getId()));
-                return Optional.of(garminInfo);
+                GarminHardwareInfo garminInfo = parseDeviceXml(deviceXmlFile.get().toFile());
+                publishFoundHardwareInfo(garminInfo);
             } else {
                 log.warn("Can't find {} on drive {}", Constants.GARMIN_DEVICE_XML, drive);
             }
@@ -175,7 +172,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         } catch (JAXBException e) {
             log.error("XML parsing failed {}", e.getMessage(), e);
         }
-        return Optional.empty();
+
     }
 
     private boolean isGarminDeviceXmlFile(Path filePath) {
@@ -190,11 +187,19 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         return !registeredRoots.contains(file) && isExistingGarminDrive(file);
     }
 
-    JAXBElement<DeviceT> parseDeviceXml(File file) throws JAXBException {
+    GarminHardwareInfo parseDeviceXml(File drive) throws JAXBException {
 
         JAXBContext jc = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.garmin");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        return (JAXBElement<DeviceT>) unmarshaller.unmarshal(file);
+
+        DeviceT device = ((JAXBElement<DeviceT>) unmarshaller.unmarshal(drive))
+                .getValue();
+
+        return new GarminHardwareInfo(
+                device.getModel().getDescription(),
+                String.valueOf(device.getModel().getSoftwareVersion()),
+                device.getModel().getPartNumber(),
+                String.valueOf(device.getId()));
 
     }
 
