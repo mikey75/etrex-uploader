@@ -41,12 +41,10 @@ public class TokenManager extends StravaApiCaller {
         // if a new token is issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized(this) {
-            long currentTime = System.currentTimeMillis() / 1000;
+            
             Long tokenExpiresAt = configuration.getStravaTokenExpires();
-            // refresh token 10 minutes before deadline
-            Long resultTimeout = currentTime - Duration.ofMinutes(10).toMillis() / 1000;
-
-            if (tokenExpiresAt < resultTimeout) {
+            
+            if (tokenExpiresAt < getCurrentTime()) {
                 log.info("Token expired, getting new token using refresh token");
                 RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
                 String response = execute(refreshTokenRequest.buildRequest());
@@ -55,6 +53,10 @@ public class TokenManager extends StravaApiCaller {
 
             }
         }
+    }
+
+    private static long getCurrentTime() {
+        return Duration.ofMillis(System.currentTimeMillis()).getSeconds();
     }
 
     private void updateTokenInfo(String accessToken, String refreshToken, Long expiresAt) {
