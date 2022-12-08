@@ -25,7 +25,7 @@
     </properties>
 
     <modules>
-        <module>etrex-uploader-core</module>
+        <module>etrex-uploader-app</module>
         <module>etrex-uploader-device</module>
         <module>etrex-uploader-common</module>
         <module>etrex-uploader-strava</module>

@@ -6,5 +6,5 @@
 **/src/main/resources/application-local.properties
 /target/
 /bin/
-/etrex-uploader-core/logs/*.log
-/etrex-uploader-core/config.properties
+/etrex-uploader-app/logs/*.log
+/etrex-uploader-app/config.properties
