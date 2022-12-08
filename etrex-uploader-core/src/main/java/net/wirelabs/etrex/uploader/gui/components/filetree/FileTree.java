@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 
 
 import javax.swing.*;

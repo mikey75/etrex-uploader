@@ -5,13 +5,12 @@ import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontS
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.ApplictationContext;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.StravaConnector;
 
-import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
-import net.wirelabs.etrex.uploader.eventbus.EventBus;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -35,7 +34,7 @@ public class EtrexUploaderRunner {
         try {
             ApplictationContext ctx = new ApplictationContext();
             ctx.getFileService().setupWorkDirectories();
-            if (isApplicationAuthorizedToStrava(ctx)) {
+            if (!isApplicationAuthorizedToStrava(ctx)) {
                 StravaConnector stravaConnector = new StravaConnector(ctx.getConfiguration());
                 stravaConnector.setVisible(true);
             }

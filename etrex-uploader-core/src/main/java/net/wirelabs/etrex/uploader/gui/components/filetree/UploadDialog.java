@@ -5,15 +5,13 @@ import net.miginfocom.swing.MigLayout;
 
 
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.FileService;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
-import net.wirelabs.etrex.uploader.system.FileService;
-
-import net.wirelabs.etrex.uploader.eventbus.EventBus;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;

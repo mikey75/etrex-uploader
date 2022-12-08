@@ -5,12 +5,13 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 
 
-import net.wirelabs.etrex.uploader.eventbus.Event;
+import net.wirelabs.etrex.uploader.common.eventbus.Event;
+import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
-import net.wirelabs.etrex.uploader.hardware.GarminUtils;
+
 import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import net.wirelabs.etrex.uploader.model.garmin.ModelT;
 

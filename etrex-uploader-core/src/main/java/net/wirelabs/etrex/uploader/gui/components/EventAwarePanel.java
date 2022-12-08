@@ -2,9 +2,9 @@ package net.wirelabs.etrex.uploader.gui.components;
 
 
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.eventbus.Event;
-import net.wirelabs.etrex.uploader.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.eventbus.EventBusListener;
+import net.wirelabs.etrex.uploader.common.eventbus.Event;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBusListener;
 
 import javax.swing.*;
 import java.util.Collection;

@@ -2,8 +2,9 @@ package net.wirelabs.etrex.uploader;
 
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
-import net.wirelabs.etrex.uploader.system.FileService;
+
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
