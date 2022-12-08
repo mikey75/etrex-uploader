@@ -4,6 +4,8 @@ import fi.iki.elonen.NanoHTTPD;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -44,6 +46,7 @@ public class AuthCodeInterceptor extends NanoHTTPD {
             if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
                 authCode = incomingCode;
                 authCodeReady.set(true);
+                EventBus.publish(EventType.AUTH_CODE_RECEIVED, authCode);
                 return staticResponse(Constants.AUTHORIZATION_OK_MSG);
             }
         }

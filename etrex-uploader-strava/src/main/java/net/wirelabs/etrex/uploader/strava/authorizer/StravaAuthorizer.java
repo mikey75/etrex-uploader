@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-import net.wirelabs.etrex.uploader.strava.api.StravaApiCaller;
-import net.wirelabs.etrex.uploader.strava.tokenmanager.TokenManager;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
+import net.wirelabs.etrex.uploader.strava.tokenmanager.TokenManager;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 @Getter
 @Setter
 @Slf4j
-public class StravaAuthorizer extends StravaApiCaller {
+public class StravaAuthorizer  {
 
     private final Configuration configuration;
     private final TokenManager tokenManager;
