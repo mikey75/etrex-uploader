@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -100,5 +102,12 @@ public class FileUtils {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy"+File.separator +"MM"+ File.separator+"dd");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
+    }
+
+    public static File copyFileToDir(File file, File dir) throws IOException {
+        File targetFile = new File(dir, file.getName());
+        Files.copy(file.toPath(), new File(dir, targetFile.getName())
+                .toPath(), REPLACE_EXISTING);
+        return targetFile;
     }
 }

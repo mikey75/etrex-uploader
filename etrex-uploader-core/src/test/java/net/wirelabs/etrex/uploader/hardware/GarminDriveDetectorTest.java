@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 
+import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
@@ -15,13 +16,13 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -169,18 +170,15 @@ public class GarminDriveDetectorTest {
     }
 
     @Test
-    void shouldParseDeviceXml() throws IOException  {
+    void shouldFindAndPublishDeviceInfo() throws IOException  {
 
         driveDetector.start();
-
-
-        // when
-        File targetFile = copyFileToDrive(GARMIN_DRIVE_ONE,DEVICE_XML_FILE);
-        addDrive(GARMIN_DRIVE_ONE);
         
+        // when
+        File targetFile = FileUtils.copyFileToDir(DEVICE_XML_FILE,GARMIN_DRIVE_ONE);
+        addDrive(GARMIN_DRIVE_ONE);
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
-            verify(driveDetector, times(1)).parseDeviceXml(targetFile);
-            verify(driveDetector, times(1)).publishFoundHardwareInfo(any(GarminHardwareInfo.class));
+            verify(driveDetector, times(1)).publishFoundHardwareInfo(any(DeviceT.class));
         });
     }
 
@@ -189,12 +187,6 @@ public class GarminDriveDetectorTest {
         driveDetector.stop();
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(driveDetector.getThreadHandle().isDone()).isTrue());
-    }
-
-    private File copyFileToDrive(File disk, File file) throws IOException {
-        File targetFile = new File(disk, file.getName());
-        Files.copy(file.toPath(), new File(disk, targetFile.getName()).toPath(), REPLACE_EXISTING);
-        return targetFile;
     }
     
     private void addDrive(File... disk) {
