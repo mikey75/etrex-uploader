@@ -2,7 +2,8 @@ package net.wirelabs.etrex.uploader.gui;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.common.ApplictationContext;
+import net.wirelabs.etrex.uploader.ApplictationContext;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.gui.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.activitiestable.ActivitiesPanel;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
@@ -11,7 +12,7 @@ import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.eventbus.EventBus;
+
 
 import javax.swing.*;
 import java.awt.*;

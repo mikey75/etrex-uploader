@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.activitiestable;
 
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,14 +12,16 @@ import javax.swing.event.ListSelectionEvent;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.hardware.threads.ThreadUtils;
+
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.IStravaService;
 import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
-import net.wirelabs.etrex.uploader.eventbus.Event;
+
 
 
 
