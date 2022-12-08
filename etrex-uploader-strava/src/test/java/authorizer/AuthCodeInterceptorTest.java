@@ -40,7 +40,7 @@ class AuthCodeInterceptorTest {
                 .build();
 
         requestWithEmptyCode = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/index.html?aaa=b"))
+                .uri(URI.create("http://localhost:" + port + "/index.html?aaa=b&code="))
                 .GET()
                 .build();
     }
