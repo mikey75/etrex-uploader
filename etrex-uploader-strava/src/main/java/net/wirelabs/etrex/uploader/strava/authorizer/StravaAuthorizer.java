@@ -52,7 +52,7 @@ public class StravaAuthorizer extends StravaApiCaller {
                 String requestAccessURL = buildAuthorizationUrl("http://localhost:"+ port);
                 runDesktopBrowserToAutorizationUrl(requestAccessURL);
                 // czekaj na authCode i zamien go na token
-                long timeOut = System.currentTimeMillis() + Duration.ofSeconds(60).toMillis();
+                long timeOut = System.currentTimeMillis() + configuration.getStravaAuthorizerTimeout();
 
                 log.info("Waiting for auth code");
                 // try to get token for 60 seconds
