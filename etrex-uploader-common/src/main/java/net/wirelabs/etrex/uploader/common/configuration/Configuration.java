@@ -31,6 +31,7 @@ public class Configuration extends PropertiesBasedConfiguration {
     private String stravaRefreshToken;
     private Long stravaTokenExpires;
     private String stravaApiBaseUrl;
+    private Long stravaAuthorizerTimeout;
     
     public Configuration(String configFile) {
         super(configFile);
@@ -47,6 +48,7 @@ public class Configuration extends PropertiesBasedConfiguration {
         stravaRefreshToken = properties.getProperty(STRAVA_REFRESH_TOKEN, Constants.EMPTY_STRING);
         stravaTokenExpires = Long.valueOf(properties.getProperty(STRAVA_ACCESS_TOKEN_EXPIRES_AT, "0"));
         stravaApiBaseUrl = properties.getProperty(STRAVA_BASE_URL, "https://www.strava.com/api/v3");
+        stravaAuthorizerTimeout = Long.valueOf(properties.getProperty(STRAVA_AUTH_TIMEOUT_SECONDS, "60"));
     }
 
     public Configuration() {
@@ -67,6 +69,7 @@ public class Configuration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_REFRESH_TOKEN, stravaRefreshToken);
         properties.setProperty(STRAVA_ACCESS_TOKEN_EXPIRES_AT, String.valueOf(stravaTokenExpires));
         properties.setProperty(STRAVA_BASE_URL, String.valueOf(stravaApiBaseUrl));
+        properties.setProperty(STRAVA_AUTH_TIMEOUT_SECONDS, String.valueOf(stravaAuthorizerTimeout));
         super.store();
 
     }
