@@ -2,14 +2,15 @@ package net.wirelabs.etrex.uploader.gui.browsers;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+
+
 import net.wirelabs.etrex.uploader.eventbus.Event;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
+import net.wirelabs.etrex.uploader.hardware.GarminUtils;
 import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import net.wirelabs.etrex.uploader.model.garmin.ModelT;
 
@@ -133,11 +134,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     }
 
     public boolean driveHasDeviceXml(File drive) {
-
-        Optional<File> f = FileUtils.findSubdir(drive,"GARMIN");
-        return f.filter(file -> FileUtils.listDirectory(file).stream()
-                        .anyMatch(s -> s.getName().equals(Constants.GARMIN_DEVICE_XML)))
-                .isPresent();
+        return GarminUtils.getGarminDeviceXmlFile(drive).isPresent();
     }
 
     private void findAndMarkFileNodeAsSystemDrive(File drive) {

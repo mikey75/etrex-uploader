@@ -119,7 +119,7 @@ public class UploadDialog extends JDialog {
 
     private void archiveAndDelete() {
         try {
-            fileService.archivAndDelete(trackFile);
+            fileService.archiveAndDelete(trackFile);
         } catch (IOException e) {
             SwingUtils.errorMsg("Archive file operation failed\n" + e + "\n" + e.getMessage());
             log.error("IO exception: {}", e.getMessage(), e);

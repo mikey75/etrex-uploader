@@ -56,7 +56,7 @@ public class GarminDriveDetectorTest {
         driveDetector = Mockito.spy(new GarminDeviceService(rootsProvider,testConfiguration));
     }
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws IOException {
         // create fake config
 
 

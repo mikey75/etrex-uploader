@@ -6,6 +6,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.ApplictationContext;
+import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.StravaConnector;
 
@@ -33,8 +34,8 @@ public class EtrexUploaderRunner {
 
         try {
             ApplictationContext ctx = new ApplictationContext();
-
-            if (!ctx.isApplicationAuthorizedToStrava()) {
+            ctx.getFileService().setupWorkDirectories();
+            if (isApplicationAuthorizedToStrava(ctx)) {
                 StravaConnector stravaConnector = new StravaConnector(ctx.getConfiguration());
                 stravaConnector.setVisible(true);
             }
@@ -70,5 +71,9 @@ public class EtrexUploaderRunner {
             log.warn("Exception while configuring logging");
         }
     }
-
+    
+    private static boolean isApplicationAuthorizedToStrava(ApplictationContext ctx) {
+        Configuration configuration = ctx.getConfiguration();
+        return !configuration.getStravaAccessToken().isEmpty();
+    }
 }

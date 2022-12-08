@@ -26,23 +26,21 @@ class FileServiceTest {
 
     private FileService fileService;
     private Configuration configuration;
-
     private final File root = new File("target/storage-root");
-
-
-
-
+    
     @BeforeEach
-    void before() {
-
+    void before() throws IOException {
         FileUtils.deleteDirectory(root);
+        setupFileServiceMock();
+        fileService.setupWorkDirectories();
+    }
 
+    private void setupFileServiceMock() {
         configuration = mock(Configuration.class);
         doReturn(root.getPath()).when(configuration).getStorageRoot();
         doReturn(true).when(configuration).isArchiveAfterUpload();
         doReturn(true).when(configuration).isDeleteAfterUpload();
         fileService = spy(new FileService(configuration));
-
     }
 
     @Test
@@ -53,8 +51,6 @@ class FileServiceTest {
                 .map(File::getName)
                 .collect(Collectors.toList());
         assertThat(s).containsOnly(Constants.UPLOADED_FILES_SUBFOLDER, Constants.TRACKS_REPO);
-
-
 
     }
 
@@ -67,20 +63,18 @@ class FileServiceTest {
         File targetDir = new File(uploadDir, FileUtils.getYearMonthTimestampedDir());
         createTestTrack(track);
         //when
-        fileService.archivAndDelete(track);
+        fileService.archiveAndDelete(track);
         // then
         assertThat(targetDir).isDirectoryContaining(f -> f.getName().equals(track.getName()));
         assertThat(track).doesNotExist();
         // when
         createTestTrack(track);
-        fileService.archivAndDelete(track);
+        fileService.archiveAndDelete(track);
         // then check if timestamped copy is created
-        assertThat(targetDir).isDirectoryContaining(f -> f.getName().equals(track.getName()));
         assertThat(targetDir).isDirectoryContaining(f -> f.getName().matches("[0-9]{13}-" + track.getName()));
 
     }
-
-
+    
     @Test
     void shouldNotArchiveWhenNotConfigured() throws IOException {
         doReturn(false).when(configuration).isArchiveAfterUpload();
@@ -91,7 +85,7 @@ class FileServiceTest {
 
         createTestTrack(track);
         //when
-        fileService.archivAndDelete(track);
+        fileService.archiveAndDelete(track);
 
         assertThat(uploadDir).isEmptyDirectory(); // file not copied
         assertThat(track).exists(); // file not deleted
