@@ -23,10 +23,9 @@ public class FileService {
 
     public FileService(Configuration configuration) {
         this.configuration = configuration;
-        setupWorkDirectories();
     }
 
-    void setupWorkDirectories() {
+    public void setupWorkDirectories() throws IOException {
         log.info("Initializing directories ");
         File defaultStorageRoot = new File(configuration.getStorageRoot());
         FileUtils.createDirIfDoesNotExist(defaultStorageRoot);
@@ -38,7 +37,7 @@ public class FileService {
         FileUtils.createDirIfDoesNotExist(defaultTracksRepoDir);
     }
 
-    public void archivAndDelete(File trackFile) throws IOException {
+    public void archiveAndDelete(File trackFile) throws IOException {
 
 
         if (configuration.isArchiveAfterUpload()) {

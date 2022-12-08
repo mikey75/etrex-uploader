@@ -27,8 +27,6 @@ public class ApplictationContext {
         this.garminDeviceService = new GarminDeviceService(configuration);
     }
 
-    public boolean isApplicationAuthorizedToStrava() {
-        return !configuration.getStravaAccessToken().isEmpty();
-    }
+    
 
 }
