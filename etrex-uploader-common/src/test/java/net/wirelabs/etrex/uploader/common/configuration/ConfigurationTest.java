@@ -25,6 +25,7 @@ public class ConfigurationTest {
         assertThat(c.isDeleteAfterUpload()).isTrue();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
+        assertThat(c.getStravaAuthorizerTimeout()).isEqualTo(60L);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class ConfigurationTest {
         assertThat(c.isDeleteAfterUpload()).isFalse();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-
+        assertThat(c.getStravaAuthorizerTimeout()).isEqualTo(120L);
     }
 
     @Test
@@ -45,7 +46,8 @@ public class ConfigurationTest {
         String[] expectedChange = {
                 "system.wait.drive.timeout=10",
                 "system.drive.observer.delay=100",
-                "system.backup.after.upload=false"
+                "system.backup.after.upload=false",
+                "strava.auth.timeout.seconds=800"
         };
 
         // because configuration save() overwrites src file, we need to operate on copy
@@ -58,6 +60,7 @@ public class ConfigurationTest {
         c.setArchiveAfterUpload(false);
         c.setDeviceDiscoveryDelay(100L);
         c.setWaitDriveTimeout(10L);
+        c.setStravaAuthorizerTimeout(800L);
         c.save();
         // now reload changed file and check
         assertThat(Files.readAllLines(configCopy.toPath())).containsAll(Arrays.asList(expectedChange));
