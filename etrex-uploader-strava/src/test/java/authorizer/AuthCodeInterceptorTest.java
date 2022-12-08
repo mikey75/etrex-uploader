@@ -1,5 +1,6 @@
-package net.wirelabs.etrex.uploader.strava.authorizer;
+package authorizer;
 
+import net.wirelabs.etrex.uploader.strava.authorizer.AuthCodeInterceptor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -43,8 +44,6 @@ class AuthCodeInterceptorTest {
                 .GET()
                 .build();
     }
-
-
 
     @Test
     void testAuthCodeInterception() throws IOException, InterruptedException {

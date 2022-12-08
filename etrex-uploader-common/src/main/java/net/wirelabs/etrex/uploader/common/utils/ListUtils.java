@@ -35,6 +35,7 @@ public class ListUtils {
      * @param <T> type of element
      * @return list of elements
      */
+    @SafeVarargs
     public static <T> Collection<T> listOf(T... elements) {
         return new ArrayList<>(Arrays.asList(elements));
     }
