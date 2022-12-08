@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Duration;
 
 
 @Getter
@@ -44,26 +43,26 @@ public class StravaAuthorizer extends StravaApiCaller {
     public void authorizeAccess() {
 
         try {
-                log.info("Starting Strava OAuth process");
-                // odpal interceptor requesta
-                int port = getRandomFreeTcpPort();
-                authCodeInterceptor = new AuthCodeInterceptor(port);
-                // odpal auth url w przegladarce
-                String requestAccessURL = buildAuthorizationUrl("http://localhost:"+ port);
-                runDesktopBrowserToAutorizationUrl(requestAccessURL);
-                // czekaj na authCode i zamien go na token
-                long timeOut = System.currentTimeMillis() + configuration.getStravaAuthorizerTimeout();
+            log.info("Starting Strava OAuth process");
+            // odpal interceptor requesta
+            int port = getRandomFreeTcpPort();
+            authCodeInterceptor = new AuthCodeInterceptor(port);
+            // odpal auth url w przegladarce
+            String requestAccessURL = buildAuthorizationUrl("http://localhost:" + port);
+            runDesktopBrowserToAutorizationUrl(requestAccessURL);
+            // czekaj na authCode i zamien go na token
+            long timeOut = System.currentTimeMillis() + configuration.getStravaAuthorizerTimeout();
 
-                log.info("Waiting for auth code");
-                // try to get token for 60 seconds
-                while (System.currentTimeMillis() < timeOut) {
+            log.info("Waiting for auth code");
+            // try to get token for 60 seconds
+            while (System.currentTimeMillis() < timeOut) {
+                if (!authCodeInterceptor.getAuthCodeReady().get()) {
                     AuthResponse authResponse = tokenManager.exchangeAuthCodeForToken(authCodeInterceptor.getAuthCode());
-                    if (authResponse != null) {
-                        return;
-                    }
-                    Sleeper.sleepMillis(200);
+                    return;
                 }
-                log.error("Could not get token in 60 seconds");
+                Sleeper.sleepMillis(200);
+            }
+            log.error("Could not get token in 60 seconds");
 
         } catch (IOException | URISyntaxException | StravaApiException e) {
             log.error("Can't run OAuth authorization process: {}", e.getMessage(), e);

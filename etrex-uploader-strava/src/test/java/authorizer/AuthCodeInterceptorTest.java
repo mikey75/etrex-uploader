@@ -23,11 +23,12 @@ class AuthCodeInterceptorTest {
     private static HttpRequest requestWithCode;
     private static HttpRequest requestWithoutCode;
     private static HttpRequest requestWithEmptyCode;
+    private static AuthCodeInterceptor authCodeInterceptor;
 
     @BeforeAll
     static void before() throws IOException {
-
         port = getRandomFreeTcpPort();
+        authCodeInterceptor = new AuthCodeInterceptor(port);
 
         requestWithCode = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + "/index.html?aaa=b&code=" + AUTH_CODE))
@@ -48,23 +49,26 @@ class AuthCodeInterceptorTest {
     @Test
     void testAuthCodeInterception() throws IOException, InterruptedException {
 
-        AuthCodeInterceptor ai = new AuthCodeInterceptor(port);
+
         HttpResponse<String> response;
 
         response = client.send(requestWithCode, HttpResponse.BodyHandlers.ofString());
-        assertThat(ai.getAuthCode()).isEqualTo(AUTH_CODE);
+        assertThat(authCodeInterceptor.getAuthCodeReady()).isTrue();
+        assertThat(authCodeInterceptor.getAuthCode()).isEqualTo(AUTH_CODE);
         assertThat(response.body()).isEqualTo(AUTHORIZATION_OK_MSG);
 
 
         response = client.send(requestWithoutCode, HttpResponse.BodyHandlers.ofString());
+        assertThat(authCodeInterceptor.getAuthCodeReady()).isFalse();
         assertThat(response.body()).isEqualTo(AUTHORIZATION_FAIL_MSG);
 
 
         response =  client.send(requestWithEmptyCode, HttpResponse.BodyHandlers.ofString());
+        assertThat(authCodeInterceptor.getAuthCodeReady()).isFalse();
         assertThat(response.body()).isEqualTo(AUTHORIZATION_FAIL_MSG);
 
-        ai.closeAllConnections();
-        ai.stop();
+        authCodeInterceptor.closeAllConnections();
+        authCodeInterceptor.stop();
 
     }
 
