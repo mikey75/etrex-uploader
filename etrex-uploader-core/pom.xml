@@ -23,11 +23,13 @@
             <artifactId>etrex-uploader-device</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>net.wirelabs</groupId>
             <artifactId>etrex-uploader-strava</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>org.jxmapviewer</groupId>
             <artifactId>jxmapviewer2</artifactId>

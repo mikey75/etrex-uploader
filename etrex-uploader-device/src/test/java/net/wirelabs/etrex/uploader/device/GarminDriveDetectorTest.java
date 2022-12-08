@@ -96,7 +96,6 @@ public class GarminDriveDetectorTest {
     void shouldDetectOneGarminDrive() {
 
         //given
-
         driveDetector.start();
 
 

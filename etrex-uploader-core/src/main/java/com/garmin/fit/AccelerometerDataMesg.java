@@ -39,7 +39,6 @@ public class AccelerometerDataMesg extends Mesg   {
     public static final int CompressedCalibratedAccelYFieldNum = 9;
     
     public static final int CompressedCalibratedAccelZFieldNum = 10;
-    
 
     protected static final  Mesg accelerometerDataMesg;
     static {
