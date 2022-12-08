@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -13,10 +14,12 @@ import java.io.IOException;
  * and get authorization code from it
  */
 @Slf4j
+@Getter
 public class AuthCodeInterceptor extends NanoHTTPD {
 
-    @Getter
+
     private String authCode = Constants.EMPTY_STRING;
+    private final AtomicBoolean authCodeReady = new AtomicBoolean(false);
 
     public AuthCodeInterceptor(int port) {
         super(port);
@@ -40,9 +43,11 @@ public class AuthCodeInterceptor extends NanoHTTPD {
             String incomingCode = session.getParameters().get("code").get(0);
             if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
                 authCode = incomingCode;
+                authCodeReady.set(true);
                 return staticResponse(Constants.AUTHORIZATION_OK_MSG);
             }
         }
+        authCodeReady.set(false);
         return staticResponse(Constants.AUTHORIZATION_FAIL_MSG);
     }
 
