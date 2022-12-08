@@ -10,7 +10,8 @@ import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
-import net.wirelabs.etrex.uploader.hardware.GarminHardwareInfo;
+import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
+import net.wirelabs.etrex.uploader.model.garmin.ModelT;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -70,16 +71,16 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     @Override
     protected void onEvent(Event evt) {
 
-        if (evt.getEventType() == EventType.EVT_HARDWARE_INFO_AVAILABLE) {
+        if (evt.getEventType() == EventType.DEVICE_INFO_AVAILABLE) {
             updateGarminInfo(evt);
         }
 
-        if (evt.getEventType() == EventType.EVT_DRIVE_UNREGISTERED) {
+        if (evt.getEventType() == EventType.DEVICE_DRIVE_UNREGISTERED) {
             clearGarminInfo();
             unregisterDriveFromBrowser(evt);
         }
 
-        if (evt.getEventType() == EventType.EVT_DRIVE_REGISTERED) {
+        if (evt.getEventType() == EventType.DEVICE_DRIVE_REGISTERED) {
             registerDriveInBrowser(evt);
         }
 
@@ -113,20 +114,22 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     }
 
     private void updateGarminInfo(Event evt) {
-        GarminHardwareInfo hardwareInfo = (GarminHardwareInfo) evt.getPayload();
-        device.setText(hardwareInfo.getDescription());
-        softwareVer.setText(hardwareInfo.getSoftwareVersion());
-        partNo.setText(hardwareInfo.getPartNumber());
-        serialNo.setText(hardwareInfo.getSerialNumber());
+        DeviceT deviceInfo = (DeviceT)  evt.getPayload();
+        ModelT modelInfo = deviceInfo.getModel();
+        
+        device.setText(modelInfo.getDescription());
+        softwareVer.setText(String.valueOf(modelInfo.getSoftwareVersion()));
+        partNo.setText(modelInfo.getPartNumber());
+        serialNo.setText(String.valueOf(deviceInfo.getId()));
         status.setText("Connected");
     }
 
     @Override
     protected Collection<EventType> subscribeEvents() {
         return Arrays.asList(
-                EventType.EVT_DRIVE_REGISTERED,
-                EventType.EVT_DRIVE_UNREGISTERED,
-                EventType.EVT_HARDWARE_INFO_AVAILABLE);
+                EventType.DEVICE_DRIVE_REGISTERED,
+                EventType.DEVICE_DRIVE_UNREGISTERED,
+                EventType.DEVICE_INFO_AVAILABLE);
     }
 
     public boolean driveHasDeviceXml(File drive) {

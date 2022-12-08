@@ -40,14 +40,14 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     @Override
     protected void onEvent(Event evt) {
-        if (evt.getEventType() == EventType.EVT_ACTIVITY_UPLOADED) {
+        if (evt.getEventType() == EventType.ACTIVITY_SUCCESSFULLY_UPLOADED) {
             updateActivities();
         }
     }
 
     @Override
     protected Collection<EventType> subscribeEvents() {
-        return Arrays.asList(EventType.EVT_ACTIVITY_UPLOADED);
+        return Arrays.asList(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED);
     }
 
     private void createVisualComponent() {
