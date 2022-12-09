@@ -8,3 +8,4 @@
 /bin/
 /etrex-uploader-app/logs/*.log
 /etrex-uploader-app/config.properties
+config.properties
