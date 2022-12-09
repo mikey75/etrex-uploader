@@ -18,8 +18,8 @@ import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
-import net.wirelabs.etrex.uploader.strava.IStravaService;
-import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
+import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
 
 
@@ -88,7 +88,7 @@ public class ActivitiesPanel extends EventAwarePanel {
                 List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, 30);
                 SwingUtilities.invokeLater(()-> activitiesTable.setData(activities));
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            } catch (StravaApiException e) {
+            } catch (StravaClientException e) {
                 SwingUtils.errorMsg(e.getMessage());
             }
         });

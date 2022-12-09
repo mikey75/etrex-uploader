@@ -1,6 +1,6 @@
-package authorizer;
+package net.wirelabs.etrex.uploader.strava.oauth;
 
-import net.wirelabs.etrex.uploader.strava.authorizer.AuthCodeInterceptor;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

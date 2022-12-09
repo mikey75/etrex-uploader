@@ -10,8 +10,8 @@ import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
-import net.wirelabs.etrex.uploader.strava.IStravaService;
-import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
+import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -97,7 +97,7 @@ public class UploadDialog extends JDialog {
             } else {
                 handleUnsuccessfulUpload(upload);
             }
-        } catch (StravaApiException e) {
+        } catch (StravaClientException e) {
             SwingUtils.errorMsg(e.getMessage());
         }
     }

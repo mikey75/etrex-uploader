@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.authorizer;
+package net.wirelabs.etrex.uploader.strava.oauth;
 
 
 import com.google.gson.annotations.SerializedName;
