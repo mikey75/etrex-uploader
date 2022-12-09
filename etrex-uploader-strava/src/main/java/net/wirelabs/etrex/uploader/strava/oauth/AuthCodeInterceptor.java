@@ -1,11 +1,9 @@
-package net.wirelabs.etrex.uploader.strava.authorizer;
+package net.wirelabs.etrex.uploader.strava.oauth;
 
 import fi.iki.elonen.NanoHTTPD;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,11 +16,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 @Getter
 public class AuthCodeInterceptor extends NanoHTTPD {
-
-
+    
     private String authCode = Constants.EMPTY_STRING;
     private final AtomicBoolean authCodeReady = new AtomicBoolean(false);
-
+    
     public AuthCodeInterceptor(int port) {
         super(port);
         startSever();
@@ -39,14 +36,13 @@ public class AuthCodeInterceptor extends NanoHTTPD {
 
     @Override
     // this method is called when Strava OAuth application authorization page redirects after allowing access
-    // the GET url contains authCode which we'll exchange for access token
+    // the GET url contains authCode which we'll exchange for access token later
     public Response serve(IHTTPSession session) {
         if (session.getParameters().containsKey("code")) {
             String incomingCode = session.getParameters().get("code").get(0);
             if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
                 authCode = incomingCode;
                 authCodeReady.set(true);
-                EventBus.publish(EventType.AUTH_CODE_RECEIVED, authCode);
                 return staticResponse(Constants.AUTHORIZATION_OK_MSG);
             }
         }

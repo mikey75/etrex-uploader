@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava;
+package net.wirelabs.etrex.uploader.strava.service;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
@@ -7,69 +7,67 @@ import lombok.extern.slf4j.Slf4j;
 
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.model.*;
-import net.wirelabs.etrex.uploader.strava.api.StravaApi;
-import net.wirelabs.etrex.uploader.strava.api.StravaApiException;
+import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
 
 
 import java.io.File;
 import java.net.URLConnection;
 import java.util.*;
 
+import static net.wirelabs.etrex.uploader.strava.client.StravaClient.*;
+import static net.wirelabs.etrex.uploader.strava.client.StravaClient.STRAVA_ATHLETE_ENDPOINT;
+
 
 @Slf4j
-public class StravaService extends StravaApi implements IStravaService {
+public class StravaService  implements IStravaService {
 
+    private final StravaClient client;
     private SummaryAthlete currentAthlete;
 
-    private final String STRAVA_ACTIVITIES_ENDPOINT = apiBaseUrl+ "/activities";
-    private final String STRAVA_ATHLETE_ENDPOINT = apiBaseUrl+"/athlete";
-    private final String STRAVA_ATHLETES_ENDPOINT = apiBaseUrl + "/athletes";
-    private final String STRAVA_ATHLETE_ACTIVITIES_ENDPOINT = apiBaseUrl +"/athlete/activities";
-
-    public final String STRAVA_UPLOAD_ENDPOINT = apiBaseUrl + "/uploads";
-
     public StravaService(Configuration configuration) {
-        super(configuration);
+        client = new StravaClient(configuration);
+
     }
 
     @Override
-    public SummaryAthlete getCurrentAthlete() throws StravaApiException {
+    public SummaryAthlete getCurrentAthlete() throws StravaClientException {
 
         if (currentAthlete == null) {
-            currentAthlete = makeGetRequest(STRAVA_ATHLETE_ENDPOINT, SummaryAthlete.class);
+            currentAthlete = client.makeGetRequest(STRAVA_ATHLETE_ENDPOINT, SummaryAthlete.class);
         }
         return currentAthlete;
 
     }
     @Override
-    public List<SummaryActivity> getCurrentAthleteActivities(int page, int perpage) throws StravaApiException {
+    public List<SummaryActivity> getCurrentAthleteActivities(int page, int perpage) throws StravaClientException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("page", String.valueOf(page));
         parameters.put("per_page", String.valueOf(perpage));
 
-        SummaryActivity[] activities = makeParameterizedGetRequest(STRAVA_ATHLETE_ACTIVITIES_ENDPOINT,
+        SummaryActivity[] activities = client.makeParameterizedGetRequest(STRAVA_ATHLETE_ACTIVITIES_ENDPOINT,
                 parameters, SummaryActivity[].class);
         return Arrays.asList(activities);
 
     }
     @Override
-    public ActivityStats getAthleteStats(Long id) throws StravaApiException {
-        return makeGetRequest(STRAVA_ATHLETES_ENDPOINT+"/"+id +"/stats", ActivityStats.class);
+    public ActivityStats getAthleteStats(Long id) throws StravaClientException {
+        return client.makeGetRequest(STRAVA_ATHLETES_ENDPOINT+"/"+id +"/stats", ActivityStats.class);
     }
     @Override
-    public DetailedActivity getActivityById(Long id) throws StravaApiException {
-        return makeGetRequest(STRAVA_ACTIVITIES_ENDPOINT +"/"+String.valueOf(id), DetailedActivity.class);
+    public DetailedActivity getActivityById(Long id) throws StravaClientException {
+        return client.makeGetRequest(STRAVA_ACTIVITIES_ENDPOINT +"/"+String.valueOf(id), DetailedActivity.class);
 
     }
     @Override
-    public List<SummaryActivity> getCurrentAthleteActivities() throws StravaApiException {
+    public List<SummaryActivity> getCurrentAthleteActivities() throws StravaClientException {
         return getCurrentAthleteActivities(1, 30);
     }
 
     @Override
-    public Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaApiException {
+    public Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaClientException {
 
         Upload u = uploadActivityRequest(file, name, desc, type);
 
@@ -89,7 +87,7 @@ public class StravaService extends StravaApi implements IStravaService {
 
     }
 
-    private Upload uploadActivityRequest(File file, String name, String description, SportType sportType) throws StravaApiException {
+    private Upload uploadActivityRequest(File file, String name, String description, SportType sportType) throws StravaClientException {
 
         String dataType = guessContentTypeFromFile(file);
         String fileFormat = guessFileFormat(file);       
@@ -101,14 +99,14 @@ public class StravaService extends StravaApi implements IStravaService {
                 .addFormDataPart("description", description)
                 .build();
 
-        return makePostRequest(STRAVA_UPLOAD_ENDPOINT, uploadBody,Upload.class);
+        return client.makePostRequest(STRAVA_UPLOAD_ENDPOINT, uploadBody,Upload.class);
 
 
     }
-    private Upload getUploadStatus(Long uploadId) throws StravaApiException {
+    private Upload getUploadStatus(Long uploadId) throws StravaClientException {
 
         String urlPart = STRAVA_UPLOAD_ENDPOINT + "/" + uploadId;
-        return makeGetRequest(urlPart,Upload.class);
+        return client.makeGetRequest(urlPart,Upload.class);
 
 
     }
@@ -125,6 +123,8 @@ public class StravaService extends StravaApi implements IStravaService {
         String contentType = URLConnection.guessContentTypeFromName(file.getName());
         return Objects.requireNonNullElse(contentType, "application/octet-stream");
     }
+
+
 }
     
 

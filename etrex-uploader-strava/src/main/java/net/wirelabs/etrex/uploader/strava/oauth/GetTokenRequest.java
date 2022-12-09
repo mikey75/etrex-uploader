@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.tokenmanager;
+package net.wirelabs.etrex.uploader.strava.oauth;
 
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
@@ -8,7 +8,7 @@ import net.wirelabs.etrex.uploader.common.Constants;
 /**
  * Created 11/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class ExchangeAuthForTokenRequest {
+public class GetTokenRequest {
     /*
          * curl -X POST https://www.strava.com/oauth/token \
          -F client_id=YOURCLIENTID \
@@ -22,7 +22,7 @@ public class ExchangeAuthForTokenRequest {
     private final String appId;
 
 
-    public ExchangeAuthForTokenRequest(String appId, String clientSecret, String authCode) {
+    public GetTokenRequest(String appId, String clientSecret, String authCode) {
         this.clientSecret = clientSecret;
         this.appId = appId;
         this.authCode = authCode;

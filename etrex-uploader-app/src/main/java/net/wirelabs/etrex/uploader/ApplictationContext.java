@@ -4,8 +4,8 @@ import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
-import net.wirelabs.etrex.uploader.strava.IStravaService;
-import net.wirelabs.etrex.uploader.strava.StravaService;
+import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 
 
