@@ -5,7 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
-import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 
 import javax.imageio.ImageIO;
@@ -43,7 +43,7 @@ public class UserAccountPanel extends BorderedPanel {
             imageLabel.setIcon(new ImageIcon(img));
         } catch (IOException e) {
             imageLabel.setText("Couldn't get profile picture");
-        } catch (StravaClientException e) {
+        } catch (StravaException e) {
             SwingUtils.errorMsg(e.getMessage());
         }
     }

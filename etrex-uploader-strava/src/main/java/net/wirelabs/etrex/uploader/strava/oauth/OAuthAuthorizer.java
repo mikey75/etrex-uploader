@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
-import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
 
 /**
  * This class implements OAuth flow for strava
@@ -22,7 +22,7 @@ public class OAuthAuthorizer {
         this.configuration = configuration;
     }
     
-    public void getAndStoreTokens() throws StravaClientException {
+    public void getAndStoreTokens() throws StravaException {
             String code = authCodeRetriever.getAuthCode();
             AuthResponse tokens = tokenExchange.exchangeAuthCodeForAccessToken(code);
             storeTokens(tokens);
