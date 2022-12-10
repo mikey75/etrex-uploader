@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
-import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 @Slf4j
@@ -17,7 +17,7 @@ public class TokenExchange {
 
     }
 
-    public AuthResponse exchangeAuthCodeForAccessToken(String authCode) throws StravaClientException {
+    public AuthResponse exchangeAuthCodeForAccessToken(String authCode) throws StravaException {
 
         if (!authCode.isEmpty()) {
             GetTokenRequest request = new GetTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), authCode);

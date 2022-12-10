@@ -14,13 +14,10 @@ class ConfigurationPropertyKeys {
     static final String USER_STORAGE_ROOTS              = "system.user.storage.roots";
     // strava
     static final String STRAVA_APP_ID                   = "strava.app.id";
-    static final String STRAVA_AUTH_CALLBACK_PORT       = "strava.auth.callback.port";
-
     static final String STRAVA_CLIENT_SECRET            = "strava.client.secret";
     static final String STRAVA_ACCESS_TOKEN             = "strava.token.access";
     static final String STRAVA_ACCESS_TOKEN_EXPIRES_AT  = "strava.token.expires.at";
     static final String STRAVA_REFRESH_TOKEN            = "strava.token.refresh";
-    static final String STRAVA_BASE_URL                 = "strava.api.base.url";
     static final String STRAVA_AUTH_TIMEOUT_SECONDS     = "strava.auth.timeout.seconds";
     // config files constants
     static final String APPLICATION_CONFIGFILE          = "config.properties";

@@ -7,7 +7,7 @@ import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.strava.client.StravaClientException;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.oauth.OAuthAuthorizer;
 
 /**
@@ -66,7 +66,7 @@ public class StravaConnector extends JDialog {
         try {
             authorizer.getAndStoreTokens();
             dispose();
-        } catch (StravaClientException ex) {
+        } catch (StravaException ex) {
             SwingUtils.errorMsg("OAuth process failed to get authorization code");
         }
     }

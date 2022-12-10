@@ -36,7 +36,7 @@ public class AuthCodeRetriever {
      * <p>
      * After running the process, the method waits here until token is received.
      */
-;
+
     public String getAuthCode() {
 
         try {
