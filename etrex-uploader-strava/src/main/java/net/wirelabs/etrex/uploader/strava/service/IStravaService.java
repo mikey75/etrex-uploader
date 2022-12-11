@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import java.io.File;
 import java.util.List;
 
-/**
+/*
  * Created 11/4/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 public interface IStravaService {

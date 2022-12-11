@@ -1,30 +1,27 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
 
-import com.squareup.okhttp.HttpUrl;
-
-import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildAuthRequestUrl;
 
 
 @Slf4j
 public class AuthCodeRetriever {
-    
+
     private AuthCodeInterceptor authCodeInterceptor;
-    private final String applicationId;
-    private final Long authCodeTimeout;
+    private Configuration configuration;
     
+
     public AuthCodeRetriever(Configuration configuration) {
-        this.applicationId = configuration.getStravaAppId();
-        this.authCodeTimeout = configuration.getStravaAuthorizerTimeout();
+        this.configuration = configuration;
     }
 
     /**
@@ -42,21 +39,24 @@ public class AuthCodeRetriever {
         try {
             log.info("Starting Strava OAuth process");
             runAuthCodeInterceptor();
-            runDesktopBrowserToAuthorizationUrl(getAuthorizationUrl());
-            
+
+            String redirectUri = "http://localhost:" + authCodeInterceptor.getListeningPort();
+            String url = buildAuthRequestUrl(redirectUri,configuration.getStravaAppId());
+            runDesktopBrowserToAuthorizationUrl(url);
+
             if (!waitForCode()) {
                 log.error("Timeout waiting for auth code");
             }
             return authCodeInterceptor.getAuthCode();
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             log.error("Can't run OAuth authorization process: {}", e.getMessage(), e);
             return authCodeInterceptor.getAuthCode();
         }
     }
 
     private boolean waitForCode() {
-        long timeOut = System.currentTimeMillis() + Duration.ofSeconds(authCodeTimeout).toMillis();
+        long timeOut = System.currentTimeMillis() + Duration.ofSeconds(configuration.getStravaAuthorizerTimeout()).toMillis();
         while (System.currentTimeMillis() < timeOut) {
             if (authCodeInterceptor.getAuthCodeReady().get()) {
                 log.info("Got auth code");
@@ -66,18 +66,18 @@ public class AuthCodeRetriever {
         }
         return false;
     }
- 
+
     private void runAuthCodeInterceptor() throws IOException {
         int port = getRandomFreeTcpPort();
         authCodeInterceptor = new AuthCodeInterceptor(port);
     }
 
-    void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException, URISyntaxException {
+    void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
         log.info("Redirecting user to strava app authorization page");
-        
+
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
-            desktop.browse(new URI(requestAccessURL));
+            desktop.browse(URI.create(requestAccessURL));
         } else {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec("xdg-open " + requestAccessURL);
@@ -92,23 +92,10 @@ public class AuthCodeRetriever {
         }
     }
 
-    private String getAuthorizationUrl() {
-
-        HttpUrl url = HttpUrl.parse(Constants.STRAVA_AUTHORIZATION_URL);
-        String redirectUri = "http://localhost:" + authCodeInterceptor.getListeningPort();
-        
-        return url.newBuilder()
-                .addQueryParameter("client_id", applicationId)
-                .addQueryParameter("redirect_uri", redirectUri)
-                .addQueryParameter("response_type", "code")
-                .addQueryParameter("approval_prompt", "force")
-                .addQueryParameter("scope", Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE)
-                .build().toString();
-
-    }
     boolean isAlive() {
         return authCodeInterceptor.isAlive();
     }
+
     int getRandomFreeTcpPort() throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(0)) {
             return serverSocket.getLocalPort();
