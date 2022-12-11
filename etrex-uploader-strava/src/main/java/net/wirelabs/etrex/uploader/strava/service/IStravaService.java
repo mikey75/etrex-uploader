@@ -21,4 +21,6 @@ public interface IStravaService {
     Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaException;
 
     ActivityStats getAthleteStats(Long id) throws StravaException;
+    
+    DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
 }
