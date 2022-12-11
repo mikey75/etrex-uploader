@@ -1,8 +1,5 @@
 package net.wirelabs.etrex.uploader.strava.service;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
@@ -10,14 +7,15 @@ import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.*;
+import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
 
 import java.io.File;
-import java.net.URLConnection;
 import java.util.*;
 
 
 @Slf4j
-public class StravaService  implements IStravaService {
+public class StravaService implements IStravaService {
 
     private final StravaClient client;
 
@@ -37,10 +35,10 @@ public class StravaService  implements IStravaService {
 
     private void setupUrls() {
         String apiBaseUrl = Constants.STRAVA_BASE_URL;
-        activities = apiBaseUrl+ "/activities";
-        athlete = apiBaseUrl+"/athlete";
+        activities = apiBaseUrl + "/activities";
+        athlete = apiBaseUrl + "/athlete";
         athletes = apiBaseUrl + "/athletes";
-        athleteActivities = apiBaseUrl +"/athlete/activities";
+        athleteActivities = apiBaseUrl + "/athlete/activities";
         uploads = apiBaseUrl + "/uploads";
     }
 
@@ -69,23 +67,25 @@ public class StravaService  implements IStravaService {
 
     @Override
     public ActivityStats getAthleteStats(Long id) throws StravaException {
-        return client.makeGetRequest(athletes +"/" + id +"/stats", ActivityStats.class);
+        return client.makeGetRequest(athletes + "/" + id + "/stats", ActivityStats.class);
     }
 
     @Override
     public DetailedActivity getActivityById(Long id) throws StravaException {
-        return client.makeGetRequest(activities +"/"+ id, DetailedActivity.class);
+        return client.makeGetRequest(activities + "/" + id, DetailedActivity.class);
 
     }
+
     @Override
     public List<SummaryActivity> getCurrentAthleteActivities() throws StravaException {
         return getCurrentAthleteActivities(1, 30);
     }
 
     @Override
-    public Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaException {
-
-        Upload u = uploadActivityRequest(file, name, desc, type);
+    public Upload uploadActivity(File file, String name, String desc, SportType sportType) throws StravaException {
+        
+        MultipartForm form = StravaUtils.createFileUploadForm(file,name,desc,sportType);
+        Upload u = client.postForm(uploads, form, Upload.class); 
 
         // after upload check upload status
         Upload uploadStatus = getUploadStatus(u.getId());
@@ -100,47 +100,15 @@ public class StravaService  implements IStravaService {
         }
 
         return uploadStatus;
-
+        
     }
-
-    private Upload uploadActivityRequest(File file, String name, String description, SportType sportType) throws StravaException {
-
-        String dataType = guessContentTypeFromFile(file);
-        String fileFormat = guessFileFormat(file);       
-        RequestBody uploadBody = new MultipartBuilder().type(MultipartBuilder.FORM)
-                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse(dataType), file))
-                .addFormDataPart("data_type", fileFormat)
-                .addFormDataPart("name", name)
-                .addFormDataPart("sport_type", sportType.getValue())
-                .addFormDataPart("description", description)
-                .build();
-
-        return client.makePostRequest(uploads, uploadBody,Upload.class);
-
-
-    }
+    
     private Upload getUploadStatus(Long uploadId) throws StravaException {
 
         String urlPart = uploads + "/" + uploadId;
-        return client.makeGetRequest(urlPart,Upload.class);
-
-
+        return client.makeGetRequest(urlPart, Upload.class);
     }
-
-    private String guessFileFormat(File file) {
-        String fname = file.getName().toLowerCase();
-        if (fname.endsWith(".gpx")) return "gpx";
-        if (fname.endsWith(".tcx")) return "tcx";
-        if (fname.endsWith(".fit")) return "fit";
-        return "";
-    }
-
-    public String guessContentTypeFromFile(File file) {
-        String contentType = URLConnection.guessContentTypeFromName(file.getName());
-        return Objects.requireNonNullElse(contentType, "application/octet-stream");
-    }
-
-
+    
 }
     
 
