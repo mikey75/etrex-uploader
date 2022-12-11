@@ -71,6 +71,11 @@ public class StravaService implements IStravaService {
     }
 
     @Override
+    public DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException {
+        return client.makePutRequest(activities +"/" + id, update,  DetailedActivity.class);
+    }
+
+    @Override
     public DetailedActivity getActivityById(Long id) throws StravaException {
         return client.makeGetRequest(activities + "/" + id, DetailedActivity.class);
 
