@@ -86,7 +86,7 @@
                                 <mkdir dir="${destDir}"/>
                                 <copy tofile="${destDir}/etrex-uploader.jar" file="${basedir}/target/etrex-uploader-app-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
                                 <copy tofile="${destDir}/garmin.png" file="${basedir}/src/main/resources/garmin.png"/>
-                                <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
+                                <copy toFile="${destDir}/logback.xml" file="${basedir}/../logback.xml"/>
                                 <copy toFile="${destDir}/config.properties" file="${basedir}/src/main/resources/config.properties"/>
                                 <zip basedir="${destDir}" destfile="${basedir}/target/etrex-uploader.zip"/>
                             </target>

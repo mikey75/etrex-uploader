@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 
 
 /**
@@ -19,15 +20,16 @@ public abstract class EventListener {
         shouldStop.set(true);
     }
 
-    void startListener(EventBusListenerCallback eventListenerCallback) {
-        new Thread(() -> {
+    void startListener(Runnable eventListenerCallback) {
+        ThreadUtils.runAsync(() -> {
+        
             while (!shouldStop.get()) {
                 isRunning.set(true);
-                eventListenerCallback.execute();
+                eventListenerCallback.run();
                 //todo make configurable delay
                 Sleeper.sleepMillis(50);
             }
             isRunning.set(false);
-        }).start();
+        });
     }
 }
