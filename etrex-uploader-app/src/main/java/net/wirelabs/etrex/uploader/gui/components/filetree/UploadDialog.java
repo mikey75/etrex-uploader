@@ -103,14 +103,12 @@ public class UploadDialog extends JDialog {
     }
 
     private void handleUnsuccessfulUpload(Upload upload) {
-        log.error("Upload failed [Api response: {}]", upload.getError());
         SwingUtils.errorMsg("Upload unsucessful [API response:" + upload.getError() + "]");
         dispose();
     }
 
     private void handleSuccessfulUpload(Upload upload) {
         EventBus.publish(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED, trackFile);
-        log.info("Upload successful [API response: {}]",  upload.getStatus());
         SwingUtils.infoMsg("Upload successful [API response: " + upload.getStatus() + "]");
         dispose();
     }

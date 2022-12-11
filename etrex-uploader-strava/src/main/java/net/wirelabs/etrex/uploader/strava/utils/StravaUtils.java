@@ -105,6 +105,15 @@ public class StravaUtils {
         throw new StravaException("The file you're uploading is in unsupported format");
     }
 
+    /**
+     * Build upload form body for uploading track resulting in created activity
+     * @param file file to upload
+     * @param name name of the activity
+     * @param description description of the activity
+     * @param sportType sport type
+     * @return form body object to use in POST request
+     * @throws StravaException
+     */
     public static MultipartForm createFileUploadForm(File file, String name, String description, SportType sportType) throws StravaException {
 
         return MultipartForm.newBuilder()

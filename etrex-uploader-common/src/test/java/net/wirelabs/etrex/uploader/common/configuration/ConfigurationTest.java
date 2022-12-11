@@ -20,7 +20,7 @@ public class ConfigurationTest {
     void shouldAssertDefaultValuesWhenNoConfigFile() {
         Configuration c = new Configuration("nonexistent.file");
         assertThat(c.getStorageRoot()).isEqualTo(System.getProperty("user.home") + File.separator + "etrex-uploader-store");
-        assertThat(c.getUserStorageRoots()).isEqualTo("");
+        assertThat(c.getUserStorageRoots()).isEmpty();
         assertThat(c.isArchiveAfterUpload()).isTrue();
         assertThat(c.isDeleteAfterUpload()).isTrue();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
