@@ -9,7 +9,6 @@ import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
-import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,7 +17,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.Map;
 
 import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildGetTokenRequest;
 
@@ -72,8 +70,7 @@ public class StravaClient {
     public <T> T makePutRequest(String endpointUrl, Object body, Class<T> type) throws StravaException {
         getNewAccessTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
-                .header("Authorization", "Bearer " + configuration.getStravaAccessToken())
-                .header("Accept", "application/json")
+                .headers(commonHeaders())
                 .uri(URI.create(endpointUrl))
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonParser.toJson(body)))
                 .build();
@@ -82,13 +79,20 @@ public class StravaClient {
         return jsonParser.fromJson(result, type);
 
     }
+
+    private String[] commonHeaders() {
+        return new String[] {
+                "Authorization", "Bearer " + configuration.getStravaAccessToken(),
+                "Accept", "application/json"
+        };
+    }
+
     public <T> T postForm(String endpointUrl, MultipartForm form, Class<T> type) throws StravaException {
 
         getNewAccessTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
                 .header("Content-Type", "multipart/form-data; boundary=" + form.getBoundary())
-                .header("Authorization", "Bearer " + configuration.getStravaAccessToken())
-                .header("Accept", "application/json")
+                .headers(commonHeaders())
                 .uri(URI.create(endpointUrl))
                 .POST(HttpRequest.BodyPublishers.ofByteArrays(form.getBody()))
                 .build();
@@ -103,8 +107,7 @@ public class StravaClient {
 
         getNewAccessTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
-                .header("Authorization", "Bearer " + configuration.getStravaAccessToken())
-                .header("Accept", "application/json")
+                .headers(commonHeaders())
                 .uri(URI.create(endpointUrl))
                 .GET()
                 .build();
