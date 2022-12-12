@@ -1,50 +1,76 @@
 package net.wirelabs.etrex.uploader.gui.account;
 
 
-import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
-import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+
+import lombok.extern.slf4j.Slf4j;
+import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
+import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 
 /**
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 public class UserAccountPanel extends BorderedPanel {
 
-    private final JLabel label = new JLabel("Getting data");
-    private final JLabel imageLabel = new JLabel("");
+    final JLabel athleteName = new JLabel();
+    final JLabel athletePicture = new JLabel();
     private final IStravaService stravaService;
     
     public UserAccountPanel(IStravaService stravaService) {
-        super("My profile");
         this.stravaService = stravaService;
-        setLayout(new MigLayout("", "[]", "[][]"));
-        add(label, "cell 0 0,growx");
-        add(imageLabel, "cell 0 1,alignx center");
-        
-        SwingUtilities.invokeLater(this::getUserAccountData);
-
+        initVisualComponent();
+        getUserAccountData();
     }
-    
+
+    private void initVisualComponent() {
+        setBorderTitle("My profile");
+        setLayout(new MigLayout("", "[]", "[][]"));
+        add(athleteName, "cell 0 0,growx");
+        add(athletePicture, "cell 0 1,alignx center");
+    }
+
     private void getUserAccountData() {
+        SummaryAthlete athlete = null;
+        BufferedImage img = null;
+        
         try {
-            SummaryAthlete athlete = stravaService.getCurrentAthlete();
-            label.setText(athlete.getFirstname() + " " + athlete.getLastname());
+            athlete = stravaService.getCurrentAthlete();
             String profilePicFilename = athlete.getProfile();
-            BufferedImage img = ImageIO.read(new URL(profilePicFilename));
-            imageLabel.setIcon(new ImageIcon(img));
-        } catch (IOException e) {
-            imageLabel.setText("Couldn't get profile picture");
-        } catch (StravaException e) {
-            SwingUtils.errorMsg(e.getMessage());
+            if (profilePicFilename != null) {
+                img = ImageIO.read(URI.create(profilePicFilename).toURL());
+            }
+        } catch (StravaException | IOException e ) {
+            log.error("Error getting user profile data {}",e.getMessage(),e);
+        }
+        
+        setAthleteFullName(athlete);
+        setAthletePicture(img);
+        
+    }
+
+    private void setAthletePicture(BufferedImage img) {
+        if (img == null ) {
+            SwingUtilities.invokeLater(() -> athletePicture.setText("Couldn't get athlete picture"));
+        } else {
+            SwingUtilities.invokeLater(() -> athletePicture.setIcon(new ImageIcon(img)));
+        }
+    }
+
+    private void setAthleteFullName(SummaryAthlete athlete) {
+        if (athlete == null) {
+            SwingUtilities.invokeLater(() -> athleteName.setText("Couldn't get athlete name"));
+        }else {
+            String athleteFullName = athlete.getFirstname() + " " + athlete.getLastname();
+            SwingUtilities.invokeLater(() -> athleteName.setText(athleteFullName));
         }
     }
 
