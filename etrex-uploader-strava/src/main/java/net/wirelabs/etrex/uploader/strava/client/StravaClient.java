@@ -114,19 +114,6 @@ public class StravaClient {
 
     }
 
-    public <T> T makeParameterizedGetRequest(String endpointUrl, Map<String, String> parameters, Class<T> type) throws StravaException {
-        String finalUrl = applyParameterToURL(endpointUrl, parameters);
-        return makeGetRequest(finalUrl, type);
-    }
-
-    private String applyParameterToURL(String endpointUrl, Map<String, String> parameters) {
-        UrlBuilder url = UrlBuilder.newBuilder().baseUrl(endpointUrl);
-        for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            url.addQueryParam(entry.getKey(), entry.getValue());
-        }
-        return url.build();
-    }
-
     public void getNewAccessTokenIfExpired() throws StravaException {
         if (configuration.getStravaAccessToken().isBlank() || configuration.getStravaRefreshToken().isBlank()) {
             throw new StravaException("Tokens unavailable, application will run without strava");

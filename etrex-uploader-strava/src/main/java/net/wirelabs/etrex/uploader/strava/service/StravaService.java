@@ -9,6 +9,7 @@ import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.*;
 import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
+import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
 import java.io.File;
 import java.util.*;
@@ -53,14 +54,13 @@ public class StravaService implements IStravaService {
     }
 
     @Override
-    public List<SummaryActivity> getCurrentAthleteActivities(int page, int perpage) throws StravaException {
-
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("page", String.valueOf(page));
-        parameters.put("per_page", String.valueOf(perpage));
-
-        SummaryActivity[] activitiesList = client.makeParameterizedGetRequest(athleteActivities,
-                parameters, SummaryActivity[].class);
+    public List<SummaryActivity> getCurrentAthleteActivities(int page, int perPage) throws StravaException {
+        
+        String url = UrlBuilder.newBuilder().baseUrl(athleteActivities)
+                .addQueryParam("page", String.valueOf(page))
+                .addQueryParam("per_page",String.valueOf(perPage)).build();
+        
+        SummaryActivity[] activitiesList = client.makeGetRequest(url, SummaryActivity[].class);
         return Arrays.asList(activitiesList);
 
     }
