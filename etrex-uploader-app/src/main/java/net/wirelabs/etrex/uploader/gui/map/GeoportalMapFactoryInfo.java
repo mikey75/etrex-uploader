@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.components;
+package net.wirelabs.etrex.uploader.gui.map;
 
 import org.jxmapviewer.viewer.TileFactoryInfo;
 

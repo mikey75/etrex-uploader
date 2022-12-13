@@ -150,15 +150,21 @@ public class StravaClient {
         configuration.save();
     }
 
-    public AuthResponse exchangeAuthCodeForAccessToken(String authCode) throws StravaException {
-
+    public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
+        
         if (!authCode.isEmpty()) {
-            HttpRequest request = buildGetTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), authCode);
+            HttpRequest request = buildGetTokenRequest(appId,clientSecret,authCode);
             String response = execute(request);
             AuthResponse authResponse = jsonParser.fromJson(response, AuthResponse.class);
-            log.info("Got token!");
-            return authResponse;
+            
+            log.info("Got tokens!");
+            updateTokenInfo(authResponse.getAccessToken(),authResponse.getRefreshToken(), authResponse.getExpiresAt());
+            // also save app id and client secret for refresh token request
+            configuration.setStravaClientSecret(clientSecret);
+            configuration.setStravaAppId(appId);
+            configuration.save();
+            
         }
-        return null;
+        
     }
 }

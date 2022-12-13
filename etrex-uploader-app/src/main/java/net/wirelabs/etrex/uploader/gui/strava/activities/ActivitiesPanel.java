@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.activitiestable;
+package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 
 import java.awt.*;

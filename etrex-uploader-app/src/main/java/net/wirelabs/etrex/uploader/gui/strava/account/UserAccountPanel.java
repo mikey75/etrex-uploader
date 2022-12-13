@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.account;
+package net.wirelabs.etrex.uploader.gui.strava.account;
 
 
 import java.awt.image.BufferedImage;
@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
@@ -28,7 +29,7 @@ public class UserAccountPanel extends BorderedPanel {
     public UserAccountPanel(IStravaService stravaService) {
         this.stravaService = stravaService;
         initVisualComponent();
-        getUserAccountData();
+        ThreadUtils.runAsync(this::getUserAccountData);
     }
 
     private void initVisualComponent() {
