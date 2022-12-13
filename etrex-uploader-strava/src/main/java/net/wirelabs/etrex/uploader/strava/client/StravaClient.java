@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
@@ -27,13 +28,16 @@ import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildGetToken
 public class StravaClient {
 
     private final HttpClient httpClient;
+    @Getter
     private Gson jsonParser;
-    private final Configuration configuration;
+    @Getter
+    private final TokenManager tokenManager;
 
-    public StravaClient(Configuration configuration) {
+    public StravaClient(TokenManager tokenManager) {
+        this.tokenManager = tokenManager;
         this.jsonParser = createJsonParser();
         this.httpClient = HttpClient.newHttpClient();
-        this.configuration = configuration;
+       
     }
 
     private Gson createJsonParser() {
@@ -82,7 +86,7 @@ public class StravaClient {
 
     private String[] commonHeaders() {
         return new String[] {
-                "Authorization", "Bearer " + configuration.getStravaAccessToken(),
+                "Authorization", "Bearer " + tokenManager.getAccessToken(),
                 "Accept", "application/json"
         };
     }
@@ -117,22 +121,21 @@ public class StravaClient {
 
     }
 
-    public void getNewAccessTokenIfExpired() throws StravaException {
-        if (configuration.getStravaAccessToken().isBlank() || configuration.getStravaRefreshToken().isBlank()) {
+    private void getNewAccessTokenIfExpired() throws StravaException {
+        if (!tokenManager.hasAccessToken() || !tokenManager.hasRefreshToken()) {
             throw new StravaException("Tokens unavailable, application will run without strava");
         }
         // if a new token is issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized (this) {
 
-            Long tokenExpiresAt = configuration.getStravaTokenExpires();
-
+            Long tokenExpiresAt = tokenManager.getTokenExpires();
             if (tokenExpiresAt < getCurrentTime()) {
                 log.info("Token expired, getting new token using refresh token");
-                HttpRequest refreshTokenRequest = StravaUtils.buildTokenRefreshRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
+                HttpRequest refreshTokenRequest = StravaUtils.buildTokenRefreshRequest(tokenManager.getAppId(), tokenManager.getClientSecret(), tokenManager.getRefreshToken());
                 String response = execute(refreshTokenRequest);
                 RefreshTokenResponse refreshTokenResponse = jsonParser.fromJson(response, RefreshTokenResponse.class);
-                updateTokenInfo(refreshTokenResponse.getAccessToken(), refreshTokenResponse.getRefreshToken(), refreshTokenResponse.getExpiresAt());
+                tokenManager.updateTokenInfo(refreshTokenResponse.getAccessToken(), refreshTokenResponse.getRefreshToken(), refreshTokenResponse.getExpiresAt());
 
             }
         }
@@ -142,29 +145,9 @@ public class StravaClient {
         return Duration.ofMillis(System.currentTimeMillis()).getSeconds();
     }
 
-    private void updateTokenInfo(String accessToken, String refreshToken, Long expiresAt) {
-        log.info("Updating tokens in configuration");
-        configuration.setStravaAccessToken(accessToken);
-        configuration.setStravaRefreshToken(refreshToken);
-        configuration.setStravaTokenExpires(expiresAt);
-        configuration.save();
-    }
+    
 
-    public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
-        
-        if (!authCode.isEmpty()) {
-            HttpRequest request = buildGetTokenRequest(appId,clientSecret,authCode);
-            String response = execute(request);
-            AuthResponse authResponse = jsonParser.fromJson(response, AuthResponse.class);
-            
-            log.info("Got tokens!");
-            updateTokenInfo(authResponse.getAccessToken(),authResponse.getRefreshToken(), authResponse.getExpiresAt());
-            // also save app id and client secret for refresh token request
-            configuration.setStravaClientSecret(clientSecret);
-            configuration.setStravaAppId(appId);
-            configuration.save();
-            
-        }
-        
-    }
+    
+
+    
 }

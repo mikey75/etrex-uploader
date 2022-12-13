@@ -10,7 +10,11 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.strava.client.TokenManager;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.oauth.OAuth;
+import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 
 /**
@@ -20,19 +24,20 @@ public class StravaConnector extends JDialog {
 
 
     private final OAuth authCodeInterceptor;
-    private final StravaClient client;
+    private final IStravaService strava;
 
     private final JLabel lblApplicationId = new JLabel("Application ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new ConnectWithStravaButton();
+    private final TokenManager tokenManager;
 
-    public StravaConnector(StravaClient client, OAuth authCodeInterceptor) {
+    public StravaConnector(IStravaService strava, TokenManager tokenManager, OAuth authCodeInterceptor) {
 
         this.authCodeInterceptor = authCodeInterceptor;
-        this.client = client;
-
+        this.strava = strava;
+        this.tokenManager = tokenManager;
         createVisualComponent();
         registerExitOnCloseListener();
         connectBtn.addActionListener(this::connectWithStrava);
@@ -72,7 +77,9 @@ public class StravaConnector extends JDialog {
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
                 String authCode = authCodeInterceptor.getAuthCode(appId);
-                client.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
+                AuthResponse authResponse = strava.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
+                tokenManager.updateTokenInfo(authResponse.getAccessToken(), authResponse.getRefreshToken(), authResponse.getExpiresAt());
+                tokenManager.updateCredentials(appId,clientSecret);
                 authCodeInterceptor.shutdown();
                 dispose();
             }

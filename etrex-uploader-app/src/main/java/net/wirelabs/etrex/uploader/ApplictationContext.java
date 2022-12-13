@@ -1,9 +1,12 @@
 package net.wirelabs.etrex.uploader;
 
+import ch.qos.logback.core.subst.Token;
 import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
+import net.wirelabs.etrex.uploader.strava.client.TokenManager;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
@@ -19,12 +22,15 @@ public class ApplictationContext {
     private final FileService fileService;
     private final IStravaService stravaService;
     private final GarminDeviceService garminDeviceService;
+    private final TokenManager tokenManager;
 
 
     public ApplictationContext() {
         this.configuration = new Configuration();
         this.fileService = new FileService(configuration);
-        this.stravaService = new StravaService(configuration);
+        this.tokenManager = new TokenManager(configuration);
+        StravaClient client = new StravaClient(tokenManager);
+        this.stravaService = new StravaService(client);
         this.garminDeviceService = new GarminDeviceService(configuration);
     }
 

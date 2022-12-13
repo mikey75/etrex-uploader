@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.strava.service;
 
 import net.wirelabs.etrex.uploader.strava.model.*;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 
 import java.io.File;
 import java.io.Serializable;
@@ -25,4 +26,6 @@ public interface IStravaService extends Serializable {
     ActivityStats getAthleteStats(Long id) throws StravaException;
     
     DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
+    
+    AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException;
 }

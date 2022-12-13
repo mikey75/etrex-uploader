@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.service;
 
+import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildGetTokenRequest;
+
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.Configuration;
@@ -7,11 +9,13 @@ import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.*;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
 import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
 import java.io.File;
+import java.net.http.HttpRequest;
 import java.util.*;
 
 
@@ -28,9 +32,8 @@ public class StravaService implements IStravaService {
     private String athleteActivities;
     private String uploads;
 
-    public StravaService(Configuration configuration) {
-
-        client = new StravaClient(configuration);
+    public StravaService(StravaClient client) {
+        this.client = client;
         setupUrls();
     }
 
@@ -114,6 +117,19 @@ public class StravaService implements IStravaService {
         return client.makeGetRequest(urlPart, Upload.class);
     }
     
+    public AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
+
+        if (!authCode.isEmpty()) {
+            HttpRequest request = buildGetTokenRequest(appId,clientSecret,authCode);
+            String response = client.execute(request);
+            AuthResponse authResponse = client.getJsonParser().fromJson(response, AuthResponse.class);
+            log.info("Got tokens!");
+            return authResponse;
+        } else {
+            throw new StravaException("Code was empty");
+        }
+
+    }
 }
     
 
