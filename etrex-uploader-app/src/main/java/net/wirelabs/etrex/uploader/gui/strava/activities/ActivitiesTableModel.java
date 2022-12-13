@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.activitiestable;
+package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 import net.wirelabs.etrex.uploader.common.utils.DateAndUnitConversionUtil;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;

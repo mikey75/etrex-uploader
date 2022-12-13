@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.account;
+package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.time.Duration;
 
+import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
