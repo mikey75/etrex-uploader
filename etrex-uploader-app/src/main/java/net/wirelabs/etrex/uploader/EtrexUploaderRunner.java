@@ -17,7 +17,6 @@ import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
-import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.oauth.OAuth;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +37,7 @@ public class EtrexUploaderRunner {
             
             if (!isApplicationAuthorizedToStrava(ctx)) {
                 OAuth oAuth = new OAuth().start();
-                StravaClient client = new StravaClient(ctx.getConfiguration());
-                StravaConnector stravaConnectorDialog = new StravaConnector(client, oAuth);
+                StravaConnector stravaConnectorDialog = new StravaConnector(ctx.getStravaService(),ctx.getTokenManager(),oAuth);
                 stravaConnectorDialog.setVisible(true);
             }
 
