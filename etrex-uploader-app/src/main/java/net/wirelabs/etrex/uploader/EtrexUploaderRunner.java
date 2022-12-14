@@ -12,11 +12,11 @@ import java.nio.file.Paths;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import org.slf4j.LoggerFactory;
 
 
@@ -35,7 +35,8 @@ public class EtrexUploaderRunner {
             ctx.getFileService().setupWorkDirectories();
             
             if (ctx.getTokenManager().getAccessToken() == null || ctx.getTokenManager().getAccessToken().isEmpty()) {
-                new StravaConnector(ctx.getClient());
+                AuthCodeRetriever authCodeRetriever = new AuthCodeRetriever();
+                new StravaConnector(ctx.getClient(), authCodeRetriever);
             }
 
             Frame window = new EtrexUploader(ctx);
