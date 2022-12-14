@@ -3,13 +3,10 @@ package net.wirelabs.etrex.uploader.strava.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
-import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,8 +15,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-
-import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildGetTokenRequest;
 
 /*
  * Created 11/3/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -37,11 +32,9 @@ public class StravaClient {
         this.tokenManager = tokenManager;
         this.jsonParser = createJsonParser();
         this.httpClient = HttpClient.newHttpClient();
-
     }
 
     private Gson createJsonParser() {
-
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapter(OffsetDateTime.class, (JsonDeserializer<OffsetDateTime>)
                         (json, type, context) -> OffsetDateTime.parse(json.getAsString()));
@@ -68,7 +61,6 @@ public class StravaClient {
             Thread.currentThread().interrupt(); // interrupt httpclient thread
             throw new StravaException(e.getMessage());
         }
-
     }
 
     public <T> T makePutRequest(String endpointUrl, Object body, Class<T> type) throws StravaException {
@@ -122,9 +114,6 @@ public class StravaClient {
     }
 
     private void getNewAccessTokenIfExpired() throws StravaException {
-        if (!tokenManager.hasAccessToken() || !tokenManager.hasRefreshToken()) {
-            throw new StravaException("Tokens unavailable, application will run without strava");
-        }
         // if a new token is issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized (this) {
@@ -132,8 +121,7 @@ public class StravaClient {
             Long tokenExpiresAt = tokenManager.getTokenExpires();
             if (tokenExpiresAt < getCurrentTime()) {
                 log.info("Token expired, getting new token");
-                HttpRequest refreshTokenRequest = StravaUtils.buildTokenRefreshRequest(tokenManager.getAppId(), tokenManager.getClientSecret(), tokenManager.getRefreshToken());
-                String response = execute(refreshTokenRequest);
+                String response = execute(tokenManager.buildRefreshTokenRequest());
                 RefreshTokenResponse refreshTokenResponse = jsonParser.fromJson(response, RefreshTokenResponse.class);
                 tokenManager.updateTokenInfo(refreshTokenResponse.getAccessToken(), refreshTokenResponse.getRefreshToken(), refreshTokenResponse.getExpiresAt());
 
@@ -145,12 +133,10 @@ public class StravaClient {
         return Duration.ofMillis(System.currentTimeMillis()).getSeconds();
     }
 
-
     public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
 
         if (!authCode.isEmpty()) {
-            HttpRequest request = buildGetTokenRequest(appId, clientSecret, authCode);
-            String response = execute(request);
+            String response = execute(tokenManager.buildGetTokenRequest(appId, clientSecret, authCode));
             AuthResponse authResponse = jsonParser.fromJson(response, AuthResponse.class);
             log.info("Got tokens!");
             tokenManager.updateTokenInfo(authResponse.getAccessToken(), authResponse.getRefreshToken(), authResponse.getExpiresAt());
@@ -159,7 +145,6 @@ public class StravaClient {
         } else {
             throw new StravaException("Code was empty");
         }
-
     }
     
 }
