@@ -37,7 +37,7 @@ public class StravaClient {
         this.tokenManager = tokenManager;
         this.jsonParser = createJsonParser();
         this.httpClient = HttpClient.newHttpClient();
-       
+
     }
 
     private Gson createJsonParser() {
@@ -85,7 +85,7 @@ public class StravaClient {
     }
 
     private String[] commonHeaders() {
-        return new String[] {
+        return new String[]{
                 "Authorization", "Bearer " + tokenManager.getAccessToken(),
                 "Accept", "application/json"
         };
@@ -131,7 +131,7 @@ public class StravaClient {
 
             Long tokenExpiresAt = tokenManager.getTokenExpires();
             if (tokenExpiresAt < getCurrentTime()) {
-                log.info("Token expired, getting new token using refresh token");
+                log.info("Token expired, getting new token");
                 HttpRequest refreshTokenRequest = StravaUtils.buildTokenRefreshRequest(tokenManager.getAppId(), tokenManager.getClientSecret(), tokenManager.getRefreshToken());
                 String response = execute(refreshTokenRequest);
                 RefreshTokenResponse refreshTokenResponse = jsonParser.fromJson(response, RefreshTokenResponse.class);
@@ -145,9 +145,21 @@ public class StravaClient {
         return Duration.ofMillis(System.currentTimeMillis()).getSeconds();
     }
 
-    
 
-    
+    public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
 
+        if (!authCode.isEmpty()) {
+            HttpRequest request = buildGetTokenRequest(appId, clientSecret, authCode);
+            String response = execute(request);
+            AuthResponse authResponse = jsonParser.fromJson(response, AuthResponse.class);
+            log.info("Got tokens!");
+            tokenManager.updateTokenInfo(authResponse.getAccessToken(), authResponse.getRefreshToken(), authResponse.getExpiresAt());
+            tokenManager.updateCredentials(appId,clientSecret);
+            
+        } else {
+            throw new StravaException("Code was empty");
+        }
+
+    }
     
 }

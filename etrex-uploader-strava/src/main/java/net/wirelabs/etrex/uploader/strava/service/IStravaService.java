@@ -27,5 +27,5 @@ public interface IStravaService extends Serializable {
     
     DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
     
-    AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException;
+    //AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException;
 }

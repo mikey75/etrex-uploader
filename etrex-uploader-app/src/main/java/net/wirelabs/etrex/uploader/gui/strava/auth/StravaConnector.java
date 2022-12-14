@@ -10,11 +10,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
-import net.wirelabs.etrex.uploader.strava.client.TokenManager;
-import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.oauth.OAuth;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 
 /**
@@ -22,28 +18,30 @@ import net.wirelabs.etrex.uploader.strava.service.StravaService;
  */
 public class StravaConnector extends JDialog {
 
-
     private final OAuth authCodeInterceptor;
-    private final IStravaService strava;
-
     private final JLabel lblApplicationId = new JLabel("Application ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new ConnectWithStravaButton();
-    private final TokenManager tokenManager;
+  
+    private final StravaClient client;
 
-    public StravaConnector(IStravaService strava, TokenManager tokenManager, OAuth authCodeInterceptor) {
+    public StravaConnector(StravaClient client) {
 
-        this.authCodeInterceptor = authCodeInterceptor;
-        this.strava = strava;
-        this.tokenManager = tokenManager;
+        this.authCodeInterceptor = getAuthCodeInterceptor();
+        this.client = client;
+  
         createVisualComponent();
         registerExitOnCloseListener();
         connectBtn.addActionListener(this::connectWithStrava);
-
+        setVisible(true);
     }
-
+    
+    OAuth getAuthCodeInterceptor() {
+        return new OAuth().start();
+    }
+    
     private void registerExitOnCloseListener() {
         addWindowListener(new WindowAdapter() {
             @Override
@@ -74,12 +72,11 @@ public class StravaConnector extends JDialog {
     private void connectWithStrava(ActionEvent ev) {
         String appId = appIdInput.getText();
         String clientSecret = appSecretInput.getText();
+        
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
                 String authCode = authCodeInterceptor.getAuthCode(appId);
-                AuthResponse authResponse = strava.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
-                tokenManager.updateTokenInfo(authResponse.getAccessToken(), authResponse.getRefreshToken(), authResponse.getExpiresAt());
-                tokenManager.updateCredentials(appId,clientSecret);
+                client.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
                 authCodeInterceptor.shutdown();
                 dispose();
             }
@@ -87,5 +84,6 @@ public class StravaConnector extends JDialog {
             SwingUtils.errorMsg("Could not connect with strava:" + e.getMessage());
         }
     }
-
+    
+   
 }

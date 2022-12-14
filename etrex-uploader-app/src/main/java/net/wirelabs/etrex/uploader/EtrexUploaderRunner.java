@@ -36,9 +36,7 @@ public class EtrexUploaderRunner {
             ctx.getFileService().setupWorkDirectories();
             
             if (!isApplicationAuthorizedToStrava(ctx)) {
-                OAuth oAuth = new OAuth().start();
-                StravaConnector stravaConnectorDialog = new StravaConnector(ctx.getStravaService(),ctx.getTokenManager(),oAuth);
-                stravaConnectorDialog.setVisible(true);
+                new StravaConnector(ctx.getClient());
             }
 
             Frame window = new EtrexUploader(ctx);
