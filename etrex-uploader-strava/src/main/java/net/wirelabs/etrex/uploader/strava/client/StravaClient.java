@@ -58,13 +58,14 @@ public class StravaClient {
         } catch (IOException e) {
             throw new StravaException(e.getMessage());
         } catch (InterruptedException e) {
+            log.info("Interrupting httpclient thread");
             Thread.currentThread().interrupt(); // interrupt httpclient thread
             throw new StravaException(e.getMessage());
         }
     }
 
     public <T> T makePutRequest(String endpointUrl, Object body, Class<T> type) throws StravaException {
-        getNewAccessTokenIfExpired();
+        refreshTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
                 .headers(commonHeaders())
                 .uri(URI.create(endpointUrl))
@@ -85,7 +86,7 @@ public class StravaClient {
 
     public <T> T postForm(String endpointUrl, MultipartForm form, Class<T> type) throws StravaException {
 
-        getNewAccessTokenIfExpired();
+        refreshTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
                 .header("Content-Type", "multipart/form-data; boundary=" + form.getBoundary())
                 .headers(commonHeaders())
@@ -101,7 +102,7 @@ public class StravaClient {
 
     public <T> T makeGetRequest(String endpointUrl, Class<T> type) throws StravaException {
 
-        getNewAccessTokenIfExpired();
+        refreshTokenIfExpired();
         HttpRequest request = HttpRequest.newBuilder()
                 .headers(commonHeaders())
                 .uri(URI.create(endpointUrl))
@@ -113,13 +114,12 @@ public class StravaClient {
 
     }
 
-    private void getNewAccessTokenIfExpired() throws StravaException {
+    private void refreshTokenIfExpired() throws StravaException {
         // if a new token is being issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized (this) {
 
-            Long tokenExpiresAt = tokenManager.getTokenExpires();
-            if (tokenExpiresAt < getCurrentTime()) {
+            if (tokenManager.getTokenExpires() < getCurrentTime()) {
                 log.info("Token expired, getting new token");
                 String response = execute(tokenManager.buildRefreshTokenRequest());
                 RefreshTokenResponse refreshTokenResponse = jsonParser.fromJson(response, RefreshTokenResponse.class);

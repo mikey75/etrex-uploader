@@ -10,7 +10,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
-import net.wirelabs.etrex.uploader.strava.oauth.OAuth;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 
 
 /**
@@ -18,18 +18,19 @@ import net.wirelabs.etrex.uploader.strava.oauth.OAuth;
  */
 public class StravaConnector extends JDialog {
 
-    private final OAuth authCodeInterceptor;
+    private final AuthCodeRetriever authCodeRetriever;
+    private final StravaClient client;
+
     private final JLabel lblApplicationId = new JLabel("Application ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new ConnectWithStravaButton();
-  
-    private final StravaClient client;
 
-    public StravaConnector(StravaClient client) {
 
-        this.authCodeInterceptor = getAuthCodeInterceptor();
+    public StravaConnector(StravaClient client, AuthCodeRetriever authCodeRetriever)  {
+
+        this.authCodeRetriever = authCodeRetriever;
         this.client = client;
   
         createVisualComponent();
@@ -38,9 +39,7 @@ public class StravaConnector extends JDialog {
         setVisible(true);
     }
     
-    OAuth getAuthCodeInterceptor() {
-        return new OAuth().start();
-    }
+
     
     private void registerExitOnCloseListener() {
         addWindowListener(new WindowAdapter() {
@@ -75,9 +74,9 @@ public class StravaConnector extends JDialog {
         
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
-                String authCode = authCodeInterceptor.getAuthCode(appId);
+                String authCode = authCodeRetriever.getAuthCode(appId);
                 client.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
-                authCodeInterceptor.shutdown();
+                authCodeRetriever.shutdown();
                 dispose();
             }
         } catch (StravaException | IOException e) {
