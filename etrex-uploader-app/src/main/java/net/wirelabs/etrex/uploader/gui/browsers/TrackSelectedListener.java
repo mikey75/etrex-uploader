@@ -10,6 +10,6 @@ public class TrackSelectedListener implements TreeSelectionListener {
     @Override
     public void valueChanged(TreeSelectionEvent event) {
         FileNode node = (FileNode) event.getPath().getLastPathComponent();
-        MapUtil.drawTrackFromSelectedFileNode(node);
+        MapUtil.drawTrackFromFile(node.getFile());
     }
 }

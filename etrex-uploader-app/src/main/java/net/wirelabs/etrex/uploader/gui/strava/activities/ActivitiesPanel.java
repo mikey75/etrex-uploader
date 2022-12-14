@@ -66,7 +66,7 @@ public class ActivitiesPanel extends EventAwarePanel {
 
         btnNextPage.addActionListener(e -> increasePageAndLoadActivities());
 
-        activitiesTable.addSelectionListener(this::drawPolyLineTrackFromActivity);
+        activitiesTable.addSelectionListener(this::drawTrack);
     }
 
     private void increasePageAndLoadActivities() {
@@ -94,9 +94,10 @@ public class ActivitiesPanel extends EventAwarePanel {
         });
     }
 
-    private void drawPolyLineTrackFromActivity(ListSelectionEvent event) {
+    private void drawTrack(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting()) {
-            MapUtil.drawTrackFromActivity(activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow()));
+            SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
+            MapUtil.drawTrackFromPolyLine(selectedActivity.getMap().getSummaryPolyline());
         }
     }
 
