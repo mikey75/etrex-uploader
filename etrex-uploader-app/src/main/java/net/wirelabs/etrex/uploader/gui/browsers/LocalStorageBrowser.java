@@ -8,7 +8,7 @@ import javax.swing.border.TitledBorder;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 
 
@@ -17,7 +17,7 @@ public class LocalStorageBrowser extends JPanel {
 
     private final FileTree fileTree;
 
-    public LocalStorageBrowser(Configuration configuration) {
+    public LocalStorageBrowser(AppConfiguration appConfiguration) {
         
         setBorder(new TitledBorder("Local repository"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -29,24 +29,24 @@ public class LocalStorageBrowser extends JPanel {
         fileTree.addTreeSelectionListener(new TrackSelectedListener());
         fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree));
         
-        setupRoots(configuration);
+        setupRoots(appConfiguration);
         scrollPane.setViewportView(fileTree);
 
     }
 
-    private void setupRoots(Configuration configuration) {
+    private void setupRoots(AppConfiguration appConfiguration) {
 
-        File defaultStorageRoot = new File(configuration.getStorageRoot());
+        File defaultStorageRoot = new File(appConfiguration.getStorageRoot());
         fileTree.addDrive(defaultStorageRoot);
-        for (File root: getCustomStorageRoots(configuration)) {
+        for (File root: getCustomStorageRoots(appConfiguration)) {
             fileTree.addDrive(root);
         }
     }
 
-    private List<File> getCustomStorageRoots(Configuration configuration) {
+    private List<File> getCustomStorageRoots(AppConfiguration appConfiguration) {
         
         List<File> customRoots = new ArrayList<>();
-        String userRoots = configuration.getUserStorageRoots();
+        String userRoots = appConfiguration.getUserStorageRoots();
         if (userRoots != null && !userRoots.isEmpty()) {
             String[] roots = userRoots.split(",");
             for (String root : roots) {

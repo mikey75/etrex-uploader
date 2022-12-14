@@ -9,5 +9,6 @@
 /logs/*.log
 /etrex-uploader/logs/*.log
 /etrex-uploader-app/config.properties
-config.properties
+/config.properties
+/strava.properties
 /logs/

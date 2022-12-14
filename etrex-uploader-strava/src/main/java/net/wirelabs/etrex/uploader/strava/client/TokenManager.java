@@ -5,7 +5,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.FormBuilder;
 
 @Slf4j
@@ -13,9 +13,9 @@ public class TokenManager implements Serializable {
 
     private static final String STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
-    private final Configuration configuration;
+    private final StravaConfiguration configuration;
 
-    public TokenManager(Configuration configuration) {
+    public TokenManager(StravaConfiguration configuration) {
         this.configuration = configuration;
     }
 

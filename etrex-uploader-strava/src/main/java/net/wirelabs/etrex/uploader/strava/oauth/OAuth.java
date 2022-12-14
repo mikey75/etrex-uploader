@@ -67,7 +67,7 @@ public class OAuth implements Serializable {
                 if (session.getParameters().containsKey("code")) {
                     String incomingCode = session.getParameters().get("code").get(0);
                     if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
-                        OAuth.this.authCode.set(incomingCode);
+                        authCode.set(incomingCode);
                         authCodeReady.set(true);
                         return staticResponse(Constants.AUTHORIZATION_OK_MSG);
                     }
@@ -77,7 +77,11 @@ public class OAuth implements Serializable {
             }
 
             private Response staticResponse(String authorizationStatusMessage) {
-                return NanoHTTPD.newFixedLengthResponse(authorizationStatusMessage);
+                Response response = NanoHTTPD.newFixedLengthResponse(authorizationStatusMessage);
+                response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                response.addHeader("Pragma", "no-cache");
+                response.addHeader("Expires", "0");
+                return response;
             }
         };
     }

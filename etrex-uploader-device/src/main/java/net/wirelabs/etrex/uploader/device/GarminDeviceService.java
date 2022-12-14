@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.thread.BaseStoppableRunnable;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
@@ -32,17 +32,17 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     private final RootsProvider rootsProvider;
     @Getter
     private final List<File> registeredRoots = new ArrayList<>();
-    private final Configuration configuration;
+    private final AppConfiguration appConfiguration;
 
     // constructor with custom provider
-    public GarminDeviceService(RootsProvider rootsProvider, Configuration configuration) {
-        this.configuration = configuration;
+    public GarminDeviceService(RootsProvider rootsProvider, AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
         this.rootsProvider = rootsProvider;
     }
 
     // constructor with default provider
-    public GarminDeviceService(Configuration configuration) {
-        this.configuration = configuration;
+    public GarminDeviceService(AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
         this.rootsProvider = new RootsProvider();
     }
     
@@ -69,7 +69,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
             roots = rootsProvider.getRoots();
             findAndRegisterNewRoots(roots);
             findAndUnregisterMissingRoots(roots);
-            Sleeper.sleepMillis(configuration.getDeviceDiscoveryDelay());
+            Sleeper.sleepMillis(appConfiguration.getDeviceDiscoveryDelay());
         }
         log.info("Device observer stopped");
 
@@ -119,7 +119,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     private boolean fileExistsAndReadable(File file) {
 
         boolean result = false;
-        long timeout = System.currentTimeMillis() + configuration.getWaitDriveTimeout();
+        long timeout = System.currentTimeMillis() + appConfiguration.getWaitDriveTimeout();
 
         while (!shouldExit.get() && !result && System.currentTimeMillis() < timeout) {
             result = file.exists() && file.canRead();
