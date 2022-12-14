@@ -2,13 +2,13 @@ package net.wirelabs.etrex.uploader.gui.map;
 
 import static net.wirelabs.etrex.uploader.common.EventType.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 
 import org.jxmapviewer.viewer.GeoPosition;
@@ -19,31 +19,29 @@ import org.jxmapviewer.viewer.GeoPosition;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MapUtil {
     
-    public static void drawTrackFromActivity(SummaryActivity activity) {
-        String polyLine = activity.getMap().getSummaryPolyline();
+    public static void drawTrackFromPolyLine(String polyLine) {
+
         if (polyLine != null) {
-            List<GeoPosition> track = polyLineDecode(polyLine, 1E5F);
+            List<GeoPosition> track = polyLineToGeoPosition(polyLine, 1E5F);
             EventBus.publish(MAP_DISPLAY_TRACK, track);
         }
     }
 
-    public static void drawTrackFromSelectedFileNode(FileNode fnode) {
-        
-        if (fnode == null || !fnode.getFile().isFile()) {
-            return;
-        }
-        
-        String filename = fnode.getFile().getName();
-        
-        if (filename.toUpperCase().endsWith(".FIT")) {
-            EventBus.publish(MAP_DISPLAY_FIT_FILE, fnode.getFile());
-        } 
-        if (filename.toUpperCase().endsWith(".GPX")) {
-            EventBus.publish(MAP_DISPLAY_GPX_FILE, fnode.getFile());
+    public static void drawTrackFromFile(File file) {
+
+        if (file != null && file.isFile()) {
+            String filename = file.getName();
+
+            if (filename.toUpperCase().endsWith(".FIT")) {
+                EventBus.publish(MAP_DISPLAY_FIT_FILE, file);
+            }
+            if (filename.toUpperCase().endsWith(".GPX")) {
+                EventBus.publish(MAP_DISPLAY_GPX_FILE, file);
+            }
         }
     }
 
-    private static List<GeoPosition> polyLineDecode(String str, Float precision) {
+    private static List<GeoPosition> polyLineToGeoPosition(String str, Float precision) {
 
         ArrayList<GeoPosition> coordinates = new ArrayList<>();
 
