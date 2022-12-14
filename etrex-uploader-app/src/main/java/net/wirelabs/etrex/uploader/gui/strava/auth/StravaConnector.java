@@ -82,6 +82,7 @@ public class StravaConnector extends JDialog {
             }
         } catch (StravaException | IOException e) {
             SwingUtils.errorMsg("Could not connect with strava:" + e.getMessage());
+            System.exit(1);
         }
     }
     

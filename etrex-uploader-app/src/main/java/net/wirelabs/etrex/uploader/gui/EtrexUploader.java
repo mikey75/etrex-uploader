@@ -49,7 +49,7 @@ public class EtrexUploader extends JFrame {
         splash.update("Initializing browsers");
         UploadDialog uploadDialog = new UploadDialog(ctx.getStravaService(), ctx.getFileService());
         devicePanel = new GarminDeviceBrowser(uploadDialog);
-        storageBrowser = new LocalStorageBrowser(ctx.getConfiguration());
+        storageBrowser = new LocalStorageBrowser(ctx.getAppConfiguration());
 
         splash.update("Initalizing maps");
         mapViewer = new MapPanel();

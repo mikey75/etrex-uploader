@@ -114,7 +114,7 @@ public class StravaClient {
     }
 
     private void getNewAccessTokenIfExpired() throws StravaException {
-        // if a new token is issued, block other threads wanting to get it until it is saved
+        // if a new token is being issued, block other threads wanting to get it until it is saved
         // enforcing a new token is available for subsequent calls
         synchronized (this) {
 

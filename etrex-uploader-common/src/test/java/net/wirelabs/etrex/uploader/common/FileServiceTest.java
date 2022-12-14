@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.common;
 
 
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 class FileServiceTest {
 
     private FileService fileService;
-    private Configuration configuration;
+    private AppConfiguration appConfiguration;
     private final File root = new File("target/storage-root");
     
     @BeforeEach
@@ -34,11 +34,11 @@ class FileServiceTest {
     }
 
     private void setupFileServiceMock() {
-        configuration = mock(Configuration.class);
-        doReturn(root.getPath()).when(configuration).getStorageRoot();
-        doReturn(true).when(configuration).isArchiveAfterUpload();
-        doReturn(true).when(configuration).isDeleteAfterUpload();
-        fileService = spy(new FileService(configuration));
+        appConfiguration = mock(AppConfiguration.class);
+        doReturn(root.getPath()).when(appConfiguration).getStorageRoot();
+        doReturn(true).when(appConfiguration).isArchiveAfterUpload();
+        doReturn(true).when(appConfiguration).isDeleteAfterUpload();
+        fileService = spy(new FileService(appConfiguration));
     }
 
     @Test
@@ -75,8 +75,8 @@ class FileServiceTest {
     
     @Test
     void shouldNotArchiveWhenNotConfigured() throws IOException {
-        doReturn(false).when(configuration).isArchiveAfterUpload();
-        doReturn(false).when(configuration).isDeleteAfterUpload();
+        doReturn(false).when(appConfiguration).isArchiveAfterUpload();
+        doReturn(false).when(appConfiguration).isDeleteAfterUpload();
 
         File track = new File("target/file.gpx");
         File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);

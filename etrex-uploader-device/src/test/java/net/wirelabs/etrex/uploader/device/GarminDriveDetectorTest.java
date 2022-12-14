@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.device;
 
 
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 
@@ -44,16 +44,16 @@ public class GarminDriveDetectorTest {
 
     @BeforeEach
     void beforeEach(){
-        Configuration testConfiguration = mock(Configuration.class);
+        AppConfiguration testApplicationConfiguration = mock(AppConfiguration.class);
 
-        when(testConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
-        when(testConfiguration.getWaitDriveTimeout()).thenReturn(200L);
-        when(testConfiguration.getStorageRoot()).thenReturn(System.getProperty("user.home") + File.separator + "etrex-uploader-store");
+        when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
+        when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
+        when(testApplicationConfiguration.getStorageRoot()).thenReturn(System.getProperty("user.home") + File.separator + "etrex-uploader-store");
 
         RootsProvider rootsProvider = Mockito.spy(new RootsProvider());
         doReturn(roots).when(rootsProvider).getRoots();
 
-        driveDetector = Mockito.spy(new GarminDeviceService(rootsProvider,testConfiguration));
+        driveDetector = Mockito.spy(new GarminDeviceService(rootsProvider, testApplicationConfiguration));
     }
     @BeforeAll
     static void beforeAll() throws IOException {

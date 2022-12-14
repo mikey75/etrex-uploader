@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.Configuration;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 
 /**
@@ -17,15 +17,15 @@ import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 @Slf4j
 public class FileService {
 
-    private final Configuration configuration;
+    private final AppConfiguration appConfiguration;
 
-    public FileService(Configuration configuration) {
-        this.configuration = configuration;
+    public FileService(AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
     }
 
     public void setupWorkDirectories() throws IOException {
         log.info("Initializing directories ");
-        File defaultStorageRoot = new File(configuration.getStorageRoot());
+        File defaultStorageRoot = new File(appConfiguration.getStorageRoot());
         FileUtils.createDirIfDoesNotExist(defaultStorageRoot);
 
         File defaultUploadedDir = new File(defaultStorageRoot, UPLOADED_FILES_SUBFOLDER);
@@ -38,9 +38,9 @@ public class FileService {
     public void archiveAndDelete(File trackFile) throws IOException {
 
 
-        if (configuration.isArchiveAfterUpload()) {
+        if (appConfiguration.isArchiveAfterUpload()) {
             log.info("Archiving {}", trackFile);
-            File uploadedSubdir = new File(configuration.getStorageRoot(), UPLOADED_FILES_SUBFOLDER);
+            File uploadedSubdir = new File(appConfiguration.getStorageRoot(), UPLOADED_FILES_SUBFOLDER);
             File targetDir = new File(uploadedSubdir, FileUtils.getYearMonthTimestampedDir());
             File targetFile = new File(targetDir, trackFile.getName());
 
@@ -52,7 +52,7 @@ public class FileService {
             FileUtils.createDirIfDoesNotExist(targetDir);
             Files.copy(trackFile.toPath(),targetFile.toPath());
         }
-        if (configuration.isDeleteAfterUpload()) {
+        if (appConfiguration.isDeleteAfterUpload()) {
             log.info("Deleting {}", trackFile);
             Files.delete(trackFile.toPath());
         }
