@@ -1,6 +1,12 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
-import static net.wirelabs.etrex.uploader.strava.utils.StravaUtils.buildAuthRequestUrl;
+import fi.iki.elonen.NanoHTTPD;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
 import java.awt.*;
 import java.io.IOException;
@@ -10,14 +16,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import fi.iki.elonen.NanoHTTPD;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
-
 
 
 @Slf4j
@@ -144,4 +142,27 @@ public class OAuth implements Serializable {
     int getAuthCodeTimeoutSeconds() {
         return DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;
     }
+
+    /**
+     * Build OAuth request URL that will go to Strava app authorization page
+     * i.e "Connect with Strava" functionality
+     * <p>
+     * <a href="https://developers.strava.com/docs/authentication/#requestingaccess">More info</a>
+     *
+     * @param redirectURL   your OAuth redirect URL
+     * @param applicationId registered Application ID
+     * @return request that will be issued to Strava
+     */
+    private String buildAuthRequestUrl(String redirectURL, String applicationId) {
+
+        return UrlBuilder.newBuilder()
+                .baseUrl(Constants.STRAVA_AUTHORIZATION_URL)
+                .addQueryParam("client_id", applicationId)
+                .addQueryParam("redirect_uri", redirectURL)
+                .addQueryParam("response_type", "code")
+                .addQueryParam("approval_prompt", "force")
+                .addQueryParam("scope", Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE)
+                .build();
+    }
+
 }
