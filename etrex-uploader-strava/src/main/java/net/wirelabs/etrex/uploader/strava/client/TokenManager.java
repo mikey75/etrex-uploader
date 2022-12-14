@@ -25,7 +25,7 @@ public class TokenManager implements Serializable {
         return configuration.getStravaTokenExpires();
     }
     public void updateTokenInfo(String accessToken, String refreshToken, Long expiresAt) {
-        log.info("Updating tokens in configuration");
+        log.info("Updating strava api tokens");
         configuration.setStravaAccessToken(accessToken);
         configuration.setStravaRefreshToken(refreshToken);
         configuration.setStravaTokenExpires(expiresAt);
@@ -37,6 +37,7 @@ public class TokenManager implements Serializable {
     }
     
     public void updateCredentials(String appId, String clientSecret) {
+        log.info("Updating strava api credentials");
         configuration.setStravaClientSecret(clientSecret);
         configuration.setStravaAppId(appId);
         configuration.save();

@@ -117,19 +117,6 @@ public class StravaService implements IStravaService {
         return client.makeGetRequest(urlPart, Upload.class);
     }
     
-    public AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
-
-        if (!authCode.isEmpty()) {
-            HttpRequest request = buildGetTokenRequest(appId,clientSecret,authCode);
-            String response = client.execute(request);
-            AuthResponse authResponse = client.getJsonParser().fromJson(response, AuthResponse.class);
-            log.info("Got tokens!");
-            return authResponse;
-        } else {
-            throw new StravaException("Code was empty");
-        }
-
-    }
 }
     
 

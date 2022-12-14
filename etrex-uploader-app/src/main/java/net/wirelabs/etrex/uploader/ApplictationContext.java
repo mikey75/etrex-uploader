@@ -23,15 +23,16 @@ public class ApplictationContext {
     private final IStravaService stravaService;
     private final GarminDeviceService garminDeviceService;
     private final TokenManager tokenManager;
-
+    private final StravaClient client;
 
     public ApplictationContext() {
         this.configuration = new Configuration();
         this.fileService = new FileService(configuration);
-        this.tokenManager = new TokenManager(configuration);
-        StravaClient client = new StravaClient(tokenManager);
-        this.stravaService = new StravaService(client);
         this.garminDeviceService = new GarminDeviceService(configuration);
+        
+        this.tokenManager = new TokenManager(configuration);
+        this.client = new StravaClient(tokenManager);
+        this.stravaService = new StravaService(client);
     }
 
     
