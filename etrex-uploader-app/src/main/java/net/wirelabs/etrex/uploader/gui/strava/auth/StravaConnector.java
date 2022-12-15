@@ -71,13 +71,13 @@ public class StravaConnector extends JDialog {
     private void connectWithStrava(ActionEvent ev) {
         String appId = appIdInput.getText();
         String clientSecret = appSecretInput.getText();
-        
+        dispose();
+
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
                 String authCode = authCodeRetriever.getAuthCode(appId);
                 client.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
                 authCodeRetriever.shutdown();
-                dispose();
             }
         } catch (StravaException | IOException e) {
             SwingUtils.errorMsg("Could not connect with strava:" + e.getMessage());

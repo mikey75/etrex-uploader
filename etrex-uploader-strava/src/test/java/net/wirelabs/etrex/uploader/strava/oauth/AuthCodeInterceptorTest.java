@@ -69,12 +69,12 @@ class AuthCodeInterceptorTest {
     }
 
     @Test
-    void testCorrectCodeInterception() throws IOException, InterruptedException, StravaException {
+    void testCorrectCodeInterceptionWithCorrectScope() throws IOException, InterruptedException, StravaException {
 
         AuthCodeRetriever authCodeRetriever = spy(new AuthCodeRetriever());
 
         HttpRequest requestWithCode = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE))
+                .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=" +Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE))
                 .GET()
                 .build();
 
@@ -85,6 +85,27 @@ class AuthCodeInterceptorTest {
         
         assertThat(code).isEqualTo(AUTH_CODE);
         assertThat(response.body()).isEqualTo(AUTHORIZATION_OK_MSG);
+        authCodeRetriever.shutdown();
+    }
+
+    @Test
+    void testCorrectCodeInterceptionWithIncorrectScope() throws IOException, InterruptedException, StravaException {
+
+        AuthCodeRetriever authCodeRetriever = spy(new AuthCodeRetriever());
+
+        HttpRequest requestWithCodeAndIncorrectScope = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=activity:read"))
+                .GET()
+                .build();
+
+        doNothing().when(authCodeRetriever).runDesktopBrowserToAuthorizationUrl(any());
+
+        HttpResponse<String> response = client.send(requestWithCodeAndIncorrectScope, HttpResponse.BodyHandlers.ofString());
+
+        StravaException thrown = assertThrows(StravaException.class, () ->  authCodeRetriever.getAuthCode(FAKE_APP_ID));
+
+        assertThat(thrown).hasMessage("You must approve all requested authorization scopes");
+        assertThat(response.body()).isEqualTo(AUTHORIZATION_FAIL_MSG);
         authCodeRetriever.shutdown();
     }
 
