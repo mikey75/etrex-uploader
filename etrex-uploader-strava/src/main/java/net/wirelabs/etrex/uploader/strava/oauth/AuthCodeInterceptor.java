@@ -11,12 +11,11 @@ import net.wirelabs.etrex.uploader.common.Constants;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class AuthCodeInterceptor extends NanoHTTPD {
     @Getter
-    private final AtomicReference<String> authCode = new AtomicReference<>(Constants.EMPTY_STRING);
+    private String authCode = Constants.EMPTY_STRING;
     @Getter
     private final AtomicBoolean authCodeReady = new AtomicBoolean(false);
 
@@ -30,23 +29,23 @@ public class AuthCodeInterceptor extends NanoHTTPD {
     // this method is called when Strava OAuth application authorization page redirects after allowing access
     // the GET url contains authCode which we'll exchange for access token later
     public Response serve(IHTTPSession session) {
-        return parseRequestForAuthCode(session);
-    }
-
-    private Response parseRequestForAuthCode(IHTTPSession session) {
         if (session.getParameters().containsKey("code")) {
             String incomingCode = session.getParameters().get("code").get(0);
             if (session.getMethod() == Method.GET && incomingCode != null && !incomingCode.isEmpty()) {
-                authCode.set(incomingCode);
+                authCode = incomingCode;
                 authCodeReady.set(true);
                 return staticResponse(Constants.AUTHORIZATION_OK_MSG);
             }
         }
-        authCodeReady.set(false);
         return staticResponse(Constants.AUTHORIZATION_FAIL_MSG);
     }
 
     private Response staticResponse(String authorizationStatusMessage) {
-        return newFixedLengthResponse(authorizationStatusMessage);
+        // make desktop browser not cache the response so it always calls our auth endpoint
+        Response response = NanoHTTPD.newFixedLengthResponse(authorizationStatusMessage);
+        response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.addHeader("Pragma", "no-cache");
+        response.addHeader("Expires", "0");
+        return response;
     }
 }
