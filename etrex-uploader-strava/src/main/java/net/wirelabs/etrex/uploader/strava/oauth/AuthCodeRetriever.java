@@ -7,11 +7,9 @@ import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
-import java.net.URI;
 import java.time.Duration;
 
 
@@ -68,14 +66,7 @@ public class AuthCodeRetriever implements Serializable {
 
     void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
         log.info("Redirecting user to strava app authorization page");
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.browse(URI.create(requestAccessURL));
-        } else {
-            Runtime runtime = Runtime.getRuntime();
-            runtime.exec("xdg-open " + requestAccessURL);
-        }
+        BrowserUtil.browseToUrl(requestAccessURL);
     }
 
     private boolean waitForCode() {

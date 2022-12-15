@@ -28,11 +28,10 @@ public class ApplictationContext {
 
     public ApplictationContext() {
         this.appConfiguration = new AppConfiguration();
-        this.stravaConfiguration = new StravaConfiguration();
-
         this.fileService = new FileService(appConfiguration);
         this.garminDeviceService = new GarminDeviceService(appConfiguration);
-        
+
+        this.stravaConfiguration = new StravaConfiguration();
         this.tokenManager = new TokenManager(stravaConfiguration);
         this.client = new StravaClient(tokenManager);
         this.stravaService = new StravaService(client);

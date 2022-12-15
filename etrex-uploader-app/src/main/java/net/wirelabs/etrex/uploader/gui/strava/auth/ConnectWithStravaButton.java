@@ -18,12 +18,4 @@ public class ConnectWithStravaButton extends JButton {
         
     }
 
-    /*URL iconLocation = getClass().getResource("/btn_strava_connectwith_orange.png");
-        if (iconLocation != null) {
-        ImageIcon icon = new ImageIcon(iconLocation);
-        connectBtn.setIcon(icon);
-    } else {
-        connectBtn.setText("Connect to strava");
-    }*/
-        //connectBtn.addActionListener(this::authorize);
 }
