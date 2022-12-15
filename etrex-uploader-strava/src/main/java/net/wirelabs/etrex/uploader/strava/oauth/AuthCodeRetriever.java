@@ -61,6 +61,10 @@ public class AuthCodeRetriever implements Serializable {
             log.error("Timeout waiting for auth code");
             throw new StravaException("Timed out waiting for code");
         }
+        if (!interceptorServer.scopeOK()) {
+            log.error("You must approve all requested authorization scopes");
+            throw new StravaException("You must approve all requested authorization scopes");
+        }
         return interceptorServer.getAuthCode();
     }
 
