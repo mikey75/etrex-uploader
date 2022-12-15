@@ -26,8 +26,8 @@ public class AuthCodeRetriever implements Serializable {
 
     public AuthCodeRetriever() throws IOException {
 
-            port = getRandomFreeTcpPort();
-            interceptorServer = new AuthCodeInterceptor(port);
+        port = getRandomFreeTcpPort();
+        interceptorServer = new AuthCodeInterceptor(port);
 
 
     }
@@ -42,17 +42,17 @@ public class AuthCodeRetriever implements Serializable {
     /**
      * Get authorization code from strava OAuth process
      * <p>
-     * Redirects user to 'Connect with strava' page where user 
+     * Redirects user to 'Connect with strava' page where user
      * authorizes the app to access their account.
      * When user authorizes the app to access their account - the auth code is issued.
      *
      * @param stravaAppId strava application id
      * @return authCode or throws exception
      * @throws StravaException - no code or empty
-     * @throws IOException - could not run browser
+     * @throws IOException     - could not run browser
      */
     public String getAuthCode(String stravaAppId) throws StravaException, IOException {
-       
+
         log.info("Starting Strava OAuth process");
 
         String redirectUri = "http://127.0.0.1:" + interceptorServer.getListeningPort();
@@ -63,7 +63,7 @@ public class AuthCodeRetriever implements Serializable {
             log.error("Timeout waiting for auth code");
             throw new StravaException("Timed out waiting for code");
         }
-        return interceptorServer.getAuthCode().get();
+        return interceptorServer.getAuthCode();
     }
 
     void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
