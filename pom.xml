@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>net.wirelabs</groupId>
     <artifactId>etrex-uploader</artifactId>
-    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -24,15 +24,31 @@
         <swagger.codegen.plugin.version>2.3.1</swagger.codegen.plugin.version>
     </properties>
 
-    <modules>
-        <module>etrex-uploader-app</module>
-        <module>etrex-uploader-device</module>
-        <module>etrex-uploader-common</module>
-        <module>etrex-uploader-strava</module>
-    </modules>
-
-    <!-- common dependencies for all modules -->
     <dependencies>
+        <dependency>
+            <groupId>org.jxmapviewer</groupId>
+            <artifactId>jxmapviewer2</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>5.3</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.annotations.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.nanohttpd</groupId>
+            <artifactId>nanohttpd</artifactId>
+            <version>2.3.1</version>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -97,19 +113,42 @@
             <artifactId>jaxb-impl</artifactId>
             <version>2.3.4</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
-        
-
-        
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        net.wirelabs.etrex.uploader.EtrexUploaderRunner
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -119,9 +158,104 @@
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <property name="destDir" value="${basedir}/target/distpack"/>
+                                <mkdir dir="${destDir}"/>
+                                <copy tofile="${destDir}/etrex-uploader.jar"
+                                      file="${basedir}/target/etrex-uploader-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+                                <copy tofile="${destDir}/garmin.png" file="${basedir}/src/main/resources/garmin.png"/>
+                                <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
+                                <copy toFile="${destDir}/config.properties"
+                                      file="${basedir}/src/main/resources/config.properties"/>
+                                <zip basedir="${destDir}" destfile="${basedir}/target/etrex-uploader.zip"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>2.5.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc-schema1</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/resources/schemas/gpx.xsd</source>
+                            </sources>
+                            <packageName>net.wirelabs.etrex.uploader.model.gpx</packageName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>xjc-schema2</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/resources/schemas/garmin.xsd</source>
+                            </sources>
+                            <packageName>net.wirelabs.etrex.uploader.model.garmin</packageName>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger.codegen.plugin.version}
+                </version>  <!-- latest version that generates working java client -->
+
+                <executions>
+                    <execution>
+
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+
+                        <configuration>
+                            <inputSpec>${basedir}/src/main/resources/schemas/swagger.json</inputSpec>
+                            <language>java</language>
+                            <withXml>false</withXml>
+                            <generateApis>false</generateApis>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <additionalProperties>hideGenerationTimestamp=true</additionalProperties>
+                            <modelPackage>net.wirelabs.etrex.uploader.strava.model</modelPackage>
+                            <apiPackage>net.wirelabs.etrex.uploader.strava.client</apiPackage>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <sourceFolder>/</sourceFolder>
+                                <serializableModel>true</serializableModel>
+                            </configOptions>
+                            <output>target/generated-sources/swagger</output>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+
     </build>
-
-
-
 </project>
