@@ -4,6 +4,7 @@ import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontS
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,13 +33,10 @@ public class EtrexUploaderRunner {
 
         try {
             ApplictationContext ctx = new ApplictationContext();
-            ctx.getFileService().setupWorkDirectories();
-            
-            if (ctx.getTokenManager().getAccessToken() == null || ctx.getTokenManager().getAccessToken().isEmpty()) {
-                AuthCodeRetriever authCodeRetriever = new AuthCodeRetriever();
-                new StravaConnector(ctx.getClient(), authCodeRetriever);
-            }
 
+            runStravaOAuthIfNecessary(ctx);
+
+            ctx.getFileService().setupWorkDirectories();
             Frame window = new EtrexUploader(ctx);
             window.setVisible(true);
 
@@ -50,6 +48,13 @@ public class EtrexUploaderRunner {
         }
 
 
+    }
+
+    private static void runStravaOAuthIfNecessary(ApplictationContext ctx) throws IOException {
+        if (!ctx.getTokenManager().hasTokens()) {
+            AuthCodeRetriever authCodeRetriever = new AuthCodeRetriever();
+            new StravaConnector(ctx.getClient(), authCodeRetriever);
+        }
     }
 
     private static void configureCustomLogbackLogging() {

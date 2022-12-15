@@ -114,4 +114,9 @@ public class TokenManager implements Serializable {
                 .build();
     }
 
+    public boolean hasTokens() {
+        boolean hasAccessToken = getAccessToken()!=null && !getAccessToken().isEmpty();
+        boolean hasRefreshToken = getRefreshToken()!=null && !getRefreshToken().isEmpty();
+        return hasAccessToken && hasRefreshToken;
+    }
 }

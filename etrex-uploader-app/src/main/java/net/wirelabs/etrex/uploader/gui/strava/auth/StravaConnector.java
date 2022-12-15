@@ -1,16 +1,16 @@
 package net.wirelabs.etrex.uploader.gui.strava.auth;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import javax.swing.*;
-
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 
 /**
@@ -84,6 +84,6 @@ public class StravaConnector extends JDialog {
             System.exit(1);
         }
     }
-    
+
    
 }
