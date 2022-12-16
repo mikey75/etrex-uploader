@@ -1,37 +1,30 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-
-
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
-import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.strava.client.RateLimitInfo;
+import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class UserAccountPanel extends EventAwarePanel {
+public class UserAccountPanel extends BorderedPanel {
 
     final JLabel athleteName = new JLabel();
     final JLabel athletePicture = new JLabel();
-    final JLabel apiUsageHourly = new JLabel();
-    final JLabel apiUsageDaily = new JLabel();
+    final ApiUsagePanel apiUsagePanel = new ApiUsagePanel();
+    
     private final IStravaService stravaService;
     
     public UserAccountPanel(IStravaService stravaService) {
@@ -41,13 +34,11 @@ public class UserAccountPanel extends EventAwarePanel {
     }
 
     private void initVisualComponent() {
-        setBorder(new TitledBorder("My profile"));
-        //setBorderTitle("My profile");
-        setLayout(new MigLayout("", "[]", "[][][][]"));
-        add(athleteName, "cell 0 0,growx");
-        add(athletePicture, "cell 0 1,alignx center");
-        add(apiUsageDaily,"cell 0 2");
-        add(apiUsageHourly, "cell 0 3");
+        setBorderTitle("My profile");
+        setLayout(new MigLayout("", "[grow]", "[][][][]"));
+        add(athleteName, "cell 0 1,alignx center");
+        add(athletePicture, "cell 0 0,alignx center");
+        add(apiUsagePanel,"cell 0 4,growx");
     }
 
     private void getUserAccountData() {
@@ -84,21 +75,5 @@ public class UserAccountPanel extends EventAwarePanel {
             String athleteFullName = athlete.getFirstname() + " " + athlete.getLastname();
             SwingUtilities.invokeLater(() -> athleteName.setText(athleteFullName));
         }
-    }
-
-    @Override
-    protected void onEvent(Event evt) {
-        if (evt.getEventType() == EventType.RATELIMIT_INFO_UPDATE) {
-            RateLimitInfo rinfo = (RateLimitInfo) evt.getPayload();
-            SwingUtilities.invokeLater(() -> {
-                apiUsageDaily.setText("API daily (" + rinfo.getCurrentDaily() + "/" + rinfo.getAllowedDaily() + ")");
-                apiUsageHourly.setText("API 15min (" + rinfo.getCurrentHourly() + "/" + rinfo.getAllowedHourly() + ")");
-            });
-        }
-    }
-
-    @Override
-    protected Collection<EventType> subscribeEvents() {
-        return List.of(EventType.RATELIMIT_INFO_UPDATE);
     }
 }

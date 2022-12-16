@@ -5,10 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthResponse;
 import net.wirelabs.etrex.uploader.strava.utils.MultipartForm;
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -53,8 +52,7 @@ public class StravaClient {
         HttpResponse<String> response;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            RateLimitInfo rateLimitInfo = new RateLimitInfo(response.headers().map());
-            EventBus.publish(EventType.RATELIMIT_INFO_UPDATE,rateLimitInfo);
+            StravaUtils.sendRateLimitInfo(response.headers().map());
             if (!apiCallSuccessful(response)) {
                 throw new StravaException(response.body());
             }
