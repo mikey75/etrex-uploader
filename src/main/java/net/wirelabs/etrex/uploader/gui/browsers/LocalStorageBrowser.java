@@ -1,25 +1,25 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
+
+import javax.swing.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
-public class LocalStorageBrowser extends JPanel {
+public class LocalStorageBrowser extends BorderedPanel {
 
     private final FileTree fileTree;
 
     public LocalStorageBrowser(AppConfiguration appConfiguration) {
         
-        setBorder(new TitledBorder("Local repository"));
+        super("Local repository");
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
