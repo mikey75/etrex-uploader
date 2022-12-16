@@ -1,18 +1,18 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.*;
-
-import java.io.File;
-import java.time.Duration;
-
-import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.time.Duration;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.*;
 
 class UserAccountPanelTest {
     
@@ -27,7 +27,7 @@ class UserAccountPanelTest {
         
         doReturn(fakeUser).when(strava).getCurrentAthlete();
 
-        UserAccountPanel uap = new UserAccountPanel(strava);
+        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
         await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
                     assertAthleteNamePresent(uap);
@@ -42,7 +42,7 @@ class UserAccountPanelTest {
         fakeUser.setProfile("file:///" + profilePictureURL);
         doReturn(fakeUser).when(strava).getCurrentAthlete();
         
-        UserAccountPanel uap = new UserAccountPanel(strava);
+        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
         await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
                     assertAthleteNamePresent(uap);
@@ -57,7 +57,7 @@ class UserAccountPanelTest {
 
         doThrow(StravaException.class).when(strava).getCurrentAthlete();
         
-        UserAccountPanel uap = new UserAccountPanel(strava);
+        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
         await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
                     assertNoAthleteName(uap);
@@ -71,7 +71,7 @@ class UserAccountPanelTest {
         
         fakeUser.setProfile("file:///"); // <-- this triggers IOException inside
         doReturn(fakeUser).when(strava).getCurrentAthlete();
-        UserAccountPanel uap = new UserAccountPanel(strava);
+        UserAccountPanel uap = new UserAccountPanel(strava,mock(AppConfiguration.class));
 
         await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
                     assertAthleteNamePresent(uap);

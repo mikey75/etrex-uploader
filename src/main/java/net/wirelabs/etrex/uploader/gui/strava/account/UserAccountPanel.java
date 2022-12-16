@@ -3,14 +3,19 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
@@ -26,19 +31,34 @@ public class UserAccountPanel extends BorderedPanel {
     final ApiUsagePanel apiUsagePanel = new ApiUsagePanel();
     
     private final IStravaService stravaService;
-    
-    public UserAccountPanel(IStravaService stravaService) {
+    private final JButton btnSettings = new JButton("Settings");
+    private final AppConfiguration configuration;
+
+    public UserAccountPanel(IStravaService stravaService, AppConfiguration configuration) {
         this.stravaService = stravaService;
+        this.configuration = configuration;
         initVisualComponent();
         ThreadUtils.runAsync(this::getUserAccountData);
     }
 
     private void initVisualComponent() {
         setBorderTitle("My profile");
-        setLayout(new MigLayout("", "[grow]", "[][][][]"));
+
+        setLayout(new MigLayout("", "[grow]", "[][][][][][][][grow,bottom]"));
         add(athleteName, "cell 0 1,alignx center");
         add(athletePicture, "cell 0 0,alignx center");
         add(apiUsagePanel,"cell 0 4,growx");
+        add(btnSettings, "cell 0 7,growx");
+
+        btnSettings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsDialog d = new SettingsDialog(configuration);
+                SwingUtils.centerComponent(d);
+                d.setVisible(true);
+
+            }
+        });
     }
 
     private void getUserAccountData() {
