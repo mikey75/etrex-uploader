@@ -7,6 +7,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
+import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
@@ -14,6 +15,7 @@ import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 
 import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import net.wirelabs.etrex.uploader.model.garmin.ModelT;
+import net.wirelabs.etrex.uploader.strava.model.Upload;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -43,7 +45,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     private final JScrollPane scrollPane = new JScrollPane();
     private final FileTree tree;
 
-    public GarminDeviceBrowser(UploadDialog uploadDialog) {
+    public GarminDeviceBrowser(UploadService uploadService) {
 
         setBorder(new TitledBorder(null, "Garmin device", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         setLayout(new MigLayout("", "[grow]", "[][][][][][grow]"));
@@ -64,8 +66,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
         
         tree.setCellRenderer(new FileTreeCellRenderer());
         tree.addTreeSelectionListener(new TrackSelectedListener());
-        
-        tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadDialog));
+        tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadService));
         scrollPane.setViewportView(tree);
         
     }

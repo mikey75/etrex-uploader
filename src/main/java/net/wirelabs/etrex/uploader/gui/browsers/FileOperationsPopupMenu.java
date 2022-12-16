@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
-import javax.swing.*;
-
+import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
-import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
+
+import javax.swing.*;
 
 public class FileOperationsPopupMenu extends JPopupMenu {
 
@@ -12,7 +12,7 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         this(tree, null);
     }
     
-    public FileOperationsPopupMenu(FileTree tree, UploadDialog uploadDialog) {
+    public FileOperationsPopupMenu(FileTree tree, UploadService uploadService) {
 
         JMenuItem menuItemUpload = new JMenuItem("Upload to Strava");
         JMenuItem menuItemDelete = new JMenuItem("Delete file");
@@ -20,14 +20,12 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         add(menuItemDelete);
         menuItemUpload.setEnabled(false);
        
-        if (uploadDialog != null) {
+        if (uploadService != null) {
             menuItemUpload.setEnabled(true);
             menuItemUpload.addActionListener(e -> {
 
                 FileNode node = (FileNode) tree.getLastSelectedPathComponent();
-                uploadDialog.setTrackFile(node.getFile());
-                uploadDialog.clearInputAndStatus();
-                uploadDialog.setVisible(true);
+                uploadService.uploadFile(node.getFile());
 
             });
         }

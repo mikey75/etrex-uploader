@@ -46,12 +46,12 @@ public class EtrexUploader extends JFrame {
         activitiesPanel = new ActivitiesPanel(ctx.getStravaService());
 
         splash.update("Initializing browsers");
-        UploadDialog uploadDialog = new UploadDialog(ctx.getStravaService(), ctx.getFileService());
-        devicePanel = new GarminDeviceBrowser(uploadDialog);
+        UploadService uploadService =  new UploadService(ctx.getAppConfiguration(),ctx.getStravaService(), ctx.getFileService());
+        devicePanel = new GarminDeviceBrowser(uploadService);
         storageBrowser = new LocalStorageBrowser(ctx.getAppConfiguration());
 
         splash.update("Initalizing maps");
-        mapViewer = new MapPanel();
+        mapViewer = new MapPanel(ctx.getAppConfiguration());
 
         splash.update("Starting Garmin drive observer service");
         ctx.getGarminDeviceService().start();
