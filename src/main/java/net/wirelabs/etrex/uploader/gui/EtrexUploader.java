@@ -4,15 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.ApplictationContext;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
-import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
 import net.wirelabs.etrex.uploader.gui.browsers.LocalStorageBrowser;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-
+import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
+import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +42,7 @@ public class EtrexUploader extends JFrame {
         registerWindowCloseListener(ctx);
 
         splash.update("Initializing Strava GUI components");
-        athletePanel = new UserAccountPanel(ctx.getStravaService());
+        athletePanel = new UserAccountPanel(ctx.getStravaService(),ctx.getAppConfiguration());
         activitiesPanel = new ActivitiesPanel(ctx.getStravaService());
 
         splash.update("Initializing browsers");
@@ -76,7 +75,7 @@ public class EtrexUploader extends JFrame {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
 
-                int answer = SwingUtils.yesNoMsg("Are you sure you want to close this window?");
+                int answer = SwingUtils.yesNoMsg("Are you sure you want to exit?");
                 if (answer == JOptionPane.YES_OPTION) {
                     ctx.getGarminDeviceService().stop();
                     EventBus.stop();
