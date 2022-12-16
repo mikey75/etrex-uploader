@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui.map;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 
@@ -32,14 +33,14 @@ public class MapPanel extends EventAwarePanel {
     private final JXMapViewer mapViewer = new JXMapViewer();
     private final TrackPainter trackPainter;
 
-    public MapPanel() {
+    public MapPanel(AppConfiguration configuration) {
         log.info("Initializing map panel");
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         trackPainter = new TrackPainter(mapViewer);
         add(mapViewer, "cell 0 0,grow");
 
-        configureTileFactory();
+        configureTileFactory(configuration.getDefaultMapType(), configuration.getThunderforestApiKey());
         configureMouseInteractionListeners();
         
         mapViewer.setZoom(7);
@@ -56,11 +57,25 @@ public class MapPanel extends EventAwarePanel {
         mapViewer.addMouseWheelListener(mwl);
     }
 
-    private void configureTileFactory() {
+    private void configureTileFactory(MapType mapType,String apiKey) {
         // Create a TileFactoryInfo for OpenStreetMap
-        TileFactoryInfo info = new OSMTileFactoryInfo();
+        TileFactoryInfo info;
+
+        switch (mapType) {
+            case OPENSTREETMAP: {
+                info = new OSMTileFactoryInfo();
+                break;
+            }
+            case OUTDOOR: {
+                info = new ThunderForestOutdoorMapFactoryInfo().withApiKey(apiKey);
+                break;
+            }
+            default:
+                info = new OSMTileFactoryInfo();
+                break;
+        }
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-        
+
         // Setup local file cache
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
@@ -69,7 +84,7 @@ public class MapPanel extends EventAwarePanel {
         mapViewer.setHorizontalWrapped(false);
         mapViewer.setInfiniteMapRendering(false);
         mapViewer.setTileFactory(tileFactory);
-        
+
     }
 
     @Override
@@ -81,14 +96,14 @@ public class MapPanel extends EventAwarePanel {
                 displayErrorMessage(result);
             });
         }
-        
+
         if (evt.getEventType().equals(EventType.MAP_DISPLAY_FIT_FILE) && evt.getPayload() instanceof File) {
             SwingUtilities.invokeLater(() -> {
                 PaintResult result = trackPainter.paintTrackFromFitFile((File) evt.getPayload());
                 displayErrorMessage(result);
             });
         }
-        
+
         if (evt.getEventType().equals(EventType.MAP_DISPLAY_TRACK) && evt.getPayload() instanceof List) {
             SwingUtilities.invokeLater(() -> {
                 PaintResult result = trackPainter.paintTrackFromTrackPoints((List) evt.getPayload());

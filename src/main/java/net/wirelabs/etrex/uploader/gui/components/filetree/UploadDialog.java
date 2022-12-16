@@ -123,15 +123,16 @@ public class UploadDialog extends JDialog {
         }
     }
 
-    public void clearInputAndStatus() {
+   /* public void clearInputAndStatus() {
         activityDesctiptionArea.setText("");
         activityTitleTextField.setText("");
         activityTypeCombo.setSelectedItem(SportType.RIDE);
 
     }
-
-    public void setTrackFile(File trackFile) {
+*/
+    public void setTrackFile(File trackFile, SportType type) {
         this.trackFile = trackFile;
+        this.activityTypeCombo.setSelectedItem(type);
         setTitle("Upload " + trackFile.getName() + " to Strava?");
     }
 }
