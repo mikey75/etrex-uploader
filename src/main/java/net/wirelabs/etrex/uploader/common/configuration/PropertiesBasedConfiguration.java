@@ -39,7 +39,7 @@ public abstract class PropertiesBasedConfiguration {
     }
 
     void store() {
-        
+        log.info("Saving configuration {}" , configFileName);
         try (OutputStream os = Files.newOutputStream(Paths.get(userDirectory,configFileName))) {
             properties.store(os, "");
         } catch (IOException e) {

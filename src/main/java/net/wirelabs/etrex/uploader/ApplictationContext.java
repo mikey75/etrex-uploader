@@ -34,7 +34,7 @@ public class ApplictationContext {
         this.stravaConfiguration = new StravaConfiguration();
         this.tokenManager = new TokenManager(stravaConfiguration);
         this.client = new StravaClient(tokenManager);
-        this.stravaService = new StravaService(client);
+        this.stravaService = new StravaService(appConfiguration,client);
     }
 
     

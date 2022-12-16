@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.strava.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
@@ -19,6 +20,7 @@ import java.util.List;
 public class StravaService implements IStravaService {
 
     private final StravaClient client;
+    private final AppConfiguration configuration;
 
     private SummaryAthlete currentAthlete;
 
@@ -28,8 +30,9 @@ public class StravaService implements IStravaService {
     private String athleteActivities;
     private String uploads;
 
-    public StravaService(StravaClient client) {
+    public StravaService(AppConfiguration configuration, StravaClient client) {
         this.client = client;
+        this.configuration = configuration;
         setupUrls();
     }
 
@@ -57,7 +60,7 @@ public class StravaService implements IStravaService {
         
         String url = UrlBuilder.newBuilder().baseUrl(athleteActivities)
                 .addQueryParam("page", String.valueOf(page))
-                .addQueryParam("per_page",String.valueOf(perPage)).build();
+                .addQueryParam("per_page", String.valueOf(configuration.getPerPage())).build();
         
         SummaryActivity[] activitiesList = client.makeGetRequest(url, SummaryActivity[].class);
         return Arrays.asList(activitiesList);

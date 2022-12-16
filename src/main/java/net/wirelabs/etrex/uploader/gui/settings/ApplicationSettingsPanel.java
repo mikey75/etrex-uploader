@@ -11,6 +11,7 @@ import javax.swing.*;
  */
 public class ApplicationSettingsPanel extends BorderedPanel {
 
+    private final AppConfiguration configuration;
     JLabel storageRootLabel = new JLabel("Storage root:");
     JTextField storageRoot = new JTextField();
     JLabel userRootsLabel = new JLabel("User roots:");
@@ -24,6 +25,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
         super("Application");
+        this.configuration = configuration;
         setLayout(new MigLayout("", "[][grow]", "[][][][][]"));
 
         add(storageRootLabel, "cell 0 0,alignx trailing");
@@ -41,10 +43,10 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         add(deleteAfterUpl, "cell 0 4");
         add(archiveAfterUpload, "cell 1 4");
 
-        loadConfiguration(configuration);
+        loadConfiguration();
     }
 
-    private void loadConfiguration(AppConfiguration configuration) {
+    private void loadConfiguration() {
         storageRoot.setText(configuration.getStorageRoot());
         userRoots.setText(configuration.getUserStorageRoots());
         discoveryDelay.setText(String.valueOf(configuration.getDeviceDiscoveryDelay()));
@@ -53,6 +55,15 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
     }
 
+    public void updateConfiguration() {
+        configuration.setStorageRoot(storageRoot.getText());
+        configuration.setUserStorageRoots(userRoots.getText());
+        configuration.setDeviceDiscoveryDelay(Long.valueOf(discoveryDelay.getText()));
+        configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
+        configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
+        configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
+
+    }
 
 }
 
