@@ -7,6 +7,8 @@ import java.io.File;
 import lombok.Getter;
 import lombok.Setter;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.gui.map.MapType;
+import net.wirelabs.etrex.uploader.strava.model.SportType;
 
 /**
  * Created 6/20/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -23,7 +25,12 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private Long waitDriveTimeout;
     private boolean deleteAfterUpload;
     private boolean archiveAfterUpload;
-    
+
+    private int perPage;
+    private SportType defaultActivityType;
+    private MapType defaultMapType;
+    private int apiUsageWarnPercent;
+    private String thunderforestApiKey; // api key needed for thunderforest maps (OUTDOOR, CYCLE)
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -33,6 +40,12 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         waitDriveTimeout = Long.valueOf(properties.getProperty(WAIT_DRIVE_TIMEOUT, "15000"));
         deleteAfterUpload = Boolean.parseBoolean(properties.getProperty(DELETE_TRACK_AFTER_UPLOAD, "true"));
         archiveAfterUpload = Boolean.parseBoolean(properties.getProperty(BACKUP_TRACK_AFTER_UPLOAD, "true"));
+
+        defaultActivityType = SportType.valueOf(properties.getProperty(STRAVA_DEFAULT_ACTIVITY_TYPE, SportType.RIDE.name()));
+        defaultMapType = MapType.valueOf(properties.getProperty(MAP_TYPE, MapType.OPENSTREETMAP.name()));
+        perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, "30"));
+        apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
+        thunderforestApiKey = properties.getProperty(MAP_THUNDERFOREST_API_KEY, Constants.EMPTY_STRING);
     }
 
     public AppConfiguration() {
@@ -46,6 +59,12 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(WAIT_DRIVE_TIMEOUT, String.valueOf(waitDriveTimeout));
         properties.setProperty(BACKUP_TRACK_AFTER_UPLOAD, String.valueOf(archiveAfterUpload));
         properties.setProperty(DELETE_TRACK_AFTER_UPLOAD, String.valueOf(deleteAfterUpload));
+
+        properties.setProperty(STRAVA_DEFAULT_ACTIVITY_TYPE, defaultActivityType.name());
+        properties.setProperty(MAP_TYPE, defaultMapType.name());
+        properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
+        properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
+        properties.setProperty(MAP_THUNDERFOREST_API_KEY, thunderforestApiKey);
         super.store();
 
     }

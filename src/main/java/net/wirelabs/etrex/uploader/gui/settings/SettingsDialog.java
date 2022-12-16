@@ -8,6 +8,11 @@ import javax.swing.*;
 public class SettingsDialog extends JDialog {
 
 
+	private final ApplicationSettingsPanel applicationSettingsPanel;
+	private final StravaSettingsPanel stravaSettingsPanel;
+	private final MapsSettingsPanel mapsSettingsPanel;
+	private final AppConfiguration configuration;
+
 	JButton cancelBtn = new JButton("Cancel");
 	JButton saveBtn = new JButton("Save settings");
 
@@ -16,14 +21,15 @@ public class SettingsDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public SettingsDialog(AppConfiguration appConfiguration) {
+		this.configuration = appConfiguration;
 
 		setTitle("Settings");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		JPanel applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
-		JPanel stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
-		JPanel mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
+		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
+		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
+		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
 
 
 		setBounds(100, 100, 521, 437);
@@ -40,6 +46,10 @@ public class SettingsDialog extends JDialog {
 	}
 
 	private void saveConfigAndClose() {
+		applicationSettingsPanel.updateConfiguration();
+		stravaSettingsPanel.updateConfiguration();
+		mapsSettingsPanel.updateConfiguration();
+		configuration.save();
 		dispose();
 	}
 

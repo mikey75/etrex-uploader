@@ -20,6 +20,13 @@ class ConfigurationPropertyKeys {
     static final String STRAVA_ACCESS_TOKEN             = "strava.token.access";
     static final String STRAVA_ACCESS_TOKEN_EXPIRES_AT  = "strava.token.expires.at";
     static final String STRAVA_REFRESH_TOKEN            = "strava.token.refresh";
+    static final String STRAVA_ACTIVITIES_PER_PAGE      = "strava.activities.per.page";
+    static final String STRAVA_DEFAULT_ACTIVITY_TYPE    = "strava.default.activity.type";
+    static final String STRAVA_API_USAGE_WARN_PERCENT   = "strava.api.usage.warn.percent";
+
+    // map
+    static final String MAP_TYPE                        = "map.type";
+    static final String MAP_THUNDERFOREST_API_KEY       = "map.thunderforest.api.key";
 
     // config files constants
     static final String APPLICATION_CONFIGFILE          = "config.properties";

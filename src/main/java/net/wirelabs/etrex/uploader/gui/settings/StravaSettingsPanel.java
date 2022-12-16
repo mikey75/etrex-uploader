@@ -12,6 +12,7 @@ import javax.swing.*;
  */
 public class StravaSettingsPanel extends BorderedPanel {
 
+    private final AppConfiguration configuration;
     JLabel activityTypeLabel = new JLabel("Default activty type:");
     JComboBox<SportType> activityTypeCombo = new JComboBox<>();
     JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
@@ -21,6 +22,7 @@ public class StravaSettingsPanel extends BorderedPanel {
 
     public StravaSettingsPanel(AppConfiguration configuration) {
         super("Strava");
+        this.configuration = configuration;
         setLayout(new MigLayout("", "[][grow]", "[][][]"));
 
         add(activityTypeLabel, "cell 0 0,alignx trailing");
@@ -32,6 +34,20 @@ public class StravaSettingsPanel extends BorderedPanel {
 
         add(lblWarnQuotaPercent, "cell 0 2,alignx trailing");
         add(warnQuotaPercent, "cell 1 2,growx");
+        loadConfiguration();
     }
+
+    private void loadConfiguration() {
+        activityTypeCombo.setSelectedItem(configuration.getDefaultActivityType());
+        activitiesPerPage.setText(String.valueOf(configuration.getPerPage()));
+        warnQuotaPercent.setText(String.valueOf(configuration.getApiUsageWarnPercent()));
+    }
+
+    public void updateConfiguration() {
+        configuration.setDefaultActivityType((SportType) activityTypeCombo.getSelectedItem());
+        configuration.setPerPage(Integer.parseInt(activitiesPerPage.getText()));
+        configuration.setApiUsageWarnPercent(Integer.parseInt(warnQuotaPercent.getText()));
+    }
+
 
 }
