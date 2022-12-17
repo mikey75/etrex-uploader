@@ -1,11 +1,11 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
+import com.squareup.okhttp.HttpUrl;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
-import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -106,15 +106,15 @@ public class AuthCodeRetriever implements Serializable {
      * @return request that will be issued to Strava
      */
     private String buildAuthRequestUrl(String redirectURL, String applicationId) {
-
-        return UrlBuilder.newBuilder()
-                .baseUrl(Constants.STRAVA_AUTHORIZATION_URL)
-                .addQueryParam("client_id", applicationId)
-                .addQueryParam("redirect_uri", redirectURL)
-                .addQueryParam("response_type", "code")
-                .addQueryParam("approval_prompt", "force")
-                .addQueryParam("scope", Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE)
-                .build();
+        HttpUrl baseUrl = HttpUrl.parse(Constants.STRAVA_AUTHORIZATION_URL);
+        return baseUrl.newBuilder()
+                .addQueryParameter("client_id", applicationId)
+                .addQueryParameter("redirect_uri", redirectURL)
+                .addQueryParameter("response_type", "code")
+                .addQueryParameter("approval_prompt", "force")
+                .addQueryParameter("scope", Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE)
+                .build()
+                .toString();
     }
 
 }

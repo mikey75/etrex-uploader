@@ -14,18 +14,13 @@ import java.util.List;
 public interface IStravaService extends Serializable {
     
     SummaryAthlete getCurrentAthlete() throws StravaException;
+    ActivityStats getAthleteStats(Long id) throws StravaException;
 
     List<SummaryActivity> getCurrentAthleteActivities(int page, int perpage) throws StravaException;
-
+    List<SummaryActivity> getCurrentAthleteActivities() throws StravaException;
     DetailedActivity getActivityById(Long id) throws StravaException;
 
-    List<SummaryActivity> getCurrentAthleteActivities() throws StravaException;
-
+    DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
     Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaException;
 
-    ActivityStats getAthleteStats(Long id) throws StravaException;
-    
-    DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
-    
-    //AuthResponse exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException;
 }
