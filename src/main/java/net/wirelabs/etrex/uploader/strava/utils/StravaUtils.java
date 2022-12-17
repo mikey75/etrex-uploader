@@ -1,5 +1,8 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.RequestBody;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -8,10 +11,8 @@ import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.net.URLConnection;
+import java.util.*;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -31,7 +32,7 @@ public class StravaUtils {
         throw new StravaException("The file you're uploading is in unsupported format");
     }
 
-    /**
+   /* *//**
      * Build upload form body for uploading track resulting in created activity
      * @param file file to upload
      * @param name name of the activity
@@ -39,16 +40,32 @@ public class StravaUtils {
      * @param sportType sport type
      * @return form body object to use in POST request
      * @throws StravaException
-     */
-    public static MultipartForm createFileUploadForm(File file, String name, String description, SportType sportType) throws StravaException {
+     *//*
+    public static RequestBody createFileUploadForm(File file, String name, String description, SportType sportType) throws StravaException {
 
-        return MultipartForm.newBuilder()
-                .addPart("file", file.toPath())
-                .addPart("data_type", guessUploadFileFormat(file))
-                .addPart("name", name)
-                .addPart("sport_type", sportType.getValue())
-                .addPart("description", description);
+        String dataType = guessContentTypeFromFile(file);
+        String fileFormat = guessFileFormat(file);
+        return new MultipartBuilder().type(MultipartBuilder.FORM)
+                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse(dataType), file))
+                .addFormDataPart("data_type", fileFormat)
+                .addFormDataPart("name", name)
+                .addFormDataPart("sport_type", sportType.getValue())
+                .addFormDataPart("description", description)
+                .build();
 
+    }*/
+
+    public static String guessContentTypeFromFile(File file) {
+        String contentType = URLConnection.guessContentTypeFromName(file.getName());
+        return Objects.requireNonNullElse(contentType, "application/octet-stream");
+    }
+
+    public static String guessFileFormat(File file) {
+        String fname = file.getName().toLowerCase();
+        if (fname.endsWith(".gpx")) return "gpx";
+        if (fname.endsWith(".tcx")) return "tcx";
+        if (fname.endsWith(".fit")) return "fit";
+        return "";
     }
 
     public static final String ALLOWED_DAILY = "allowedDaily";
@@ -58,12 +75,12 @@ public class StravaUtils {
 
     public static void sendRateLimitInfo(Map<String, List<String>> headers) {
 
-        if (headers.containsKey("x-ratelimit-limit") && headers.containsKey("x-ratelimit-usage")) {
+        if (headers.containsKey("X-RateLimit-Limit") && headers.containsKey("X-RateLimit-Usage")) {
 
             HashMap<String, Integer> info = new HashMap<>();
 
-            String rateLimitAllowed = headers.get("x-ratelimit-limit").get(0);
-            String rateLimitCurrent = headers.get("x-ratelimit-usage").get(0);
+            String rateLimitAllowed = headers.get("X-RateLimit-Limit").get(0);
+            String rateLimitCurrent = headers.get("X-RateLimit-Usage").get(0);
 
             StringTokenizer tokenizer = new StringTokenizer(rateLimitAllowed, ",");
             info.put(ALLOWED_15MINS, Integer.parseInt(tokenizer.nextToken()));

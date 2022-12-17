@@ -1,12 +1,12 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.net.http.HttpRequest;
-
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
-import net.wirelabs.etrex.uploader.strava.utils.FormBuilder;
+
+import java.io.Serializable;
 
 @Slf4j
 public class TokenManager implements Serializable {
@@ -71,18 +71,17 @@ public class TokenManager implements Serializable {
      *
      * @return built request
      */
-    public HttpRequest buildRefreshTokenRequest() {
-
-        String formData = FormBuilder.newBuilder()
+    public Request buildRefreshTokenRequest() {
+        RequestBody body = new FormEncodingBuilder()
                 .add("client_id", getAppId())
                 .add("client_secret", getClientSecret())
                 .add("grant_type", "refresh_token")
                 .add("refresh_token", getRefreshToken())
                 .build();
 
-        return HttpRequest.newBuilder()
-                .uri(URI.create(getTokenUrl()))
-                .POST(HttpRequest.BodyPublishers.ofString(formData))
+        return new Request.Builder()
+                .url(getTokenUrl())
+                .post(body)
                 .build();
     }
 
@@ -99,24 +98,25 @@ public class TokenManager implements Serializable {
      *
      * @return built request
      */
-    public  HttpRequest buildGetTokenRequest(String appId, String clientSecret, String authCode) {
-
-        String formData = FormBuilder.newBuilder()
+    public Request buildGetTokenRequest(String appId, String clientSecret, String authCode) {
+        RequestBody body = new FormEncodingBuilder()
                 .add("client_id", appId)
                 .add("client_secret", clientSecret)
                 .add("code", authCode)
                 .add("grant_type", "authorization_code")
                 .build();
 
-        return HttpRequest.newBuilder()
-                .uri(URI.create(getTokenUrl()))
-                .POST(HttpRequest.BodyPublishers.ofString(formData))
+        return new Request.Builder()
+                .url(getTokenUrl())
+                .post(body)
                 .build();
+
     }
 
+
     public boolean hasTokens() {
-        boolean hasAccessToken = getAccessToken()!=null && !getAccessToken().isEmpty();
-        boolean hasRefreshToken = getRefreshToken()!=null && !getRefreshToken().isEmpty();
+        boolean hasAccessToken = getAccessToken() != null && !getAccessToken().isEmpty();
+        boolean hasRefreshToken = getRefreshToken() != null && !getRefreshToken().isEmpty();
         return hasAccessToken && hasRefreshToken;
     }
 }
