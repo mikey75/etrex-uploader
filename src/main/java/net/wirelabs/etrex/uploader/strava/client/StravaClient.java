@@ -44,25 +44,30 @@ public class StravaClient {
         return jsonParser;
     }
 
-    public static boolean apiCallSuccessful(HttpResponse<?> resp) {
+    public boolean apiCallSuccessful(HttpResponse<?> resp) {
         return resp.statusCode() >= 200 && resp.statusCode() < 300;
     }
 
     public String execute(HttpRequest request) throws StravaException {
-        HttpResponse<String> response;
+        HttpResponse<String> response = null;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            StravaUtils.sendRateLimitInfo(response.headers().map());
+            String body = response.body();
+
             if (!apiCallSuccessful(response)) {
-                throw new StravaException(response.body());
+                throw new StravaException(body);
             }
-            return response.body();
+            return body;
         } catch (IOException e) {
             throw new StravaException(e.getMessage());
         } catch (InterruptedException e) {
             log.info("Interrupting httpclient thread");
             Thread.currentThread().interrupt(); // interrupt httpclient thread
             throw new StravaException(e.getMessage());
+        } finally {
+            if (response != null) {
+                StravaUtils.sendRateLimitInfo(response.headers().map());
+            }
         }
     }
 

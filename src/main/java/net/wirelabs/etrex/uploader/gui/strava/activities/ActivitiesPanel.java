@@ -86,7 +86,7 @@ public class ActivitiesPanel extends EventAwarePanel {
             try {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, 30);
-                SwingUtilities.invokeLater(()-> activitiesTable.setData(activities));
+                activitiesTable.setData(activities);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             } catch (StravaException e) {
                 SwingUtils.errorMsg(e.getMessage());
