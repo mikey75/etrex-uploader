@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -16,20 +17,25 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created 10/30/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 class FileServiceTest {
 
+    private static final LocalDateTime testDateTimeNow = LocalDateTime.of(2022, 1, 2, 10, 24, 11);
+    private static final String expectedFormattedPart = "2022-01-02-102411";
+
     private FileService fileService;
     private AppConfiguration appConfiguration;
     private final File root = new File("target/storage-root");
-    
+
+
     @BeforeEach
     void before() throws IOException {
-        FileUtils.deleteDirectory(root);
+        FileUtils.recursivelyDeleteDirectory(root);
         setupFileServiceMock();
         fileService.setupWorkDirectories();
     }
@@ -40,26 +46,27 @@ class FileServiceTest {
         doReturn(true).when(appConfiguration).isArchiveAfterUpload();
         doReturn(true).when(appConfiguration).isDeleteAfterUpload();
         fileService = Mockito.spy(new FileService(appConfiguration));
+
+        doReturn(testDateTimeNow).when(fileService).getNow();
     }
 
     @Test
     void directoryInitializationTest() {
         assertThat(root).isNotNull();
-        assertThat(root.listFiles()).hasSize(2);
         List<String> s = Arrays.stream(Objects.requireNonNull(root.listFiles()))
                 .map(File::getName)
                 .collect(Collectors.toList());
+
         assertThat(s).containsOnly(Constants.UPLOADED_FILES_SUBFOLDER, Constants.TRACKS_REPO);
 
     }
-
 
     @Test
     void archiveAndDeleteTest() throws IOException {
 
         File track = new File("target/file.gpx");
         File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);
-        File targetDir = new File(uploadDir, FileUtils.getYearMonthTimestampedDir());
+        File targetDir = new File(uploadDir, "2022/01");
         createTestTrack(track);
         //when
         fileService.archiveAndDelete(track);
@@ -70,11 +77,30 @@ class FileServiceTest {
         createTestTrack(track);
         fileService.archiveAndDelete(track);
         // then check if timestamped copy is created
-        assertThat(targetDir).isDirectoryContaining(f -> f.getName()
-                .matches("duplicate-of-file-gpx-.*"));
+        assertThat(targetDir).isDirectoryContaining(f ->
+                f.getName().equals(("file-" + expectedFormattedPart + ".gpx")));
 
     }
-    
+
+    @Test
+    void shouldNotDeleteCurrentgpx() throws IOException {
+        File track = new File("target/Current.gpx");
+        File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);
+        File targetDir = new File(uploadDir, "2022/01");
+        createTestTrack(track);
+        //when
+        fileService.archiveAndDelete(track);
+        // then
+
+        // then check if file was not deleted
+        assertThat(track).exists().isFile();
+        // check if archived
+
+        assertThat(targetDir).isDirectoryContaining(f ->
+                f.getName().equals(("Current.gpx")));
+
+    }
+
     @Test
     void shouldNotArchiveWhenNotConfigured() throws IOException {
         doReturn(false).when(appConfiguration).isArchiveAfterUpload();
