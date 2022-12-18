@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.strava.auth;
 
+import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -24,6 +26,10 @@ public class StravaConnector extends JDialog {
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new StravaButton();
     private final AuthService authService;
+    @Getter
+    private final AtomicBoolean oauthStatus = new AtomicBoolean(false);
+    @Getter
+    private String oauthMessage;
 
     public StravaConnector(StravaClient client)  {
 
@@ -73,10 +79,15 @@ public class StravaConnector extends JDialog {
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
                 authService.getToken(appId,clientSecret);
+                oauthStatus.set(true);
+            } else {
+                oauthStatus.set(false);
+                oauthMessage = "client id/client secret cannot be blank";
             }
         } catch (StravaException | IOException e) {
-            SwingUtils.errorMsg("Could not connect with strava:" + e.getMessage());
-            System.exit(1);
+
+            oauthStatus.set(false);
+            oauthMessage = e.getMessage();
         }
     }
 

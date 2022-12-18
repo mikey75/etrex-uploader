@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
@@ -17,8 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
-
-
 
 
 @Slf4j
@@ -37,6 +36,7 @@ public class EtrexUploaderRunner {
             Frame window = new EtrexUploader(ctx);
             window.setVisible(true);
 
+
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
             EventBus.stop();
@@ -47,15 +47,20 @@ public class EtrexUploaderRunner {
 
     }
 
-   private static void runStravaOAuthIfNecessary(ApplictationContext ctx)  {
+    private static void runStravaOAuthIfNecessary(ApplictationContext ctx) {
 
         if (!ctx.getStravaConfiguration().hasAllTokens()) {
-            new StravaConnector(ctx.getStravaClient());
+            StravaConnector connector = new StravaConnector(ctx.getStravaClient());
+            if (!connector.getOauthStatus().get()) {
+                SwingUtils.errorMsg(connector.getOauthMessage());
+                System.exit(1);
+            }
         }
+
     }
 
     private static void configureCustomLogbackLogging() {
-        
+
         String currentDir = System.getProperty("user.dir");
         String logbackXml = "logback.xml";
         String path = currentDir + File.separator + logbackXml;
@@ -72,6 +77,6 @@ public class EtrexUploaderRunner {
             log.warn("Exception while configuring logging");
         }
     }
-    
+
 
 }
