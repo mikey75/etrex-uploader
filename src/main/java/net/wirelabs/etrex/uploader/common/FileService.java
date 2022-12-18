@@ -46,7 +46,7 @@ public class FileService {
 
             if (targetFile.exists()) {
                 log.warn("Target file exists. Changing name by adding current timestamp to filename");
-                targetFile = new  File(targetDir, System.currentTimeMillis() +"-"+trackFile.getName());
+                targetFile = new  File(targetDir, FileUtils.createDuplicateFileName(trackFile));
             }
 
             FileUtils.createDirIfDoesNotExist(targetDir);
