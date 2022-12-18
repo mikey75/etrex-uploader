@@ -31,7 +31,7 @@ import java.util.List;
 public class MapPanel extends EventAwarePanel {
     
     private final JXMapViewer mapViewer = new JXMapViewer();
-    private final TrackPainter trackPainter;
+    private final transient TrackPainter trackPainter;
 
     public MapPanel(AppConfiguration configuration) {
         log.info("Initializing map panel");
@@ -80,7 +80,7 @@ public class MapPanel extends EventAwarePanel {
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
         tileFactory.setThreadPoolSize(8); // Use 8 threads in parallel to load the tiles
-        //mapViewer.setDrawTileBorders(true);
+
         mapViewer.setHorizontalWrapped(false);
         mapViewer.setInfiniteMapRendering(false);
         mapViewer.setTileFactory(tileFactory);

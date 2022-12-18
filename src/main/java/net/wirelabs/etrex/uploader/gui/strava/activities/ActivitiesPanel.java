@@ -18,12 +18,9 @@ import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.gui.map.MapUtil;
-
-
-
 
 @Slf4j
 public class ActivitiesPanel extends EventAwarePanel {
@@ -32,10 +29,10 @@ public class ActivitiesPanel extends EventAwarePanel {
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
-    private final IStravaService stravaService;
+    private final StravaService stravaService;
     private int page = 1;
 
-    public ActivitiesPanel(IStravaService stravaService) {
+    public ActivitiesPanel(StravaService stravaService) {
         this.stravaService = stravaService;
         createVisualComponent();
         updateActivities();

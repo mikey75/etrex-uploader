@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import java.io.File;
 
@@ -13,10 +13,10 @@ import java.io.File;
 public class UploadService {
 
     private final AppConfiguration configuration;
-    private final IStravaService stravaService;
+    private final StravaService stravaService;
     private final FileService fileService;
 
-    public UploadService(AppConfiguration configuration, IStravaService stravaService, FileService fileService) {
+    public UploadService(AppConfiguration configuration, StravaService stravaService, FileService fileService) {
         this.configuration = configuration;
         this.stravaService = stravaService;
         this.fileService = fileService;

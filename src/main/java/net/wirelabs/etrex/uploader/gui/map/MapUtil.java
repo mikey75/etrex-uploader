@@ -1,17 +1,15 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
-import static net.wirelabs.etrex.uploader.common.EventType.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
-
-import org.jxmapviewer.viewer.GeoPosition;
+import static net.wirelabs.etrex.uploader.common.EventType.*;
 
 /**
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)

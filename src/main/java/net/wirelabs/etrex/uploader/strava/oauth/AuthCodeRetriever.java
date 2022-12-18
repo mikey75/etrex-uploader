@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.strava.utils.BrowserUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,26 +15,22 @@ import java.time.Duration;
 
 
 @Slf4j
-public class AuthCodeRetriever implements Serializable {
+class AuthCodeRetriever implements Serializable {
 
-    public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     private final transient AuthCodeInterceptor interceptorServer;
 
     @Getter
     private final int port;
 
     public AuthCodeRetriever() throws IOException {
-
         port = getRandomFreeTcpPort();
         interceptorServer = new AuthCodeInterceptor(port);
-
-
     }
 
     public void shutdown() {
-        log.info("Shutting down auth interceptor");
         interceptorServer.closeAllConnections();
         interceptorServer.stop();
+        log.info("auth code interceptor shut down");
     }
 
 
@@ -56,7 +53,11 @@ public class AuthCodeRetriever implements Serializable {
         String redirectUri = "http://127.0.0.1:" + interceptorServer.getListeningPort();
         String url = buildAuthRequestUrl(redirectUri, stravaAppId);
         runDesktopBrowserToAuthorizationUrl(url);
+        checkForTimeoutAndCorrectScopes();
+        return interceptorServer.getAuthCode();
+    }
 
+    private void checkForTimeoutAndCorrectScopes() throws StravaException {
         if (!waitForCode()) {
             log.error("Timeout waiting for auth code");
             throw new StravaException("Timed out waiting for code");
@@ -65,7 +66,6 @@ public class AuthCodeRetriever implements Serializable {
             log.error("You must approve all requested authorization scopes");
             throw new StravaException("You must approve all requested authorization scopes");
         }
-        return interceptorServer.getAuthCode();
     }
 
     void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
@@ -76,7 +76,7 @@ public class AuthCodeRetriever implements Serializable {
     private boolean waitForCode() {
         long timeOut = System.currentTimeMillis() + Duration.ofSeconds(getAuthCodeTimeoutSeconds()).toMillis();
         while (System.currentTimeMillis() < timeOut) {
-            if (interceptorServer.getAuthCodeReady().get()) {
+            if (interceptorServer.isAuthCodeReady()) {
                 log.info("Got auth code");
                 return true;
             }
@@ -92,7 +92,7 @@ public class AuthCodeRetriever implements Serializable {
     }
 
     int getAuthCodeTimeoutSeconds() {
-        return DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;
+        return Constants.DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;
     }
 
     /**

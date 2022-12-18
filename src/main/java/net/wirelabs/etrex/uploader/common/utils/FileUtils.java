@@ -31,14 +31,14 @@ public class FileUtils {
         return (files != null) ? new ArrayList<>(Arrays.asList(files)) : Collections.emptyList();
     }
     
-    public static boolean deleteDirectory(File directoryToBeDeleted) {
+    public static boolean deleteDirectory(File directoryToBeDeleted) throws IOException {
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
                 deleteDirectory(file);
             }
         }
-        return directoryToBeDeleted.delete();
+        return Files.deleteIfExists(directoryToBeDeleted.toPath());
     }
     
     public static String getYearMonthTimestampedDir() {

@@ -26,7 +26,6 @@ public abstract class EventListener {
             while (!shouldStop.get()) {
                 isRunning.set(true);
                 eventListenerCallback.run();
-                //todo make configurable delay
                 Sleeper.sleepMillis(50);
             }
             isRunning.set(false);

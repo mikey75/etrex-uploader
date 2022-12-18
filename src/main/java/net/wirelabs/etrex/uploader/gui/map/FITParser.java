@@ -26,10 +26,10 @@ public class FITParser {
         List<RecordMesg> records = fitMessages.getRecordMesgs();
         // return only records with position data
         return records.stream()
-                .filter(record -> record.hasField(RecordMesg.PositionLongFieldNum) && record.hasField(RecordMesg.PositionLatFieldNum))
-                .map(record -> {
-                    double lattitude = SemicirclesConverter.semicirclesToDegrees(record.getPositionLat());
-                    double longitude = SemicirclesConverter.semicirclesToDegrees(record.getPositionLong());
+                .filter(rec -> rec.hasField(RecordMesg.PositionLongFieldNum) && rec.hasField(RecordMesg.PositionLatFieldNum))
+                .map(rec -> {
+                    double lattitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLat());
+                    double longitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLong());
                     return new GeoPosition(lattitude, longitude);
                 })
                 .collect(Collectors.toList());

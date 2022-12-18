@@ -41,4 +41,16 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_ACCESS_TOKEN_EXPIRES_AT, String.valueOf(stravaTokenExpires));
         super.store();
     }
+
+    boolean hasAccessToken() {
+        return stravaAccessToken!=null && !stravaAccessToken.isBlank();
+    }
+
+    boolean hasRefreshToken() {
+        return stravaRefreshToken!=null && !stravaRefreshToken.isBlank();
+    }
+
+    public boolean hasAllTokens() {
+        return hasAccessToken() && hasRefreshToken();
+    }
 }

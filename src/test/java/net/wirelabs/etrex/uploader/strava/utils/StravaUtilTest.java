@@ -12,20 +12,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class StravaUtilsTest {
+class StravaUtilTest {
     
     @ParameterizedTest
     @MethodSource("provideFilenames")
     void shouldDetectCorrectUploadTypes(String input, String expected) throws StravaException {
         File testFile = new File(input);
-        String result = StravaUtils.guessUploadFileFormat(testFile);
+        String result = StravaUtil.guessUploadFileFormat(testFile);
         assertThat(result).isEqualTo(expected);
     }
     @Test
     void shouldThrowExceptionOnUnrecognizedUploadFile() {
         File testFile = new File("garmin.jpg");
         StravaException thrown = Assertions.assertThrows(StravaException.class, () -> {
-            StravaUtils.guessUploadFileFormat(testFile);
+            StravaUtil.guessUploadFileFormat(testFile);
         });
         assertThat(thrown).hasMessage("The file you're uploading is in unsupported format");
         
