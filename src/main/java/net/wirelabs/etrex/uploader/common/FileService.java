@@ -25,11 +25,12 @@ public class FileService {
 
     private final AppConfiguration appConfiguration;
 
-    public FileService(AppConfiguration appConfiguration) {
+    public FileService(AppConfiguration appConfiguration) throws IOException {
         this.appConfiguration = appConfiguration;
+        setupWorkDirectories();
     }
 
-    public void setupWorkDirectories() throws IOException {
+    private void setupWorkDirectories() throws IOException {
         log.info("Initializing directories ");
         File defaultStorageRoot = new File(appConfiguration.getStorageRoot());
         FileUtils.createDirIfDoesNotExist(defaultStorageRoot);

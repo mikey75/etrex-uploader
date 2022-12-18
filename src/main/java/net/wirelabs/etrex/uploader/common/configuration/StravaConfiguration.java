@@ -43,14 +43,22 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
     }
 
     boolean hasAccessToken() {
-        return stravaAccessToken!=null && !stravaAccessToken.isBlank();
+        return stravaAccessToken != null && !stravaAccessToken.isBlank();
     }
 
     boolean hasRefreshToken() {
-        return stravaRefreshToken!=null && !stravaRefreshToken.isBlank();
+        return stravaRefreshToken != null && !stravaRefreshToken.isBlank();
     }
 
-    public boolean hasAllTokens() {
-        return hasAccessToken() && hasRefreshToken();
+    boolean hasAppId() {
+        return stravaAppId != null && !stravaAppId.isBlank();
+    }
+
+    boolean hasClientSecret() {
+        return stravaClientSecret != null && !stravaClientSecret.isBlank();
+    }
+
+    public boolean hasAllTokensAndCredentials() {
+        return hasAccessToken() && hasRefreshToken() && hasAppId() && hasClientSecret();
     }
 }
