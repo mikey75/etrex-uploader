@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 import java.io.IOException;

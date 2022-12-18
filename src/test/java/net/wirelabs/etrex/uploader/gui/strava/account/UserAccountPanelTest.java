@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;

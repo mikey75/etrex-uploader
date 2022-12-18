@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.service;
+package net.wirelabs.etrex.uploader.strava.client;
 
 
 import com.google.gson.annotations.SerializedName;

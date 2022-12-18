@@ -11,7 +11,7 @@ import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;

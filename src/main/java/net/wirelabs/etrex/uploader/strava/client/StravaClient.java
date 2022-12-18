@@ -2,17 +2,15 @@ package net.wirelabs.etrex.uploader.strava.client;
 
 import com.squareup.okhttp.*;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
-import net.wirelabs.etrex.uploader.strava.service.TokenResponse;
-import net.wirelabs.etrex.uploader.strava.service.TokenRequest;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.time.Duration;
 import java.util.Map;
 

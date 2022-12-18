@@ -16,7 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
