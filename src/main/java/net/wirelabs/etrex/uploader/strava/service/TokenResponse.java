@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.oauth;
+package net.wirelabs.etrex.uploader.strava.service;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -8,7 +8,7 @@ import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 
 @Getter
 @Setter
-public class AuthResponse {
+public class TokenResponse {
     @SerializedName("token_type")
     String tokenType;
     @SerializedName("expires_at")

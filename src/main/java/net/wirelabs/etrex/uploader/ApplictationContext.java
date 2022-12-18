@@ -6,10 +6,8 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.client.TokenManager;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
-
+import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
 
 
 /**
@@ -20,21 +18,21 @@ public class ApplictationContext {
 
     private final AppConfiguration appConfiguration;
     private final StravaConfiguration stravaConfiguration;
+
     private final FileService fileService;
-    private final IStravaService stravaService;
     private final GarminDeviceService garminDeviceService;
-    private final TokenManager tokenManager;
-    private final StravaClient client;
+    private final StravaService stravaService;
+    private final StravaClient stravaClient;
 
     public ApplictationContext() {
         this.appConfiguration = new AppConfiguration();
+        this.stravaConfiguration = new StravaConfiguration();
         this.fileService = new FileService(appConfiguration);
         this.garminDeviceService = new GarminDeviceService(appConfiguration);
 
-        this.stravaConfiguration = new StravaConfiguration();
-        this.tokenManager = new TokenManager(stravaConfiguration);
-        this.client = new StravaClient(tokenManager);
-        this.stravaService = new StravaService(appConfiguration,client);
+        this.stravaClient = new StravaClient(stravaConfiguration);
+        this.stravaService = new StravaServiceImpl(appConfiguration,stravaClient);
+
     }
 
     

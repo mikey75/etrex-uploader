@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import javax.swing.*;
 import java.awt.*;
@@ -36,10 +36,10 @@ public class UploadDialog extends JDialog {
     private final JScrollPane scrollPane;
     private final JButton btnOk;
     private final JButton btnCancel;
-    private final IStravaService stravaService;
-    private final FileService fileService;
+    private final StravaService stravaService;
+    private final transient FileService fileService;
 
-    public UploadDialog(IStravaService stravaService, FileService fileService) {
+    public UploadDialog(StravaService stravaService, FileService fileService) {
         this.stravaService = stravaService;
         this.fileService = fileService;
         lblActivityName = new JLabel("Name");
@@ -123,13 +123,6 @@ public class UploadDialog extends JDialog {
         }
     }
 
-   /* public void clearInputAndStatus() {
-        activityDesctiptionArea.setText("");
-        activityTitleTextField.setText("");
-        activityTypeCombo.setSelectedItem(SportType.RIDE);
-
-    }
-*/
     public void setTrackFile(File trackFile, SportType type) {
         this.trackFile = trackFile;
         this.activityTypeCombo.setSelectedItem(type);

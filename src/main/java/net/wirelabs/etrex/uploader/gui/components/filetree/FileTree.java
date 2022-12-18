@@ -131,6 +131,7 @@ public class FileTree extends JTree {
 
         }
         public void treeCollapsed(TreeExpansionEvent event) {
+            // nothing
         }
 
     }

@@ -1,14 +1,14 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
-import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationPropertyKeys.*;
-
-import java.io.File;
-
 import lombok.Getter;
 import lombok.Setter;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.gui.map.MapType;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
+
+import java.io.File;
+
+import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationPropertyKeys.*;
 
 /**
  * Created 6/20/22 by Michał Szwaczko (mikey@wirelabs.net)

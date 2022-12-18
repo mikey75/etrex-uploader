@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.oauth;
+package net.wirelabs.etrex.uploader.strava.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

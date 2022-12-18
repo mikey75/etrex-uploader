@@ -5,7 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 
 import javax.swing.*;
@@ -45,8 +45,8 @@ public class ApiUsagePanel extends EventAwarePanel {
 				Map<String, Integer> apiInfo = (Map<String, Integer>) evt.getPayload();
 
 	            SwingUtilities.invokeLater(() -> {
-					dailyLimits.setText("(" + apiInfo.get(StravaUtils.CURRENT_DAILY) + "/" + apiInfo.get(StravaUtils.ALLOWED_DAILY) + ")");
-	                quarterLimits.setText("(" + apiInfo.get(StravaUtils.CURRENT_15MINS) + "/" + apiInfo.get(StravaUtils.ALLOWED_15MINS) + ")");
+					dailyLimits.setText("(" + apiInfo.get(StravaUtil.CURRENT_DAILY) + "/" + apiInfo.get(StravaUtil.ALLOWED_DAILY) + ")");
+	                quarterLimits.setText("(" + apiInfo.get(StravaUtil.CURRENT_15MINS) + "/" + apiInfo.get(StravaUtil.ALLOWED_15MINS) + ")");
 	            });
 	        }
 	    }

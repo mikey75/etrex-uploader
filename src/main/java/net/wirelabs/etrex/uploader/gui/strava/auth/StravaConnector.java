@@ -4,7 +4,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
-import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,23 +18,20 @@ import java.io.IOException;
  */
 public class StravaConnector extends JDialog {
 
-    private final AuthCodeRetriever authCodeRetriever;
-    private final StravaClient client;
-
     private final JLabel lblApplicationId = new JLabel("Application ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
-    private final JButton connectBtn = new ConnectWithStravaButton();
+    private final JButton connectBtn = new StravaButton();
+    private final AuthService authService;
 
+    public StravaConnector(StravaClient client)  {
 
-    public StravaConnector(StravaClient client, AuthCodeRetriever authCodeRetriever)  {
+        authService = new AuthService(client);
 
-        this.authCodeRetriever = authCodeRetriever;
-        this.client = client;
-  
         createVisualComponent();
         registerExitOnCloseListener();
+
         connectBtn.addActionListener(this::connectWithStrava);
         setVisible(true);
     }
@@ -75,9 +72,7 @@ public class StravaConnector extends JDialog {
 
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
-                String authCode = authCodeRetriever.getAuthCode(appId);
-                client.exchangeAuthCodeForAccessToken(appId, clientSecret, authCode);
-                authCodeRetriever.shutdown();
+                authService.getToken(appId,clientSecret);
             }
         } catch (StravaException | IOException e) {
             SwingUtils.errorMsg("Could not connect with strava:" + e.getMessage());

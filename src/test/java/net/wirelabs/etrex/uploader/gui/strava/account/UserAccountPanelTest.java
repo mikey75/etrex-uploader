@@ -3,8 +3,8 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class UserAccountPanelTest {
     
     private final File fakePhoto  = new File("src/test/resources/fakeUserPhoto.png");
-    private final IStravaService strava = mock(StravaService.class);
+    private final StravaService strava = mock(StravaServiceImpl.class);
     private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
     private final String profilePictureURL = fakePhoto.getAbsolutePath().replace("\\", "/");
     

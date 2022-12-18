@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.common.configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * Created 9/13/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public abstract class PropertiesBasedConfiguration {
+public abstract class PropertiesBasedConfiguration implements Serializable {
 
     protected Properties properties = new Properties();
     private final String userDirectory;

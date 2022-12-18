@@ -3,9 +3,9 @@ package net.wirelabs.etrex.uploader.gui.strava.auth;
 import java.net.URL;
 import javax.swing.*;
 
-public class ConnectWithStravaButton extends JButton {
+public class StravaButton extends JButton {
     
-    public ConnectWithStravaButton() {
+    public StravaButton() {
         
         URL iconLocation = getClass().getResource("/btn_strava_connectwith_orange.png");
     

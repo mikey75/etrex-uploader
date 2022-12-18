@@ -3,25 +3,23 @@ package net.wirelabs.etrex.uploader.gui.browsers;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
-
-
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
-import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
-
 import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import net.wirelabs.etrex.uploader.model.garmin.ModelT;
-import net.wirelabs.etrex.uploader.strava.model.Upload;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeNode;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 /**

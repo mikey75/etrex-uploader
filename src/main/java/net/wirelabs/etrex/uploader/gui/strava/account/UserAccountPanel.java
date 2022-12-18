@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
 import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
-import net.wirelabs.etrex.uploader.strava.service.IStravaService;
+import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,11 +30,11 @@ public class UserAccountPanel extends BorderedPanel {
     final JLabel athletePicture = new JLabel();
     final ApiUsagePanel apiUsagePanel = new ApiUsagePanel();
     
-    private final IStravaService stravaService;
+    private final StravaService stravaService;
     private final JButton btnSettings = new JButton("Settings");
     private final AppConfiguration configuration;
 
-    public UserAccountPanel(IStravaService stravaService, AppConfiguration configuration) {
+    public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
         this.stravaService = stravaService;
         this.configuration = configuration;
         initVisualComponent();
@@ -50,14 +50,10 @@ public class UserAccountPanel extends BorderedPanel {
         add(apiUsagePanel,"cell 0 4,growx");
         add(btnSettings, "cell 0 7,growx");
 
-        btnSettings.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SettingsDialog d = new SettingsDialog(configuration);
-                SwingUtils.centerComponent(d);
-                d.setVisible(true);
-
-            }
+        btnSettings.addActionListener(e -> {
+            SettingsDialog d = new SettingsDialog(configuration);
+            SwingUtils.centerComponent(d);
+            d.setVisible(true);
         });
     }
 

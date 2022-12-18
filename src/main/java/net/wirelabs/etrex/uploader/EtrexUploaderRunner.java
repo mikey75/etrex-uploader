@@ -1,15 +1,5 @@
 package net.wirelabs.etrex.uploader;
 
-import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +7,16 @@ import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
-import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
 
 
 
@@ -33,7 +31,6 @@ public class EtrexUploaderRunner {
 
         try {
             ApplictationContext ctx = new ApplictationContext();
-
             runStravaOAuthIfNecessary(ctx);
 
             ctx.getFileService().setupWorkDirectories();
@@ -50,10 +47,10 @@ public class EtrexUploaderRunner {
 
     }
 
-    private static void runStravaOAuthIfNecessary(ApplictationContext ctx) throws IOException {
-        if (!ctx.getTokenManager().hasTokens()) {
-            AuthCodeRetriever authCodeRetriever = new AuthCodeRetriever();
-            new StravaConnector(ctx.getClient(), authCodeRetriever);
+   private static void runStravaOAuthIfNecessary(ApplictationContext ctx)  {
+
+        if (!ctx.getStravaConfiguration().hasAllTokens()) {
+            new StravaConnector(ctx.getStravaClient());
         }
     }
 

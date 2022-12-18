@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
 
-import net.wirelabs.etrex.uploader.strava.utils.StravaUtils;
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -26,7 +26,7 @@ class ApiUsagePanelTest {
         headers.put("X-RateLimit-Limit", List.of("100,1000"));
         headers.put("X-RateLimit-Usage", List.of("90,800"));
 
-        StravaUtils.sendRateLimitInfo(headers);
+        StravaUtil.sendRateLimitInfo(headers);
 
 
         await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> {
@@ -36,7 +36,7 @@ class ApiUsagePanelTest {
 
         // when response does not contain ratelimit headers - the labels should stay as they were
         headers = new HashMap<>();
-        StravaUtils.sendRateLimitInfo(headers);
+        StravaUtil.sendRateLimitInfo(headers);
 
         await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> {
             assertThat(p.getDailyLimits().getText()).isEqualTo("(800/1000)");

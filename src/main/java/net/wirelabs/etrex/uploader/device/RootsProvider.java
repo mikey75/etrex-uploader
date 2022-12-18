@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.device;
 
+import net.wirelabs.etrex.uploader.common.Constants;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,7 +46,7 @@ public class RootsProvider {
     // linux automounts usb drives in /media/$user
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
-        File root = new File("/media" , user);
+        File root = new File(Constants.LINUX_USB_MOUNTDIR , user);
         File[] list = root.listFiles();
 
         if (list != null) {
