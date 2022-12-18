@@ -4,10 +4,8 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
-import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -29,32 +27,14 @@ public class EtrexUploaderRunner {
         setGlobalFontSize(10);
 
         try {
-            ApplictationContext ctx = new ApplictationContext();
-            runStravaOAuthIfNecessary(ctx);
-
-            ctx.getFileService().setupWorkDirectories();
+            ApplicationStartupContext ctx = new ApplicationStartupContext();
             Frame window = new EtrexUploader(ctx);
             window.setVisible(true);
-
-
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
             EventBus.stop();
             ThreadUtils.shutdownExecutorService();
             System.exit(1);
-        }
-
-
-    }
-
-    private static void runStravaOAuthIfNecessary(ApplictationContext ctx) {
-
-        if (!ctx.getStravaConfiguration().hasAllTokens()) {
-            StravaConnector connector = new StravaConnector(ctx.getStravaClient());
-            if (!connector.getOauthStatus().get()) {
-                SwingUtils.errorMsg(connector.getOauthMessage());
-                System.exit(1);
-            }
         }
 
     }

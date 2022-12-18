@@ -15,7 +15,7 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
  */
 public class ThunderForestOutdoorMapFactoryInfo extends TileFactoryInfo
 {
-    private static final int MAX_ZOOM = 19;
+    private static final int MAX_ZOOM = 22;
     private String apiKey = Constants.EMPTY_STRING;
 
     /**

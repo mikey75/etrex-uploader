@@ -37,10 +37,9 @@ class FileServiceTest {
     void before() throws IOException {
         FileUtils.recursivelyDeleteDirectory(root);
         setupFileServiceMock();
-        fileService.setupWorkDirectories();
     }
 
-    private void setupFileServiceMock() {
+    private void setupFileServiceMock() throws IOException {
         appConfiguration = mock(AppConfiguration.class);
         doReturn(root.getPath()).when(appConfiguration).getStorageRoot();
         doReturn(true).when(appConfiguration).isArchiveAfterUpload();
