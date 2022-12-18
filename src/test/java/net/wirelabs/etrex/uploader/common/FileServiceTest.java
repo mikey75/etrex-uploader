@@ -70,7 +70,8 @@ class FileServiceTest {
         createTestTrack(track);
         fileService.archiveAndDelete(track);
         // then check if timestamped copy is created
-        assertThat(targetDir).isDirectoryContaining(f -> f.getName().matches("[0-9]{13}-" + track.getName()));
+        assertThat(targetDir).isDirectoryContaining(f -> f.getName()
+                .matches("duplicate-of-file-gpx-.*"));
 
     }
     
