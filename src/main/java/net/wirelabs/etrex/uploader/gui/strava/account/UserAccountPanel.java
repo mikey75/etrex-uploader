@@ -8,14 +8,12 @@ import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;

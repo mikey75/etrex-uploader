@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.strava.auth;
 
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.client;
+package net.wirelabs.etrex.uploader;
 
 /*
  * Created 11/1/22 by Michał Szwaczko (mikey@wirelabs.net)

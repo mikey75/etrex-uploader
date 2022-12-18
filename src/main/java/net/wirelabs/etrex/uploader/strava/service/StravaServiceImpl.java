@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.client.StravaException;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.strava.model.*;
 
 import java.io.File;
