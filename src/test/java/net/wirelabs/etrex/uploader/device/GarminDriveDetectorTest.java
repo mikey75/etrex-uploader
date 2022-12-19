@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class GarminDriveDetectorTest {
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
         when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
-        when(testApplicationConfiguration.getStorageRoot()).thenReturn(System.getProperty("user.home") + File.separator + "etrex-uploader-store");
+        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
 
         RootsProvider rootsProvider = Mockito.spy(new RootsProvider());
         doReturn(roots).when(rootsProvider).getRoots();

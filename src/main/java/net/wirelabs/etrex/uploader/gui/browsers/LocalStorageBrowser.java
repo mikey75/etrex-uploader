@@ -8,8 +8,10 @@ import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 
 import javax.swing.*;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -36,7 +38,7 @@ public class LocalStorageBrowser extends BorderedPanel {
 
     private void setupRoots(AppConfiguration appConfiguration) {
 
-        File defaultStorageRoot = new File(appConfiguration.getStorageRoot());
+        File defaultStorageRoot = appConfiguration.getStorageRoot().toFile();
         fileTree.addDrive(defaultStorageRoot);
         for (File root: getCustomStorageRoots(appConfiguration)) {
             fileTree.addDrive(root);
@@ -44,17 +46,10 @@ public class LocalStorageBrowser extends BorderedPanel {
     }
 
     private List<File> getCustomStorageRoots(AppConfiguration appConfiguration) {
-        
-        List<File> customRoots = new ArrayList<>();
-        String userRoots = appConfiguration.getUserStorageRoots();
-        if (userRoots != null && !userRoots.isEmpty()) {
-            String[] roots = userRoots.split(",");
-            for (String root : roots) {
-                File newRoot = new File(root);
-                customRoots.add(newRoot);
-            }
-        }
-        return customRoots;
+
+        return appConfiguration.getUserStorageRoots().stream()
+                .map(f -> Paths.get(f.toString()).toFile()).collect(Collectors.toList());
+
     }
 
 }
