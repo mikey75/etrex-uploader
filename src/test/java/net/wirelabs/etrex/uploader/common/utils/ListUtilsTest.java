@@ -60,4 +60,26 @@ public class ListUtilsTest {
 
     }
 
+    @Test
+    void testStringToPath() {
+        String s_many = "a ,b ,doc and set";
+        String s_single ="a   ";
+        String s_none ="";
+        String s_NULL = null;
+        List<Path> paths = ListUtils.convertStringListToPaths(s_many);
+        assertThat(paths).containsExactly(Paths.get("a"),Paths.get("b"), Paths.get("doc and set"));
+        paths = ListUtils.convertStringListToPaths(s_single);
+        assertThat(paths).containsExactly(Paths.get("a"));
+        paths = ListUtils.convertStringListToPaths(s_none);
+        assertThat(paths).isEmpty();
+        paths = ListUtils.convertStringListToPaths(s_NULL);
+        assertThat(paths).isEmpty();
+    }
+
+    @Test
+    void testPathListToString () {
+        List<Path> p = List.of(Paths.get("Documents and Settings"),Paths.get("B"), Paths.get("C"));
+        String result = ListUtils.convertPathListToString(p);
+        assertThat(result).isEqualTo("Documents and Settings,B,C");
+    }
 }
