@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
@@ -19,7 +20,7 @@ public class AppConfigurationTest {
     @Test
     void shouldAssertDefaultValuesWhenNoConfigFile() {
         AppConfiguration c = new AppConfiguration("nonexistent.file");
-        assertThat(c.getStorageRoot()).isEqualTo(System.getProperty("user.home") + File.separator + "etrex-uploader-store");
+        assertThat(c.getStorageRoot()).isEqualTo(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
         assertThat(c.getUserStorageRoots()).isEmpty();
         assertThat(c.isArchiveAfterUpload()).isTrue();
         assertThat(c.isDeleteAfterUpload()).isTrue();
@@ -30,8 +31,8 @@ public class AppConfigurationTest {
     @Test
     void shouldReadAndParseCorrectConfig() {
         AppConfiguration c = new AppConfiguration("src/test/resources/test.properties");
-        assertThat(c.getStorageRoot()).isEqualTo("/test/root");
-        assertThat(c.getUserStorageRoots()).isEqualTo("/test/1,test/2");
+        assertThat(c.getStorageRoot()).isEqualTo(Paths.get("/test/root"));
+        assertThat(c.getUserStorageRoots()).containsExactly(Paths.get("/test/1"),Paths.get("test/2"));
         assertThat(c.isArchiveAfterUpload()).isTrue();
         assertThat(c.isDeleteAfterUpload()).isFalse();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);

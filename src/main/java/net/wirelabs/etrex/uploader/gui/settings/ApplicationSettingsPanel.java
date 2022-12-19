@@ -2,9 +2,11 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 
 import javax.swing.*;
+import java.nio.file.Paths;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -47,8 +49,8 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     }
 
     private void loadConfiguration() {
-        storageRoot.setText(configuration.getStorageRoot());
-        userRoots.setText(configuration.getUserStorageRoots());
+        storageRoot.setText(configuration.getStorageRoot().toString());
+        userRoots.setText(ListUtils.convertPathListToString(configuration.getUserStorageRoots()));
         discoveryDelay.setText(String.valueOf(configuration.getDeviceDiscoveryDelay()));
         waitDriveTimeout.setText(String.valueOf(configuration.getWaitDriveTimeout()));
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
@@ -56,8 +58,8 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     }
 
     public void updateConfiguration() {
-        configuration.setStorageRoot(storageRoot.getText());
-        configuration.setUserStorageRoots(userRoots.getText());
+        configuration.setStorageRoot(Paths.get(storageRoot.getText()));
+        configuration.setUserStorageRoots(ListUtils.convertStringListToPaths(userRoots.getText()));
         configuration.setDeviceDiscoveryDelay(Long.valueOf(discoveryDelay.getText()));
         configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());

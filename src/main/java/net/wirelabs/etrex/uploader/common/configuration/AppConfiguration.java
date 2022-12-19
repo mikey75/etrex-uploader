@@ -3,10 +3,14 @@ package net.wirelabs.etrex.uploader.common.configuration;
 import lombok.Getter;
 import lombok.Setter;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.map.MapType;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationPropertyKeys.*;
 
@@ -19,8 +23,8 @@ import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationProp
 @Setter
 public class AppConfiguration extends PropertiesBasedConfiguration {
 
-    private String storageRoot;
-    private String userStorageRoots;
+    private Path storageRoot;
+    private List<Path> userStorageRoots;
     private Long deviceDiscoveryDelay;
     private Long waitDriveTimeout;
     private boolean deleteAfterUpload;
@@ -34,8 +38,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
 
     public AppConfiguration(String configFile) {
         super(configFile);
-        storageRoot = properties.getProperty(STORAGE_ROOT, System.getProperty("user.home") + File.separator + Constants.DEFAULT_LOCAL_STORE);
-        userStorageRoots = properties.getProperty(USER_STORAGE_ROOTS, Constants.EMPTY_STRING);
+        storageRoot = Paths.get(properties.getProperty(STORAGE_ROOT, System.getProperty("user.home") + File.separator + Constants.DEFAULT_LOCAL_STORE));
+        userStorageRoots = ListUtils.convertStringListToPaths(properties.getProperty(USER_STORAGE_ROOTS, Constants.EMPTY_STRING));
         deviceDiscoveryDelay = Long.valueOf(properties.getProperty(DRIVE_OBSERVER_DELAY, "500"));
         waitDriveTimeout = Long.valueOf(properties.getProperty(WAIT_DRIVE_TIMEOUT, "15000"));
         deleteAfterUpload = Boolean.parseBoolean(properties.getProperty(DELETE_TRACK_AFTER_UPLOAD, "true"));
@@ -53,8 +57,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     }
 
     public void save() {
-        properties.setProperty(STORAGE_ROOT, storageRoot);
-        properties.setProperty(USER_STORAGE_ROOTS, userStorageRoots);
+        properties.setProperty(STORAGE_ROOT, storageRoot.toString());
+        properties.setProperty(USER_STORAGE_ROOTS, ListUtils.convertPathListToString(userStorageRoots));
         properties.setProperty(DRIVE_OBSERVER_DELAY, String.valueOf(deviceDiscoveryDelay));
         properties.setProperty(WAIT_DRIVE_TIMEOUT, String.valueOf(waitDriveTimeout));
         properties.setProperty(BACKUP_TRACK_AFTER_UPLOAD, String.valueOf(archiveAfterUpload));

@@ -32,7 +32,7 @@ public class FileService {
 
     private void setupWorkDirectories() throws IOException {
         log.info("Initializing directories ");
-        File defaultStorageRoot = new File(appConfiguration.getStorageRoot());
+        File defaultStorageRoot = appConfiguration.getStorageRoot().toFile();
         FileUtils.createDirIfDoesNotExist(defaultStorageRoot);
 
         File defaultUploadedDir = new File(defaultStorageRoot, UPLOADED_FILES_SUBFOLDER);
@@ -59,7 +59,7 @@ public class FileService {
 
     private void archive(File trackFile) throws IOException {
         log.info("Archiving {}", trackFile);
-        File uploadedSubdir = new File(appConfiguration.getStorageRoot(), UPLOADED_FILES_SUBFOLDER);
+        File uploadedSubdir = new File(appConfiguration.getStorageRoot().toFile(), UPLOADED_FILES_SUBFOLDER);
         File targetDir = new File(uploadedSubdir, getYearMonthTimestampedDir());
         File targetFile = new File(targetDir, trackFile.getName());
 

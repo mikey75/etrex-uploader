@@ -41,7 +41,7 @@ class FileServiceTest {
 
     private void setupFileServiceMock() throws IOException {
         appConfiguration = mock(AppConfiguration.class);
-        doReturn(root.getPath()).when(appConfiguration).getStorageRoot();
+        doReturn(root.toPath()).when(appConfiguration).getStorageRoot();
         doReturn(true).when(appConfiguration).isArchiveAfterUpload();
         doReturn(true).when(appConfiguration).isDeleteAfterUpload();
         fileService = Mockito.spy(new FileService(appConfiguration));
