@@ -1,24 +1,30 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileChooserTextField extends JPanel {
 
-
     private final JTextField textfield;
     private final JButton button;
+    private final boolean allowMultiple;
+    private final boolean dirsOnly;
 
+    private List<Path> paths = new ArrayList<>();
 
     public FileChooserTextField() {
-        this(false,false);
-
+        this(false, false);
     }
 
     public FileChooserTextField(boolean dirsOnly, boolean allowMultiple) {
-
+        this.dirsOnly = dirsOnly;
+        this.allowMultiple = allowMultiple;
         setBorder(null);
         setLayout(new MigLayout("gapx 0,insets 0", "[grow][]", "[]"));
 
@@ -36,33 +42,42 @@ public class FileChooserTextField extends JPanel {
         add(textfield, "cell 0 0,grow");
 
         button.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            if (dirsOnly) {
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            }
-            int result = fileChooser.showOpenDialog(null);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                String selectedItem = fileChooser.getSelectedFile().getPath();
-                addItem(selectedItem);
-            }
+            showFileChooser();
         });
     }
 
-    private void addItem(String selectedItem) {
-        String s = getText();
-        if (!getText().contains(selectedItem)) {
-            s += s.isBlank() ? "" : ",";
-            s += selectedItem;
-            setText(s);
+    private void showFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        if (dirsOnly) {
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        }
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            Path selectedItem = fileChooser.getSelectedFile().toPath();
+            addItem(selectedItem);
         }
     }
 
-
-    public void setText(String text) {
-        textfield.setText(text);
+    private void addItem(Path selectedItem) {
+        if (allowMultiple) {
+            if (!paths.contains(selectedItem)) {
+                paths.add(selectedItem);
+                textfield.setText(ListUtils.convertPathListToString(paths));
+            }
+        } else {
+            paths.clear();
+            paths.add(selectedItem);
+            textfield.setText(ListUtils.convertPathListToString(paths));
+        }
     }
 
-    public String getText() {
-        return textfield.getText();
+    public List<Path> getPaths() {
+        this.paths = ListUtils.convertStringListToPaths(textfield.getText());
+        return paths;
+    }
+
+    public void setPaths(List<Path> paths) {
+        this.paths = new ArrayList<>(paths);
+        textfield.setText(ListUtils.convertPathListToString(paths));
     }
 }
