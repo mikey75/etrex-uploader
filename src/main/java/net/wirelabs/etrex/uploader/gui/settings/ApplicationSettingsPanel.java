@@ -4,9 +4,11 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 
 import javax.swing.*;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -15,9 +17,9 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
     JLabel storageRootLabel = new JLabel("Storage root:");
-    JTextField storageRoot = new JTextField();
+    FileChooserTextField storageRoot = new FileChooserTextField(true, false);
     JLabel userRootsLabel = new JLabel("User roots:");
-    JTextField userRoots = new JTextField();
+    FileChooserTextField userRoots = new FileChooserTextField(true, true);
     JLabel discoveryDelayLabel = new JLabel("Garmin discovery delay:");
     JTextField discoveryDelay = new JTextField();
     JLabel waitDriveTimeoutLabel = new JLabel("Garmin discovery timeout:");
@@ -49,8 +51,8 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     }
 
     private void loadConfiguration() {
-        storageRoot.setText(configuration.getStorageRoot().toString());
-        userRoots.setText(ListUtils.convertPathListToString(configuration.getUserStorageRoots()));
+        storageRoot.setPaths(Collections.singletonList(configuration.getStorageRoot()));
+        userRoots.setPaths(configuration.getUserStorageRoots());
         discoveryDelay.setText(String.valueOf(configuration.getDeviceDiscoveryDelay()));
         waitDriveTimeout.setText(String.valueOf(configuration.getWaitDriveTimeout()));
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
@@ -58,8 +60,8 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     }
 
     public void updateConfiguration() {
-        configuration.setStorageRoot(Paths.get(storageRoot.getText()));
-        configuration.setUserStorageRoots(ListUtils.convertStringListToPaths(userRoots.getText()));
+        configuration.setStorageRoot(storageRoot.getPaths().get(0));
+        configuration.setUserStorageRoots(userRoots.getPaths());
         configuration.setDeviceDiscoveryDelay(Long.valueOf(discoveryDelay.getText()));
         configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
