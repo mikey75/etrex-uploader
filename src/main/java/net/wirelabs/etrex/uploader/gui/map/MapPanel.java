@@ -22,6 +22,7 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.Collection;
@@ -30,10 +31,24 @@ import java.util.List;
 @Slf4j
 public class MapPanel extends EventAwarePanel {
     
-    private final JXMapViewer mapViewer = new JXMapViewer();
+    private final JXMapViewer mapViewer;
     private final transient TrackPainter trackPainter;
 
     public MapPanel(AppConfiguration configuration) {
+
+        mapViewer = new JXMapViewer(){
+
+            private  AttributionPainter painter;
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (painter == null) {
+                    painter = new AttributionPainter(g, mapViewer);
+                }
+                painter.paint(g);
+            }
+        };
+
         log.info("Initializing map panel");
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
