@@ -53,12 +53,12 @@ public class ThunderForestOutdoorMapFactoryInfo extends TileFactoryInfo
 
     @Override
     public String getAttribution() {
-        return "\u00A9 ThunderForest contributors";
+        return "Maps \u00A9 Thunderforest, Data \u00A9 OpenStreetMap contributors";
     }
 
     @Override
     public String getLicense() {
-        return "Creative Commons Attribution-ShareAlike 2.0";
+        return " CC-BY-SA 2.0";
     }
 
 
