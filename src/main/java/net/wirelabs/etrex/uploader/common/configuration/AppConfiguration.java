@@ -23,8 +23,8 @@ import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationProp
 @Setter
 public class AppConfiguration extends PropertiesBasedConfiguration {
 
-    private Path storageRoot;
-    private List<Path> userStorageRoots;
+    private transient Path storageRoot;
+    private transient List<Path> userStorageRoots;
     private Long deviceDiscoveryDelay;
     private Long waitDriveTimeout;
     private boolean deleteAfterUpload;

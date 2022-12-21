@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.device;
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -12,29 +13,20 @@ import java.util.List;
  */
 public class RootsProvider {
 
-    private static final String WINDOWS = "Windows";
-    private static final String LINUX = "Linux";
-
     public List<File> getRoots() {
 
-        String os = getOperatingSystem();
-
-        if (os.startsWith(WINDOWS)) {
+        if (SystemUtils.isWindows()) {
             return windowsRoots();
         }
-        if (os.startsWith(LINUX)) {
+        if (SystemUtils.isLinux()) {
             return linuxRoots();
         }
         throw new IllegalStateException("Unsupported operating system");
-        }
-
-     String getOperatingSystem() {
-        return System.getProperty("os.name");
     }
 
 
     // windows automounts usb drives as new drives
-     List<File> windowsRoots() {
+    List<File> windowsRoots() {
         File[] roots = File.listRoots();
         if (roots != null) {
             return Arrays.asList(File.listRoots());
@@ -46,7 +38,7 @@ public class RootsProvider {
     // linux automounts usb drives in /media/$user
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
-        File root = new File(Constants.LINUX_USB_MOUNTDIR , user);
+        File root = new File(Constants.LINUX_USB_MOUNTDIR, user);
         File[] list = root.listFiles();
 
         if (list != null) {

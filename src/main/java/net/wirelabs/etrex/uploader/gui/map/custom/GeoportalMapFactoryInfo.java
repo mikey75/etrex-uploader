@@ -13,15 +13,17 @@ public class GeoportalMapFactoryInfo extends TileFactoryInfo {
     private static final int TILE_SIZE = 512;
 
     // max row/col numbers - taken from service's schema xsd
-    private int[] maxRows={14538,7269,3634,1453,726,290,145,72,29,14,7,3,1,0,0,0};
-    private int[] maxCols={16827,8413,4206,1682,841,336,168,84,33,16,8,4,1,0,0,0};
+    private final int[] maxRows={14538,7269,3634,1453,726,290,145,72,29,14,7,3,1,0,0,0};
+    private final int[] maxCols={16827,8413,4206,1682,841,336,168,84,33,16,8,4,1,0,0,0};
 
-    
+    public int getMaxRowsAtZoom(int zoom) {
+        return maxRows[zoom];
+    }
 
-    private double[] longitudeDegrees = new double[MAX_ZOOM+1];
-    private double[] longitudeRadians = new double[MAX_ZOOM+1];
+    private final double[] longitudeDegrees = new double[MAX_ZOOM+1];
+    private final double[] longitudeRadians = new double[MAX_ZOOM+1];
 
-    private Point2D[] mapCentersInPixels = new Point2D.Double[MAX_ZOOM+1];
+    private final Point2D[] mapCentersInPixels = new Point2D.Double[MAX_ZOOM+1];
     /**
      * Default constructor
      */

@@ -16,7 +16,7 @@ public class FileChooserTextField extends JPanel {
     private final boolean allowMultiple;
     private final boolean dirsOnly;
 
-    private List<Path> paths = new ArrayList<>();
+    private transient List<Path> paths = new ArrayList<>();
 
     public FileChooserTextField() {
         this(false, false);
@@ -41,9 +41,7 @@ public class FileChooserTextField extends JPanel {
         add(button, "cell 1 0");
         add(textfield, "cell 0 0,grow");
 
-        button.addActionListener(e -> {
-            showFileChooser();
-        });
+        button.addActionListener(e -> showFileChooser());
     }
 
     private void showFileChooser() {
