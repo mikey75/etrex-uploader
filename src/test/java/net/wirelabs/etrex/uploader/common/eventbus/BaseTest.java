@@ -24,12 +24,13 @@ public abstract class BaseTest {
     protected void stopListeners(EventBusListener... listeners) {
 
         for (EventBusListener listener : listeners) {
-            listener.stopListener();
+            listener.stop();
         }
 
         waitUntilAsserted(Duration.ofSeconds(10), () -> {
             for (EventBusListener listener : listeners) {
-                assertThat(listener.getIsRunning()).isFalse();
+
+                assertThat(listener.getThreadHandle().isDone()).isTrue();
             }
 
         });

@@ -18,7 +18,7 @@ public class EventBus {
     public static void stop() {
         for (EventBusListener listener: uniqueListeners) {
             log.info("Stopping listener: {}", listener);
-            listener.stopListener();
+            listener.stop();
         }
     }
     public static void register(EventBusListener listener, Object... eventTypes) {
