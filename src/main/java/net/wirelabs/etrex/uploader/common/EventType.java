@@ -5,15 +5,14 @@ package net.wirelabs.etrex.uploader.common;
  */
 public enum EventType {
     // map events
-    MAP_DISPLAY_GPX_FILE,
-    MAP_DISPLAY_FIT_FILE,
     MAP_DISPLAY_TRACK,
    
     // garmin drive events
     DEVICE_DRIVE_REGISTERED,
     DEVICE_DRIVE_UNREGISTERED,
     DEVICE_INFO_AVAILABLE,
-    // 
+
+    // misc
     ACTIVITY_SUCCESSFULLY_UPLOADED,
-    AUTH_CODE_RECEIVED, RATELIMIT_INFO_UPDATE, MAP_CHANGED;
+    RATELIMIT_INFO_UPDATE
 }

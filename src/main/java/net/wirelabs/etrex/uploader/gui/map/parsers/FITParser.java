@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created 12/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class FITParser {
+class FITParser {
 
     private final FitDecoder fitDecoder;
 

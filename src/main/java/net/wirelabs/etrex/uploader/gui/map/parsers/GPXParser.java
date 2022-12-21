@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * Created 8/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class GPXParser {
+class GPXParser {
 
     private Unmarshaller unmarshaller;
 

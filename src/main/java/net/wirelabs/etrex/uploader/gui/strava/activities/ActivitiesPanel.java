@@ -1,26 +1,28 @@
 package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
-import net.wirelabs.etrex.uploader.StravaException;
-import net.wirelabs.etrex.uploader.gui.map.MapUtil;
+
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import java.awt.Cursor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 
 @Slf4j
 public class ActivitiesPanel extends EventAwarePanel {
@@ -94,7 +96,10 @@ public class ActivitiesPanel extends EventAwarePanel {
     private void drawTrack(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting()) {
             SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
-            MapUtil.drawTrackFromPolyLine(selectedActivity.getMap().getSummaryPolyline());
+            String polyLine = selectedActivity.getMap().getSummaryPolyline();
+            if (selectedActivity.getMap().getSummaryPolyline() != null) {
+                EventBus.publish(MAP_DISPLAY_TRACK, polyLine);
+            }
         }
     }
 
