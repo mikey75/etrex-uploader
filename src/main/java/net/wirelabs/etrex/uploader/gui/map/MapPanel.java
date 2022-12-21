@@ -7,6 +7,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestOutdoorMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
 import org.jxmapviewer.JXMapViewer;
@@ -78,6 +79,10 @@ public class MapPanel extends EventAwarePanel {
             }
             case OUTDOOR: {
                 info = new ThunderForestOutdoorMapFactoryInfo().withApiKey(apiKey);
+                break;
+            }
+            case GEOPORTAL: {
+                info = new GeoportalMapFactoryInfo();
                 break;
             }
             default:
