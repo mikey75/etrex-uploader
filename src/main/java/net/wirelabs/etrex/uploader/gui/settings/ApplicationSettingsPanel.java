@@ -2,12 +2,12 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 
-import javax.swing.*;
-import java.nio.file.Paths;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 import java.util.Collections;
 
 /*

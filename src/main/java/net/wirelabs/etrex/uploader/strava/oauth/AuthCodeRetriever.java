@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.StravaException;
-import net.wirelabs.etrex.uploader.strava.utils.BrowserUtil;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -70,7 +70,7 @@ class AuthCodeRetriever implements Serializable {
 
     void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
         log.info("Redirecting user to strava app authorization page");
-        BrowserUtil.browseToUrl(requestAccessURL);
+        SystemUtils.openSystemBrowser(requestAccessURL);
     }
 
     private boolean waitForCode() {
