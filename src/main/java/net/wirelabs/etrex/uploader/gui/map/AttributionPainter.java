@@ -1,59 +1,116 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.AbstractPainter;
 
+import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
-import java.util.EnumMap;
-import java.util.Map;
 
 /*
  * Created 12/20/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class AttributionPainter {
+public class AttributionPainter extends AbstractPainter<JXMapViewer> {
 
-    private final String attribution;
-    private final FontMetrics fontMetrics;
-    private final int attributionWidth;
-    private final int attributionHeight;
-    private final Map<MapAttributionPosition,Point> map = new EnumMap<>(MapAttributionPosition.class);
+    // defaults
+    private Font font = new Font("Dialog", Font.BOLD, 10);
+    private Color backgroundColor = Color.WHITE;
+    private Color fontColor = Color.BLACK;
+    private int horizontal = SwingConstants.LEFT;
+    private int vertical = SwingConstants.TOP;
+    private int margin = 2;
 
+    @Override
+    protected void doPaint(Graphics2D graphics, JXMapViewer mapViewer, int width, int height) {
 
+        // get attribution text
+        String attributionText = "Map: " + mapViewer.getTileFactory().getInfo().getAttribution() +
+                "  Licence: " + mapViewer.getTileFactory().getInfo().getLicense();
 
-    public AttributionPainter(Graphics g, JXMapViewer viewer) {
+        // set font and calculate attribution text bounding box
+        graphics.setFont(font);
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        Rectangle2D textBounds = fontMetrics.getStringBounds(attributionText, graphics);
+        int attributionWidth = (int) textBounds.getWidth() + margin;
+        int attributionHeight = (int) textBounds.getHeight() + margin;
 
-        attribution = "Map: " + viewer.getTileFactory().getInfo().getAttribution() +
-                "  Licence: " + viewer.getTileFactory().getInfo().getLicense();
-        // calculate text font metrics and text bounds
-        g.setFont(new Font("Dialog", Font.BOLD, 10));
-        fontMetrics = g.getFontMetrics();
-        Rectangle2D textBounds = fontMetrics.getStringBounds(attribution, g);
-
-        int margin = 2;
-        attributionWidth = (int) textBounds.getWidth() + margin;
-        attributionHeight = (int) textBounds.getHeight() + margin;
-
-        map.put(MapAttributionPosition.NORTH_EAST, new Point(viewer.getWidth() - attributionWidth - 2, 2));
-        map.put(MapAttributionPosition.NORTH_WEST, new Point(2, 2));
-        map.put(MapAttributionPosition.SOUTH_EAST, new Point(viewer.getWidth() - attributionWidth - 2, viewer.getHeight() - attributionHeight - 2));
-        map.put(MapAttributionPosition.SOUTH_WEST, new Point(2, viewer.getHeight() - attributionHeight - 2));
-    }
-
-    void paint(Graphics graphics) {
-        graphics.setFont(new Font("Dialog", Font.BOLD, 10));
         // apply position
-        Point position = map.get(MapAttributionPosition.NORTH_WEST);
+        Point position = getPosition(width, height, attributionWidth, attributionHeight);
         // draw container frame
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(backgroundColor);
         graphics.fillRect(position.x, position.y, attributionWidth, attributionHeight);
-        graphics.setColor(Color.black);
+        graphics.setColor(Color.BLACK);
         graphics.drawRect(position.x, position.y, attributionWidth, attributionHeight);
         // paint string
-        graphics.setColor(Color.BLACK);
-        graphics.drawString(attribution, position.x, position.y + fontMetrics.getAscent());
+        graphics.setColor(fontColor);
+        graphics.drawString(attributionText, position.x, position.y + fontMetrics.getAscent());
+    }
+
+    private Point getPosition(int width, int height, int attributionWidth, int attributionHeight) {
+        int x = 0;
+        int y = 0;
+
+        if (vertical == SwingConstants.TOP) {
+            y = 2;
+        }
+        if (vertical == SwingConstants.BOTTOM) {
+            y = height - attributionHeight - 2;
+        }
+        if (horizontal == SwingConstants.LEFT) {
+            x = 2;
+        }
+        if (horizontal == SwingConstants.RIGHT) {
+            x = width - attributionWidth - 2;
+        }
+
+        return new Point(x, y);
+    }
+
+    /**
+     * Set margin around the attribution text in pixels
+     * @param margin margin
+     */
+    public void setMargin(int margin) {
+        this.margin = margin;
+    }
+
+    /**
+     * Set backround color of the attribution box
+     * @param backgroundColor color, default white
+     */
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    /**
+     * Set font color of the attribution text
+     * @param fontColor color, default black
+     */
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    /**
+     * Set font of the attribution text
+     * @param font font, default Dialog,10px
+     */
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    /**
+     * Set position of the attribution box
+     * should be SwingConstants.(TOP,BOTTOM,LEFT,RIGHT)
+     *
+     * @param vertical vertical position
+     * @param horizontal horizontal position
+     */
+    void setPosition(int vertical, int horizontal) {
+        this.vertical = vertical;
+        this.horizontal = horizontal;
     }
 }

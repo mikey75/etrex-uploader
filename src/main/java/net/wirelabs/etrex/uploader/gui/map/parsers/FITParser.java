@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.map;
+package net.wirelabs.etrex.uploader.gui.map.parsers;
 
 import com.garmin.fit.FitDecoder;
 import com.garmin.fit.FitMessages;

@@ -6,9 +6,14 @@ import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +24,22 @@ import java.util.Objects;
  * @author Martin Steiger
  */
 @Slf4j
+
 public class RoutePainter implements Painter<JXMapViewer> {
-    
+
     private static final Color color = Color.RED;
-    private final List<GeoPosition> track;
+
+    public void setTrack(List<GeoPosition> track) {
+        this.track = track;
+    }
+
+    private List<GeoPosition> track;
     private BufferedImage startFlagIcon;
     private BufferedImage endFlagIcon;
+
+    public RoutePainter() {
+        this(new ArrayList<>());
+    }
 
     /**
      * @param track the track
@@ -32,7 +47,7 @@ public class RoutePainter implements Painter<JXMapViewer> {
     public RoutePainter(List<GeoPosition> track) {
         // copy the list so that changes in the 
         // original list do not have an effect here
-        this.track = new ArrayList<>(track);
+        setTrack(track);
         // prepare flag gfx
         try {
             startFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx/start-point.png")));
@@ -44,27 +59,30 @@ public class RoutePainter implements Painter<JXMapViewer> {
 
     @Override
     public void paint(Graphics2D graphicsContext, JXMapViewer map, int width, int height) {
-        graphicsContext = (Graphics2D) graphicsContext.create();
+        if (!track.isEmpty()) {
+            graphicsContext = (Graphics2D) graphicsContext.create();
 
-        // convert from viewport to world bitmap
-        Rectangle rect = map.getViewportBounds();
-        graphicsContext.translate(-rect.x, -rect.y);
+            // convert from viewport to world bitmap
+            Rectangle rect = map.getViewportBounds();
+            graphicsContext.translate(-rect.x, -rect.y);
 
-        graphicsContext.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        graphicsContext.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            graphicsContext.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            graphicsContext.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // do the drawing
-        graphicsContext.setColor(color);
-        graphicsContext.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+            // do the drawing
+            graphicsContext.setColor(color);
+            graphicsContext.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
-        drawRoute(graphicsContext, map);
+            drawRoute(graphicsContext, map);
 
-        graphicsContext.dispose();
+            graphicsContext.dispose();
+        }
+
     }
 
     /**
      * @param graphicsContext the graphics object
-     * @param map the map
+     * @param map             the map
      */
     private void drawRoute(Graphics2D graphicsContext, JXMapViewer map) {
 
@@ -91,7 +109,6 @@ public class RoutePainter implements Painter<JXMapViewer> {
     }
 
     private void paintStartAndFinishIcons(Graphics2D graphicsContext, JXMapViewer map) {
-
             GeoPosition startPosition = track.get(0);
             GeoPosition endPosition = track.get(track.size() - 1);
 
@@ -99,7 +116,7 @@ public class RoutePainter implements Painter<JXMapViewer> {
             paintFlag(graphicsContext, map, endPosition, endFlagIcon);
 
     }
-   
+
     private void paintFlag(Graphics2D graphicsContext,
                            JXMapViewer map,
                            GeoPosition position,
@@ -115,4 +132,6 @@ public class RoutePainter implements Painter<JXMapViewer> {
             graphicsContext.drawImage(image, x, y, null);
         }
     }
+
+
 }
