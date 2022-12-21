@@ -5,13 +5,10 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
-import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
-
+import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestOutdoorMapFactoryInfo;
-import net.wirelabs.etrex.uploader.gui.map.parsers.FITParser;
-import net.wirelabs.etrex.uploader.gui.map.parsers.GPXParser;
+import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -22,10 +19,9 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputListener;
-
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.Collection;
@@ -37,8 +33,7 @@ public class MapPanel extends EventAwarePanel {
 
     private final JXMapViewer mapViewer;
     private final transient RoutePainter routePainter;
-    private final transient GPXParser gpxParser = new GPXParser();
-    private final transient FITParser fitParser = new FITParser();
+    private final transient TrackParser trackParser = new TrackParser();
 
     public MapPanel(AppConfiguration configuration) {
 
@@ -94,7 +89,7 @@ public class MapPanel extends EventAwarePanel {
         // Setup local file cache
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
-        tileFactory.setThreadPoolSize(8); // Use 8 threads in parallel to load the tiles
+        tileFactory.setThreadPoolSize(16); // Use 16 threads in parallel to load the tiles
 
         mapViewer.setHorizontalWrapped(false);
         mapViewer.setInfiniteMapRendering(false);
@@ -104,40 +99,36 @@ public class MapPanel extends EventAwarePanel {
 
     @Override
     protected void onEvent(Event evt) {
-
-        if (evt.getEventType().equals(EventType.MAP_DISPLAY_GPX_FILE) && evt.getPayload() instanceof File) {
-            SwingUtilities.invokeLater(() -> {
-                List<GeoPosition> points = gpxParser.parseToGeoPosition((File) evt.getPayload());
-                routePainter.setTrack(points);
-                mapViewer.zoomToBestFit(new HashSet<>(points), 0.7);
-
-            });
-        }
-
-        if (evt.getEventType().equals(EventType.MAP_DISPLAY_FIT_FILE) && evt.getPayload() instanceof File) {
-            SwingUtilities.invokeLater(() -> {
-                List<GeoPosition> points = fitParser.parseToGeoPosition((File) evt.getPayload());
-                routePainter.setTrack(points);
-                mapViewer.zoomToBestFit(new HashSet<>(points), 0.7);
-
-            });
-        }
-
-        if (evt.getEventType().equals(EventType.MAP_DISPLAY_TRACK) && evt.getPayload() instanceof List) {
-
-            SwingUtilities.invokeLater(() -> {
-                List<GeoPosition> points = ((List<GeoPosition>) evt.getPayload());
-                routePainter.setTrack(points);
-                mapViewer.zoomToBestFit(new HashSet<>(points), 0.7);
-
-            });
-        }
+        drawTrackOnMap(evt);
     }
 
     @Override
     protected Collection<EventType> subscribeEvents() {
-        return ListUtils.listOf(EventType.MAP_DISPLAY_GPX_FILE,
-                EventType.MAP_DISPLAY_FIT_FILE,
-                EventType.MAP_DISPLAY_TRACK);
+        return ListUtils.listOf(EventType.MAP_DISPLAY_TRACK);
+    }
+
+    private void drawTrackOnMap(Event evt) {
+        // track is inside a file
+        if (evt.getPayload() instanceof File) {
+            File file = (File) evt.getPayload();
+            SwingUtilities.invokeLater(() -> {
+                List<GeoPosition> points = trackParser.parseToGeoPosition(file);
+                paintTrack(points);
+            });
+
+        }
+        // track is inside a polyline string
+        if (evt.getPayload() instanceof String) {
+            SwingUtilities.invokeLater(() -> {
+                String polyLine = (String) evt.getPayload();
+                List<GeoPosition> points = trackParser.parsePolyline(polyLine, 1E5F);
+                paintTrack(points);
+            });
+        }
+    }
+
+    private void paintTrack(List<GeoPosition> points) {
+        routePainter.setTrack(points);
+        mapViewer.zoomToBestFit(new HashSet<>(points), 0.7);
     }
 }

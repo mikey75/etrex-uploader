@@ -56,4 +56,16 @@ public class FileUtils {
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1))
                 .orElseThrow(() -> new IOException("File has no extension"));
     }
+
+    public static boolean isTrackFile(File file) {
+        return isFitFile(file) || isGpxFile(file);
+    }
+
+    public static boolean isFitFile(File file) {
+        return file.getName().toLowerCase().endsWith(".fit");
+    }
+
+    public static boolean isGpxFile(File file) {
+        return file.getName().toLowerCase().endsWith(".gpx");
+    }
 }
