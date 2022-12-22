@@ -28,4 +28,10 @@ public abstract class BaseStoppableRunnable implements StoppableRunnable {
     public CompletableFuture<?> getThreadHandle() {
         return threadHandle;
     }
+
+    protected void loopUntilStopped(Runnable code) {
+        while (!getShouldExit().get()) {
+            code.run();
+        }
+    }
 }

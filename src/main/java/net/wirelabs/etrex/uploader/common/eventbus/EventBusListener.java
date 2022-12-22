@@ -27,11 +27,7 @@ public abstract class EventBusListener extends BaseStoppableRunnable {
         loopUntilStopped(this::processEvents);
     }
 
-    void loopUntilStopped(Runnable code) {
-        while (!getShouldExit().get()) {
-            code.run();
-        }
-    }
+
 
     private void processEvents() {
         Optional<Event> evt = eventsQueue.stream().findFirst();

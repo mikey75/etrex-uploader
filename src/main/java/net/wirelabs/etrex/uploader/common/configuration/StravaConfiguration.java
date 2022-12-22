@@ -1,12 +1,14 @@
-package net.wirelabs.etrex.uploader.common.configuration;/*
- * Created 12/14/22 by Michał Szwaczko (mikey@wirelabs.net)
- */
+package net.wirelabs.etrex.uploader.common.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
 import net.wirelabs.etrex.uploader.common.Constants;
 
 import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationPropertyKeys.*;
+
+/**
+ * Created 12/14/22 by Michał Szwaczko (mikey@wirelabs.net)
+ */
 
 @Getter
 @Setter
