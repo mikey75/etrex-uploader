@@ -18,7 +18,6 @@ import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationProp
  * Created 6/20/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 
-
 @Getter
 @Setter
 public class AppConfiguration extends PropertiesBasedConfiguration {
@@ -30,9 +29,9 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private boolean deleteAfterUpload;
     private boolean archiveAfterUpload;
 
-    private int perPage;
     private SportType defaultActivityType;
     private MapType defaultMapType;
+    private int perPage;
     private int apiUsageWarnPercent;
 
 

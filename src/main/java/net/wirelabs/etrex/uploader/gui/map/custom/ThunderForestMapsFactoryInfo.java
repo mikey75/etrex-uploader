@@ -41,7 +41,7 @@ public class ThunderForestMapsFactoryInfo extends TileFactoryInfo
     public String getTileUrl(int x, int y, int zoom)
     {
         int invZoom = MAX_ZOOM - zoom;
-        return this.baseURL + "/" + invZoom + "/" + x + "/" + y + ".png?apikey=" + apiKey;
+        return this.baseURL + "/" + invZoom + "/" + x + "/" + y + ".png" + (apiKey.isEmpty() ? "" : "?apikey=" + apiKey);
     }
 
     @Override

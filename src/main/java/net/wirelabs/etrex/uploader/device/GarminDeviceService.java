@@ -4,6 +4,7 @@ package net.wirelabs.etrex.uploader.device;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.xml.bind.JAXBException;
 
 import lombok.Getter;
@@ -56,21 +57,22 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     public void run() {
 
         log.info("Starting Garmin device discovery thread");
-        List<File> roots = rootsProvider.getRoots();
+        AtomicReference<List<File>> roots = new AtomicReference<>(rootsProvider.getRoots());
 
         // registration of anything already connected
         log.info("Registering already connected drives");
-        registerAlreadyConnected(roots);
+        registerAlreadyConnected(roots.get());
 
         // listen for and register new connections 
         log.info("Listening for new drives");
-        while (!shouldExit.get()) {
 
-            roots = rootsProvider.getRoots();
-            findAndRegisterNewRoots(roots);
-            findAndUnregisterMissingRoots(roots);
+        loopUntilStopped(()-> {
+            roots.set(rootsProvider.getRoots());
+            findAndRegisterNewRoots(roots.get());
+            findAndUnregisterMissingRoots(roots.get());
             Sleeper.sleepMillis(appConfiguration.getDeviceDiscoveryDelay());
-        }
+        });
+
         log.info("Device observer stopped");
 
     }

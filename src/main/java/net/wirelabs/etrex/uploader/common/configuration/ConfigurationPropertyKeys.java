@@ -26,7 +26,6 @@ class ConfigurationPropertyKeys {
 
     // map
     static final String MAP_TYPE                        = "map.type";
-    static final String MAP_THUNDERFOREST_API_KEY       = "map.thunderforest.api.key";
 
     // config files constants
     static final String APPLICATION_CONFIGFILE          = "config.properties";

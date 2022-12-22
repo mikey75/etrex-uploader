@@ -9,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Created 11/11/22 by Michał Szwaczko (mikey@wirelabs.net)
+ */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadUtils {

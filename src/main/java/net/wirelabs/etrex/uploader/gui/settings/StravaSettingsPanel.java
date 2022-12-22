@@ -13,15 +13,19 @@ import javax.swing.*;
 public class StravaSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
-    JLabel activityTypeLabel = new JLabel("Default activty type:");
-    JComboBox<SportType> activityTypeCombo = new JComboBox<>();
-    JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
-    JTextField activitiesPerPage = new JTextField();
-    JLabel lblWarnQuotaPercent = new JLabel("Warn quota percent:");
-    JTextField warnQuotaPercent = new JTextField();
+    private final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
+    private final JTextField activitiesPerPage = new JTextField();
+    private final JTextField warnQuotaPercent = new JTextField();
+
 
     public StravaSettingsPanel(AppConfiguration configuration) {
+
         super("Strava");
+
+        JLabel activityTypeLabel = new JLabel("Default activty type:");
+        JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
+        JLabel lblWarnQuotaPercent = new JLabel("Warn quota percent:");
+
         this.configuration = configuration;
         setLayout(new MigLayout("", "[][grow]", "[][][]"));
 
