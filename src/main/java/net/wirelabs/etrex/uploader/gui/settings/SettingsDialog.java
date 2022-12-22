@@ -27,12 +27,13 @@ public class SettingsDialog extends JDialog {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setAlwaysOnTop(true);
 		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
 		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
 
 
-		setBounds(100, 100, 521, 437);
+		setBounds(100, 100, 521, 500);
 		setLayout(new MigLayout("", "[grow]", "[grow][grow][grow][]"));
 		add(applicationSettingsPanel, "cell 0 0,grow");
 		add(stravaSettingsPanel, "cell 0 1,grow");
