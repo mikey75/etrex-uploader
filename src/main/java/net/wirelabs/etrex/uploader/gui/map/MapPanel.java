@@ -8,7 +8,8 @@ import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalMapFactoryInfo;
-import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestOutdoorMapFactoryInfo;
+import net.wirelabs.etrex.uploader.gui.map.custom.TFMapType;
+import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestMapsFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -117,16 +118,20 @@ public class MapPanel extends EventAwarePanel {
                 info = new OSMTileFactoryInfo();
                 break;
             }
-            case OUTDOOR: {
-                info = new ThunderForestOutdoorMapFactoryInfo().withApiKey(apiKey);
+            case TF_OUTDOOR: {
+                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_OUTDOORS, apiKey);
+                break;
+            }
+            case TF_CYCLE: {
+                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_CYCLE, apiKey);
+                break;
+            }
+            case TF_LANDSCAPE: {
+                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_LANDSCAPE, apiKey);
                 break;
             }
             case GEOPORTAL: {
                 info = new GeoportalMapFactoryInfo();
-                break;
-            }
-            case CYCLE: {
-                info = new ThunderForestOutdoorMapFactoryInfo().withApiKey(apiKey);
                 break;
             }
             case VIRTEARTH: {
