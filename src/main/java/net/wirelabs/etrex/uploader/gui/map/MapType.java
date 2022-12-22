@@ -11,7 +11,8 @@ public enum MapType {
     OPENSTREETMAP("OpenStreetMap"),
     OUTDOOR("Outdoor - requires API key"),
     CYCLE("Cycling - requires API key"),
-    GEOPORTAL("GeoPortal Topo (Poland only)");
+    GEOPORTAL("GeoPortal Topo (Poland only)"),
+    VIRTEARTH("Virtual Earth Satellite");
 
     @Override
     public String toString() {

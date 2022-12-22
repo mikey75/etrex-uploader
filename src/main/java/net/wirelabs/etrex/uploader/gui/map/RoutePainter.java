@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
@@ -13,7 +15,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +25,12 @@ import java.util.Objects;
  * @author Martin Steiger
  */
 @Slf4j
-
 public class RoutePainter implements Painter<JXMapViewer> {
 
     private static final Color color = Color.RED;
 
-    public void setTrack(List<GeoPosition> track) {
-        this.track = track;
-    }
-
+    @Getter
+    @Setter
     private List<GeoPosition> track;
     private BufferedImage startFlagIcon;
     private BufferedImage endFlagIcon;

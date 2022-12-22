@@ -12,6 +12,7 @@ import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestOutdoorMapFactory
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
@@ -20,9 +21,11 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
+import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.Collection;
@@ -32,30 +35,61 @@ import java.util.List;
 @Slf4j
 public class MapPanel extends EventAwarePanel {
 
-    private final JXMapViewer mapViewer;
-    private final transient RoutePainter routePainter;
+    public static final double MAX_FRACTION = 0.9;
+
+    private final AppConfiguration configuration;
+    private final JXMapViewer mapViewer = new JXMapViewer();
+
+    private final transient RoutePainter routePainter = new RoutePainter();
+    private final transient AttributionPainter attributionPainter = new AttributionPainter();
     private final transient TrackParser trackParser = new TrackParser();
 
+
     public MapPanel(AppConfiguration configuration) {
-
-        routePainter = new RoutePainter();
-        mapViewer = new JXMapViewer();
-
-        CompoundPainter<JXMapViewer> painter = new CompoundPainter<>();
-        painter.addPainter(routePainter);
-        painter.addPainter(new AttributionPainter());
-        mapViewer.setOverlayPainter(painter);
-
-        log.info("Initializing map panel");
+        this.configuration = configuration;
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         add(mapViewer, "cell 0 0,grow");
 
-        configureTileFactory(configuration.getDefaultMapType(), configuration.getThunderforestApiKey());
         configureMouseInteractionListeners();
+        configureMapSelector();
+        setupPainters();
+        configureTileFactory(configuration.getDefaultMapType(), configuration.getThunderforestApiKey());
+        setHomeLocation();
 
-        mapViewer.setZoom(7);
-        mapViewer.setAddressLocation(new GeoPosition(51.246452, 22.568445)); // LUBLIN,PL :)
+    }
+
+    private void configureMapSelector() {
+
+        final JComboBox<MapType> mapSelector = new JComboBox<>(MapType.values());
+
+        mapSelector.setSelectedItem(configuration.getDefaultMapType());
+        mapSelector.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                MapType mapType = (MapType) e.getItem();
+                changeMap(mapType);
+            }
+        });
+        // this is a hackish way to overlay JComboBox on the map
+        mapViewer.setLayout(new MigLayout("", "[90%][]", "[]"));
+        mapViewer.add(mapSelector, "cell 1 0, grow");
+    }
+
+    private void setupPainters() {
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<>();
+        painter.addPainter(routePainter);
+        painter.addPainter(attributionPainter);
+        mapViewer.setOverlayPainter(painter);
+    }
+
+    private void changeMap(MapType mapType) {
+
+        configureTileFactory(mapType, configuration.getThunderforestApiKey());
+        if (routePainter.getTrack().isEmpty()) {
+            setHomeLocation();
+        } else {
+            mapViewer.zoomToBestFit(new HashSet<>(routePainter.getTrack()), MAX_FRACTION);
+        }
 
     }
 
@@ -66,6 +100,12 @@ public class MapPanel extends EventAwarePanel {
         mapViewer.addMouseListener(mia);
         mapViewer.addMouseMotionListener(mia);
         mapViewer.addMouseWheelListener(mwl);
+    }
+
+    private void setHomeLocation() {
+        mapViewer.setZoom(7);
+        mapViewer.setAddressLocation(new GeoPosition(51.246452, 22.568445)); // LUBLIN,PL :)
+
     }
 
     private void configureTileFactory(MapType mapType, String apiKey) {
@@ -83,6 +123,14 @@ public class MapPanel extends EventAwarePanel {
             }
             case GEOPORTAL: {
                 info = new GeoportalMapFactoryInfo();
+                break;
+            }
+            case CYCLE: {
+                info = new ThunderForestOutdoorMapFactoryInfo().withApiKey(apiKey);
+                break;
+            }
+            case VIRTEARTH: {
+                info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
                 break;
             }
             default:
@@ -134,6 +182,6 @@ public class MapPanel extends EventAwarePanel {
 
     private void paintTrack(List<GeoPosition> points) {
         routePainter.setTrack(points);
-        mapViewer.zoomToBestFit(new HashSet<>(points), 0.7);
+        mapViewer.zoomToBestFit(new HashSet<>(points), MAX_FRACTION);
     }
 }
