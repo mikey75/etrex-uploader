@@ -9,10 +9,11 @@ import lombok.Getter;
 public enum MapType {
 
     OPENSTREETMAP("OpenStreetMap"),
-    OUTDOOR("Outdoor - requires API key"),
-    CYCLE("Cycling - requires API key"),
+    TF_OUTDOOR("Outdoor - requires API key"),
+    TF_CYCLE("Cycling - requires API key"),
+    TF_LANDSCAPE("Landscape - requires API key"),
     GEOPORTAL("GeoPortal Topo (Poland only)"),
-    VIRTEARTH("Virtual Earth Satellite");
+    VIRTEARTH("Virtual Earth Satellite") ;
 
     @Override
     public String toString() {

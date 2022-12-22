@@ -7,13 +7,10 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 
-
-    //https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=???
-
 /**
  * Uses OpenStreetMap
  */
-public class ThunderForestOutdoorMapFactoryInfo extends TileFactoryInfo
+public class ThunderForestMapsFactoryInfo extends TileFactoryInfo
 {
     private static final int MAX_ZOOM = 22;
     private String apiKey = Constants.EMPTY_STRING;
@@ -21,21 +18,17 @@ public class ThunderForestOutdoorMapFactoryInfo extends TileFactoryInfo
     /**
      * Default constructor
      */
-    public ThunderForestOutdoorMapFactoryInfo()
+    public ThunderForestMapsFactoryInfo(TFMapType tfMapType, String apiKey)
     {
-        this("ThunderForest", "https://tile.thunderforest.com/outdoors");
-    }
-
-    public ThunderForestOutdoorMapFactoryInfo withApiKey(String apiKey) {
+        this("ThunderForest", tfMapType.baseUrl);
         this.apiKey = apiKey;
-        return this;
     }
 
     /**
      * @param name the name of the factory
      * @param baseURL the base URL to load tiles from
      */
-    public ThunderForestOutdoorMapFactoryInfo(String name, String baseURL)
+    public ThunderForestMapsFactoryInfo(String name, String baseURL)
     {
         super(name,
                 0, MAX_ZOOM, MAX_ZOOM,
