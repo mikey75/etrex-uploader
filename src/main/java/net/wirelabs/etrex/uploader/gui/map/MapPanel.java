@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.gui.map;
 
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
@@ -55,7 +56,7 @@ public class MapPanel extends EventAwarePanel {
         configureMouseInteractionListeners();
         configureMapSelector();
         setupPainters();
-        configureTileFactory(configuration.getDefaultMapType(), configuration.getThunderforestApiKey());
+        configureTileFactory(configuration.getDefaultMapType());
         setHomeLocation();
 
     }
@@ -85,7 +86,7 @@ public class MapPanel extends EventAwarePanel {
 
     private void changeMap(MapType mapType) {
 
-        configureTileFactory(mapType, configuration.getThunderforestApiKey());
+        configureTileFactory(mapType);
         if (routePainter.getTrack().isEmpty()) {
             setHomeLocation();
         } else {
@@ -109,9 +110,14 @@ public class MapPanel extends EventAwarePanel {
 
     }
 
-    private void configureTileFactory(MapType mapType, String apiKey) {
-        // Create a TileFactoryInfo for OpenStreetMap
+    private void configureTileFactory(MapType mapType) {
+
         TileFactoryInfo info;
+        String apiKey = Constants.EMPTY_STRING;
+
+        if (mapType.isRequiresKey()) {
+            apiKey = configuration.getProperty("map.api.key." + mapType.name());
+        }
 
         switch (mapType) {
             case OPENSTREETMAP: {

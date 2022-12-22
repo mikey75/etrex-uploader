@@ -6,25 +6,27 @@ package net.wirelabs.etrex.uploader.gui.map;
 
 import lombok.Getter;
 
+@Getter
 public enum MapType {
 
-    OPENSTREETMAP("OpenStreetMap"),
-    TF_OUTDOOR("Outdoor - requires API key"),
-    TF_CYCLE("Cycling - requires API key"),
-    TF_LANDSCAPE("Landscape - requires API key"),
-    GEOPORTAL("GeoPortal Topo (Poland only)"),
-    VIRTEARTH("Virtual Earth Satellite") ;
+    OPENSTREETMAP("OpenStreetMap", false),
+    TF_OUTDOOR("Outdoor" ,true),
+    TF_CYCLE("Cycling" ,true),
+    TF_LANDSCAPE("Landscape",true),
+    GEOPORTAL("GeoPortal Topo (Poland only)", false),
+    VIRTEARTH("Virtual Earth Satellite", false) ;
 
     @Override
     public String toString() {
         return desc;
     }
 
-    @Getter
     private final String desc;
+    private final boolean requiresKey;
 
-    MapType(String desc) {
+    MapType(String desc, boolean requiresKey) {
 
         this.desc = desc;
+        this.requiresKey = requiresKey;
     }
 }

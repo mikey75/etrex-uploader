@@ -34,7 +34,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private SportType defaultActivityType;
     private MapType defaultMapType;
     private int apiUsageWarnPercent;
-    private String thunderforestApiKey; // api key needed for thunderforest maps (OUTDOOR, CYCLE)
+
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -49,7 +49,6 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         defaultMapType = MapType.valueOf(properties.getProperty(MAP_TYPE, MapType.OPENSTREETMAP.name()));
         perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, "30"));
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
-        thunderforestApiKey = properties.getProperty(MAP_THUNDERFOREST_API_KEY, Constants.EMPTY_STRING);
     }
 
     public AppConfiguration() {
@@ -68,10 +67,15 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_TYPE, defaultMapType.name());
         properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
-        properties.setProperty(MAP_THUNDERFOREST_API_KEY, thunderforestApiKey);
         super.store();
 
     }
 
+    public String getProperty(String property) {
+        return properties.getProperty(property, "");
+    }
 
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
 }
