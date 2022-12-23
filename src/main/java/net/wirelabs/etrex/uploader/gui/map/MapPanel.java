@@ -144,6 +144,10 @@ public class MapPanel extends EventAwarePanel {
                 info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
                 break;
             }
+            /*case OSM_TOPO: {
+                info = new OSMTopoMapFactoryInfo();
+                break;
+            }*/ //disabled (very slow)
             default:
                 info = new OSMTileFactoryInfo();
                 break;

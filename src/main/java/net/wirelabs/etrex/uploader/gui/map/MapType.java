@@ -10,6 +10,7 @@ import lombok.Getter;
 public enum MapType {
 
     OPENSTREETMAP("OpenStreetMap", false),
+    //OSM_TOPO("OpenTopoMap - slow", false), //disabled, very slow
     TF_OUTDOOR("Outdoor" ,true),
     TF_CYCLE("Cycling" ,true),
     TF_LANDSCAPE("Landscape",true),
