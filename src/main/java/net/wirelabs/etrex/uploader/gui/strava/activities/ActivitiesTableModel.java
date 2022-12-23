@@ -14,7 +14,8 @@ import java.util.List;
  */
 public class ActivitiesTableModel extends AbstractTableModel {
 
-    private final String[] columnNames = {"Date", "Sport","Title","Time","Distance","Elevation","Speed avg", "Achievements"};
+    private final String[] columnNames = {"Title", "Date", "Sport","Time","Distance","Elevation","Speed avg", "Achievements"};
+
     private transient Object[][] data = new Object[][]{};
     private transient List<SummaryActivity> activitiesList = new ArrayList<>();
 
@@ -54,11 +55,11 @@ public class ActivitiesTableModel extends AbstractTableModel {
 
         int rowIdx = 0;
         this.activitiesList = activities;
-        data = new Object[activities.size()][8];
+        data = new Object[activities.size()][columnNames.length];
         for (SummaryActivity act : activities) {
-            data[rowIdx][0] = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(act.getStartDateLocal());
-            data[rowIdx][1] = act.getSportType();
-            data[rowIdx][2] = act.getName();
+            data[rowIdx][0] = act.getName();
+            data[rowIdx][1] = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(act.getStartDateLocal());
+            data[rowIdx][2] = act.getSportType();
             data[rowIdx][3] = DateAndUnitConversionUtil.secondsToTimeAsString(act.getElapsedTime());
             data[rowIdx][4] = act.getDistance() / 1000;
             data[rowIdx][5] = act.getTotalElevationGain();
@@ -67,5 +68,4 @@ public class ActivitiesTableModel extends AbstractTableModel {
             rowIdx++;
         }
     }
-    
 }

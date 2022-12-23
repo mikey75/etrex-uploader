@@ -17,6 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.Cursor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,6 +68,22 @@ public class ActivitiesPanel extends EventAwarePanel {
         btnNextPage.addActionListener(e -> increasePageAndLoadActivities());
 
         activitiesTable.addSelectionListener(this::drawTrack);
+        activitiesTable.getTableHeader().setResizingAllowed(false);
+        applyRendererToActivityTitleColumn();
+        applyMouseListenerToActivityTitleColumn();
+
+    }
+
+    private void applyMouseListenerToActivityTitleColumn() {
+        StravaActivityIconClickListener activityClickListener = new StravaActivityIconClickListener(activitiesTable, 16, 16);
+        activitiesTable.addMouseListener(activityClickListener);
+    }
+
+    private void applyRendererToActivityTitleColumn() {
+        TableCellRenderer cellRenderer = new StravaActivityTitleCellRenderer();
+        TableColumn titleColumn = activitiesTable.getColumnModel().getColumn(activitiesTable.getModel().findColumn("Title"));
+        titleColumn.setCellRenderer(cellRenderer);
+        titleColumn.setPreferredWidth(400);
     }
 
     private void increasePageAndLoadActivities() {
