@@ -26,13 +26,14 @@ public class UserAccountPanel extends BorderedPanel {
 
     final JLabel athleteName = new JLabel();
     final JLabel athletePicture = new JLabel();
-    final ApiUsagePanel apiUsagePanel = new ApiUsagePanel();
+    final ApiUsagePanel apiUsagePanel;
     
     private final StravaService stravaService;
     private final JButton btnSettings = new JButton("Settings");
     private final AppConfiguration configuration;
 
     public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
+        this.apiUsagePanel = new ApiUsagePanel(configuration);
         this.stravaService = stravaService;
         this.configuration = configuration;
         initVisualComponent();
