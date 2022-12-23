@@ -1,26 +1,31 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
+import javax.swing.JLabel;
+import javax.swing.Timer;
 import java.io.File;
 import java.util.List;
-import javax.swing.*;
 
-
+/**
+ * Silly label that shows waiting for device
+ * as a mini dot progressbar
+ */
 public class DeviceStatusLabel extends JLabel {
-    
-    final String[] string = {"."};
-    
-    public DeviceStatusLabel(List<File> deviceList) {
-        
-        Timer t = new Timer(400, e -> {
-            if (deviceList.isEmpty()) {
-                setText("Wait for device " + string[0]);
-                string[0] += ".";
-                if (string[0].length() > 3) {
-                    string[0] = ".";
-                }
-            }
-        });
 
-        t.start();
+    private final StringBuilder dotProgress = new StringBuilder();
+
+    public DeviceStatusLabel(List<File> deviceList) {
+
+        new Timer(500, e -> printBar(deviceList))
+                .start();
+    }
+
+    private void printBar(List<File> deviceList) {
+        if (deviceList.isEmpty()) {
+            dotProgress.append(".");
+            setText("waiting" + dotProgress);
+            if (dotProgress.length() > 3) {
+                dotProgress.setLength(0);
+            }
+        }
     }
 }
