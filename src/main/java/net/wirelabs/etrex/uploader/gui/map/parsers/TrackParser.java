@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class TrackParser {
 
-    FITParser fitParser = new FITParser();
-    GPXParser gpxParser = new GPXParser();
+    private final FITParser fitParser = new FITParser();
+    private final GPXParser gpxParser = new GPXParser();
 
     public List<GeoPosition> parseToGeoPosition(File file) {
 

@@ -6,7 +6,7 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
  * Created 12/23/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 public class OSMTopoMapFactoryInfo extends TileFactoryInfo {
-    private static final int MAX_ZOOM = 15;
+    private static final int MAX_ZOOM = 17;
     /*
     {a|b|c}.tile.opentopomap.org/{z}/{x}/{y}.png
      */
