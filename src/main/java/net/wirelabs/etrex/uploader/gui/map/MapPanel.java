@@ -9,6 +9,7 @@ import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalMapFactoryInfo;
+import net.wirelabs.etrex.uploader.gui.map.custom.OSMTopoMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.TFMapType;
 import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestMapsFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
@@ -144,10 +145,11 @@ public class MapPanel extends EventAwarePanel {
                 info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
                 break;
             }
-            /*case OSM_TOPO: {
+            case OSM_TOPO: {
                 info = new OSMTopoMapFactoryInfo();
+
                 break;
-            }*/ //disabled (very slow)
+            }
             default:
                 info = new OSMTileFactoryInfo();
                 break;
@@ -157,7 +159,7 @@ public class MapPanel extends EventAwarePanel {
         // Setup local file cache
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
-        tileFactory.setThreadPoolSize(16); // Use 16 threads in parallel to load the tiles
+        tileFactory.setThreadPoolSize(configuration.getTilerThreads());
 
         mapViewer.setHorizontalWrapped(false);
         mapViewer.setInfiniteMapRendering(false);
