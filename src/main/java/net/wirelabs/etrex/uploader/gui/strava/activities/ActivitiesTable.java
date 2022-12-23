@@ -2,9 +2,14 @@ package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 
-import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellRenderer;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 /**
@@ -47,5 +52,26 @@ public class ActivitiesTable extends JTable {
         return model;
     }
 
+    @Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 
+        final Color shadeColor = new Color(240, 240, 240);
+
+        Component comp = super.prepareRenderer(renderer, row, column);
+
+        if (!isCellSelected(row, column)) {
+            comp.setBackground(row % 2 == 0 ? getBackground() : shadeColor);
+        }
+        return comp;
+    }
+
+    @Override
+    public boolean editCellAt(int row, int column) {
+        return false;
+    }
+
+    @Override
+    public boolean editCellAt(int row, int column, EventObject e) {
+        return false;
+    }
 }
