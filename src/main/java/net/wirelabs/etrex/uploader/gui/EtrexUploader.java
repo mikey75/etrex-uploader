@@ -41,12 +41,12 @@ public class EtrexUploader extends JFrame {
             Container container = getContentPane();
             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-            container.setLayout(new MigLayout("", "[10%,grow][80%,grow][10%,grow]", "[30%,grow][grow][100px:n,grow]"));
+            container.setLayout(new MigLayout("", "[10%,grow][80%,grow][10%,grow]", "[30%][grow][100px:n,grow]"));
             registerWindowCloseListener(ctx);
 
             splash.update("Initializing Strava GUI components");
             athletePanel = new UserAccountPanel(ctx.getStravaService(), ctx.getAppConfiguration());
-            activitiesPanel = new ActivitiesPanel(ctx.getStravaService());
+            activitiesPanel = new ActivitiesPanel(ctx.getStravaService(),ctx.getAppConfiguration());
 
             splash.update("Initializing browsers");
             UploadService uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());

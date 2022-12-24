@@ -17,6 +17,11 @@ public class DateAndUnitConversionUtil {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public static String secondsToHoursAsString(int totalSecs) {
+        int hours = totalSecs / 3600;
+        return String.format("%02d", hours);
+    }
+
 
     public static String metersPerSecToKilometersPerHourAsString(double metersPerSecond) {
         DecimalFormat df = new DecimalFormat("####0.00");
