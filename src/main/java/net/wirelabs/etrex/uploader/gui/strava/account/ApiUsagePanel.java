@@ -19,12 +19,9 @@ import java.util.Map;
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 public class ApiUsagePanel extends EventAwarePanel {
-
-    @Getter
-    private final JLabel dailyLimits;
-    @Getter
-    private final JLabel quarterLimits;
     private final AppConfiguration configuration;
+    @Getter private final JLabel dailyLimits;
+    @Getter private final JLabel quarterLimits;
     private Integer currentDaily;
     private Integer current15min;
     private Integer allowedDaily;
@@ -32,20 +29,21 @@ public class ApiUsagePanel extends EventAwarePanel {
 
     public ApiUsagePanel(AppConfiguration configuration) {
         this.configuration = configuration;
-        setLayout(new MigLayout("insets 0 0 0 0", "[][]", "[][][]"));
+        setLayout(new MigLayout("insets 0 0 0 0", "[][][][][]", "[]"));
 
         JLabel header = new JLabel("API usage:");
+
+        add(header, "cell 0 0,growx");
         JLabel dailyLabel = new JLabel("Daily:");
+        add(dailyLabel, "cell 1 0,alignx left");
+
+        dailyLimits = new JLabel("$daily");
+        add(dailyLimits, "cell 2 0");
         JLabel quarterLabel = new JLabel("15min:");
+        add(quarterLabel, "cell 3 0,alignx left");
 
-        dailyLimits = new JLabel("");
-        quarterLimits = new JLabel("");
-
-        add(header, "cell 0 0 2 1,alignx center");
-        add(dailyLabel, "cell 0 1,alignx right");
-        add(quarterLabel, "cell 0 2,alignx right");
-        add(dailyLimits, "cell 1 1");
-        add(quarterLimits, "cell 1 2");
+        quarterLimits = new JLabel("$15min");
+        add(quarterLimits, "cell 4 0");
     }
 
     @Override

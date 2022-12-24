@@ -5,15 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.gui.strava.account.ApiUsagePanel;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -31,13 +34,15 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
+    private final JPanel apiUsagePanel;
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
     private final StravaService stravaService;
     private int page = 1;
 
-    public ActivitiesPanel(StravaService stravaService) {
+    public ActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
         this.stravaService = stravaService;
+        apiUsagePanel = new ApiUsagePanel(configuration);
         createVisualComponent();
         updateActivities();
     }
@@ -56,10 +61,11 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     private void createVisualComponent() {
         setBorder(new TitledBorder("Strava"));
-        setLayout(new MigLayout("", "[grow]", "[grow][]"));
-        add(scrollPane, "cell 0 0,grow");
+        setLayout(new MigLayout("", "[grow][]", "[grow][grow]"));
+        add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");
+        add(apiUsagePanel, "cell 1 1");
 
         scrollPane.setViewportView(activitiesTable);
 

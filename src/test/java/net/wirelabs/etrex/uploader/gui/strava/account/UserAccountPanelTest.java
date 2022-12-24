@@ -2,6 +2,8 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.model.ActivityStats;
+import net.wirelabs.etrex.uploader.strava.model.ActivityTotal;
 import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
@@ -19,6 +21,8 @@ class UserAccountPanelTest {
     private final File fakePhoto  = new File("src/test/resources/fakeUserPhoto.png");
     private final StravaService strava = mock(StravaServiceImpl.class);
     private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
+    private final ActivityTotal total = new ActivityTotal().count(1).distance(1000F).elapsedTime(3600);
+    private final ActivityStats fakeStats = new ActivityStats().allRideTotals(total).ytdRideTotals(total);
     private final String profilePictureURL = fakePhoto.getAbsolutePath().replace("\\", "/");
     
 
@@ -78,6 +82,28 @@ class UserAccountPanelTest {
                     assertNoPicture(uap);
                 }
         );
+    }
+
+    @Test
+    void testCorrectStats() throws StravaException {
+
+        doReturn(fakeStats).when(strava).getAthleteStats(any());
+        doReturn(fakeUser).when(strava).getCurrentAthlete();
+        UserAccountPanel uap = new UserAccountPanel(strava,mock(AppConfiguration.class));
+
+        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+                    assertCorrectStats(uap);
+                }
+        );
+    }
+
+    private static void assertCorrectStats(UserAccountPanel uap) {
+        assertThat(uap.totalDist.getText()).isEqualTo("1 km");
+        assertThat(uap.totalRides.getText()).isEqualTo("1");
+        assertThat(uap.totalTime.getText()).isEqualTo("01 hours");
+        assertThat(uap.ytdDist.getText()).isEqualTo("1 km");
+        assertThat(uap.ytdRides.getText()).isEqualTo("1");
+        assertThat(uap.ytdTime.getText()).isEqualTo("01 hours");
     }
 
     private static void assertNoAthleteName(UserAccountPanel uap) {
