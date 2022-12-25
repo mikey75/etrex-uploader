@@ -1,17 +1,23 @@
 package net.wirelabs.etrex.uploader.gui.strava.activities;
 
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
+import javax.swing.JComponent;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 /**
  * Created 12/23/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class StravaActivityIconClickListener extends MouseAdapter {
+@Slf4j
+public class StravaActivityIconClickListener extends MouseAdapter implements MouseMotionListener {
 
     private final ActivitiesTable table;
     private final int iconWidth;
@@ -25,25 +31,42 @@ public class StravaActivityIconClickListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int row = table.rowAtPoint(e.getPoint());
-        int column = table.columnAtPoint(e.getPoint());
-        if (column == table.getModel().findColumn("Title")) {
-            Rectangle r = table.getCellRect(row, column, true);
-            if (clickedOnIcon(e.getPoint(), r)) {
-                String url = "https://www.strava.com/activities/" + table.getModel().getActivityAtRow(row).getId();
-                try {
-                    SystemUtils.openSystemBrowser(url);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
 
+        if (mouseOverIcon(e.getPoint())) {
+            String activityId = String.valueOf(table.getModel().getActivityAtRow(table.getSelectedRow()).getId());
+            String url = Constants.STRAVA_ACTIVITY_URL+ "/" + activityId;
+
+            try {
+                SystemUtils.openSystemBrowser(url);
+            } catch (IOException ex) {
+                log.error("Couldn't open this strava activity in browser");
+            }
         }
     }
 
-    private boolean clickedOnIcon(Point point, Rectangle r) {
-        return (point.x >= r.x && point.x <= r.x + iconWidth) &&
-                (point.y >= r.y && point.y <= r.y + iconHeight);
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+        Point p = new Point(e.getX(), e.getY());
+        JComponent comp = (JComponent) table.getComponentAt(p);
+        if (mouseOverIcon(p)) {
+            table.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            comp.setToolTipText("Click to view this activity on Strava!");
+        } else {
+            table.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            comp.setToolTipText(null);
+        }
+    }
+
+    private boolean mouseOverIcon(Point point) {
+        int row = table.rowAtPoint(point);
+        int column = table.columnAtPoint(point);
+        if (column == table.getModel().findColumn("Title")) {
+            Rectangle r = table.getCellRect(row, column, true);
+            return (point.x >= r.x && point.x <= r.x + iconWidth) &&
+                    (point.y >= r.y && point.y <= r.y + iconHeight);
+        }
+        return false;
     }
 
 
