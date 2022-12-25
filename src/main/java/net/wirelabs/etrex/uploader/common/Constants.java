@@ -16,6 +16,7 @@ public class Constants {
     public static final String STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize";
     public static final String STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
     public static final String STRAVA_BASE_URL ="https://www.strava.com/api/v3";
+    public static final String STRAVA_ACTIVITY_URL = "https://www.strava.com/activities";
 
     public static final String GARMIN_DEVICE_XML = "GarminDevice.xml";
     public static final String DEFAULT_LOCAL_STORE = "etrex-uploader-store";

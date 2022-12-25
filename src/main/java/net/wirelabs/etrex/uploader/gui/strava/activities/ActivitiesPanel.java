@@ -75,6 +75,7 @@ public class ActivitiesPanel extends EventAwarePanel {
 
         activitiesTable.addSelectionListener(this::drawTrack);
         activitiesTable.getTableHeader().setResizingAllowed(false);
+        activitiesTable.getTableHeader().setReorderingAllowed(false);
         applyRendererToActivityTitleColumn();
         applyMouseListenerToActivityTitleColumn();
 
@@ -83,6 +84,7 @@ public class ActivitiesPanel extends EventAwarePanel {
     private void applyMouseListenerToActivityTitleColumn() {
         StravaActivityIconClickListener activityClickListener = new StravaActivityIconClickListener(activitiesTable, 16, 16);
         activitiesTable.addMouseListener(activityClickListener);
+        activitiesTable.addMouseMotionListener(activityClickListener);
     }
 
     private void applyRendererToActivityTitleColumn() {
