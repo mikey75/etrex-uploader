@@ -45,11 +45,13 @@ public class UserAccountPanel extends BorderedPanel {
     private final JLabel lblTotalDist = new JLabel("Total distance:");
     private final JLabel lblTotalTime = new JLabel("Total time:");
     private final JLabel lblStatistics = new JLabel("Statistics");
+    private final ApiUsagePanel apiUsagePanel;
 
     public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
 
         this.stravaService = stravaService;
         this.configuration = configuration;
+        apiUsagePanel = new ApiUsagePanel(configuration);
         initVisualComponent();
         ThreadUtils.runAsync(() -> {
             getUserAccountData();
@@ -60,7 +62,7 @@ public class UserAccountPanel extends BorderedPanel {
 
     private void initVisualComponent() {
         setBorderTitle("My profile");
-        setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][grow,bottom]"));
+        setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][grow][grow,bottom]"));
         add(athleteName, "cell 0 1 2 1,alignx center");
         add(athletePicture, "cell 0 0 2 1,alignx center");
         add(lblStatistics, "cell 0 2 2 1");
@@ -78,7 +80,9 @@ public class UserAccountPanel extends BorderedPanel {
         add(totalDist, "cell 1 9");
         add(lblTotalTime, "cell 0 10");
         add(totalTime, "cell 1 10");
-        add(btnSettings, "cell 0 11 2 1,growx");
+
+        add(apiUsagePanel, "cell 0 11 2 1,grow");
+        add(btnSettings, "cell 0 12 2 1,growx");
 
         btnSettings.addActionListener(e -> {
             SettingsDialog d = new SettingsDialog(configuration);
@@ -93,7 +97,7 @@ public class UserAccountPanel extends BorderedPanel {
 
         try {
             athlete = stravaService.getCurrentAthlete();
-            String profilePicFilename = athlete.getProfile();
+            String profilePicFilename = athlete.getProfileMedium();
             if (profilePicFilename != null) {
                 img = ImageIO.read(URI.create(profilePicFilename).toURL());
             }

@@ -5,18 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.gui.strava.account.ApiUsagePanel;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -26,6 +25,7 @@ import java.awt.Cursor;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 
@@ -34,15 +34,14 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
-    private final JPanel apiUsagePanel;
+    private final JLabel pwrdByImageLabel = new JLabel();
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
     private final StravaService stravaService;
     private int page = 1;
 
-    public ActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
+    public ActivitiesPanel(StravaService stravaService) {
         this.stravaService = stravaService;
-        apiUsagePanel = new ApiUsagePanel(configuration);
         createVisualComponent();
         updateActivities();
     }
@@ -65,12 +64,12 @@ public class ActivitiesPanel extends EventAwarePanel {
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");
-        add(apiUsagePanel, "cell 1 1");
 
         scrollPane.setViewportView(activitiesTable);
+        setPoweredByLogo();
+
 
         btnPrevPage.addActionListener(e -> decreasePageAndLoadActivities());
-
         btnNextPage.addActionListener(e -> increasePageAndLoadActivities());
 
         activitiesTable.addSelectionListener(this::drawTrack);
@@ -79,6 +78,13 @@ public class ActivitiesPanel extends EventAwarePanel {
         applyRendererToActivityTitleColumn();
         applyMouseListenerToActivityTitleColumn();
 
+    }
+
+    // this is required by strava api branding guidelines
+    private void setPoweredByLogo() {
+        ImageIcon poweredBy = new ImageIcon(Objects.requireNonNull(getClass().getResource("/pwrdBystrava.png")));
+        pwrdByImageLabel.setIcon(poweredBy);
+        add(pwrdByImageLabel, "cell 1 1,aligny center");
     }
 
     private void applyMouseListenerToActivityTitleColumn() {

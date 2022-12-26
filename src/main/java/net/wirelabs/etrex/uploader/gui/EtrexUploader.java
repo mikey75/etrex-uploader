@@ -12,8 +12,12 @@ import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+import java.awt.Container;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -46,7 +50,7 @@ public class EtrexUploader extends JFrame {
 
             splash.update("Initializing Strava GUI components");
             athletePanel = new UserAccountPanel(ctx.getStravaService(), ctx.getAppConfiguration());
-            activitiesPanel = new ActivitiesPanel(ctx.getStravaService(),ctx.getAppConfiguration());
+            activitiesPanel = new ActivitiesPanel(ctx.getStravaService());
 
             splash.update("Initializing browsers");
             UploadService uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());

@@ -43,7 +43,7 @@ class UserAccountPanelTest {
     @Test
     void testCorrectUserAndImage() throws StravaException {
         
-        fakeUser.setProfile("file:///" + profilePictureURL);
+        fakeUser.setProfileMedium("file:///" + profilePictureURL);
         doReturn(fakeUser).when(strava).getCurrentAthlete();
         
         UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
@@ -73,7 +73,7 @@ class UserAccountPanelTest {
     @Test
     void testImageIOThrownException() throws StravaException {
         
-        fakeUser.setProfile("file:///"); // <-- this triggers IOException inside
+        fakeUser.setProfileMedium("file:///"); // <-- this triggers IOException inside
         doReturn(fakeUser).when(strava).getCurrentAthlete();
         UserAccountPanel uap = new UserAccountPanel(strava,mock(AppConfiguration.class));
 

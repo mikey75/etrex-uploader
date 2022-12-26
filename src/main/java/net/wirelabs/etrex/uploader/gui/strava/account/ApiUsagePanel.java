@@ -20,8 +20,10 @@ import java.util.Map;
  */
 public class ApiUsagePanel extends EventAwarePanel {
     private final AppConfiguration configuration;
-    @Getter private final JLabel dailyLimits;
-    @Getter private final JLabel quarterLimits;
+    @Getter
+    private final JLabel dailyLimits;
+    @Getter
+    private final JLabel quarterLimits;
     private Integer currentDaily;
     private Integer current15min;
     private Integer allowedDaily;
@@ -29,21 +31,24 @@ public class ApiUsagePanel extends EventAwarePanel {
 
     public ApiUsagePanel(AppConfiguration configuration) {
         this.configuration = configuration;
-        setLayout(new MigLayout("insets 0 0 0 0", "[][][][][]", "[]"));
+        setLayout(new MigLayout("insets 0 0 0 0", "[grow][grow]", "[][center][][]"));
 
         JLabel header = new JLabel("API usage:");
 
-        add(header, "cell 0 0,growx");
+        add(header, "cell 0 1 2 1,growx,aligny center");
+
+        JSeparator separator = new JSeparator();
+        add(separator, "cell 0 0 2 1,grow");
         JLabel dailyLabel = new JLabel("Daily:");
-        add(dailyLabel, "cell 1 0,alignx left");
+        add(dailyLabel, "cell 0 2,alignx left");
 
         dailyLimits = new JLabel("$daily");
-        add(dailyLimits, "cell 2 0");
+        add(dailyLimits, "cell 1 2");
         JLabel quarterLabel = new JLabel("15min:");
-        add(quarterLabel, "cell 3 0,alignx left");
+        add(quarterLabel, "cell 0 3,alignx left");
 
         quarterLimits = new JLabel("$15min");
-        add(quarterLimits, "cell 4 0");
+        add(quarterLimits, "cell 1 3");
     }
 
     @Override
@@ -71,7 +76,7 @@ public class ApiUsagePanel extends EventAwarePanel {
         }
     }
 
-    private void updateApiUsageLabels(Map<String,Integer> apiInfo) {
+    private void updateApiUsageLabels(Map<String, Integer> apiInfo) {
 
         currentDaily = apiInfo.get(StravaUtil.CURRENT_DAILY);
         current15min = apiInfo.get(StravaUtil.CURRENT_15MINS);
