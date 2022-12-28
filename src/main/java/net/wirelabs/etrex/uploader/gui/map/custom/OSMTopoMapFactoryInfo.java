@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.map.custom;
 
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-/*
+/**
  * Created 12/23/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 public class OSMTopoMapFactoryInfo extends TileFactoryInfo {
@@ -13,7 +13,7 @@ public class OSMTopoMapFactoryInfo extends TileFactoryInfo {
 
     public OSMTopoMapFactoryInfo()
     {
-        this("ThunderForest","https://tile.opentopomap.org");
+        this("OpenTopoMap","https://a.tile.opentopomap.org");
     }
     /**
      * @param name the name of the factory
