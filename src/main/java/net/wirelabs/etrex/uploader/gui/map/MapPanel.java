@@ -8,6 +8,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.gui.map.custom.GeoPortalTileFactory;
 import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.OSMTopoMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.TFMapType;
@@ -22,7 +23,9 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.empty.EmptyTileFactory;
 
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
@@ -113,7 +116,8 @@ public class MapPanel extends EventAwarePanel {
 
     private void configureTileFactory(MapType mapType) {
 
-        TileFactoryInfo info;
+
+        DefaultTileFactory tileFactory;
         String apiKey = Constants.EMPTY_STRING;
 
         if (mapType.isRequiresKey()) {
@@ -122,39 +126,46 @@ public class MapPanel extends EventAwarePanel {
 
         switch (mapType) {
             case OPENSTREETMAP: {
-                info = new OSMTileFactoryInfo();
+                TileFactoryInfo info = new OSMTileFactoryInfo();
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             case TF_OUTDOOR: {
-                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_OUTDOORS, apiKey);
+                TileFactoryInfo info = new ThunderForestMapsFactoryInfo(TFMapType.TF_OUTDOORS, apiKey);
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             case TF_CYCLE: {
-                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_CYCLE, apiKey);
+                TileFactoryInfo info = new ThunderForestMapsFactoryInfo(TFMapType.TF_CYCLE, apiKey);
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             case TF_LANDSCAPE: {
-                info = new ThunderForestMapsFactoryInfo(TFMapType.TF_LANDSCAPE, apiKey);
+                TileFactoryInfo info = new ThunderForestMapsFactoryInfo(TFMapType.TF_LANDSCAPE, apiKey);
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             case GEOPORTAL: {
-                info = new GeoportalMapFactoryInfo();
+                TileFactoryInfo info = new GeoportalMapFactoryInfo();
+                tileFactory = new GeoPortalTileFactory(info);
                 break;
             }
             case VIRTEARTH: {
-                info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+                TileFactoryInfo info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             case OSM_TOPO: {
-                info = new OSMTopoMapFactoryInfo();
-
+                TileFactoryInfo info = new OSMTopoMapFactoryInfo();
+                tileFactory = new DefaultTileFactory(info);
                 break;
             }
             default:
-                info = new OSMTileFactoryInfo();
+                TileFactoryInfo info = new OSMTileFactoryInfo();
+                tileFactory = new DefaultTileFactory(info);
                 break;
         }
-        DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+        //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
 
         // Setup local file cache
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
