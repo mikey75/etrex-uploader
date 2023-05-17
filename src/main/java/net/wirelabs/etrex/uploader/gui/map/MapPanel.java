@@ -8,8 +8,8 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
-import net.wirelabs.etrex.uploader.gui.map.custom.GeoPortalTileFactory;
-import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalMapFactoryInfo;
+import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalTopoBaseFactory;
+import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalTopoBaseFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.OSMTopoMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.TFMapType;
 import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestMapsFactoryInfo;
@@ -21,11 +21,10 @@ import org.jxmapviewer.cache.FileBasedLocalCache;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.viewer.AbstractTileFactory;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
-import org.jxmapviewer.viewer.empty.EmptyTileFactory;
 
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
@@ -117,7 +116,7 @@ public class MapPanel extends EventAwarePanel {
     private void configureTileFactory(MapType mapType) {
 
 
-        DefaultTileFactory tileFactory;
+        AbstractTileFactory tileFactory;
         String apiKey = Constants.EMPTY_STRING;
 
         if (mapType.isRequiresKey()) {
@@ -146,8 +145,8 @@ public class MapPanel extends EventAwarePanel {
                 break;
             }
             case GEOPORTAL: {
-                TileFactoryInfo info = new GeoportalMapFactoryInfo();
-                tileFactory = new GeoPortalTileFactory(info);
+                TileFactoryInfo info = new GeoportalTopoBaseFactoryInfo();
+                tileFactory = new GeoportalTopoBaseFactory(info);
                 break;
             }
             case VIRTEARTH: {
