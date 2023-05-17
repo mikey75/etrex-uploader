@@ -1,37 +1,16 @@
-package net.wirelabs.etrex.uploader.gui.map.custom;
+package net.wirelabs.etrex.uploader.gui.map.wmts;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.beans.Transient;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @XmlRootElement(name = "Capabilities", namespace = Capabilities.WMTS)
 public class Capabilities {
+
 	static final String WMTS = "http://www.opengis.net/wmts/1.0";
 	static final String OWS = "http://www.opengis.net/ows/1.1";
-
-	public static Capabilities parse(File f) throws IOException {
-		return parse(Files.newInputStream(f.toPath()));
-	}
-
-	public static Capabilities parse(InputStream in) {
-		try {
-			JAXBContext context = JAXBContext.newInstance(Capabilities.class);
-			Unmarshaller jaxb = context.createUnmarshaller();
-			return (Capabilities) jaxb.unmarshal(in);
-		} catch (JAXBException ex) {
-			throw new IllegalArgumentException("Failed to parse Capabilities XML", ex);
-		}
-	}
 
 	@XmlElement(namespace = WMTS)
 	public Contents Contents;
