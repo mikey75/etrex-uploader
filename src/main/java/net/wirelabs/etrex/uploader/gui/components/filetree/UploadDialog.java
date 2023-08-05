@@ -86,7 +86,7 @@ public class UploadDialog extends JDialog {
     private void uploadFile(File trackFile) {
 
         try {
-
+            log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Upload upload = stravaService.uploadActivity(trackFile, activityTitleTextField.getText(),
                     activityDesctiptionArea.getText(), (SportType) activityTypeCombo.getSelectedItem());
@@ -103,6 +103,7 @@ public class UploadDialog extends JDialog {
     }
 
     private void handleUnsuccessfulUpload(Upload upload) {
+        log.error("Upload unsucessful [API response: {}]", upload.getError());
         SwingUtils.errorMsg("Upload unsucessful [API response:" + upload.getError() + "]");
         dispose();
     }

@@ -34,7 +34,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int tilerThreads;
     private int perPage;
     private int apiUsageWarnPercent;
-
+    private int uploadStatusWaitSeconds;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -50,6 +50,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         tilerThreads = Integer.parseInt(properties.getProperty(MAP_TILER_THREAD_COUNT, "8"));
         perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, "30"));
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
+        uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, "60"));
     }
 
     public AppConfiguration() {
@@ -69,6 +70,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_TILER_THREAD_COUNT, String.valueOf(tilerThreads));
         properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
+        properties.setProperty(UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
         super.store();
 
     }

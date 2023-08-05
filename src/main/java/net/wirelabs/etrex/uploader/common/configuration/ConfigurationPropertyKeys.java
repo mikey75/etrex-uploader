@@ -23,7 +23,7 @@ class ConfigurationPropertyKeys {
     static final String STRAVA_ACTIVITIES_PER_PAGE      = "strava.activities.per.page";
     static final String STRAVA_DEFAULT_ACTIVITY_TYPE    = "strava.default.activity.type";
     static final String STRAVA_API_USAGE_WARN_PERCENT   = "strava.api.usage.warn.percent";
-
+    static final String UPLOAD_STATUS_WAIT_SECONDS      = "strava.upload.status.wait.seconds";
     // map
     static final String MAP_TYPE                        = "map.type";
     static final String MAP_TILER_THREAD_COUNT          = "map.tiler.threads";
