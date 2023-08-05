@@ -96,9 +96,9 @@ public class StravaServiceImpl implements StravaService {
         Upload uploadStatus = getUploadStatus(u.getId());
 
         // wait for success or fail
-        long timeout = System.currentTimeMillis() + 15000L;
+        long timeout = System.currentTimeMillis() + configuration.getUploadStatusWaitSeconds() * 1000L;
         // strava reccomends polling on upload status with 1 sec intervals, median is 8
-        // sec.
+        // sec. We have it at 60sec in the config (editable)
         while (uploadStatus.getActivityId() == null && System.currentTimeMillis() < timeout) {
             Sleeper.sleepSeconds(2);
             uploadStatus = getUploadStatus(u.getId());
