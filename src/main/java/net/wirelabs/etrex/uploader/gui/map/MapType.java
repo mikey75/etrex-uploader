@@ -15,7 +15,8 @@ public enum MapType {
     TF_CYCLE("Cycling" ,true),
     TF_LANDSCAPE("Landscape",true),
     GEOPORTAL("GeoPortal Topo (Poland only)", false),
-    VIRTEARTH("Virtual Earth Satellite", false) ;
+    VIRTEARTH("Virtual Earth Satellite", false),
+    MTB_CZ("MTB.cz", false);
 
     @Override
     public String toString() {

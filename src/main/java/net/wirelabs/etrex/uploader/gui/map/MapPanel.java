@@ -10,6 +10,7 @@ import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalTopoBaseFactory;
 import net.wirelabs.etrex.uploader.gui.map.custom.GeoportalTopoBaseFactoryInfo;
+import net.wirelabs.etrex.uploader.gui.map.custom.MtbMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.OSMTopoMapFactoryInfo;
 import net.wirelabs.etrex.uploader.gui.map.custom.TFMapType;
 import net.wirelabs.etrex.uploader.gui.map.custom.ThunderForestMapsFactoryInfo;
@@ -141,6 +142,11 @@ public class MapPanel extends EventAwarePanel {
             }
             case TF_LANDSCAPE: {
                 TileFactoryInfo info = new ThunderForestMapsFactoryInfo(TFMapType.TF_LANDSCAPE, apiKey);
+                tileFactory = new DefaultTileFactory(info);
+                break;
+            }
+            case MTB_CZ: {
+                TileFactoryInfo info = new MtbMapFactoryInfo();
                 tileFactory = new DefaultTileFactory(info);
                 break;
             }
