@@ -88,9 +88,14 @@ public class UploadDialog extends JDialog {
         try {
             log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            Upload upload = stravaService.uploadActivity(trackFile, activityTitleTextField.getText(),
-                    activityDesctiptionArea.getText(), (SportType) activityTypeCombo.getSelectedItem());
+
+            Upload upload = stravaService.uploadActivity(trackFile,
+                    activityTitleTextField.getText(),
+                    activityDesctiptionArea.getText(),
+                    (SportType) activityTypeCombo.getSelectedItem());
+
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            log.info("Upload request finished, getting the upload");
             if (upload.getActivityId() != null) {
                 handleSuccessfulUpload(upload);
                 archiveAndDelete();
