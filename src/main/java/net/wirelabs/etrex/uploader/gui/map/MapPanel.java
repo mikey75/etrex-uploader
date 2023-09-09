@@ -46,13 +46,17 @@ public class MapPanel extends EventAwarePanel {
     private final AppConfiguration configuration;
     private final JXMapViewer mapViewer = new JXMapViewer();
 
-    private final transient RoutePainter routePainter = new RoutePainter();
-    private final transient AttributionPainter attributionPainter = new AttributionPainter();
-    private final transient TrackParser trackParser = new TrackParser();
+    private final transient RoutePainter routePainter;
+    private final transient AttributionPainter attributionPainter;
+    private final transient TrackParser trackParser;
 
 
     public MapPanel(AppConfiguration configuration) {
         this.configuration = configuration;
+        this.routePainter = new RoutePainter(configuration);
+        this.attributionPainter = new AttributionPainter();
+        this.trackParser = new TrackParser();
+
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         add(mapViewer, "cell 0 0,grow");
