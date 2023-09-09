@@ -27,6 +27,7 @@ class ConfigurationPropertyKeys {
     // map
     static final String MAP_TYPE                        = "map.type";
     static final String MAP_TILER_THREAD_COUNT          = "map.tiler.threads";
+    static final String MAP_TRACK_COLOR                 = "map.track.color";
     // config files constants
     static final String APPLICATION_CONFIGFILE          = "config.properties";
     static final String STRAVA_CONFIGFILE               = "strava.properties";

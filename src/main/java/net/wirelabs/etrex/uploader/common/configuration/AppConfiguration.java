@@ -35,6 +35,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int perPage;
     private int apiUsageWarnPercent;
     private int uploadStatusWaitSeconds;
+    private String mapTrackColor;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -51,6 +52,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, "30"));
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, "60"));
+        mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, "#ff0000");
     }
 
     public AppConfiguration() {
@@ -71,6 +73,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
         properties.setProperty(UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
+        properties.setProperty(MAP_TRACK_COLOR, mapTrackColor);
         super.store();
 
     }

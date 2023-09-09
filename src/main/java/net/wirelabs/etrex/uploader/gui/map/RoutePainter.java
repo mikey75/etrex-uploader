@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui.map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -27,7 +28,8 @@ import java.util.Objects;
 @Slf4j
 public class RoutePainter implements Painter<JXMapViewer> {
 
-    private static final Color color = Color.RED;
+    @Setter
+    private static Color color = Color.RED;
 
     @Getter
     @Setter
@@ -35,14 +37,15 @@ public class RoutePainter implements Painter<JXMapViewer> {
     private BufferedImage startFlagIcon;
     private BufferedImage endFlagIcon;
 
-    public RoutePainter() {
-        this(new ArrayList<>());
+    public RoutePainter(AppConfiguration configuration) {
+        this(new ArrayList<>(), configuration);
     }
 
     /**
      * @param track the track
      */
-    public RoutePainter(List<GeoPosition> track) {
+    public RoutePainter(List<GeoPosition> track, AppConfiguration configuration) {
+        color = Color.decode(configuration.getMapTrackColor());
         // copy the list so that changes in the 
         // original list do not have an effect here
         setTrack(track);
