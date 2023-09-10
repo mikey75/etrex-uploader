@@ -22,7 +22,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.Cursor;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -41,21 +40,10 @@ public class ActivitiesPanel extends EventAwarePanel {
     private int page = 1;
 
     public ActivitiesPanel(StravaService stravaService) {
+
         this.stravaService = stravaService;
         createVisualComponent();
-        updateActivities();
-    }
-
-    @Override
-    protected void onEvent(Event evt) {
-        if (evt.getEventType() == EventType.ACTIVITY_SUCCESSFULLY_UPLOADED) {
-            updateActivities();
-        }
-    }
-
-    @Override
-    protected Collection<EventType> subscribeEvents() {
-        return Arrays.asList(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED);
+        updateActivities(page);
     }
 
     private void createVisualComponent() {
@@ -65,18 +53,19 @@ public class ActivitiesPanel extends EventAwarePanel {
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");
 
+
+
         scrollPane.setViewportView(activitiesTable);
-        setPoweredByLogo();
-
-
         btnPrevPage.addActionListener(e -> decreasePageAndLoadActivities());
         btnNextPage.addActionListener(e -> increasePageAndLoadActivities());
 
-        activitiesTable.addSelectionListener(this::drawTrack);
+        activitiesTable.addSelectionListener(this::activitySelected);
         activitiesTable.getTableHeader().setResizingAllowed(false);
         activitiesTable.getTableHeader().setReorderingAllowed(false);
+
         applyRendererToActivityTitleColumn();
         applyMouseListenerToActivityTitleColumn();
+        setPoweredByLogo();
 
     }
 
@@ -101,39 +90,53 @@ public class ActivitiesPanel extends EventAwarePanel {
     }
 
     private void increasePageAndLoadActivities() {
-        page++;
-        updateActivities();
+        updateActivities(++page);
     }
 
     private void decreasePageAndLoadActivities() {
         if (page > 1) {
-            page--;
-            updateActivities();
+            updateActivities(--page);
         }
     }
 
-    private void updateActivities() {
+    private void updateActivities(int page) {
+
         ThreadUtils.runAsync(() -> {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             try {
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, 30);
                 activitiesTable.setData(activities);
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
             } catch (StravaException e) {
                 SwingUtils.errorMsg(e.getMessage());
             }
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         });
     }
 
-    private void drawTrack(ListSelectionEvent event) {
+    /**
+     * Activity is selected, emit the event for activity's track painting on map
+     * @param event list selection event
+     */
+    private void activitySelected(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting()) {
             SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
             String polyLine = selectedActivity.getMap().getSummaryPolyline();
-            if (selectedActivity.getMap().getSummaryPolyline() != null) {
+            if (polyLine != null) {
                 EventBus.publish(MAP_DISPLAY_TRACK, polyLine);
             }
         }
     }
 
+    @Override
+    protected void onEvent(Event evt) {
+        if (evt.getEventType() == EventType.ACTIVITY_SUCCESSFULLY_UPLOADED) {
+            updateActivities(page);
+        }
+    }
 
+    @Override
+    protected Collection<EventType> subscribeEvents() {
+        return List.of(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED);
+    }
 }
