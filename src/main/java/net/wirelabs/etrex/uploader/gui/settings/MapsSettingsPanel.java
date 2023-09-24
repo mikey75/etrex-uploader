@@ -1,11 +1,12 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
 import net.wirelabs.etrex.uploader.gui.map.MapType;
-import net.wirelabs.etrex.uploader.gui.map.RoutePainter;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -61,7 +62,7 @@ public class MapsSettingsPanel extends BorderedPanel {
 
     private void updateTrackColor() {
         configuration.setMapTrackColor(colorChooserTextField.getText());
-        RoutePainter.setColor(Color.decode(colorChooserTextField.getText()));
+        EventBus.publish(EventType.TRACK_COLOR_CHANGED, Color.decode(colorChooserTextField.getText()));
     }
 
 }

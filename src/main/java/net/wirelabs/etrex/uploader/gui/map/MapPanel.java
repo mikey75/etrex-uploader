@@ -31,6 +31,7 @@ import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputListener;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -189,12 +190,18 @@ public class MapPanel extends EventAwarePanel {
 
     @Override
     protected void onEvent(Event evt) {
-        drawTrackOnMap(evt);
+        if (evt.getEventType() == EventType.MAP_DISPLAY_TRACK) {
+            drawTrackOnMap(evt);
+        }
+        if (evt.getEventType() == EventType.TRACK_COLOR_CHANGED) {
+            routePainter.setColor((Color) evt.getPayload());
+            mapViewer.repaint();
+        }
     }
 
     @Override
     protected Collection<EventType> subscribeEvents() {
-        return ListUtils.listOf(EventType.MAP_DISPLAY_TRACK);
+        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK);
     }
 
     private void drawTrackOnMap(Event evt) {
