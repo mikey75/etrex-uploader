@@ -16,6 +16,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,7 @@ import java.util.Objects;
 public class RoutePainter implements Painter<JXMapViewer> {
 
     @Setter
-    private static Color color = Color.RED;
+    public  Color color;
 
     @Getter
     @Setter
@@ -45,16 +46,19 @@ public class RoutePainter implements Painter<JXMapViewer> {
      * @param track the track
      */
     public RoutePainter(List<GeoPosition> track, AppConfiguration configuration) {
-        color = Color.decode(configuration.getMapTrackColor());
-        // copy the list so that changes in the 
+        // copy the list so that changes in the
         // original list do not have an effect here
         setTrack(track);
         // prepare flag gfx
         try {
+            color = Color.decode(configuration.getMapTrackColor());
             startFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx/start-point.png")));
             endFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx/end-point.png")));
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.info("Failed to load icons for start or finish {}", e.getMessage());
+        } catch (NumberFormatException nfe) {
+            log.info("Unparsable color, setting red");
+            color = Color.RED;
         }
     }
 
