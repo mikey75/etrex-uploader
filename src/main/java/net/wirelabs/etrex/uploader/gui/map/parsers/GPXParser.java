@@ -5,7 +5,8 @@ import net.wirelabs.etrex.uploader.model.gpx.GpxType;
 import net.wirelabs.etrex.uploader.model.gpx.TrkType;
 import net.wirelabs.etrex.uploader.model.gpx.TrksegType;
 import net.wirelabs.etrex.uploader.model.gpx.WptType;
-import org.jxmapviewer.viewer.GeoPosition;
+import net.wirelabs.jmaps.map.geo.Coordinate;
+
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -43,10 +44,10 @@ class GPXParser {
      * @param file input file
      * @return list of waypoints in GeoPosition format
      */
-    public List<GeoPosition> parseToGeoPosition(File file) {
+    public List<Coordinate> parseToGeoPosition(File file) {
 
         return parseGpxFile(file).stream()
-                .map(trackPoint -> new GeoPosition(trackPoint.getLat().doubleValue(), trackPoint.getLon().doubleValue()))
+                .map(trackPoint -> new Coordinate(trackPoint.getLon().doubleValue(), trackPoint.getLat().doubleValue()))
                 .collect(Collectors.toList());
 
     }
