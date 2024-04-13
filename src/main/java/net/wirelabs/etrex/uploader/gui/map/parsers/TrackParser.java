@@ -1,7 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import org.jxmapviewer.viewer.GeoPosition;
+import net.wirelabs.jmaps.map.geo.Coordinate;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class TrackParser {
     private final FITParser fitParser = new FITParser();
     private final GPXParser gpxParser = new GPXParser();
 
-    public List<GeoPosition> parseToGeoPosition(File file) {
+    public List<Coordinate> parseToGeoPosition(File file) {
 
         if (FileUtils.isGpxFile(file)) {
             return gpxParser.parseToGeoPosition(file);
@@ -27,8 +28,8 @@ public class TrackParser {
         return Collections.emptyList();
     }
 
-    public List<GeoPosition> parsePolyline(String polyLine, Float precision) {
-        ArrayList<GeoPosition> coordinates = new ArrayList<>();
+    public List<Coordinate> parsePolyline(String polyLine, Float precision) {
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
 
         int index = 0;
         int lat = 0;
@@ -61,7 +62,7 @@ public class TrackParser {
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
-            GeoPosition position = new GeoPosition((double) lat / precision, (double) lng / precision);
+            Coordinate position = new Coordinate((double) lng / precision, (double) lat / precision);
             coordinates.add(position);
         }
         return coordinates;
