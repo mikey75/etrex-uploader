@@ -36,6 +36,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int apiUsageWarnPercent;
     private int uploadStatusWaitSeconds;
     private String mapTrackColor;
+    private transient Path mapDefinitonsDir;
+    private transient Path mapFile;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -53,6 +55,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, "60"));
         mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, "#ff0000");
+        mapDefinitonsDir = Paths.get(properties.getProperty(MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_MAP_DIR));
+        mapFile = Paths.get(mapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE));
     }
 
     public AppConfiguration() {
@@ -74,6 +78,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
         properties.setProperty(UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
         properties.setProperty(MAP_TRACK_COLOR, mapTrackColor);
+        properties.setProperty(MAP_DEFINITIONS_DIR, mapDefinitonsDir.toString());
+        properties.setProperty(MAP_FILE, mapFile.getFileName().toString());
         super.store();
 
     }

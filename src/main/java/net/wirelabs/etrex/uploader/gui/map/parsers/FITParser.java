@@ -4,7 +4,8 @@ import com.garmin.fit.FitDecoder;
 import com.garmin.fit.FitMessages;
 import com.garmin.fit.RecordMesg;
 import com.garmin.fit.util.SemicirclesConverter;
-import org.jxmapviewer.viewer.GeoPosition;
+import net.wirelabs.jmaps.map.geo.Coordinate;
+
 
 import java.io.File;
 import java.util.List;
@@ -21,7 +22,7 @@ class FITParser {
         this.fitDecoder = new FitDecoder();
     }
 
-    public List<GeoPosition> parseToGeoPosition(File fitFile) {
+    public List<Coordinate> parseToGeoPosition(File fitFile) {
         FitMessages fitMessages = fitDecoder.decode(fitFile);
         List<RecordMesg> records = fitMessages.getRecordMesgs();
         // return only records with position data
@@ -30,7 +31,7 @@ class FITParser {
                 .map(rec -> {
                     double lattitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLat());
                     double longitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLong());
-                    return new GeoPosition(lattitude, longitude);
+                    return new Coordinate(longitude, lattitude);
                 })
                 .collect(Collectors.toList());
     }

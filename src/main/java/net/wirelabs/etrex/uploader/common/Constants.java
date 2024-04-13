@@ -20,6 +20,7 @@ public class Constants {
 
     public static final String GARMIN_DEVICE_XML = "GarminDevice.xml";
     public static final String DEFAULT_LOCAL_STORE = "etrex-uploader-store";
+    public static final String DEFAULT_MAP_DIR = "etrex-uploader-maps";
     public static final String UPLOADED_FILES_SUBFOLDER = "archived-uploads";
     public static final String TRACKS_REPO = "tracks-archive";
     public static final String EMPTY_STRING = "";
