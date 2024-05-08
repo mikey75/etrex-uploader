@@ -125,6 +125,9 @@ public class StravaClient  {
                 .addFormDataPart("name", name)
                 .addFormDataPart("sport_type", sportType.getValue())
                 .addFormDataPart("description", description)
+                .addFormDataPart("external_id", name + System.currentTimeMillis())
+                .addFormDataPart("commute", "false")
+                .addFormDataPart("trainer", "false")
                 .build();
     }
 

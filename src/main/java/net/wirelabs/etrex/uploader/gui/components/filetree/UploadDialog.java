@@ -114,6 +114,7 @@ public class UploadDialog extends JDialog {
     }
 
     private void handleSuccessfulUpload(Upload upload) {
+        log.info("Upload successful [API response: {}]", upload.getStatus());
         EventBus.publish(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED, trackFile);
         SwingUtils.infoMsg("Upload successful [API response: " + upload.getStatus() + "]");
         dispose();
