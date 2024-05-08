@@ -90,25 +90,24 @@ public class StravaServiceImpl implements StravaService {
     @Override
     public Upload uploadActivity(File file, String name, String desc, SportType sportType) throws StravaException {
 
-        Upload u = client.uploadActivityRequest(file, name, desc, sportType);
+        int uploadWaitTimeSeconds = configuration.getUploadStatusWaitSeconds();
+        long uploadStatusTimeout = System.currentTimeMillis() + uploadWaitTimeSeconds * 1000L;
 
-        // after upload check upload status
-        Upload uploadStatus = getUploadStatus(u.getId());
+        // make upload request
+        Upload upload = client.uploadActivityRequest(file, name, desc, sportType);
 
         // wait for success or fail
-        long timeout = System.currentTimeMillis() + configuration.getUploadStatusWaitSeconds() * 1000L;
-        // strava reccomends polling on upload status with 1 sec intervals, median is 8
-        // sec. We have it at 60sec in the config (editable)
-        while (uploadStatus.getActivityId() == null && System.currentTimeMillis() < timeout) {
+        // i.e poll Upload's activity id for uploadStatusTimeout seconds
+        // in 2 seconds intervals
+        while (getUpload(upload.getId()).getActivityId() == null && System.currentTimeMillis() < uploadStatusTimeout) {
             Sleeper.sleepSeconds(2);
-            uploadStatus = getUploadStatus(u.getId());
         }
-
-        return uploadStatus;
+        // return upload
+        return getUpload(upload.getId());
 
     }
 
-    private Upload getUploadStatus(Long uploadId) throws StravaException {
+    private Upload getUpload(Long uploadId) throws StravaException {
 
         String urlPart = uploads + "/" + uploadId;
         return client.makeGetRequest(urlPart, Upload.class,null);
