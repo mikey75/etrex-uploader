@@ -126,6 +126,14 @@ public class MapPanel extends EventAwarePanel {
                 paintTrack(points);
             });
         }
+        // track is a coordinate list
+        if (evt.getPayload() instanceof List && !((List<?>) evt.getPayload()).isEmpty() && ((List<?>) evt.getPayload()).get(0) instanceof Coordinate) {
+            SwingUtilities.invokeLater(() -> {
+                List<Coordinate> coords = (List<Coordinate>) evt.getPayload();
+                paintTrack(coords);
+            });
+
+        }
     }
 
     private void paintTrack(List<Coordinate> points) {

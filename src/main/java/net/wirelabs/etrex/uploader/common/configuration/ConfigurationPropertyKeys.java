@@ -24,6 +24,7 @@ class ConfigurationPropertyKeys {
     static final String STRAVA_DEFAULT_ACTIVITY_TYPE    = "strava.default.activity.type";
     static final String STRAVA_API_USAGE_WARN_PERCENT   = "strava.api.usage.warn.percent";
     static final String UPLOAD_STATUS_WAIT_SECONDS      = "strava.upload.status.wait.seconds";
+    static final String USE_POLYLINES                   = "strava.use.polylines"; // use polylines instead of real track data
     // map
     static final String MAP_TYPE                        = "map.type";
     static final String MAP_FILE                        = "map.file";
