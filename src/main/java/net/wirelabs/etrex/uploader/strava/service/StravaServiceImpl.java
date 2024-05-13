@@ -107,6 +107,14 @@ public class StravaServiceImpl implements StravaService {
 
     }
 
+    @Override
+    public StreamSet getActivityStreams(Long activityId, String keys, boolean keyByType) throws StravaException {
+        Map<String, String> params = new HashMap<>();
+        params.put("keys", keys);
+        params.put("key_by_type",String.valueOf(keyByType));
+        return client.makeGetRequest(activities + "/" + activityId + "/streams" , StreamSet.class, params);
+    }
+
     private Upload getUpload(Long uploadId) throws StravaException {
 
         String urlPart = uploads + "/" + uploadId;
