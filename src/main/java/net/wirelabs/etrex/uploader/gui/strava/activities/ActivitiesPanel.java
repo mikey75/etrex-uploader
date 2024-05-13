@@ -5,13 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.strava.model.LatLng;
+import net.wirelabs.etrex.uploader.strava.model.StreamSet;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,6 +29,7 @@ import java.awt.Cursor;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 
@@ -37,10 +42,11 @@ public class ActivitiesPanel extends EventAwarePanel {
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
     private final StravaService stravaService;
+    private final AppConfiguration configuration;
     private int page = 1;
 
-    public ActivitiesPanel(StravaService stravaService) {
-
+    public ActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
+        this.configuration = configuration;
         this.stravaService = stravaService;
         createVisualComponent();
         updateActivities(page);
@@ -52,7 +58,6 @@ public class ActivitiesPanel extends EventAwarePanel {
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");
-
 
 
         scrollPane.setViewportView(activitiesTable);
@@ -120,11 +125,41 @@ public class ActivitiesPanel extends EventAwarePanel {
      */
     private void activitySelected(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting()) {
-            SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
-            String polyLine = selectedActivity.getMap().getSummaryPolyline();
-            if (polyLine != null) {
-                EventBus.publish(MAP_DISPLAY_TRACK, polyLine);
+            if (configuration.isUsePolyLines()) {
+                drawTrackFromSummaryPolyLine();
+            } else {
+                drawTrackFromActivityStream();
             }
+        }
+    }
+
+    private void drawTrackFromSummaryPolyLine() {
+
+        // todo: maybe get DetailedActivity and use full polyline instead of summary Polyline
+        //  (requires one more call to api)
+        SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
+        String polyLine = selectedActivity.getMap().getSummaryPolyline();
+        if (polyLine != null) {
+            EventBus.publish(MAP_DISPLAY_TRACK, polyLine);
+        }
+
+    }
+
+    private void drawTrackFromActivityStream() {
+        try {
+            SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
+            StreamSet streamSet = stravaService.getActivityStreams(selectedActivity.getId(), "latlng,altitude", true);
+
+            List<LatLng> coords = streamSet.getLatlng().getData();
+
+            // convert strava coords to jmaps coordinates
+            List<Coordinate> jmapsCoord = coords.stream()
+                    .map(sc -> new Coordinate(sc.get(1), sc.get(0))).collect(Collectors.toList());
+            if (!jmapsCoord.isEmpty()) {
+                EventBus.publish(MAP_DISPLAY_TRACK, jmapsCoord);
+            }
+        } catch (StravaException e) {
+            SwingUtils.errorMsg(e.getMessage());
         }
     }
 

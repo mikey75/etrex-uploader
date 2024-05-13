@@ -21,5 +21,5 @@ public interface StravaService extends Serializable {
 
     DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException;
     Upload uploadActivity(File file, String name, String desc, SportType type) throws StravaException;
-
+    StreamSet getActivityStreams(Long activityId, String keys, boolean keyByType) throws StravaException;
 }

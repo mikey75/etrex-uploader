@@ -16,7 +16,7 @@ public class StravaSettingsPanel extends BorderedPanel {
     private final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
     private final JTextField activitiesPerPage = new JTextField();
     private final JTextField warnQuotaPercent = new JTextField();
-
+    private final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
 
     public StravaSettingsPanel(AppConfiguration configuration) {
 
@@ -38,6 +38,7 @@ public class StravaSettingsPanel extends BorderedPanel {
 
         add(lblWarnQuotaPercent, "cell 0 2,alignx trailing");
         add(warnQuotaPercent, "cell 1 2,growx");
+        add(usePolylines, "cell 1 3");
         loadConfiguration();
     }
 
@@ -45,12 +46,14 @@ public class StravaSettingsPanel extends BorderedPanel {
         activityTypeCombo.setSelectedItem(configuration.getDefaultActivityType());
         activitiesPerPage.setText(String.valueOf(configuration.getPerPage()));
         warnQuotaPercent.setText(String.valueOf(configuration.getApiUsageWarnPercent()));
+        usePolylines.setSelected(configuration.isUsePolyLines());
     }
 
     public void updateConfiguration() {
         configuration.setDefaultActivityType((SportType) activityTypeCombo.getSelectedItem());
         configuration.setPerPage(Integer.parseInt(activitiesPerPage.getText()));
         configuration.setApiUsageWarnPercent(Integer.parseInt(warnQuotaPercent.getText()));
+        configuration.setUsePolyLines(usePolylines.isSelected());
     }
 
 

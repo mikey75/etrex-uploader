@@ -38,6 +38,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private String mapTrackColor;
     private transient Path mapDefinitonsDir;
     private transient Path mapFile;
+    private boolean usePolyLines;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -57,6 +58,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, "#ff0000");
         mapDefinitonsDir = Paths.get(properties.getProperty(MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_MAP_DIR));
         mapFile = Paths.get(mapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE));
+        usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, "true"));
     }
 
     public AppConfiguration() {
@@ -80,6 +82,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_TRACK_COLOR, mapTrackColor);
         properties.setProperty(MAP_DEFINITIONS_DIR, mapDefinitonsDir.toString());
         properties.setProperty(MAP_FILE, mapFile.getFileName().toString());
+        properties.setProperty(USE_POLYLINES, String.valueOf(usePolyLines));
         super.store();
 
     }
