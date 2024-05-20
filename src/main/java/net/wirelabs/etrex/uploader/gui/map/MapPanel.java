@@ -8,6 +8,7 @@ import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
 import net.wirelabs.etrex.uploader.gui.settings.ChooseMapComboBox;
 import net.wirelabs.jmaps.map.MapViewer;
@@ -31,6 +32,7 @@ public class MapPanel extends EventAwarePanel {
     private final MapViewer mapViewer = new MapViewer();
 
     private final transient RoutePainter routePainter;
+    private final OverlayEnabler overlayEnabler;
 
     private final transient TrackParser trackParser;
 
@@ -39,6 +41,7 @@ public class MapPanel extends EventAwarePanel {
         this.configuration = configuration;
         this.routePainter = new RoutePainter(configuration);
         this.trackParser = new TrackParser();
+        this.overlayEnabler = new OverlayEnabler(mapViewer, routePainter);
 
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);
@@ -48,7 +51,7 @@ public class MapPanel extends EventAwarePanel {
         mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
         mapViewer.addUserOverlay(routePainter);
-
+        mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
 
         setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));

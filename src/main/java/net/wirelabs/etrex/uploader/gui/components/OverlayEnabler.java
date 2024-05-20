@@ -1,0 +1,25 @@
+package net.wirelabs.etrex.uploader.gui.components;
+
+import lombok.Getter;
+import net.wirelabs.etrex.uploader.gui.map.RoutePainter;
+import net.wirelabs.jmaps.map.MapViewer;
+
+import javax.swing.*;
+
+public class OverlayEnabler extends JPanel  {
+
+    @Getter
+    private final JCheckBox showOverlaysCheckbox = new JCheckBox("Show user overlays", true);
+
+    public OverlayEnabler(MapViewer mapViewer, RoutePainter routePainter) {
+        showOverlaysCheckbox.addActionListener(a -> {
+            boolean selected = showOverlaysCheckbox.isSelected();
+            if (!selected) {
+                mapViewer.getUserOverlays().clear();
+            } else {
+                mapViewer.addUserOverlay(routePainter);
+            }
+            mapViewer.repaint();
+        });
+    }
+}
