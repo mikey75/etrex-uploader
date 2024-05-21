@@ -33,7 +33,6 @@ public class SettingsDialog extends JDialog {
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
 
 
-		setBounds(100, 100, 521, 500);
 		setLayout(new MigLayout("", "[grow]", "[grow][grow][grow][]"));
 		add(applicationSettingsPanel, "cell 0 0,grow");
 		add(stravaSettingsPanel, "cell 0 1,grow");
@@ -44,6 +43,7 @@ public class SettingsDialog extends JDialog {
 
 		cancelBtn.addActionListener(e -> dispose());
 		saveBtn.addActionListener(e -> saveConfigAndClose());
+		pack();
 	}
 
 	private void saveConfigAndClose() {

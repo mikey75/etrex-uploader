@@ -11,6 +11,7 @@ import javax.swing.plaf.FontUIResource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 
 /**
  * Created 10/23/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -39,6 +40,19 @@ public class SwingUtils {
         return JOptionPane.showConfirmDialog(null,
                 message, "Confirm action", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
+
+    }
+
+    /**
+     * Set system look and feel or swing native - if configured in config.properties
+     */
+    public static void setSystemLookAndFeel(AppConfiguration configuration) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        boolean isNative = configuration.isNativeLookAndFeel();
+
+        UIManager.setLookAndFeel(
+                isNative ?
+                        UIManager.getCrossPlatformLookAndFeelClassName() : UIManager.getSystemLookAndFeelClassName()
+        );
 
     }
 

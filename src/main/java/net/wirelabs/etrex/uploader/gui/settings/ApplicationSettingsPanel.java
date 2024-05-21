@@ -24,6 +24,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
+    private final JCheckBox nativeLookAndFeel = new JCheckBox("Native look/feel");
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
         super("Application");
@@ -53,7 +54,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         add(deleteAfterUpl, "cell 0 5");
         add(archiveAfterUpload, "cell 1 5");
-
+        add(nativeLookAndFeel, "cell 0 6");
         loadConfiguration();
     }
 
@@ -65,6 +66,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getMapDefinitonsDir()));
+        nativeLookAndFeel.setSelected(configuration.isNativeLookAndFeel());
     }
 
     public void updateConfiguration() {
@@ -75,6 +77,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
+        configuration.setNativeLookAndFeel(nativeLookAndFeel.isSelected());
 
     }
 
