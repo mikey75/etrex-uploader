@@ -7,6 +7,7 @@ import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.map.MapType;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 
+import javax.swing.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private transient Path mapDefinitonsDir;
     private transient Path mapFile;
     private boolean usePolyLines;
-    private boolean nativeLookAndFeel;
+    private String lookAndFeelClassName;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -60,7 +61,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         mapDefinitonsDir = Paths.get(properties.getProperty(MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_MAP_DIR));
         mapFile = Paths.get(mapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE));
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, "true"));
-        nativeLookAndFeel = Boolean.parseBoolean(properties.getProperty(USE_NATIVE_LAF, "true"));
+        lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
     }
 
     public AppConfiguration() {
@@ -85,7 +86,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_DEFINITIONS_DIR, mapDefinitonsDir.toString());
         properties.setProperty(MAP_FILE, mapFile.getFileName().toString());
         properties.setProperty(USE_POLYLINES, String.valueOf(usePolyLines));
-        properties.setProperty(USE_NATIVE_LAF, String.valueOf(nativeLookAndFeel));
+        properties.setProperty(LOOK_AND_FEEL_CLASS, String.valueOf(lookAndFeelClassName));
         super.store();
 
     }

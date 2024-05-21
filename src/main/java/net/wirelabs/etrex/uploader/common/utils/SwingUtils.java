@@ -44,16 +44,10 @@ public class SwingUtils {
     }
 
     /**
-     * Set system look and feel or swing native - if configured in config.properties
+     * Set system look and feel as configured in config.properties
      */
     public static void setSystemLookAndFeel(AppConfiguration configuration) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        boolean isNative = configuration.isNativeLookAndFeel();
-
-        UIManager.setLookAndFeel(
-                isNative ?
-                        UIManager.getCrossPlatformLookAndFeelClassName() : UIManager.getSystemLookAndFeelClassName()
-        );
-
+        UIManager.setLookAndFeel(configuration.getLookAndFeelClassName());
     }
 
     public static void setGlobalFontSize(Integer fontsize) {
