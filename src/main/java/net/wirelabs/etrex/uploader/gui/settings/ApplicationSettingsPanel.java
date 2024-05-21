@@ -24,7 +24,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
-    private final JCheckBox nativeLookAndFeel = new JCheckBox("Native look/feel");
+    private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
         super("Application");
@@ -52,9 +52,13 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         add(waitDriveTimeoutLabel, "cell 0 4,alignx trailing");
         add(waitDriveTimeout, "cell 1 4,growx");
 
-        add(deleteAfterUpl, "cell 0 5");
-        add(archiveAfterUpload, "cell 1 5");
-        add(nativeLookAndFeel, "cell 0 6");
+        JLabel lafLabel = new JLabel("GUI Look and Feel");
+        add(lafLabel, "cell 0 5, alignx trailing");
+        add(lookAndFeelSelector, "cell 1 5, growx");
+
+        add(deleteAfterUpl, "cell 0 6");
+        add(archiveAfterUpload, "cell 1 6");
+
         loadConfiguration();
     }
 
@@ -66,7 +70,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getMapDefinitonsDir()));
-        nativeLookAndFeel.setSelected(configuration.isNativeLookAndFeel());
+        lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
     }
 
     public void updateConfiguration() {
@@ -77,7 +81,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
-        configuration.setNativeLookAndFeel(nativeLookAndFeel.isSelected());
+        configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
 
     }
 
