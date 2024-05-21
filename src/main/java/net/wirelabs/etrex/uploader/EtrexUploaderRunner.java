@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class EtrexUploaderRunner {
 
         try {
             ApplicationStartupContext ctx = new ApplicationStartupContext();
+            SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration());
             Frame window = new EtrexUploader(ctx);
             window.setVisible(true);
         } catch (Exception e) {
