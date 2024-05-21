@@ -13,6 +13,7 @@ class ConfigurationPropertyKeys {
     static final String DELETE_TRACK_AFTER_UPLOAD       = "system.delete.after.upload";
     static final String BACKUP_TRACK_AFTER_UPLOAD       = "system.backup.after.upload";
     static final String USER_STORAGE_ROOTS              = "system.user.storage.roots";
+    static final String USE_NATIVE_LAF                  = "system.use.native.laf"; // use Swing  native look and feel (Metal), otherwise use OS default.
 
     // strava
     static final String STRAVA_APP_ID                   = "strava.app.id";
