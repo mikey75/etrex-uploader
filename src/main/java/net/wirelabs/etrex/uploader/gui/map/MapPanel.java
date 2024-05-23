@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -10,7 +11,7 @@ import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
-import net.wirelabs.etrex.uploader.gui.settings.ChooseMapComboBox;
+import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.jmaps.map.MapViewer;
 import net.wirelabs.jmaps.map.cache.DirectoryBasedCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
@@ -18,7 +19,7 @@ import net.wirelabs.jmaps.map.geo.Coordinate;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ItemEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -66,7 +67,7 @@ public class MapPanel extends EventAwarePanel {
 
         final ChooseMapComboBox mapSelector = new ChooseMapComboBox(configuration);
 
-        if (mapSelector.getMapFiles().length > 0) {
+        if (!mapSelector.getMapDefinitionFiles().isEmpty()) {
 
             mapSelector.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -74,7 +75,16 @@ public class MapPanel extends EventAwarePanel {
                 }
             });
             mapViewer.add(mapSelector, "cell 1 0, grow");
-            mapSelector.setSelectedItem(configuration.getMapFile().toFile());
+
+            // if configured file does not exist - setup first item (which is default OSM.xml)
+            File mapFile = configuration.getMapFile().toFile();
+            if (mapFile.exists()) {
+                mapSelector.setSelectedItem(mapFile);
+            } else {
+                mapSelector.setSelectedItem(mapSelector.getMapDefinitionFiles().get(0));
+                changeMap(mapSelector.getItemAt(0));
+            }
+
         } else {
             SwingUtils.errorMsg("No maps defined. Check configuration");
         }
@@ -84,14 +94,7 @@ public class MapPanel extends EventAwarePanel {
 
 
     private void changeMap(File mapFile) {
-
        mapViewer.setCurrentMap(mapFile);
-        if (routePainter.getObjects().isEmpty()) {
-            mapViewer.setHome(mapViewer.getHome());
-        } else {
-            mapViewer.setBestFit(routePainter.getObjects());
-        }
-
     }
 
 

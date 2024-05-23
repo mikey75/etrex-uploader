@@ -69,7 +69,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         waitDriveTimeout.setText(String.valueOf(configuration.getWaitDriveTimeout()));
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
-        mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getMapDefinitonsDir()));
+        mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitonsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
     }
 
@@ -80,7 +80,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
-        configuration.setMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
+        configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
 
     }
