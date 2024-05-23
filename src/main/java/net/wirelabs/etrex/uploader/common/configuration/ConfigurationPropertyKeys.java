@@ -27,7 +27,6 @@ class ConfigurationPropertyKeys {
     static final String UPLOAD_STATUS_WAIT_SECONDS      = "strava.upload.status.wait.seconds";
     static final String USE_POLYLINES                   = "strava.use.polylines"; // use polylines instead of real track data
     // map
-    static final String MAP_TYPE                        = "map.type";
     static final String MAP_FILE                        = "map.file";
     static final String MAP_TILER_THREAD_COUNT          = "map.tiler.threads";
     static final String MAP_TRACK_COLOR                 = "map.track.color";
