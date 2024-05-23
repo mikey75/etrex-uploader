@@ -20,6 +20,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
 
@@ -58,6 +59,7 @@ public class EtrexUploader extends JFrame {
             storageBrowser = new LocalStorageBrowser(ctx.getAppConfiguration());
 
             splash.update("Initalizing maps");
+            checkIfDefaultMapAvailable();
             mapViewer = new MapPanel(ctx.getAppConfiguration());
 
             splash.update("Starting Garmin drive observer service");
@@ -77,6 +79,16 @@ public class EtrexUploader extends JFrame {
             log.info("Application initalization finished.");
         } else {
             SwingUtils.errorMsg("You are not authorized");
+            System.exit(1);
+        }
+    }
+
+    private static void checkIfDefaultMapAvailable() {
+        // default map should be available since it is part of the release package
+        // if it is not found, configuration is corrupted and should exit application anyway
+        File defaultMap = new File(System.getProperty("user.dir") + File.separator + "maps/defaultMap.xml");
+        if (!defaultMap.exists()) {
+            log.error("No default map found! Exiting");
             System.exit(1);
         }
     }
