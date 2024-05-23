@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
-import net.wirelabs.etrex.uploader.gui.map.MapType;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 
 import javax.swing.*;
@@ -31,7 +30,6 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private boolean archiveAfterUpload;
 
     private SportType defaultActivityType;
-    private MapType defaultMapType;
     private int tilerThreads;
     private int perPage;
     private int apiUsageWarnPercent;
@@ -52,7 +50,6 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         archiveAfterUpload = Boolean.parseBoolean(properties.getProperty(BACKUP_TRACK_AFTER_UPLOAD, "true"));
 
         defaultActivityType = SportType.valueOf(properties.getProperty(STRAVA_DEFAULT_ACTIVITY_TYPE, SportType.RIDE.name()));
-        defaultMapType = MapType.valueOf(properties.getProperty(MAP_TYPE, MapType.OPENSTREETMAP.name()));
         tilerThreads = Integer.parseInt(properties.getProperty(MAP_TILER_THREAD_COUNT, "8"));
         perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, "30"));
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
@@ -77,7 +74,6 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(DELETE_TRACK_AFTER_UPLOAD, String.valueOf(deleteAfterUpload));
 
         properties.setProperty(STRAVA_DEFAULT_ACTIVITY_TYPE, defaultActivityType.name());
-        properties.setProperty(MAP_TYPE, defaultMapType.name());
         properties.setProperty(MAP_TILER_THREAD_COUNT, String.valueOf(tilerThreads));
         properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
