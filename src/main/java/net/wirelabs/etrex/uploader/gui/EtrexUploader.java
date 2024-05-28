@@ -3,7 +3,9 @@ package net.wirelabs.etrex.uploader.gui;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
 import net.wirelabs.etrex.uploader.gui.browsers.LocalStorageBrowser;
@@ -14,13 +16,16 @@ import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
 
@@ -29,14 +34,18 @@ import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFIC
 public class EtrexUploader extends JFrame {
 
 
+    public static final List<File> configuredMaps = new ArrayList<>();
 
-    private JPanel devicePanel;
-    private JPanel storageBrowser;
-    private JPanel mapViewer;
-    private JPanel athletePanel;
-    private JPanel activitiesPanel;
+    private GarminDeviceBrowser devicePanel;
+    private LocalStorageBrowser storageBrowser;
+    private MapPanel mapPanel;
+    private UserAccountPanel athletePanel;
+    private ActivitiesPanel activitiesPanel;
+
 
     public EtrexUploader(ApplicationStartupContext ctx) {
+
+        getMapDefinitionFiles(ctx.getAppConfiguration());
 
         if (ctx.isAuthorized()) {
 
@@ -59,8 +68,7 @@ public class EtrexUploader extends JFrame {
             storageBrowser = new LocalStorageBrowser(ctx.getAppConfiguration());
 
             splash.update("Initalizing maps");
-            checkIfDefaultMapAvailable();
-            mapViewer = new MapPanel(ctx.getAppConfiguration());
+            mapPanel = new MapPanel(ctx.getAppConfiguration());
 
             splash.update("Starting Garmin drive observer service");
             ctx.getGarminDeviceService().start();
@@ -69,7 +77,7 @@ public class EtrexUploader extends JFrame {
             container.add(devicePanel, "cell 0 0 1 2,grow");
             container.add(activitiesPanel, "cell 1 0,grow");
             container.add(athletePanel, "cell 2 0,grow");
-            container.add(mapViewer, "cell 1 1 2 2,grow");
+            container.add(mapPanel, "cell 1 1 2 2,grow");
             container.add(storageBrowser, "cell 0 2,grow");
 
             splash.update("Done");
@@ -83,12 +91,27 @@ public class EtrexUploader extends JFrame {
         }
     }
 
-    private static void checkIfDefaultMapAvailable() {
-        // default map should be available since it is part of the release package
-        // if it is not found, configuration is corrupted and should exit application anyway
-        File defaultMap = new File(System.getProperty("user.dir") + File.separator + "maps/defaultMap.xml");
-        if (!defaultMap.exists()) {
-            log.error("No default map found! Exiting");
+    public void getMapDefinitionFiles(AppConfiguration configuration) {
+
+        // get and sort maps from app's default location
+        String currentDir = System.getProperty("user.dir");
+        List<File> defaultMaps = FileUtils.listDirectory(new File(currentDir + File.separator + "maps")).stream()
+                .sorted(Comparator.comparing(File::getName))
+                .collect(Collectors.toList());
+
+        // get and sort usermaps
+        File mapsDefinitionsDir = configuration.getUserMapDefinitonsDir().toFile();
+        List<File> sortedUserMaps = FileUtils.listDirectory(mapsDefinitionsDir).stream()
+                .sorted(Comparator.comparing(File::getName))
+                .collect(Collectors.toList());
+
+        // add default map(s)
+        configuredMaps.addAll(defaultMaps);
+        // add sorted usermaps
+        configuredMaps.addAll(sortedUserMaps);
+
+        if (configuredMaps.isEmpty()) {
+            SwingUtils.errorMsg("Fatal error: No maps defined, check configuration. Exiting!");
             System.exit(1);
         }
     }

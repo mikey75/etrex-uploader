@@ -1,6 +1,5 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -8,6 +7,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
 import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
@@ -65,9 +65,9 @@ public class MapPanel extends EventAwarePanel {
 
     private void configureMapSelector() {
 
-        final ChooseMapComboBox mapSelector = new ChooseMapComboBox(configuration);
+        final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
-        if (!mapSelector.getMapDefinitionFiles().isEmpty()) {
+        if (!EtrexUploader.configuredMaps.isEmpty()) {
 
             mapSelector.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -81,7 +81,7 @@ public class MapPanel extends EventAwarePanel {
             if (mapFile.exists()) {
                 mapSelector.setSelectedItem(mapFile);
             } else {
-                mapSelector.setSelectedItem(mapSelector.getMapDefinitionFiles().get(0));
+                mapSelector.setSelectedItem(EtrexUploader.configuredMaps.get(0));
                 changeMap(mapSelector.getItemAt(0));
             }
 
