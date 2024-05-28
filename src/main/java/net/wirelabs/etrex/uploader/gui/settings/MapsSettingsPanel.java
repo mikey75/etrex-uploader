@@ -32,7 +32,7 @@ public class MapsSettingsPanel extends BorderedPanel {
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps");
         this.configuration = configuration;
-        newMaps = new ChooseMapComboBox(configuration);
+        newMaps = new ChooseMapComboBox();
 
         setLayout(new MigLayout("", "[][][][grow]", "[][][grow]"));
         add(lblDefaultMap, "cell 0 0,alignx trailing");
