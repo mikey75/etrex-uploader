@@ -75,7 +75,7 @@ public class FileUtils {
     public static boolean isOldGpxFile(File file) {
         try {
             String content = readFileToString(file, StandardCharsets.UTF_8);
-            return content.contains("<gpx version=\"1.0\"");
+            return content.contains("<gpx version=\"1.0\"") || content.contains("xmlns=\"http://www.topografix.com/GPX/1/0\"");
         } catch (IOException e) {
             log.error("Could not read file {}", file);
             return false;
