@@ -6,10 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static org.apache.commons.io.FileUtils.readFileToString;
+
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -67,5 +70,15 @@ public class FileUtils {
 
     public static boolean isGpxFile(File file) {
         return file.getName().toLowerCase().endsWith(".gpx");
+    }
+
+    public static boolean isOldGpxFile(File file) {
+        try {
+            String content = readFileToString(file, StandardCharsets.UTF_8);
+            return content.contains("<gpx version=\"1.0\"");
+        } catch (IOException e) {
+            log.error("Could not read file {}", file);
+            return false;
+        }
     }
 }

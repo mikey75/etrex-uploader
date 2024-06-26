@@ -1,10 +1,15 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.model.gpx.GpxType;
-import net.wirelabs.etrex.uploader.model.gpx.TrkType;
-import net.wirelabs.etrex.uploader.model.gpx.TrksegType;
-import net.wirelabs.etrex.uploader.model.gpx.WptType;
+import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.model.gpx.ver11.GpxType;
+import net.wirelabs.etrex.uploader.model.gpx.ver11.TrkType;
+import net.wirelabs.etrex.uploader.model.gpx.ver11.TrksegType;
+import net.wirelabs.etrex.uploader.model.gpx.ver11.WptType;
+import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
+import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk;
+import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg;
+import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg.Trkpt;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 
@@ -25,12 +30,15 @@ import java.util.stream.Collectors;
 class GPXParser {
 
     private Unmarshaller unmarshaller;
+    private Unmarshaller unmarshallerOld; // for older version 1.0 gpx
 
     public GPXParser() {
 
         try {
-            JAXBContext jc = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.gpx");
-            this.unmarshaller = jc.createUnmarshaller();
+            JAXBContext jc11 = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.gpx.ver11");
+            JAXBContext jc10 = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.gpx.ver10");
+            this.unmarshaller = jc11.createUnmarshaller();
+            this.unmarshallerOld = jc10.createUnmarshaller();
         } catch (JAXBException e) {
             log.error("JAXB exception {}", e.getMessage(), e);
         }
@@ -46,10 +54,14 @@ class GPXParser {
      */
     public List<Coordinate> parseToGeoPosition(File file) {
 
-        return parseGpxFile(file).stream()
-                .map(trackPoint -> new Coordinate(trackPoint.getLon().doubleValue(), trackPoint.getLat().doubleValue()))
-                .collect(Collectors.toList());
-
+        if (FileUtils.isOldGpxFile(file)) {
+            return parseOldGpxFile(file).stream().map(trackPoint -> new Coordinate(trackPoint.getLon().doubleValue(), trackPoint.getLat().doubleValue()))
+                    .collect(Collectors.toList());
+        } else {
+            return parseGpxFile(file).stream()
+                    .map(trackPoint -> new Coordinate(trackPoint.getLon().doubleValue(), trackPoint.getLat().doubleValue()))
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -80,7 +92,33 @@ class GPXParser {
         return Collections.emptyList();
     }
 
+    /**
+     * Parses gpx 1.0 file (note: all tracks and all segments are merged into one set of waypoints)
+     *
+     * @param file input file
+     * @return list of waypoints in GPX's own Wpt format
+     */
+    public List<Trkpt> parseOldGpxFile(File file) {
+        try {
+            Gpx root = (Gpx) unmarshallerOld.unmarshal(file);
 
+            List<Trk> tracks = root.getTrk();
+            List<Trkpt> result = new ArrayList<>();
+
+            if (!tracks.isEmpty()) {
+                for (Trk track : tracks) {
+                    track.getTrkseg().stream()
+                            .map(Trkseg::getTrkpt)
+                            .forEach(result::addAll);
+                }
+                return result;
+            }
+
+        } catch (JAXBException e) {
+            log.warn("File does not contain a gpx track");
+        }
+        return Collections.emptyList();
+    }
 }
 
 
