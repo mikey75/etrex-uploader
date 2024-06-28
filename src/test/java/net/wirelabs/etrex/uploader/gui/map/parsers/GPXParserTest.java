@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
+import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg.Trkpt;
 import net.wirelabs.etrex.uploader.model.gpx.ver11.WptType;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class GPXParserTest {
     @Test
     void shouldProcessVerion10() {
 
-        List<Gpx.Trk.Trkseg.Trkpt> points = parser.parseOldGpxFile(GPX_FILE_VER_1_0);
+        List<Trkpt> points = parser.parseGpx10File(GPX_FILE_VER_1_0);
         assertThat(points).isNotEmpty();
         List<Coordinate> coords = parser.parseToGeoPosition(GPX_FILE_VER_1_0);
         assertThat(coords).isNotEmpty();
@@ -35,7 +35,7 @@ class GPXParserTest {
     @Test
     void shouldProcessVerion11() {
 
-        List<WptType> points = parser.parseGpxFile(GPX_FILE_VER_1_1);
+        List<WptType> points = parser.parseGpx11File(GPX_FILE_VER_1_1);
         assertThat(points).isNotEmpty();
         List<Coordinate> coords = parser.parseToGeoPosition(GPX_FILE_VER_1_1);
         assertThat(coords).isNotEmpty();
@@ -47,16 +47,16 @@ class GPXParserTest {
 
         assertThat(FileUtils.isGpxFile(GPX_FILE_VER_1_0)).isTrue();
         assertThat(FileUtils.isGpxFile(GPX_FILE_VER_1_1)).isTrue();
-        assertThat(FileUtils.isOldGpxFile(GPX_FILE_VER_1_0)).isTrue();
-        assertThat(FileUtils.isOldGpxFile(GPX_FILE_VER_1_1)).isFalse();
+        assertThat(parser.isGpx10File(GPX_FILE_VER_1_0)).isTrue();
+        assertThat(parser.isGpx10File(GPX_FILE_VER_1_1)).isFalse();
     }
 
     @Test
     void shouldThrowWhenNonGpxFile() {
-        List<?> points = parser.parseGpxFile(NON_GPX_FILE);
+        List<?> points = parser.parseGpx11File(NON_GPX_FILE);
         assertThat(points).isEmpty();
 
-        points = parser.parseOldGpxFile(NON_GPX_FILE);
+        points = parser.parseGpx10File(NON_GPX_FILE);
         assertThat(points).isEmpty();
 
     }
