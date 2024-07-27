@@ -41,12 +41,12 @@ public class StravaUtil {
 
     public static void sendRateLimitInfo(Map<String, List<String>> headers) {
 
-        if (headers.containsKey("X-RateLimit-Limit") && headers.containsKey("X-RateLimit-Usage")) {
+        if (headers.containsKey("x-ratelimit-limit") && headers.containsKey("x-ratelimit-usage")) {
 
             HashMap<String, Integer> info = new HashMap<>();
 
-            String rateLimitAllowed = headers.get("X-RateLimit-Limit").get(0);
-            String rateLimitCurrent = headers.get("X-RateLimit-Usage").get(0);
+            String rateLimitAllowed = headers.get("x-ratelimit-limit").get(0);
+            String rateLimitCurrent = headers.get("x-ratelimit-usage").get(0);
 
             StringTokenizer tokenizer = new StringTokenizer(rateLimitAllowed, ",");
             info.put(ALLOWED_15MINS, Integer.parseInt(tokenizer.nextToken()));
