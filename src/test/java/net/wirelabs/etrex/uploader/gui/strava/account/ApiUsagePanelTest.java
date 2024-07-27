@@ -28,8 +28,8 @@ class ApiUsagePanelTest {
         Map<String, List<String>> headers = new HashMap<>();
 
         // simulate over the limit
-        headers.put("X-RateLimit-Limit", List.of("100,1000"));
-        headers.put("X-RateLimit-Usage", List.of("90,800"));
+        headers.put("x-ratelimit-limit", List.of("100,1000"));
+        headers.put("x-ratelimit-usage", List.of("90,800"));
 
         StravaUtil.sendRateLimitInfo(headers);
 
@@ -42,8 +42,8 @@ class ApiUsagePanelTest {
         });
 
         // simulate within limit
-        headers.put("X-RateLimit-Limit", List.of("100,1000"));
-        headers.put("X-RateLimit-Usage", List.of("20,100"));
+        headers.put("x-ratelimit-limit", List.of("100,1000"));
+        headers.put("x-ratelimit-usage", List.of("20,100"));
 
         StravaUtil.sendRateLimitInfo(headers);
 
