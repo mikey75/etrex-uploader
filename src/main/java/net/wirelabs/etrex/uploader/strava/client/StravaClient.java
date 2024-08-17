@@ -97,9 +97,9 @@ public class StravaClient  {
 
     }
 
-    public Upload uploadActivityRequest(File file, String name, String description, SportType sportType) throws StravaException {
+    public Upload uploadActivityRequest(File file, String name, String description, SportType sportType, boolean virtual,boolean commute) throws StravaException {
 
-        RequestBody body = buildUploadRequest(file, name, description, sportType);
+        RequestBody body = buildUploadRequest(file, name, description, sportType, virtual, commute);
 
         refreshTokenIfExpired();
 
@@ -114,7 +114,7 @@ public class StravaClient  {
 
     }
 
-    private RequestBody buildUploadRequest(File file, String name, String description, SportType sportType) throws StravaException {
+    private RequestBody buildUploadRequest(File file, String name, String description, SportType sportType, boolean virtual, boolean commute) throws StravaException {
 
         String dataType = StravaUtil.guessContentTypeFromFile(file);
         String fileFormat = StravaUtil.guessUploadFileFormat(file);
@@ -126,8 +126,8 @@ public class StravaClient  {
                 .addFormDataPart("sport_type", sportType.getValue())
                 .addFormDataPart("description", description)
                 .addFormDataPart("external_id", name + System.currentTimeMillis())
-                .addFormDataPart("commute", "false")
-                .addFormDataPart("trainer", "false")
+                .addFormDataPart("commute", String.valueOf(commute))
+                .addFormDataPart("trainer", String.valueOf(virtual))
                 .build();
     }
 

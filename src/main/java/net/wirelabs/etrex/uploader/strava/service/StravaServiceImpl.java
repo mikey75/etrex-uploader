@@ -88,13 +88,13 @@ public class StravaServiceImpl implements StravaService {
     }
 
     @Override
-    public Upload uploadActivity(File file, String name, String desc, SportType sportType) throws StravaException {
+    public Upload uploadActivity(File file, String name, String desc, SportType sportType, boolean virtual, boolean commute) throws StravaException {
 
         int uploadWaitTimeSeconds = configuration.getUploadStatusWaitSeconds();
         long uploadStatusTimeout = System.currentTimeMillis() + uploadWaitTimeSeconds * 1000L;
 
         // make upload request
-        Upload upload = client.uploadActivityRequest(file, name, desc, sportType);
+        Upload upload = client.uploadActivityRequest(file, name, desc, sportType, virtual, commute);
 
         // wait for success or fail
         // i.e poll Upload's activity id for uploadStatusTimeout seconds
