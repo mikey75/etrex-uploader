@@ -14,6 +14,8 @@ import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.StravaException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -36,6 +38,8 @@ public class UploadDialog extends JDialog {
     private final JScrollPane scrollPane;
     private final JButton btnOk;
     private final JButton btnCancel;
+    private final JCheckBox commute; // is the activity a commute
+    private final JCheckBox virtual; // is the activity a virtual/trainer ride
     private final StravaService stravaService;
     private final transient FileService fileService;
 
@@ -51,7 +55,14 @@ public class UploadDialog extends JDialog {
         btnOk = new JButton("Upload");
         btnCancel = new JButton("Cancel");
         activityTypeCombo = new JComboBox<>(SportType.values());
-
+        commute = new JCheckBox("Commuting ride");
+        virtual = new JCheckBox("Virtual/Trainer ride");
+        commute.addActionListener(e -> {
+            if (commute.isSelected()) virtual.setSelected(false);
+        });
+        virtual.addActionListener(e -> {
+            if (virtual.isSelected()) commute.setSelected(false);
+        });
         setModal(true);
         setSize(600, 300);
         SwingUtils.centerComponent(this);
@@ -67,7 +78,8 @@ public class UploadDialog extends JDialog {
         container.add(activityTypeCombo, "cell 0 3,grow");
         container.add(lblActivityDescription, "cell 0 4");
         container.add(scrollPane, "cell 0 5,grow");
-
+        container.add(commute, "cell 0 6");
+        container.add(virtual, "cell 0 6");
         //  container.add(statusLabel, "cell 0 6"); <-- tu zrobic mozna progressbar teraz
         container.add(btnOk, "flowx,cell 0 7");
         container.add(btnCancel, "cell 0 7");
@@ -92,8 +104,8 @@ public class UploadDialog extends JDialog {
             Upload upload = stravaService.uploadActivity(trackFile,
                     activityTitleTextField.getText(),
                     activityDesctiptionArea.getText(),
-                    (SportType) activityTypeCombo.getSelectedItem());
-
+                    (SportType) activityTypeCombo.getSelectedItem(),
+                    virtual.isSelected(), commute.isSelected());
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             log.info("Upload request finished, getting the upload");
             if (upload.getActivityId() != null) {
