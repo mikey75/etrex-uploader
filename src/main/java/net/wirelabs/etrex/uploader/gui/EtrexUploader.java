@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
@@ -34,7 +35,8 @@ import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFIC
 public class EtrexUploader extends JFrame {
 
 
-    public static final List<File> configuredMaps = new ArrayList<>();
+    @Getter
+    private static final List<File> configuredMaps = new ArrayList<>();
 
     private GarminDeviceBrowser devicePanel;
     private LocalStorageBrowser storageBrowser;
