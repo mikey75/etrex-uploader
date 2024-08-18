@@ -12,7 +12,7 @@ import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 public abstract class BaseStoppableRunnable implements StoppableRunnable {
 
     protected final AtomicBoolean shouldExit = new AtomicBoolean(false);
-    private CompletableFuture<?> threadHandle;
+    private CompletableFuture<Void> threadHandle;
 
     @Override
     public void start() {
@@ -25,7 +25,7 @@ public abstract class BaseStoppableRunnable implements StoppableRunnable {
     }
 
     @Override
-    public CompletableFuture<?> getThreadHandle() {
+    public CompletableFuture<Void> getThreadHandle() {
         return threadHandle;
     }
 
