@@ -4,7 +4,6 @@ package net.wirelabs.etrex.uploader.common;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
 
 /**
  * Created 10/27/22 by Michał Szwaczko (mikey@wirelabs.net)

@@ -67,7 +67,7 @@ public class MapPanel extends EventAwarePanel {
 
         final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
-        if (!EtrexUploader.configuredMaps.isEmpty()) {
+        if (!EtrexUploader.getConfiguredMaps().isEmpty()) {
 
             mapSelector.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -81,7 +81,7 @@ public class MapPanel extends EventAwarePanel {
             if (mapFile.exists()) {
                 mapSelector.setSelectedItem(mapFile);
             } else {
-                mapSelector.setSelectedItem(EtrexUploader.configuredMaps.get(0));
+                mapSelector.setSelectedItem(EtrexUploader.getConfiguredMaps().get(0));
                 changeMap(mapSelector.getItemAt(0));
             }
 

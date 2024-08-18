@@ -135,8 +135,6 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     private void drawTrackFromSummaryPolyLine() {
 
-        // todo: maybe get DetailedActivity and use full polyline instead of summary Polyline
-        //  (requires one more call to api)
         SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
         String polyLine = selectedActivity.getMap().getSummaryPolyline();
         if (polyLine != null) {

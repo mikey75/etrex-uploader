@@ -11,7 +11,7 @@ public class ChooseMapComboBox extends JComboBox<File> {
 
     public ChooseMapComboBox() {
         setRenderer(new ChooseMapComboRenderer());
-        setModel(new DefaultComboBoxModel<>(EtrexUploader.configuredMaps.toArray(new File[0])));
+        setModel(new DefaultComboBoxModel<>(EtrexUploader.getConfiguredMaps().toArray(new File[0])));
     }
 
 }

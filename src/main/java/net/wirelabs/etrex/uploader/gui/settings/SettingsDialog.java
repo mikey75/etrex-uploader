@@ -27,7 +27,7 @@ public class SettingsDialog extends JDialog {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		setAlwaysOnTop(true);
+
 		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
 		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);

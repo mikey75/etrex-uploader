@@ -22,7 +22,7 @@ public final class ThreadUtils {
         return CompletableFuture.runAsync(runnable, executorService);
     }
 
-    public static void waitForCompleted(CompletableFuture<?> future) {
+    public static void waitForCompleted(CompletableFuture<Void> future) {
         if (future != null) {
             future.join();
         }

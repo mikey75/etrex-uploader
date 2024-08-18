@@ -22,7 +22,7 @@ public interface StoppableRunnable extends Runnable {
 
     AtomicBoolean getShouldExit();
 
-    CompletableFuture<?> getThreadHandle();
+    CompletableFuture<Void> getThreadHandle();
 
     default void stop() {
         getShouldExit().set(true);
