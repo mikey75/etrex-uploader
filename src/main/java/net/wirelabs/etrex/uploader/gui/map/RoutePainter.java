@@ -32,8 +32,8 @@ public class RoutePainter extends Painter<MapViewer> {
     public RoutePainter(AppConfiguration configuration) {
         try {
             routeColor = Color.decode(configuration.getMapTrackColor());
-            startFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx/start-point.png")));
-            endFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx/end-point.png")));
+            startFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx-start-point.png")));
+            endFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx-end-point.png")));
         } catch (IOException e) {
             log.info("Failed to load icons for start or finish {}", e.getMessage());
         } catch (NumberFormatException nfe) {
