@@ -15,9 +15,9 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                                                   boolean sel, boolean expanded, boolean leaf, int row,
                                                   boolean hasFocus) {
         
-        Icon iconDir = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/places/folder.png")));
-        Icon iconRegularFile = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/mimetypes/unknown.png")));
-        Icon iconDisk = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/devices/drive-harddisk.png")));
+        Icon iconDir = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/folder.png")));
+        Icon iconRegularFile = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/unknownMime.png")));
+        Icon iconDisk = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/drive-harddisk.png")));
         Icon iconGarmin = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/garmin-triangle.png")));
         
         FileNode node = (FileNode) value;
