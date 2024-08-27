@@ -4,20 +4,26 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
 import net.wirelabs.etrex.uploader.model.gpx.ver11.WptType;
+import net.wirelabs.etrex.uploader.model.tcx.TrackpointT;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 /**
- * Class for easy creation of jmaps coordinate objects from different versions of gpx files
- * (from WptType for gpx 1.1, and TrkPt for gpx 1.0
+ * Class for easy creation of jmaps coordinate objects from different versions of track  files
+ * (from WptType for gpx 1.1, and TrkPt for gpx 1.0, anD TrackPointT for tcx)
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GpxCoordinate {
+public class GPSCoordinate {
 
+    // gpx 1.1
     public static Coordinate create(WptType wptType) {
        return new Coordinate(wptType.getLon().doubleValue(), wptType.getLat().doubleValue(), wptType.getEle().doubleValue());
     }
-
+    // gpx 1.0
     public static Coordinate create(Gpx.Trk.Trkseg.Trkpt trkpt) {
        return new Coordinate(trkpt.getLon().doubleValue(), trkpt.getLat().doubleValue(), trkpt.getEle().doubleValue());
+    }
+    // tcx
+    public static Coordinate create(TrackpointT wptType) {
+        return new Coordinate(wptType.getPosition().getLongitudeDegrees(), wptType.getPosition().getLatitudeDegrees(), wptType.getAltitudeMeters());
     }
 }

@@ -16,6 +16,7 @@ public class TrackParser {
 
     private final FITParser fitParser = new FITParser();
     private final GPXParser gpxParser = new GPXParser();
+    private final TCXParser tcxParser = new TCXParser();
 
     public List<Coordinate> parseToGeoPosition(File file) {
 
@@ -24,6 +25,9 @@ public class TrackParser {
         }
         if (FileUtils.isFitFile(file)) {
             return fitParser.parseToGeoPosition(file);
+        }
+        if (FileUtils.isTcxFile(file)) {
+            return tcxParser.parseToGeoPosition(file);
         }
         return Collections.emptyList();
     }
