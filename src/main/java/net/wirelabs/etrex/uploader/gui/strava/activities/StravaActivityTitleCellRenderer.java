@@ -15,7 +15,7 @@ import java.util.Objects;
 public class StravaActivityTitleCellRenderer extends JLabel implements TableCellRenderer {
 
     @Getter
-    private final ImageIcon stravaIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/strava_logo_mini.png")));
+    private final ImageIcon stravaIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/strava_logo_mini.png")));
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

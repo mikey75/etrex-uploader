@@ -33,7 +33,7 @@ public class Splash extends JFrame {
     }
 
     private void setApplicationLogoIcon() {
-        URL iconLocation = getClass().getResource("/garmin.png");
+        URL iconLocation = getClass().getResource("/images/garmin.png");
         if (iconLocation != null) {
             ImageIcon icon = new ImageIcon(iconLocation);
             iconLabel.setIcon(icon);
