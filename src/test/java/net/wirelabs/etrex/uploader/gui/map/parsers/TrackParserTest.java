@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TrackParserTest {
 
-    private static final File GPX_FILE_VER_1_0 = new File("src/test/resources/gpx10.gpx");
-    private static final File GPX_FILE_VER_1_1 = new File("src/test/resources/gpx11.gpx");
-    private static final File TCX_FILE = new File("src/test/resources/tcx1.tcx");
-    private static final File NOT_TRACK_FILE = new File("src/test/resources/test.png");
+    private static final File GPX_FILE_VER_1_0 = new File("src/test/resources/trackfiles/gpx10.gpx");
+    private static final File GPX_FILE_VER_1_1 = new File("src/test/resources/trackfiles/gpx11.gpx");
+    private static final File TCX_FILE = new File("src/test/resources/trackfiles/tcx1.tcx");
+    private static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
 
     private final GPXParser gpxParser = new GPXParser();
     private final TCXParser tcxParser = new TCXParser();

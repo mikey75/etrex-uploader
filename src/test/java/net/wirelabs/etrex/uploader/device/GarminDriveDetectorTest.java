@@ -36,7 +36,7 @@ class GarminDriveDetectorTest {
 
     private static final File GARMIN_DIR_ONE = new File(GARMIN_DRIVE_ONE, "GARMIN");
     private static final File GARMIN_DIR_TWO = new File(GARMIN_DRIVE_TWO, "GaRmin");
-    private static final File DEVICE_XML_FILE = new File("src/test/resources/GarminDevice.xml");
+    private static final File DEVICE_XML_FILE = new File("src/test/resources/garmin/GarminDevice.xml");
 
     private GarminDeviceService driveDetector;
 
