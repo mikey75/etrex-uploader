@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 class UserAccountPanelTest {
     
-    private final File fakePhoto  = new File("src/test/resources/fakeUserPhoto.png");
+    private final File fakePhoto  = new File("src/test/resources/gui/fakeUserPhoto.png");
     private final StravaService strava = mock(StravaServiceImpl.class);
     private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
     private final ActivityTotal total = new ActivityTotal().count(1).distance(1000F).elapsedTime(3600);
