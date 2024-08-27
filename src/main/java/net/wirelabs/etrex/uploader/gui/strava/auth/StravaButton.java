@@ -7,7 +7,7 @@ public class StravaButton extends JButton {
     
     public StravaButton() {
         
-        URL iconLocation = getClass().getResource("/btn_strava_connectwith_orange.png");
+        URL iconLocation = getClass().getResource("/images/btn_strava_connectwith_orange.png");
     
         if (iconLocation!= null) {
             ImageIcon icon = new ImageIcon(iconLocation);

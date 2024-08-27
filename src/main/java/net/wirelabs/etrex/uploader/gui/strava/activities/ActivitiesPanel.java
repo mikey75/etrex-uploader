@@ -76,7 +76,7 @@ public class ActivitiesPanel extends EventAwarePanel {
 
     // this is required by strava api branding guidelines
     private void setPoweredByLogo() {
-        ImageIcon poweredBy = new ImageIcon(Objects.requireNonNull(getClass().getResource("/pwrdBystrava.png")));
+        ImageIcon poweredBy = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/pwrdBystrava.png")));
         pwrdByImageLabel.setIcon(poweredBy);
         add(pwrdByImageLabel, "cell 1 1,aligny center");
     }
