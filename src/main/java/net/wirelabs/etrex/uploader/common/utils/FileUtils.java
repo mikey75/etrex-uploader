@@ -61,7 +61,7 @@ public class FileUtils {
     }
 
     public static boolean isTrackFile(File file) {
-        return isFitFile(file) || isGpxFile(file);
+        return isFitFile(file) || isGpxFile(file) || isTcxFile(file);
     }
 
     public static boolean isFitFile(File file) {
@@ -70,6 +70,10 @@ public class FileUtils {
 
     public static boolean isGpxFile(File file) {
         return file.getName().toLowerCase().endsWith(".gpx");
+    }
+
+    public static boolean isTcxFile(File file) {
+        return file.getName().toLowerCase().endsWith(".tcx");
     }
 
 

@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.GpxCoordinate;
+import net.wirelabs.etrex.uploader.common.GPSCoordinate;
 import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
 import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk;
 import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg;
@@ -29,7 +29,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
  * Created 8/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-class GPXParser {
+class GPXParser extends BaseParser {
 
     private Unmarshaller unmarshallerForVer11; // for gpx version 1.1
     private Unmarshaller unmarshallerForVer10; // for gpx version 1.0
@@ -37,10 +37,8 @@ class GPXParser {
     public GPXParser() {
 
         try {
-            this.unmarshallerForVer11 = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.gpx.ver11")
-                    .createUnmarshaller();
-            this.unmarshallerForVer10 = JAXBContext.newInstance("net.wirelabs.etrex.uploader.model.gpx.ver10")
-                    .createUnmarshaller();
+            this.unmarshallerForVer11 = JAXBContext.newInstance(GPX11_MODEL_PKG).createUnmarshaller();
+            this.unmarshallerForVer10 = JAXBContext.newInstance(GPX10_MODEL_PKG).createUnmarshaller();
         } catch (JAXBException e) {
             log.error("JAXB exception {}", e.getMessage(), e);
         }
@@ -58,11 +56,11 @@ class GPXParser {
 
         if (isGpx10File(file)) {
             return parseGpx10File(file).stream()
-                    .map(GpxCoordinate::create)
+                    .map(GPSCoordinate::create)
                     .collect(Collectors.toList());
         } else {
             return parseGpx11File(file).stream()
-                    .map(GpxCoordinate::create)
+                    .map(GPSCoordinate::create)
                     .collect(Collectors.toList());
         }
     }
@@ -125,9 +123,7 @@ class GPXParser {
         }
     }
 
-    private void logParseErrorMessage(File file, JAXBException e) {
-        log.warn("Could not parse GPX file {}", file, e);
-    }
+
 }
 
 
