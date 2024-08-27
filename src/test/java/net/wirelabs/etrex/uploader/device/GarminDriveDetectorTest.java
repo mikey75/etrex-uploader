@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
-public class GarminDriveDetectorTest {
+class GarminDriveDetectorTest {
 
     private static final File GARMIN_DRIVE_ONE = new File("target/disk1");
     private static final File GARMIN_DRIVE_TWO = new File("target/disk2");
