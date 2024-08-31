@@ -42,7 +42,8 @@ class FITParser {
                 .map(rec -> {
                     double lattitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLat());
                     double longitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLong());
-                    return new Coordinate(longitude, lattitude);
+                    double altitude = rec.getAltitude().doubleValue();
+                    return new Coordinate(longitude, lattitude, altitude);
                 })
                 .collect(Collectors.toList());
     }
