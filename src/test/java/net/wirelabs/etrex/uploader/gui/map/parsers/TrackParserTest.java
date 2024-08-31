@@ -20,6 +20,7 @@ class TrackParserTest {
     private static final File TCX_FILE = new File("src/test/resources/trackfiles/tcx1.tcx");
     private static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
     private static final File FIT_FILE = new File("src/test/resources/trackfiles/track.fit");
+    private static final File NONEXISTENT = new File("src/test/resources/dupa");
 
     private final GPXParser gpxParser = new GPXParser();
     private final TCXParser tcxParser = new TCXParser();
@@ -59,6 +60,9 @@ class TrackParserTest {
 
         List<Coordinate> coords = fitParser.parseToGeoPosition(FIT_FILE);
         assertThat(coords).isNotEmpty().hasSize(933);
+
+        coords = fitParser.parseToGeoPosition(NONEXISTENT);
+        assertThat(coords).isEmpty();
 
     }
 
