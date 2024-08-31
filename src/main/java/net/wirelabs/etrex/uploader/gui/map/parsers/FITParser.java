@@ -8,6 +8,8 @@ import net.wirelabs.jmaps.map.geo.Coordinate;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +25,12 @@ class FITParser {
     }
 
     public List<Coordinate> parseToGeoPosition(File fitFile) {
-        FitMessages fitMessages = fitDecoder.decode(fitFile);
+        FitMessages fitMessages = null;
+        try {
+            fitMessages = fitDecoder.decode(new FileInputStream(fitFile));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         List<RecordMesg> records = fitMessages.getRecordMesgs();
         // return only records with position data
         return records.stream()
