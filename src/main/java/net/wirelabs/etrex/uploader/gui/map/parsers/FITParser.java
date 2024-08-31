@@ -4,18 +4,21 @@ import com.garmin.fit.FitDecoder;
 import com.garmin.fit.FitMessages;
 import com.garmin.fit.RecordMesg;
 import com.garmin.fit.util.SemicirclesConverter;
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created 12/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 class FITParser {
 
     private final FitDecoder fitDecoder;
@@ -25,11 +28,12 @@ class FITParser {
     }
 
     public List<Coordinate> parseToGeoPosition(File fitFile) {
-        FitMessages fitMessages = null;
+        FitMessages fitMessages;
         try {
             fitMessages = fitDecoder.decode(new FileInputStream(fitFile));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            log.error("File not found {}", fitFile);
+            return Collections.emptyList();
         }
         List<RecordMesg> records = fitMessages.getRecordMesgs();
         // return only records with position data
