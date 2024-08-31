@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class TCXParser extends BaseParser {
+public class TCXParser implements TrackToCoordsParser {
 
     private Unmarshaller unmarshaller;
-
+    private final String TCX_MODEL_PKG = "net.wirelabs.etrex.uploader.model.tcx";
     public TCXParser() {
 
         try {
@@ -65,7 +65,7 @@ public class TCXParser extends BaseParser {
             }
 
         } catch (JAXBException e) {
-            logParseErrorMessage(file, e);
+            log.warn("Could not parse GPS file {}", file, e);
         }
         return result;
     }
