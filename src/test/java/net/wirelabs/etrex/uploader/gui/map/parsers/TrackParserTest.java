@@ -1,95 +1,61 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg.Trkpt;
-import net.wirelabs.etrex.uploader.model.gpx.ver11.WptType;
-import net.wirelabs.etrex.uploader.model.tcx.TrackpointT;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 class TrackParserTest {
 
-    private static final File GPX_FILE_VER_1_0 = new File("src/test/resources/trackfiles/gpx10.gpx");
-    private static final File GPX_FILE_VER_1_1 = new File("src/test/resources/trackfiles/gpx11.gpx");
-    private static final File TCX_FILE = new File("src/test/resources/trackfiles/tcx1.tcx");
-    private static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
-    private static final File FIT_FILE = new File("src/test/resources/trackfiles/track.fit");
-    private static final File NONEXISTENT = new File("src/test/resources/dupa");
-
-    private final GPXParser gpxParser = new GPXParser();
-    private final TCXParser tcxParser = new TCXParser();
-    private final FITParser fitParser = new FITParser();
+    private  final TrackParser trackParser = new TrackParser();
 
     @Test
     void shouldProcessGpxVerion10() {
-
-        List<Trkpt> points = gpxParser.parseGpx10File(GPX_FILE_VER_1_0);
-        assertThat(points).isNotEmpty().hasSize(1000);
-        List<Coordinate> coords = gpxParser.parseToGeoPosition(GPX_FILE_VER_1_0);
+        List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_0);
         assertThat(coords).isNotEmpty().hasSize(1000);
-
     }
 
     @Test
     void shouldProcessGpxVerion11() {
-
-        List<WptType> points = gpxParser.parseGpx11File(GPX_FILE_VER_1_1);
-        assertThat(points).isNotEmpty().hasSize(1511);
-        List<Coordinate> coords = gpxParser.parseToGeoPosition(GPX_FILE_VER_1_1);
+        List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_1);
         assertThat(coords).isNotEmpty().hasSize(1511);
     }
 
     @Test
     void shouldProcessTCX() {
-
-        List<TrackpointT> points = tcxParser.parseTcxFile(TCX_FILE);
-        assertThat(points).isNotEmpty().hasSize(263);
-        List<Coordinate> coords = tcxParser.parseToGeoPosition(TCX_FILE);
+        List<Coordinate> coords = trackParser.parseTrackFile(TCX_FILE);
         assertThat(coords).isNotEmpty().hasSize(263);
-
     }
 
     @Test
     void shouldProcessFIT() {
 
-        List<Coordinate> coords = fitParser.parseToGeoPosition(FIT_FILE);
+        List<Coordinate> coords = trackParser.parseTrackFile(FIT_FILE);
         assertThat(coords).isNotEmpty().hasSize(933);
 
-        coords = fitParser.parseToGeoPosition(NONEXISTENT);
+        coords = trackParser.parseTrackFile(NONEXISTENT);
         assertThat(coords).isEmpty();
 
     }
 
     @Test
-    void shouldDetectTrack() {
+    void shouldProcessPolylineTrack() {
+        // this polyline is taken from one of strava activities, i checked it on strava and it has 175 waypoints
+        String polyline = "qorxHimgeCKE?E?FDCCU?m@LsANe@Fg@JQJCDK?U?RCHACFOD?ADCCDH@IBBC?EL?NBq@B^@@GQBB?CBJB?CE?HD?S@@GGD?GL@@NDMDBATMs@J\\?JEEA_@?JCFAEOQIJAHB@NMD@FDFXKRD[?e@A@CJ?LDFAEMAFGBK@`@@?ACDHEFGR?HHHAu@IYIA@HCLLFDCCA?E@LEs@GBHJAHDn@Gr@M^APOHGLGp@BZEPEBG@BO@LASCBAA?DAGBHABHDC@GM@GB@@HCE?FCG?I?DDBGIDBC@?TEG?KGJBA@?j@z@d@\\f@Pj@JH?NJXf@RXJBDHBNPNDN?@GCCG@BEL?KEIUQAI@A?MGMGEEOQY@ICIo@Be@IOQ_A[GBO`@G^@C";
+        List<Coordinate> coords = trackParser.parsePolyline(polyline, 1E5F);
+        assertThat(coords).isNotEmpty().hasSize(175);
 
-        assertThat(FileUtils.isGpxFile(GPX_FILE_VER_1_0)).isTrue();
-        assertThat(FileUtils.isGpxFile(GPX_FILE_VER_1_1)).isTrue();
-        assertThat(gpxParser.isGpx10File(GPX_FILE_VER_1_0)).isTrue();
-        assertThat(gpxParser.isGpx10File(GPX_FILE_VER_1_1)).isFalse();
-        assertThat(FileUtils.isTcxFile(TCX_FILE)).isTrue();
-        assertThat(FileUtils.isFitFile(FIT_FILE)).isTrue();
     }
 
     @Test
-    void shouldThrowWhenNonGpxOrNonTcxFile() {
-
-        List<?> points = gpxParser.parseGpx11File(NOT_TRACK_FILE);
-        assertThat(points).isEmpty();
-
-        points = gpxParser.parseGpx10File(NOT_TRACK_FILE);
-        assertThat(points).isEmpty();
-
-        points = tcxParser.parseTcxFile(NOT_TRACK_FILE);
-        assertThat(points).isEmpty();
-
-        points = fitParser.parseToGeoPosition(NOT_TRACK_FILE);
+    void shouldBeEmptyOnNonTrackFile() {
+        List<Coordinate> points = trackParser.parseTrackFile(NOT_TRACK_FILE);
         assertThat(points).isEmpty();
     }
+
+
 }
