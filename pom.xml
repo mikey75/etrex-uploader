@@ -22,6 +22,7 @@
         <gson.version>2.9.1</gson.version>
         <swagger.annotations.version>1.5.24</swagger.annotations.version>
         <swagger.codegen.plugin.version>2.3.1</swagger.codegen.plugin.version>
+        <fit.sdk.version>21.120.0</fit.sdk.version>
     </properties>
 
     <dependencies>
@@ -127,6 +128,11 @@
             <groupId>org.osgeo</groupId>
             <artifactId>proj4j</artifactId>
             <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.garmin</groupId>
+            <artifactId>fit</artifactId>
+            <version>${fit.sdk.version}</version>
         </dependency>
     </dependencies>
 
