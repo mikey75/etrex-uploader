@@ -19,9 +19,11 @@ class TrackParserTest {
     private static final File GPX_FILE_VER_1_1 = new File("src/test/resources/trackfiles/gpx11.gpx");
     private static final File TCX_FILE = new File("src/test/resources/trackfiles/tcx1.tcx");
     private static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
+    private static final File FIT_FILE = new File("src/test/resources/trackfiles/track.fit");
 
     private final GPXParser gpxParser = new GPXParser();
     private final TCXParser tcxParser = new TCXParser();
+    private final FITParser fitParser = new FITParser();
 
     @Test
     void shouldProcessGpxVerion10() {
@@ -53,6 +55,14 @@ class TrackParserTest {
     }
 
     @Test
+    void shouldProcessFIT() {
+
+        List<Coordinate> coords = fitParser.parseToGeoPosition(FIT_FILE);
+        assertThat(coords).isNotEmpty().hasSize(933);
+
+    }
+
+    @Test
     void shouldDetectTrack() {
 
         assertThat(FileUtils.isGpxFile(GPX_FILE_VER_1_0)).isTrue();
@@ -60,6 +70,7 @@ class TrackParserTest {
         assertThat(gpxParser.isGpx10File(GPX_FILE_VER_1_0)).isTrue();
         assertThat(gpxParser.isGpx10File(GPX_FILE_VER_1_1)).isFalse();
         assertThat(FileUtils.isTcxFile(TCX_FILE)).isTrue();
+        assertThat(FileUtils.isFitFile(FIT_FILE)).isTrue();
     }
 
     @Test
@@ -72,6 +83,9 @@ class TrackParserTest {
         assertThat(points).isEmpty();
 
         points = tcxParser.parseTcxFile(NOT_TRACK_FILE);
+        assertThat(points).isEmpty();
+
+        points = fitParser.parseToGeoPosition(NOT_TRACK_FILE);
         assertThat(points).isEmpty();
     }
 }
