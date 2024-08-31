@@ -19,13 +19,11 @@ import java.util.stream.Collectors;
  * Created 12/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-class FITParser {
+class FITParser implements TrackToCoordsParser {
 
-    private final FitDecoder fitDecoder;
 
-    public FITParser() {
-        this.fitDecoder = new FitDecoder();
-    }
+
+    private final FitDecoder fitDecoder = new FitDecoder();
 
     public List<Coordinate> parseToGeoPosition(File fitFile) {
         FitMessages fitMessages;

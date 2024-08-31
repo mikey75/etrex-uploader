@@ -119,7 +119,7 @@ public class MapPanel extends EventAwarePanel {
         if (evt.getPayload() instanceof File) {
             File file = (File) evt.getPayload();
             SwingUtilities.invokeLater(() -> {
-                List<Coordinate> points = trackParser.parseToGeoPosition(file);
+                List<Coordinate> points = trackParser.parseTrackFile(file);
                 paintTrack(points);
             });
 

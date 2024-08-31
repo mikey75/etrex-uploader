@@ -1,32 +1,36 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
-
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.common.utils.FileUtils.*;
+
 /*
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class TrackParser {
+public class TrackParser  {
 
-    private final FITParser fitParser = new FITParser();
-    private final GPXParser gpxParser = new GPXParser();
-    private final TCXParser tcxParser = new TCXParser();
+    private final TrackToCoordsParser fitParser = new FITParser();
+    private final TrackToCoordsParser gpxV11Parser = new GPXv11Parser();
+    private final TrackToCoordsParser gpxV10Parser = new GPXv10Parser();
+    private final TrackToCoordsParser tcxParser = new TCXParser();
 
-    public List<Coordinate> parseToGeoPosition(File file) {
+    public List<Coordinate> parseTrackFile(File file) {
 
-        if (FileUtils.isGpxFile(file)) {
-            return gpxParser.parseToGeoPosition(file);
+        if (isGpx10File(file)) {
+            return gpxV10Parser.parseToGeoPosition(file);
         }
-        if (FileUtils.isFitFile(file)) {
+        if (isGpx11File(file)) {
+            return gpxV11Parser.parseToGeoPosition(file);
+        }
+        if (isFitFile(file)) {
             return fitParser.parseToGeoPosition(file);
         }
-        if (FileUtils.isTcxFile(file)) {
+        if (isTcxFile(file)) {
             return tcxParser.parseToGeoPosition(file);
         }
         return Collections.emptyList();
