@@ -1,10 +1,18 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +24,15 @@ public class LookAndFeelComboBox extends JComboBox<String> {
 
     public LookAndFeelComboBox() {
 
-        // make a map of installed look and feels (laf class, laf name)
+        List<LookAndFeelInfo> lafsList = prepareListOfLafs();
+
+        // make a map of installed look and feels (laf class, laf name) and set the classnames to model
         Map<String, String> map = new HashMap<>();
-        Arrays.stream(getInstalledLookAndFeels()).forEach(k -> map.put(k.getClassName(),k.getName()));
-        // set the classnames to model
-        Arrays.stream(getInstalledLookAndFeels()).forEach(a -> addItem(a.getClassName()));
+        lafsList.forEach(k -> {
+            map.put(k.getClassName(), k.getName());
+            addItem(k.getClassName());
+        });
+
         // add renderer to print Laf name instead of classname in the jcombobox
         setRenderer(new BasicComboBoxRenderer() {
 
@@ -34,6 +46,17 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         });
         // add change listener
         addActionListener(event -> setSelectedLookAndFeel());
+    }
+
+    @NotNull
+    private static List<LookAndFeelInfo> prepareListOfLafs() {
+        List<LookAndFeelInfo> lafsList = new ArrayList<>(Arrays.asList(getInstalledLookAndFeels()));
+        lafsList.add(new LookAndFeelInfo(FlatIntelliJLaf.NAME, FlatIntelliJLaf.class.getName()));
+        lafsList.add(new LookAndFeelInfo(FlatMacDarkLaf.NAME, FlatMacDarkLaf.class.getName()));
+        lafsList.add(new LookAndFeelInfo(FlatLightLaf.NAME, FlatLightLaf.class.getName()));
+        lafsList.add(new LookAndFeelInfo(FlatMacLightLaf.NAME, FlatMacLightLaf.class.getName()));
+        lafsList.add(new LookAndFeelInfo(FlatDarculaLaf.NAME, FlatDarculaLaf.class.getName()));
+        return lafsList;
     }
 
     private void setSelectedLookAndFeel() {
@@ -55,7 +78,7 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         setLookAndFeel(selectedLookAndFeelClassName);
         Arrays.stream(Window.getWindows()).forEach(window -> {
             SwingUtilities.updateComponentTreeUI(window);
-            window.pack();
+            window.setMinimumSize(window.getMinimumSize());
         });
     }
 

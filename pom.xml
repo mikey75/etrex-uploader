@@ -23,6 +23,7 @@
         <swagger.annotations.version>1.5.24</swagger.annotations.version>
         <swagger.codegen.plugin.version>2.3.1</swagger.codegen.plugin.version>
         <fit.sdk.version>21.120.0</fit.sdk.version>
+        <flatlaf.version>3.5.1</flatlaf.version>
     </properties>
 
     <dependencies>
@@ -134,6 +135,12 @@
             <artifactId>fit</artifactId>
             <version>${fit.sdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>${flatlaf.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

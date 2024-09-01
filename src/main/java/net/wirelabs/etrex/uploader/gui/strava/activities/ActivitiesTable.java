@@ -54,15 +54,7 @@ public class ActivitiesTable extends JTable {
 
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-
-        final Color shadeColor = new Color(240, 240, 240);
-
-        Component comp = super.prepareRenderer(renderer, row, column);
-
-        if (!isCellSelected(row, column)) {
-            comp.setBackground(row % 2 == 0 ? getBackground() : shadeColor);
-        }
-        return comp;
+        return super.prepareRenderer(renderer, row, column);
     }
 
     @Override
