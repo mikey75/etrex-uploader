@@ -31,6 +31,7 @@ public class EtrexUploaderRunner {
             ApplicationStartupContext ctx = new ApplicationStartupContext();
             SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration());
             Frame window = new EtrexUploader(ctx);
+            window.setMinimumSize(new Dimension(800,600));
             window.setVisible(true);
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
