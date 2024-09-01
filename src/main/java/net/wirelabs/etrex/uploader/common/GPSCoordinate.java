@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.common;
 
+import com.garmin.xmlschemas.trainingCenterDatabase.v2.TrackpointT;
+import com.topografix.gpx.x1.x0.GpxDocument;
+import com.topografix.gpx.x1.x1.WptType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
-import net.wirelabs.etrex.uploader.model.gpx.ver11.WptType;
-import net.wirelabs.etrex.uploader.model.tcx.TrackpointT;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 /**
@@ -19,7 +19,7 @@ public class GPSCoordinate {
        return new Coordinate(wptType.getLon().doubleValue(), wptType.getLat().doubleValue(), wptType.getEle().doubleValue());
     }
     // gpx 1.0
-    public static Coordinate create(Gpx.Trk.Trkseg.Trkpt trkpt) {
+    public static Coordinate create(GpxDocument.Gpx.Trk.Trkseg.Trkpt trkpt) {
        return new Coordinate(trkpt.getLon().doubleValue(), trkpt.getLat().doubleValue(), trkpt.getEle().doubleValue());
     }
     // tcx

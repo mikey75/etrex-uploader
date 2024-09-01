@@ -1,11 +1,10 @@
 package net.wirelabs.etrex.uploader.device;
 
 
+import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-
-import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
@@ -16,13 +15,11 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

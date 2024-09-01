@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @Slf4j
 class FITParser implements TrackToCoordsParser {
 
-
-
     private final FitDecoder fitDecoder = new FitDecoder();
 
     public List<Coordinate> parseToGeoPosition(File fitFile) {
