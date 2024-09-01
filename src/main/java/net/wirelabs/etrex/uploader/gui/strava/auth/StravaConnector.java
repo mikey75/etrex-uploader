@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class StravaConnector extends JDialog {
 
-    private final JLabel lblApplicationId = new JLabel("Application ID");
+    private final JLabel lblApplicationId = new JLabel("Client ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
