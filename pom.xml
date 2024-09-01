@@ -219,7 +219,8 @@
                 </executions>
 
                 <configuration>
-                    <sourceDir>src/main/resources/schemas/garmin_device_and_tracks</sourceDir>
+                    <sourceDir>src/main/resources/schemas/garmin</sourceDir>
+                    <recurseSourceSubdirs>true</recurseSourceSubdirs>
                     <repackage>net.wirelabs.etrex.uploader</repackage>
                     <name>xml</name>
                 </configuration>
