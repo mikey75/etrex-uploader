@@ -2,11 +2,13 @@ package net.wirelabs.etrex.uploader.device;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.xml.bind.JAXBException;
 
+import com.garmin.xmlschemas.garminDevice.v2.DeviceDocument;
+import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
@@ -17,7 +19,7 @@ import net.wirelabs.etrex.uploader.common.thread.BaseStoppableRunnable;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
+import org.apache.xmlbeans.XmlException;
 
 
 /**
@@ -137,9 +139,9 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
         GarminUtils.getGarminDeviceXmlFile(drive).ifPresent(deviceXmlFile -> {
             try {
-                DeviceT garminInfo = GarminUtils.parseDeviceXml(deviceXmlFile.toFile());
-                publishFoundHardwareInfo(garminInfo);
-            } catch (JAXBException e) {
+                DeviceDocument garminInfo = DeviceDocument.Factory.parse(deviceXmlFile.toFile());
+                publishFoundHardwareInfo(garminInfo.getDevice());
+            } catch (IOException | XmlException e) {
                 log.warn("Can't parse {} on drive {}", Constants.GARMIN_DEVICE_XML, drive);
             }
         });

@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
+import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
+import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -9,8 +11,6 @@ import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
-import net.wirelabs.etrex.uploader.model.garmin.DeviceT;
-import net.wirelabs.etrex.uploader.model.garmin.ModelT;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

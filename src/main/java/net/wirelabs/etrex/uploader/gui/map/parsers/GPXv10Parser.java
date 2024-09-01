@@ -1,17 +1,18 @@
 package net.wirelabs.etrex.uploader.gui.map.parsers;
 
+import com.topografix.gpx.x1.x0.GpxDocument;
+import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk;
+import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg;
+import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg.Trkpt;
+
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.GPSCoordinate;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg;
-import net.wirelabs.etrex.uploader.model.gpx.ver10.Gpx.Trk.Trkseg.Trkpt;
-import net.wirelabs.jmaps.map.geo.Coordinate;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import net.wirelabs.jmaps.map.geo.Coordinate;
+import org.apache.xmlbeans.XmlException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,20 +22,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 class GPXv10Parser implements TrackToCoordsParser {
-
-    private final String GPX10_MODEL_PKG = "net.wirelabs.etrex.uploader.model.gpx.ver10";
-    private Unmarshaller unmarshaller;
-
-    public GPXv10Parser() {
-
-        try {
-            this.unmarshaller = JAXBContext.newInstance(GPX10_MODEL_PKG).createUnmarshaller();
-        } catch (JAXBException e) {
-            log.error("JAXB exception {}", e.getMessage(), e);
-        }
-
-    }
-
 
     /**
      * Parses gpx file in geoposition format
@@ -59,16 +46,16 @@ class GPXv10Parser implements TrackToCoordsParser {
     private List<Trkpt> parse(File file) {
         List<Trkpt> result = new ArrayList<>();
         try {
-            Gpx root = (Gpx) unmarshaller.unmarshal(file);
+            GpxDocument root = GpxDocument.Factory.parse(file);
 
-            List<Trk> tracks = root.getTrk();
+            List<Trk> tracks = root.getGpx().getTrkList();
             for (Trk track : tracks) {
-                track.getTrkseg().stream()
-                        .map(Trkseg::getTrkpt)
+                track.getTrksegList().stream()
+                        .map(Trkseg::getTrkptList)
                         .forEach(result::addAll);
             }
 
-        } catch (JAXBException e) {
+        } catch (IOException | XmlException e) {
             log.warn("Could not parse GPS file {}", file, e);
         }
         return result;
