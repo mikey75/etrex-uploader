@@ -55,7 +55,7 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         setLookAndFeel(selectedLookAndFeelClassName);
         Arrays.stream(Window.getWindows()).forEach(window -> {
             SwingUtilities.updateComponentTreeUI(window);
-            window.pack();
+            window.setMinimumSize(window.getMinimumSize());
         });
     }
 
