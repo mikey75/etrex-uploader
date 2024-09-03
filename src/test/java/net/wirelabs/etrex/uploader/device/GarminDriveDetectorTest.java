@@ -5,6 +5,7 @@ import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.tools.LogVerifier;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
@@ -42,6 +43,7 @@ class GarminDriveDetectorTest {
 
     @BeforeEach
     void beforeEach(){
+        LogVerifier.initLogging();
         AppConfiguration testApplicationConfiguration = mock(AppConfiguration.class);
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
@@ -177,6 +179,20 @@ class GarminDriveDetectorTest {
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
             verify(driveDetector, times(1)).publishFoundHardwareInfo(any(DeviceT.class));
         });
+    }
+
+    @Test
+    void shouldNotFindDeviceInfoFileIfNotExists() throws IOException  {
+
+        FileUtils.recursivelyDeleteDirectory(GARMIN_DRIVE_ONE);
+
+        driveDetector.start();
+        addDrive(GARMIN_DRIVE_ONE);
+
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
+                    LogVerifier.verifyLogged("Listening for new drives");
+                    LogVerifier.verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
+                });
     }
 
     @AfterEach

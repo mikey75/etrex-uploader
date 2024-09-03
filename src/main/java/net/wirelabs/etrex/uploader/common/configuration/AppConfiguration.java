@@ -87,11 +87,4 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
 
     }
 
-    public String getProperty(String property) {
-        return properties.getProperty(property, "");
-    }
-
-    public void setProperty(String key, String value) {
-        properties.setProperty(key, value);
-    }
 }

@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.map.parsers;
+package net.wirelabs.etrex.uploader.common.parsers;
 
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
