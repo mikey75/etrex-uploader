@@ -1,10 +1,12 @@
-package net.wirelabs.etrex.uploader.gui.map.parsers;
+package net.wirelabs.etrex.uploader.common.parsers;
 
 import com.garmin.fit.FitDecoder;
 import com.garmin.fit.FitMessages;
+import com.garmin.fit.FitRuntimeException;
 import com.garmin.fit.RecordMesg;
 import com.garmin.fit.util.SemicirclesConverter;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.parsers.TrackToCoordsParser;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 
@@ -27,8 +29,8 @@ class FITParser implements TrackToCoordsParser {
         FitMessages fitMessages;
         try {
             fitMessages = fitDecoder.decode(new FileInputStream(fitFile));
-        } catch (FileNotFoundException e) {
-            log.error("File not found {}", fitFile);
+        } catch (FileNotFoundException | FitRuntimeException e) {
+            log.error("Could not parse GPS file {}", fitFile);
             return Collections.emptyList();
         }
         List<RecordMesg> records = fitMessages.getRecordMesgs();

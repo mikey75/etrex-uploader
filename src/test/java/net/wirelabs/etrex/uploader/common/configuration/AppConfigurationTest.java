@@ -1,7 +1,11 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
+import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.strava.model.SportType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,39 +13,60 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
+import static net.wirelabs.etrex.uploader.TestConstants.CONFIG_FILE;
+import static net.wirelabs.etrex.uploader.TestConstants.NONEXISTENT_FILE;
+import static net.wirelabs.etrex.uploader.tools.LogVerifier.initLogging;
+import static net.wirelabs.etrex.uploader.tools.LogVerifier.verifyLogged;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
  * Created 10/25/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class AppConfigurationTest {
+class AppConfigurationTest {
+
+    @BeforeEach
+    void init() {
+        initLogging();
+    }
 
     @Test
     void shouldAssertDefaultValuesWhenNoConfigFile() {
-        AppConfiguration c = new AppConfiguration("nonexistent.file");
+        AppConfiguration c = new AppConfiguration(NONEXISTENT_FILE.getPath());
         assertThat(c.getStorageRoot()).isEqualTo(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
         assertThat(c.getUserStorageRoots()).isEmpty();
-        assertThat(c.isArchiveAfterUpload()).isTrue();
-        assertThat(c.isDeleteAfterUpload()).isTrue();
-        assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
+        assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
+        assertThat(c.isDeleteAfterUpload()).isTrue();
+        assertThat(c.isArchiveAfterUpload()).isTrue();
+        assertThat(c.getDefaultActivityType()).isEqualTo(SportType.RIDE);
+        assertThat(c.getTilerThreads()).isEqualTo(8);
+        assertThat(c.getPerPage()).isEqualTo(30);
+        assertThat(c.getApiUsageWarnPercent()).isEqualTo(85);
+        assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(60);
+        assertThat(c.getMapTrackColor()).isEqualTo("#ff0000");
+        assertThat(c.getUserMapDefinitonsDir()).hasToString(System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR);
+        assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + "null");
+        assertThat(c.isUsePolyLines()).isTrue();
+        assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
+        verifyLogged(NONEXISTENT_FILE.getPath() +" file not found or cannot be loaded");
     }
 
     @Test
     void shouldReadAndParseCorrectConfig() {
-        AppConfiguration c = new AppConfiguration("src/test/resources/config/test.properties");
+        AppConfiguration c = new AppConfiguration(CONFIG_FILE.getPath());
         assertThat(c.getStorageRoot()).isEqualTo(Paths.get("/test/root"));
         assertThat(c.getUserStorageRoots()).containsExactly(Paths.get("/test/1"), Paths.get("test/2"));
         assertThat(c.isArchiveAfterUpload()).isTrue();
         assertThat(c.isDeleteAfterUpload()).isFalse();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
+        verifyLogged("Loading " +CONFIG_FILE.getPath());
 
     }
 
     @Test
-    void shouldStoreConfig() throws IOException {
+    void shouldStoreChangedConfig() throws IOException {
 
         String[] expectedChange = {
                 "system.wait.drive.timeout=10",
@@ -49,20 +74,23 @@ public class AppConfigurationTest {
                 "system.backup.after.upload=false"
         };
 
-        // because configuration save() overwrites src file, we need to operate on copy
-        File configFile = new File("src/test/resources/config/test.properties");
-        File configCopy = new File("target/test.properties");
+        // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
+        File configFile = new File(CONFIG_FILE.getPath());
+        File newConfigFile = new File("target", CONFIG_FILE.getName());
 
-        Files.copy(configFile.toPath(), configCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(configFile.toPath(), newConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-        AppConfiguration c = new AppConfiguration(configCopy.getPath());
+        AppConfiguration c = new AppConfiguration(newConfigFile.getPath());
         c.setArchiveAfterUpload(false);
         c.setDeviceDiscoveryDelay(100L);
         c.setWaitDriveTimeout(10L);
         c.save();
 
+        verifyLogged("Loading " + newConfigFile.getPath());
+        verifyLogged("Saving configuration " + newConfigFile.getPath());
         // now reload changed file and check
-        assertThat(Files.readAllLines(configCopy.toPath())).containsAll(Arrays.asList(expectedChange));
+        assertThat(Files.readAllLines(newConfigFile.toPath())).containsAll(Arrays.asList(expectedChange));
+
     }
 
 }

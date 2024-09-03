@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Created 6/23/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class ListUtilsTest {
+class ListUtilsTest {
 
     @Test
     void iterableToListTest() {

@@ -44,4 +44,15 @@ class DateAndUnitConversionUtilTest {
         kmh = DateAndUnitConversionUtil.metersPerSecToKilometersPerHourAsString(-120);
         assertThat(kmh).matches("-432(\\.|,)00");
     }
+
+    @Test
+    void convertSecondsToHoursAsString() {
+        String hours = DateAndUnitConversionUtil.secondsToHoursAsString(3600+3600);
+        assertThat(hours).isEqualTo("02");
+        hours = DateAndUnitConversionUtil.secondsToHoursAsString(3600);
+        assertThat(hours).isEqualTo("01");
+        hours = DateAndUnitConversionUtil.secondsToHoursAsString(60); // this is zero hours ;)
+        assertThat(hours).isEqualTo("00");
+
+    }
 }

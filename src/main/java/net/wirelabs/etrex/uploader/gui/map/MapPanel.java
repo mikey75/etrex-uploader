@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
-import net.wirelabs.etrex.uploader.gui.map.parsers.TrackParser;
+import net.wirelabs.etrex.uploader.common.parsers.TrackParser;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.jmaps.map.MapViewer;
 import net.wirelabs.jmaps.map.cache.DirectoryBasedCache;

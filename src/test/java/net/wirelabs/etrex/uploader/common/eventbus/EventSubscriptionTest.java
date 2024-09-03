@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created 6/21/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class EventSubscriptionTest extends BaseTest {
+class EventSubscriptionTest extends BaseTest {
 
     @BeforeEach
     void before() {

@@ -1,17 +1,53 @@
-package net.wirelabs.etrex.uploader.gui.map.parsers;
+package net.wirelabs.etrex.uploader.common.parsers;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.jmaps.map.geo.Coordinate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+
 import static net.wirelabs.etrex.uploader.TestConstants.*;
+import static net.wirelabs.etrex.uploader.tools.LogVerifier.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-class TrackParserTest {
+@Slf4j
+class TrackParserTest  {
 
     private  final TrackParser trackParser = new TrackParser();
+
+    @BeforeEach
+    void init() {
+        initLogging();
+    }
+
+    @Test
+    void shouldNotProcessBadXmlGpx() {
+        // v1.0
+        List<Coordinate> coords = trackParser.parseTrackFile(BAD_XML_GPX_1_0_FILE);
+        assertThat(coords).isEmpty();
+        verifyLogged("Could not parse GPS file " + BAD_XML_GPX_1_0_FILE);
+        // v1.1
+        coords = trackParser.parseTrackFile(BAD_XML_GPX_1_1_FILE);
+        assertThat(coords).isEmpty();
+        verifyLogged("Could not parse GPS file " +BAD_XML_GPX_1_1_FILE);
+
+    }
+
+    @Test
+    void shouldNotProcessBadXmlTCXFile() {
+        List<Coordinate> coords = trackParser.parseTrackFile(BAD_XML_TCX_FILE);
+        assertThat(coords).isEmpty();
+        verifyLogged("Could not parse GPS file " + BAD_XML_TCX_FILE);
+    }
+
+    @Test
+    void shouldNotProcessBadXmlFitFile() {
+        List<Coordinate> coords = trackParser.parseTrackFile(BAD_FIT_FILE);
+        assertThat(coords).isEmpty();
+        verifyLogged("Could not parse GPS file " + BAD_FIT_FILE);
+    }
 
     @Test
     void shouldProcessGpxVerion10() {
@@ -37,9 +73,12 @@ class TrackParserTest {
         List<Coordinate> coords = trackParser.parseTrackFile(FIT_FILE);
         assertThat(coords).isNotEmpty().hasSize(933);
 
-        coords = trackParser.parseTrackFile(NONEXISTENT);
-        assertThat(coords).isEmpty();
+    }
 
+    @Test
+    void shouldNotProcessNonExistentGPX() {
+        List<Coordinate> coords = trackParser.parseTrackFile(NONEXISTENT_FILE);
+        assertThat(coords).isEmpty();
     }
 
     @Test
@@ -53,9 +92,13 @@ class TrackParserTest {
 
     @Test
     void shouldBeEmptyOnNonTrackFile() {
+
         List<Coordinate> points = trackParser.parseTrackFile(NOT_TRACK_FILE);
+        verifyLogged("Unsupported track file: " + NOT_TRACK_FILE.getName());
         assertThat(points).isEmpty();
     }
+
+
 
 
 }

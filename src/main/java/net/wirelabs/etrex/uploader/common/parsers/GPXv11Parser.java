@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.map.parsers;
+package net.wirelabs.etrex.uploader.common.parsers;
 
 import com.topografix.gpx.x1.x1.GpxDocument;
 import com.topografix.gpx.x1.x1.TrkType;
@@ -8,6 +8,7 @@ import com.topografix.gpx.x1.x1.WptType;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.GPSCoordinate;
 
+import net.wirelabs.etrex.uploader.common.parsers.TrackToCoordsParser;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 

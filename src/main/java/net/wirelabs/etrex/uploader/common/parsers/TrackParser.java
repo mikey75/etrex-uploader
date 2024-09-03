@@ -1,5 +1,6 @@
-package net.wirelabs.etrex.uploader.gui.map.parsers;
+package net.wirelabs.etrex.uploader.common.parsers;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import static net.wirelabs.etrex.uploader.common.utils.FileUtils.*;
 /*
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 public class TrackParser  {
 
     private final TrackToCoordsParser fitParser = new FITParser();
@@ -33,6 +35,7 @@ public class TrackParser  {
         if (isTcxFile(file)) {
             return tcxParser.parseToGeoPosition(file);
         }
+        log.warn("Unsupported track file: {}", file.getName());
         return Collections.emptyList();
     }
 
