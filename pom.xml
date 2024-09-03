@@ -265,7 +265,7 @@
                                 <sourceFolder>/</sourceFolder>
                                 <serializableModel>true</serializableModel>
                             </configOptions>
-                            <output>target/generated-sources/swagger</output>
+                            <output>target/generated-sources</output>
                         </configuration>
                     </execution>
                 </executions>
