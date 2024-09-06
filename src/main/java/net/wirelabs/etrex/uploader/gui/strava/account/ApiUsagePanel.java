@@ -4,9 +4,11 @@ import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.eventbus.Event;
-import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
+import net.wirelabs.eventbus.Event;
+import net.wirelabs.eventbus.IEventType;
+import net.wirelabs.eventbus.swing.EventAwarePanel;
 
 
 import javax.swing.*;
@@ -90,7 +92,7 @@ public class ApiUsagePanel extends EventAwarePanel {
     }
 
     @Override
-    protected Collection<EventType> subscribeEvents() {
+    protected Collection<IEventType> subscribeEvents() {
         return List.of(EventType.RATELIMIT_INFO_UPDATE);
     }
 

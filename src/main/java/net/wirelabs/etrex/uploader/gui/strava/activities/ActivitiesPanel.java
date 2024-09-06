@@ -6,26 +6,24 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.eventbus.Event;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
-import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.model.LatLng;
 import net.wirelabs.etrex.uploader.strava.model.StreamSet;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.eventbus.Event;
+import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.eventbus.IEventType;
+import net.wirelabs.eventbus.swing.EventAwarePanel;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.Cursor;
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -169,7 +167,7 @@ public class ActivitiesPanel extends EventAwarePanel {
     }
 
     @Override
-    protected Collection<EventType> subscribeEvents() {
+    protected Collection<IEventType> subscribeEvents() {
         return List.of(EventType.ACTIVITY_SUCCESSFULLY_UPLOADED);
     }
 }

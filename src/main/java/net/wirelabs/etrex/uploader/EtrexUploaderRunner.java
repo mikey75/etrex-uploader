@@ -3,10 +3,10 @@ package net.wirelabs.etrex.uploader;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
+
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
+import net.wirelabs.eventbus.EventBus;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -37,8 +37,7 @@ public class EtrexUploaderRunner {
             window.setVisible(true);
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
-            EventBus.stop();
-            ThreadUtils.shutdownExecutorService();
+            EventBus.shutdown();
             System.exit(1);
         }
 

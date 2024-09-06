@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
@@ -14,12 +13,10 @@ import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
+import net.wirelabs.eventbus.EventBus;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
-import java.awt.Container;
-import java.awt.Frame;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -126,7 +123,7 @@ public class EtrexUploader extends JFrame {
                 int answer = SwingUtils.yesNoMsg("Are you sure you want to exit?");
                 if (answer == JOptionPane.YES_OPTION) {
                     ctx.getGarminDeviceService().stop();
-                    EventBus.stop();
+                    EventBus.shutdown();
                     System.exit(0);
                 }
             }
