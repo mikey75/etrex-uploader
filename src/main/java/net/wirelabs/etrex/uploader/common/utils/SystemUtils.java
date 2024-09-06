@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -46,4 +47,13 @@ public class SystemUtils {
             Thread.currentThread().interrupt();
         }
     }
+
+    public static void checkGraphicsEnvironmentPresent() {
+        if (GraphicsEnvironment.isHeadless()) {
+            log.error("This application needs graphics environment - X11 or Windows");
+            System.exit(1);
+        }
+    }
+
+
 }

@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
+import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphicsEnvironmentPresent;
 
 
 @Slf4j
@@ -24,6 +25,7 @@ public class EtrexUploaderRunner {
 
     public static void main(String[] args) {
 
+        checkGraphicsEnvironmentPresent();
         configureCustomLogbackLogging();
         setGlobalFontSize(10);
 
