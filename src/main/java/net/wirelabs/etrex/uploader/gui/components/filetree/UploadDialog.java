@@ -1,15 +1,19 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.FileService;
+
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.eventbus.EventBus;
+
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +28,7 @@ public class UploadDialog extends JDialog {
 
 
     private File trackFile;
+    @Setter private int hostCheckupTimeout;
     private final JTextField activityTitleTextField;
     private final JComboBox<SportType> activityTypeCombo;
     private final JTextArea activityDesctiptionArea;
@@ -94,6 +99,11 @@ public class UploadDialog extends JDialog {
 
     private void uploadFile(File trackFile) {
 
+        if (!StravaUtil.isStravaUp(hostCheckupTimeout)) {
+            log.info("Some of Strava hosts are down or unavailable");
+            SwingUtils.errorMsg("Some of Strava hosts are down or unavailable. Try again!");
+            return;
+        }
         try {
             log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
