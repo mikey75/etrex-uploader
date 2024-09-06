@@ -1,9 +1,11 @@
 package net.wirelabs.etrex.uploader.common;
 
+import net.wirelabs.eventbus.IEventType;
+
 /**
  * Created 8/3/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public enum EventType {
+public enum EventType implements IEventType {
     // map events
     MAP_DISPLAY_TRACK,
    

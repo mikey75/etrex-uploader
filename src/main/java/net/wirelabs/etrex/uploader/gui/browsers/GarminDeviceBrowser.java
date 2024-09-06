@@ -5,10 +5,11 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.eventbus.Event;
+import net.wirelabs.eventbus.Event;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.UploadService;
-import net.wirelabs.etrex.uploader.gui.components.EventAwarePanel;
+import net.wirelabs.eventbus.IEventType;
+import net.wirelabs.eventbus.swing.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 
@@ -126,7 +127,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     }
 
     @Override
-    protected Collection<EventType> subscribeEvents() {
+    protected Collection<IEventType> subscribeEvents() {
         return Arrays.asList(
                 EventType.DEVICE_DRIVE_REGISTERED,
                 EventType.DEVICE_DRIVE_UNREGISTERED,
