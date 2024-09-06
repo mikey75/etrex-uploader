@@ -14,6 +14,7 @@ import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
 import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +32,6 @@ import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFIC
 @Slf4j
 public class EtrexUploader extends JFrame {
 
-
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class EtrexUploader extends JFrame {
 
 
     public EtrexUploader(ApplicationStartupContext ctx) {
-
+        checkStravaIsUp(ctx.getAppConfiguration());
         getMapDefinitionFiles(ctx.getAppConfiguration());
 
         if (ctx.isAuthorized()) {
@@ -86,6 +86,14 @@ public class EtrexUploader extends JFrame {
             log.info("Application initalization finished.");
         } else {
             SwingUtils.errorMsg("You are not authorized");
+            System.exit(1);
+        }
+    }
+
+    private  void checkStravaIsUp(AppConfiguration cfg) {
+        if (!StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
+            SwingUtils.errorMsg("Strava seems to be down! Exiting!");
+            log.info("Exiting due to strava being down!");
             System.exit(1);
         }
     }
