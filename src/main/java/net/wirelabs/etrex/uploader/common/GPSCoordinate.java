@@ -16,11 +16,15 @@ public class GPSCoordinate {
 
     // gpx 1.1
     public static Coordinate create(WptType wptType) {
-       return new Coordinate(wptType.getLon().doubleValue(), wptType.getLat().doubleValue(), wptType.getEle().doubleValue());
+       return new Coordinate(wptType.getLon().doubleValue(), wptType.getLat().doubleValue(),
+               // elevation might not be present so take care for that
+               wptType.getEle()!=null ? wptType.getEle().doubleValue() : 0);
     }
     // gpx 1.0
     public static Coordinate create(GpxDocument.Gpx.Trk.Trkseg.Trkpt trkpt) {
-       return new Coordinate(trkpt.getLon().doubleValue(), trkpt.getLat().doubleValue(), trkpt.getEle().doubleValue());
+       return new Coordinate(trkpt.getLon().doubleValue(), trkpt.getLat().doubleValue(),
+               // elevation might not be present so take care for that
+               trkpt.getEle()!=null ? trkpt.getEle().doubleValue() : 0);
     }
     // tcx
     public static Coordinate create(TrackpointT wptType) {
