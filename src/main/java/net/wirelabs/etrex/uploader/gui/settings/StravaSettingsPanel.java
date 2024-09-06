@@ -17,7 +17,8 @@ public class StravaSettingsPanel extends BorderedPanel {
     private final JTextField activitiesPerPage = new JTextField();
     private final JTextField warnQuotaPercent = new JTextField();
     private final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
-
+    private final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
+    private final JTextField hostTimeout = new JTextField();
     public StravaSettingsPanel(AppConfiguration configuration) {
 
         super("Strava");
@@ -25,6 +26,7 @@ public class StravaSettingsPanel extends BorderedPanel {
         JLabel activityTypeLabel = new JLabel("Default activty type:");
         JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
         JLabel lblWarnQuotaPercent = new JLabel("Warn quota percent:");
+        JLabel lblHostTimeout = new JLabel("Strava hosts timeout milliseconds:");
 
         this.configuration = configuration;
         setLayout(new MigLayout("", "[][grow]", "[][][]"));
@@ -39,6 +41,11 @@ public class StravaSettingsPanel extends BorderedPanel {
         add(lblWarnQuotaPercent, "cell 0 2,alignx trailing");
         add(warnQuotaPercent, "cell 1 2,growx");
         add(usePolylines, "cell 1 3");
+
+        add(checkHostBeforeUpload, "cell 1 4, alignx trailing");
+        add(lblHostTimeout,"cell 1 5, alignx trailing ");
+        add(hostTimeout, "cell 1 5, growx");
+
         loadConfiguration();
     }
 
@@ -47,6 +54,8 @@ public class StravaSettingsPanel extends BorderedPanel {
         activitiesPerPage.setText(String.valueOf(configuration.getPerPage()));
         warnQuotaPercent.setText(String.valueOf(configuration.getApiUsageWarnPercent()));
         usePolylines.setSelected(configuration.isUsePolyLines());
+        hostTimeout.setText(String.valueOf(configuration.getStravaCheckTimeout()));
+        checkHostBeforeUpload.setSelected(configuration.isStravaCheckHostBeforeUpload());
     }
 
     public void updateConfiguration() {
@@ -54,6 +63,8 @@ public class StravaSettingsPanel extends BorderedPanel {
         configuration.setPerPage(Integer.parseInt(activitiesPerPage.getText()));
         configuration.setApiUsageWarnPercent(Integer.parseInt(warnQuotaPercent.getText()));
         configuration.setUsePolyLines(usePolylines.isSelected());
+        configuration.setStravaCheckTimeout(Integer.parseInt(hostTimeout.getText()));
+        configuration.setStravaCheckHostBeforeUpload(checkHostBeforeUpload.isSelected());
     }
 
 

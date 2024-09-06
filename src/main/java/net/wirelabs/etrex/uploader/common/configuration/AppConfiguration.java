@@ -38,6 +38,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private transient Path userMapDefinitonsDir;
     private transient Path mapFile;
     private boolean usePolyLines;
+    private int stravaCheckTimeout;
+    private boolean stravaCheckHostBeforeUpload;
     private String lookAndFeelClassName;
 
     public AppConfiguration(String configFile) {
@@ -58,6 +60,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         userMapDefinitonsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR));
         mapFile = Paths.get(userMapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE));
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, "true"));
+        stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, "500"));
+        stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,"true"));
         lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
     }
 
@@ -82,6 +86,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(USER_MAP_DEFINITIONS_DIR, userMapDefinitonsDir.toString());
         properties.setProperty(MAP_FILE, mapFile.getFileName().toString());
         properties.setProperty(USE_POLYLINES, String.valueOf(usePolyLines));
+        properties.setProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(stravaCheckTimeout));
+        properties.setProperty(CHECK_HOSTS_BEFORE_UPLOAD, String.valueOf(stravaCheckHostBeforeUpload));
         properties.setProperty(LOOK_AND_FEEL_CLASS, String.valueOf(lookAndFeelClassName));
         super.store();
 

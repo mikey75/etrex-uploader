@@ -2,17 +2,21 @@ package net.wirelabs.etrex.uploader.strava.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.StravaException;
 
 import java.io.File;
-import java.net.URLConnection;
+import java.io.IOException;
+import java.net.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StravaUtil {
 
@@ -59,6 +63,41 @@ public class StravaUtil {
             EventBus.publish(EventType.RATELIMIT_INFO_UPDATE, info);
         }
     }
-}
 
+    /**
+     * Checks if ipv4 strava hosts are available for http connection
+     * @return yes or no
+     */
+    public static boolean isStravaUp(int hostTimeout) {
+
+        List<InetAddress> allStravaIpv4Hosts;
+
+        try {
+            allStravaIpv4Hosts = Arrays.stream(InetAddress.getAllByName("www.strava.com"))
+                    .filter(Inet4Address.class::isInstance)
+                    .collect(Collectors.toList());
+
+            for (InetAddress stravaHost : allStravaIpv4Hosts) {
+                String host = stravaHost.getHostAddress();
+                // if one of the hosts is unreachable - false
+                if (!isHostTcpHttpReachable(host, hostTimeout))
+                    return false;
+            }
+            // all hosts reachable
+            return true;
+
+        } catch (IOException e) {
+            log.error("Strava or network is down!");
+        }
+        return false;
+    }
+
+    private static boolean isHostTcpHttpReachable(String host, int timeOutMillis) throws IOException {
+
+            try (Socket soc = new Socket()) {
+                soc.connect(new InetSocketAddress(host, 80), timeOutMillis);
+            }
+            return true;
+    }
+}
 
