@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
-import org.junit.jupiter.api.BeforeEach;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -15,20 +15,15 @@ import java.util.Arrays;
 
 import static net.wirelabs.etrex.uploader.TestConstants.CONFIG_FILE;
 import static net.wirelabs.etrex.uploader.TestConstants.NONEXISTENT_FILE;
-import static net.wirelabs.etrex.uploader.tools.LogVerifier.initLogging;
-import static net.wirelabs.etrex.uploader.tools.LogVerifier.verifyLogged;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
  * Created 10/25/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-class AppConfigurationTest {
+class AppConfigurationTest extends BaseTest {
 
-    @BeforeEach
-    void init() {
-        initLogging();
-    }
+
 
     @Test
     void shouldAssertDefaultValuesWhenNoConfigFile() {
