@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.common;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created 10/30/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-class FileServiceTest {
+class FileServiceTest extends BaseTest {
 
     private static final LocalDateTime testDateTimeNow = LocalDateTime.of(2022, 1, 2, 10, 24, 11);
     private static final String expectedFormattedPart = "2022-01-02-102411";
@@ -72,12 +73,15 @@ class FileServiceTest {
         // then
         assertThat(targetDir).isDirectoryContaining(f -> f.getName().equals(track.getName()));
         assertThat(track).doesNotExist();
-        // when
+        // when saving track that exists (previous step)
         createTestTrack(track);
         fileService.archiveAndDelete(track);
         // then check if timestamped copy is created
         assertThat(targetDir).isDirectoryContaining(f ->
                 f.getName().equals(("file-" + expectedFormattedPart + ".gpx")));
+        verifyLogged("Target file exists. Changing name by adding current timestamp to filename");
+        verifyLoggedTimes(2, "Archiving " + track.getPath());
+        verifyLoggedTimes(2,"Deleting "+ track.getPath());
 
     }
 
@@ -93,10 +97,12 @@ class FileServiceTest {
 
         // then check if file was not deleted
         assertThat(track).exists().isFile();
+        verifyNeverLogged("Deleting " + track.getPath());
         // check if archived
 
         assertThat(targetDir).isDirectoryContaining(f ->
-                f.getName().equals(("Current.gpx")));
+                f.getName().equals(track.getName()));
+        verifyLogged("Archiving " + track.getPath());
 
     }
 
@@ -114,6 +120,7 @@ class FileServiceTest {
 
         assertThat(uploadDir).isEmptyDirectory(); // file not copied
         assertThat(track).exists(); // file not deleted
+        verifyNeverLogged("Deleting " + track.getPath()); // deletion not logged
     }
 
     private void createTestTrack(File track) throws IOException {

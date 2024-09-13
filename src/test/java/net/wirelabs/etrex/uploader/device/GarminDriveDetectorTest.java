@@ -5,6 +5,7 @@ import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.LogVerifier;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
@@ -22,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
-class GarminDriveDetectorTest {
+class GarminDriveDetectorTest extends BaseTest {
 
     private static final File GARMIN_DRIVE_ONE = new File("target/disk1");
     private static final File GARMIN_DRIVE_TWO = new File("target/disk2");
@@ -43,7 +45,7 @@ class GarminDriveDetectorTest {
 
     @BeforeEach
     void beforeEach(){
-        LogVerifier.initLogging();
+
         AppConfiguration testApplicationConfiguration = mock(AppConfiguration.class);
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
@@ -55,6 +57,7 @@ class GarminDriveDetectorTest {
 
         driveDetector = Mockito.spy(new GarminDeviceService(rootsProvider, testApplicationConfiguration));
     }
+
     @BeforeAll
     static void beforeAll() throws IOException {
         // create fake config
@@ -84,12 +87,16 @@ class GarminDriveDetectorTest {
         driveDetector.start();
         // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(driveDetector.getThreadHandle()).isNotNull());
+        verifyLogged("Starting Garmin device discovery thread");
+        verifyLogged("Registering already connected drives");
+        verifyLogged("Listening for new drives");
 
         // when
         driveDetector.stop();
         // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(driveDetector.getThreadHandle().isDone()).isTrue());
-
+        verifyLogged("Garmin Device Service stopping");
+        verifyLogged("Device observer stopped");
     }
 
     @Test
@@ -190,8 +197,8 @@ class GarminDriveDetectorTest {
         addDrive(GARMIN_DRIVE_ONE);
 
         waitUntilAsserted(Duration.ofSeconds(2), () -> {
-                    LogVerifier.verifyLogged("Listening for new drives");
-                    LogVerifier.verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
+                    verifyLogged("Listening for new drives");
+                    verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
                 });
     }
 

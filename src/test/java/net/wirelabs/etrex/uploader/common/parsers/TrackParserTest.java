@@ -1,26 +1,19 @@
 package net.wirelabs.etrex.uploader.common.parsers;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.jmaps.map.geo.Coordinate;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-
 import static net.wirelabs.etrex.uploader.TestConstants.*;
-import static net.wirelabs.etrex.uploader.tools.LogVerifier.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class TrackParserTest  {
+class TrackParserTest extends BaseTest {
 
     private  final TrackParser trackParser = new TrackParser();
-
-    @BeforeEach
-    void init() {
-        initLogging();
-    }
 
     @Test
     void shouldNotProcessBadXmlGpx() {
