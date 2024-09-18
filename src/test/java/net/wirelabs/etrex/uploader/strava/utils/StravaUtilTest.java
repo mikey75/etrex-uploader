@@ -21,6 +21,7 @@ class StravaUtilTest {
         String result = StravaUtil.guessUploadFileFormat(testFile);
         assertThat(result).isEqualTo(expected);
     }
+
     @Test
     void shouldThrowExceptionOnUnrecognizedUploadFile() {
         File testFile = new File("garmin.jpg");
@@ -30,7 +31,26 @@ class StravaUtilTest {
         assertThat(thrown).hasMessage("The file you're uploading is in unsupported format");
         
     }
-    
+
+    @Test
+    void shouldRecognizeFileContentForHttpRequest() {
+
+        File gpxFile = new File("file.gpx");
+        File txtFile = new File("file.txt");
+        File pngFile = new File("file.png");
+        String type = StravaUtil.guessContentTypeFromFileName(gpxFile);
+        // binary/track files are handled as application/octet-stream by http client
+        assertThat(type).isEqualTo("application/octet-stream");
+        // text files are just text
+        type = StravaUtil.guessContentTypeFromFileName(txtFile);
+        assertThat(type).isEqualTo("text/plain");
+        // jpeg is image/jpeg
+        type = StravaUtil.guessContentTypeFromFileName(pngFile);
+        assertThat(type).isEqualTo("image/png");
+
+    }
+
+
     private static Stream<Arguments> provideFilenames() {
         return Stream.of(
                 Arguments.of("file.gpx","gpx"),

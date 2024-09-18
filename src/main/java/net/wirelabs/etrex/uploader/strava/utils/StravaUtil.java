@@ -38,7 +38,7 @@ public class StravaUtil {
     }
 
 
-    public static String guessContentTypeFromFile(File file) {
+    public static String guessContentTypeFromFileName(File file) {
         String contentType = URLConnection.guessContentTypeFromName(file.getName());
         return Objects.requireNonNullElse(contentType, "application/octet-stream");
     }
