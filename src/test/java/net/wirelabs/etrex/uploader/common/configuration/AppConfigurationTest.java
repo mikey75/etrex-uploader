@@ -4,10 +4,12 @@ import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 import static net.wirelabs.etrex.uploader.TestConstants.CONFIG_FILE;
 import static net.wirelabs.etrex.uploader.TestConstants.NONEXISTENT_FILE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -24,6 +27,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AppConfigurationTest extends BaseTest {
 
 
+    @Test
+    void shouldLoadDefaultConfigIfNoneGiven() {
+
+        AppConfiguration c = new AppConfiguration();
+        // these are default values that are never modified in any code
+        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
+        assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
+        assertThat(c.isDeleteAfterUpload()).isTrue();
+        assertThat(c.isArchiveAfterUpload()).isTrue();
+
+    }
+
+    @Test
+    void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
+
+        AppConfiguration configuration = new AppConfiguration();
+        configuration.properties = Mockito.spy(configuration.properties);
+
+        doThrow(new IOException())
+                .when(configuration.properties)
+                .store(any(OutputStream.class), anyString());
+
+        configuration.store();
+
+        verifyLogged("Saving configuration "+ ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+        verifyLogged("Can't save configuration");
+
+    }
 
     @Test
     void shouldAssertDefaultValuesWhenNoConfigFile() {
@@ -44,6 +75,8 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + "null");
         assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
+        assertThat(c.getStravaCheckTimeout()).isEqualTo(500);
+        assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
         verifyLogged(NONEXISTENT_FILE.getPath() +" file not found or cannot be loaded");
     }
 

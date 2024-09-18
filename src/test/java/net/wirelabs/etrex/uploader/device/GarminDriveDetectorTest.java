@@ -2,11 +2,11 @@ package net.wirelabs.etrex.uploader.device;
 
 
 import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.tools.LogVerifier;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
@@ -17,12 +17,13 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -36,7 +37,8 @@ class GarminDriveDetectorTest extends BaseTest {
 
     private static final File GARMIN_DIR_ONE = new File(GARMIN_DRIVE_ONE, "GARMIN");
     private static final File GARMIN_DIR_TWO = new File(GARMIN_DRIVE_TWO, "GaRmin");
-    private static final File DEVICE_XML_FILE = new File("src/test/resources/garmin/GarminDevice.xml");
+    private static final File DEVICE_XML_FILE = new File("src/test/resources/garmin", Constants.GARMIN_DEVICE_XML);
+    private static final File DEVICE_XML_FILE_INVALID = new File("src/test/resources/garmin/GarminDevice-invalid.xml");
 
     private GarminDeviceService driveDetector;
 
@@ -50,7 +52,7 @@ class GarminDriveDetectorTest extends BaseTest {
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
         when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
-        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
+        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(System.getProperty("user.home") + File.separator + Constants.DEFAULT_LOCAL_STORE));
 
         RootsProvider rootsProvider = Mockito.spy(new RootsProvider());
         doReturn(roots).when(rootsProvider).getRoots();
@@ -200,6 +202,22 @@ class GarminDriveDetectorTest extends BaseTest {
                     verifyLogged("Listening for new drives");
                     verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
                 });
+    }
+
+    @Test
+    void shouldLogWarningWhenXMLisInvalid() throws IOException  {
+
+        driveDetector.start();
+
+        // when
+        Files.copy(DEVICE_XML_FILE_INVALID.toPath(), new File(GARMIN_DRIVE_ONE, Constants.GARMIN_DEVICE_XML).toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        addDrive(GARMIN_DRIVE_ONE);
+        // when garmin xml is invalid, we should issue warning and the reason but still listen for new drives
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
+            verifyLogged("Can't parse " + Constants.GARMIN_DEVICE_XML + " on drive " + GARMIN_DRIVE_ONE);
+            verifyLogged("Listening for new drives");
+        });
     }
 
     @AfterEach

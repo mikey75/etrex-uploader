@@ -116,7 +116,7 @@ public class StravaClient  {
 
     private RequestBody buildUploadRequest(File file, String name, String description, SportType sportType, boolean virtual, boolean commute) throws StravaException {
 
-        String dataType = StravaUtil.guessContentTypeFromFile(file);
+        String dataType = StravaUtil.guessContentTypeFromFileName(file);
         String fileFormat = StravaUtil.guessUploadFileFormat(file);
 
         return new MultipartBuilder().type(MultipartBuilder.FORM)
