@@ -4,6 +4,7 @@ package net.wirelabs.etrex.uploader.common;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.jmaps.map.geo.Coordinate;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 
 /**
@@ -15,6 +16,11 @@ public class Constants {
     public static final String APPLICATION_IDENTIFICATION = "Etrex Uploader ver: 1.0.0 (c) Michał Szwaczko (c) 2022 WireLabs Technologies";
     public static final Coordinate DEFAULT_MAP_START_LOCATION = new Coordinate(22.565628, 51.247717); // Lublin,PL!
     public static final int DEFAULT_MAP_START_ZOOM = 12;
+    public static final String COPYRIGHT_SIGN = Character.toString( 169 );
+    public static final String APPLICATION_IDENTIFICATION = "Etrex Uploader ver: "
+            + SystemUtils.getAppVersion()
+            + " " + COPYRIGHT_SIGN + " "
+            + "2022 Michał Szwaczko, WireLabs Technologies";
 
     public static final String STRAVA_DEFAULT_APP_ACCESS_SCOPE = "activity:read,activity:write,read_all";
     public static final String STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize";

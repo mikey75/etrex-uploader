@@ -5,6 +5,7 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
 
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.eventbus.EventBus;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,9 @@ public class EtrexUploaderRunner {
 
     public static void main(String[] args) {
 
-        checkGraphicsEnvironmentPresent();
         configureCustomLogbackLogging();
+        log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
+        checkGraphicsEnvironmentPresent();
         setGlobalFontSize(10);
 
         try {

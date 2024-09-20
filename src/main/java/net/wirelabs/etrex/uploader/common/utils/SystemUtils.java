@@ -3,9 +3,13 @@ package net.wirelabs.etrex.uploader.common.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.jmaps.map.Defaults;
+import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -55,5 +59,11 @@ public class SystemUtils {
         }
     }
 
-
+    public static String getAppVersion() {
+        try {
+            return FileUtils.readFileToString(new File("project.version"), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "";
+        }
+    }
 }
