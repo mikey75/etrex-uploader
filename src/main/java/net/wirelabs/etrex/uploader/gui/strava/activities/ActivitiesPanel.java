@@ -8,6 +8,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
+import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
 import net.wirelabs.etrex.uploader.strava.model.LatLng;
 import net.wirelabs.etrex.uploader.strava.model.StreamSet;
 import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
@@ -15,11 +16,9 @@ import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.eventbus.IEventType;
-import net.wirelabs.eventbus.swing.EventAwarePanel;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -34,7 +33,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 
 @Slf4j
-public class ActivitiesPanel extends EventAwarePanel {
+public class ActivitiesPanel extends EventAwareBorderedPanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
@@ -46,6 +45,7 @@ public class ActivitiesPanel extends EventAwarePanel {
     private int page = 1;
 
     public ActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
+        super("Strava");
         this.configuration = configuration;
         this.stravaService = stravaService;
         createVisualComponent();
@@ -53,7 +53,7 @@ public class ActivitiesPanel extends EventAwarePanel {
     }
 
     private void createVisualComponent() {
-        setBorder(new TitledBorder("Strava"));
+
         setLayout(new MigLayout("", "[grow][]", "[grow][grow]"));
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");

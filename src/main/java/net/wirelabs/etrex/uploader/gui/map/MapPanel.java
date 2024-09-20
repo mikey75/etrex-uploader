@@ -4,12 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.eventbus.IEventType;
-import net.wirelabs.eventbus.swing.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
 import net.wirelabs.etrex.uploader.common.parsers.TrackParser;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
@@ -19,7 +19,6 @@ import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -30,7 +29,7 @@ import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_LOC
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
 
 @Slf4j
-public class MapPanel extends EventAwarePanel {
+public class MapPanel extends EventAwareBorderedPanel {
 
 
 
@@ -44,6 +43,7 @@ public class MapPanel extends EventAwarePanel {
 
 
     public MapPanel(AppConfiguration configuration) {
+        super("Map");
         this.configuration = configuration;
         this.routePainter = new RoutePainter(configuration);
         this.trackParser = new TrackParser();
@@ -59,7 +59,6 @@ public class MapPanel extends EventAwarePanel {
         mapViewer.addUserOverlay(routePainter);
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
 
-        setBorder(new TitledBorder("Map"));
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         add(mapViewer, "cell 0 0,grow");
 

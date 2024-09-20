@@ -5,16 +5,15 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.eventbus.IEventType;
-import net.wirelabs.eventbus.swing.EventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.List;
  * Created 9/8/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class GarminDeviceBrowser extends EventAwarePanel {
+public class GarminDeviceBrowser extends EventAwareBorderedPanel {
 
     private final List<File> garminDrives = new ArrayList<>();
     private final JLabel device = new JLabel();
@@ -45,8 +44,7 @@ public class GarminDeviceBrowser extends EventAwarePanel {
     private final FileTree tree;
 
     public GarminDeviceBrowser(UploadService uploadService) {
-
-        setBorder(new TitledBorder(null, "Garmin device", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        super("Garmin device");
         setLayout(new MigLayout("", "[grow]", "[][][][][][grow]"));
 
         add(lblDevice, "flowx,cell 0 0,alignx left");
