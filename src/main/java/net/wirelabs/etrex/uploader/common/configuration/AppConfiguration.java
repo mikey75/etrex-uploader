@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.common.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.wirelabs.etrex.uploader.common.Constants;
+
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 
@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.common.Constants.*;
 import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationPropertyKeys.*;
 
 /**

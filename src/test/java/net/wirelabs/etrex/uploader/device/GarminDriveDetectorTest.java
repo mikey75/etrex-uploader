@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.common.Constants.HOME_DIR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -52,7 +53,7 @@ class GarminDriveDetectorTest extends BaseTest {
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
         when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
-        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(System.getProperty("user.home") + File.separator + Constants.DEFAULT_LOCAL_STORE));
+        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(HOME_DIR + File.separator + Constants.DEFAULT_LOCAL_STORE));
 
         RootsProvider rootsProvider = Mockito.spy(new RootsProvider());
         doReturn(roots).when(rootsProvider).getRoots();

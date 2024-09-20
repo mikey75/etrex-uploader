@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
+import static net.wirelabs.etrex.uploader.common.Constants.CURRENT_WORK_DIR;
 
 
 @Slf4j
@@ -101,8 +102,7 @@ public class EtrexUploader extends JFrame {
     public void getMapDefinitionFiles(AppConfiguration configuration) {
 
         // get and sort maps from app's default location
-        String currentDir = System.getProperty("user.dir");
-        List<File> defaultMaps = FileUtils.listDirectory(new File(currentDir + File.separator + "maps")).stream()
+        List<File> defaultMaps = FileUtils.listDirectory(new File(CURRENT_WORK_DIR + File.separator + "maps")).stream()
                 .sorted(Comparator.comparing(File::getName))
                 .collect(Collectors.toList());
 
