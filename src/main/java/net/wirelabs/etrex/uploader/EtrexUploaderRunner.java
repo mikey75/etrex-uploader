@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static net.wirelabs.etrex.uploader.common.Constants.CURRENT_WORK_DIR;
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
 import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphicsEnvironmentPresent;
 
@@ -47,9 +48,8 @@ public class EtrexUploaderRunner {
 
     private static void configureCustomLogbackLogging() {
 
-        String currentDir = System.getProperty("user.dir");
         String logbackXml = "logback.xml";
-        String path = currentDir + File.separator + logbackXml;
+        String path = CURRENT_WORK_DIR + File.separator + logbackXml;
         Path logbackXmlLocation = Paths.get(path);
 
         try (InputStream configStream = Files.newInputStream(logbackXmlLocation)) {
