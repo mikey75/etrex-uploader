@@ -4,11 +4,13 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
+import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.util.Collections;
+import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CHANGED;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -82,7 +84,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
-
+        EventBus.publish(USER_STORAGE_ROOTS_CHANGED, configuration.getUserStorageRoots());
     }
 
 }
