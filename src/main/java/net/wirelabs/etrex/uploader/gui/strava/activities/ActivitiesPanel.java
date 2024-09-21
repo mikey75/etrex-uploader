@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
+import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 
 @Slf4j
 public class ActivitiesPanel extends EventAwarePanel {
@@ -123,12 +125,31 @@ public class ActivitiesPanel extends EventAwarePanel {
      */
     private void activitySelected(ListSelectionEvent event) {
         if (!event.getValueIsAdjusting()) {
+            if (activityDoesNotHaveRoute()) {
+                warnAndResetMap();
+                return;
+            }
             if (configuration.isUsePolyLines()) {
                 drawTrackFromSummaryPolyLine();
             } else {
                 drawTrackFromActivityStream();
             }
         }
+    }
+
+    private void warnAndResetMap() {
+        SwingUtils.infoMsg("This activity does not contain a track/route\nWill reset map to default!");
+        EventBus.publish(MAP_RESET, DEFAULT_MAP_START_LOCATION);
+    }
+
+    /**
+     * check if activity has route, there's always polyline present so if it is empty
+     * this means activity has no route/track uploaded
+     */
+    private boolean activityDoesNotHaveRoute() {
+
+        SummaryActivity summaryActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
+        return summaryActivity.getMap().getSummaryPolyline().isEmpty();
     }
 
     private void drawTrackFromSummaryPolyLine() {

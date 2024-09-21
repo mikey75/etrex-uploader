@@ -16,6 +16,7 @@ import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboB
 import net.wirelabs.jmaps.map.MapViewer;
 import net.wirelabs.jmaps.map.cache.DirectoryBasedCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
+import net.wirelabs.jmaps.map.painters.Painter;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -25,10 +26,13 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_LOCATION;
+import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
+
 @Slf4j
 public class MapPanel extends EventAwarePanel {
 
-    private static final Coordinate LUBLIN_PL = new Coordinate(22.565628, 51.247717);
+
 
     private final AppConfiguration configuration;
     private final MapViewer mapViewer = new MapViewer();
@@ -47,8 +51,8 @@ public class MapPanel extends EventAwarePanel {
 
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);
-        mapViewer.setZoom(12);
-        mapViewer.setHome(LUBLIN_PL);
+        mapViewer.setZoom(DEFAULT_MAP_START_ZOOM);
+        mapViewer.setHome(DEFAULT_MAP_START_LOCATION);
         mapViewer.setImageCacheSize(32000);
         mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
@@ -108,11 +112,21 @@ public class MapPanel extends EventAwarePanel {
             routePainter.setColor((Color) evt.getPayload());
             mapViewer.repaint();
         }
+
+        if (evt.getEventType() == EventType.MAP_RESET) {
+            for (Painter<?> painter : mapViewer.getUserOverlays()) {
+                painter.getObjects().clear();
+            }
+            // reset map to default start position, and current zoom
+            mapViewer.setPositionAndZoom(DEFAULT_MAP_START_LOCATION, DEFAULT_MAP_START_ZOOM);
+            mapViewer.repaint();
+
+        }
     }
 
     @Override
     protected Collection<IEventType> subscribeEvents() {
-        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK);
+        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK, EventType.MAP_RESET);
     }
 
     private void drawTrackOnMap(Event evt) {
