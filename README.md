@@ -14,7 +14,7 @@ remotely via the API (like this application does) you need to setup your own API
 Go to https://www.strava.com/settings/api, setup your API Application,  and use the  application client secret and id in the initial 
 etrex-uploader setup dialog.
 
-![](src/main/resources/window2.png)
+![](src/main/resources/setupApiApp.png)
 
 IMPORTANT!
 =
