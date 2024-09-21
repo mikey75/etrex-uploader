@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 
-import static net.wirelabs.etrex.uploader.common.Constants.AUTHORIZATION_FAIL_MSG;
-import static net.wirelabs.etrex.uploader.common.Constants.AUTHORIZATION_OK_MSG;
+import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_FAIL_MSG;
+import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_OK_MSG;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
