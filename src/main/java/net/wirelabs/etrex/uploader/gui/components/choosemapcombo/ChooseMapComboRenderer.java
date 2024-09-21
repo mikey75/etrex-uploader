@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.components.choosemapcombo;
 
-import net.wirelabs.jmaps.map.model.map.MapDefinition;
+import net.wirelabs.jmaps.model.map.MapDocument;
 import net.wirelabs.jmaps.map.readers.MapReader;
 
 import javax.swing.*;
@@ -15,8 +15,8 @@ public class ChooseMapComboRenderer extends BasicComboBoxRenderer {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         // there is always at least one item so no need to check emptiness
         File item = (File) value;
-        MapDefinition m = MapReader.loadMapDefinitionFile(item);
-        setText(m.getName());
+        MapDocument m = MapReader.loadMapDefinitionFile(item);
+        setText(m.getMap().getName());
         return this;
     }
 }
