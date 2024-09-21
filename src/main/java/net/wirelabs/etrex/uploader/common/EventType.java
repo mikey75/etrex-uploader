@@ -8,6 +8,7 @@ import net.wirelabs.eventbus.IEventType;
 public enum EventType implements IEventType {
     // map events
     MAP_DISPLAY_TRACK,
+    MAP_RESET,
    
     // garmin drive events
     DEVICE_DRIVE_REGISTERED,
