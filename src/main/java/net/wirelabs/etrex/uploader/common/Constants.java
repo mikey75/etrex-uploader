@@ -16,7 +16,6 @@ public class Constants {
     public static final String CURRENT_WORK_DIR = System.getProperty("user.dir");
     public static final String HOME_DIR = System.getProperty("user.home");
 
-    public static final String APPLICATION_IDENTIFICATION = "Etrex Uploader ver: 1.0.0 (c) Michał Szwaczko (c) 2022 WireLabs Technologies";
     public static final Coordinate DEFAULT_MAP_START_LOCATION = new Coordinate(22.565628, 51.247717); // Lublin,PL!
     public static final int DEFAULT_MAP_START_ZOOM = 12;
     public static final String COPYRIGHT_SIGN = Character.toString( 169 );
