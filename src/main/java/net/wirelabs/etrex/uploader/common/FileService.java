@@ -1,18 +1,14 @@
 package net.wirelabs.etrex.uploader.common;
 
-import static net.wirelabs.etrex.uploader.common.Constants.TRACKS_REPO;
-import static net.wirelabs.etrex.uploader.common.Constants.UPLOADED_FILES_SUBFOLDER;
-import static net.wirelabs.etrex.uploader.common.utils.FileUtils.getExtensionPart;
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 
 /**
  * Created 10/28/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -24,6 +20,11 @@ public class FileService {
     private final DateTimeFormatter yearMonthFormatter = DateTimeFormatter.ofPattern("yyyy"+File.separator +"MM");
 
     private final AppConfiguration appConfiguration;
+
+    // these are fileservice only, local-store based subdirs - the only configurable is the storage root in appConfiguration
+    // so we moved them here from general constants
+    static final String UPLOADED_FILES_SUBFOLDER = "archived-uploads";
+    static final String TRACKS_REPO = "tracks-archive";
 
     public FileService(AppConfiguration appConfiguration) throws IOException {
         this.appConfiguration = appConfiguration;

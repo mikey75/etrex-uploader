@@ -34,8 +34,8 @@ class AppConfigurationTest extends BaseTest {
     @BeforeEach
     void makeACopyOfCurrentConfigFile() throws IOException {
 
-        currentConfig = new File(System.getProperty("user.dir"), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-        currentConfigCopy = new File(System.getProperty("user.dir"), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
+        currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+        currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
         if (currentConfig.exists()) {
             Files.copy(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
@@ -93,7 +93,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getApiUsageWarnPercent()).isEqualTo(85);
         assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(60);
         assertThat(c.getMapTrackColor()).isEqualTo("#ff0000");
-        assertThat(c.getUserMapDefinitonsDir()).hasToString(System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR);
+        assertThat(c.getUserMapDefinitonsDir()).hasToString(Constants.DEFAULT_USER_MAP_DIR);
         assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + Constants.DEFAULT_MAP);
         assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
