@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_LOCATION;
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
 
 @Slf4j
@@ -38,13 +37,14 @@ public class MapPanel extends EventAwareBorderedPanel {
 
     private final transient RoutePainter routePainter;
     private final OverlayEnabler overlayEnabler;
-
+    private Coordinate mapHome;
     private final transient TrackParser trackParser;
 
 
     public MapPanel(AppConfiguration configuration) {
         super("Map");
         this.configuration = configuration;
+        this.mapHome = new Coordinate(configuration.getMapHomeLongitude(),configuration.getMapHomeLattitude());
         this.routePainter = new RoutePainter(configuration);
         this.trackParser = new TrackParser();
         this.overlayEnabler = new OverlayEnabler(mapViewer, routePainter);
@@ -52,11 +52,12 @@ public class MapPanel extends EventAwareBorderedPanel {
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);
         mapViewer.setZoom(DEFAULT_MAP_START_ZOOM);
-        mapViewer.setHome(DEFAULT_MAP_START_LOCATION);
+        mapViewer.setHome(mapHome);
         mapViewer.setImageCacheSize(32000);
         mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
         mapViewer.addUserOverlay(routePainter);
+        mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
 
         setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -117,15 +118,19 @@ public class MapPanel extends EventAwareBorderedPanel {
                 painter.getObjects().clear();
             }
             // reset map to default start position, and current zoom
-            mapViewer.setPositionAndZoom(DEFAULT_MAP_START_LOCATION, DEFAULT_MAP_START_ZOOM);
+            mapViewer.setPositionAndZoom(mapHome, DEFAULT_MAP_START_ZOOM);
             mapViewer.repaint();
+
+        }
+        if (evt.getEventType() == EventType.MAP_HOME_CHANGED) {
+            mapHome = (Coordinate) evt.getPayload();
 
         }
     }
 
     @Override
     protected Collection<IEventType> subscribeEvents() {
-        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK, EventType.MAP_RESET);
+        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK, EventType.MAP_RESET, EventType.MAP_HOME_CHANGED);
     }
 
     private void drawTrackOnMap(Event evt) {

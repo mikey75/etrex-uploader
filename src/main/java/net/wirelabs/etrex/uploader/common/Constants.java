@@ -17,7 +17,7 @@ public class Constants {
     public static final String CURRENT_WORK_DIR = System.getProperty("user.dir");
     public static final String HOME_DIR = System.getProperty("user.home");
 
-    public static final Coordinate DEFAULT_MAP_START_LOCATION = new Coordinate(22.565628, 51.247717); // Lublin,PL!
+    public static final Coordinate DEFAULT_MAP_HOME_LOCATION = new Coordinate(22.565628, 51.247717); // Lublin,PL!
     public static final int DEFAULT_MAP_START_ZOOM = 12;
     public static final String COPYRIGHT_SIGN = Character.toString( 169 );
     public static final String APPLICATION_IDENTIFICATION = String.format("Etrex Uploader ver: %s (%s) 2022 Michał Szwaczko, WireLabs Technologies", EtrexUploaderRunner.APP_VERSION, COPYRIGHT_SIGN);
