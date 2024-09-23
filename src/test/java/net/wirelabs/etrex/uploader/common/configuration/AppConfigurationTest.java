@@ -19,7 +19,6 @@ import java.util.Arrays;
 
 import static net.wirelabs.etrex.uploader.TestConstants.CONFIG_FILE;
 import static net.wirelabs.etrex.uploader.TestConstants.NONEXISTENT_FILE;
-import static net.wirelabs.etrex.uploader.common.Constants.HOME_DIR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
