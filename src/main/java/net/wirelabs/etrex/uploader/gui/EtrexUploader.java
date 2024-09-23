@@ -12,7 +12,7 @@ import net.wirelabs.etrex.uploader.gui.browsers.LocalStorageBrowser;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
-import net.wirelabs.etrex.uploader.gui.strava.activities.ActivitiesPanel;
+import net.wirelabs.etrex.uploader.gui.strava.activities.StravaActivitiesPanel;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
@@ -40,7 +40,7 @@ public class EtrexUploader extends JFrame {
     private LocalStorageBrowser storageBrowser;
     private MapPanel mapPanel;
     private UserAccountPanel athletePanel;
-    private ActivitiesPanel activitiesPanel;
+    private StravaActivitiesPanel activitiesPanel;
 
 
     public EtrexUploader(ApplicationStartupContext ctx) {
@@ -60,7 +60,7 @@ public class EtrexUploader extends JFrame {
 
             splash.update("Initializing Strava GUI components");
             athletePanel = new UserAccountPanel(ctx.getStravaService(), ctx.getAppConfiguration());
-            activitiesPanel = new ActivitiesPanel(ctx.getStravaService(), ctx.getAppConfiguration());
+            activitiesPanel = new StravaActivitiesPanel(ctx.getStravaService(), ctx.getAppConfiguration());
 
             splash.update("Initializing browsers");
             UploadService uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());
