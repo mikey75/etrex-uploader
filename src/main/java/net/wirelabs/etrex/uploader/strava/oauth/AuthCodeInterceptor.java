@@ -95,7 +95,7 @@ class AuthCodeInterceptor extends NanoHTTPD {
     public static final String AUTHORIZATION_FAIL_MSG =
 
             "<center>" +
-                "<h1>FAILURE! FAILURE! FAILURE!</h1>" +
+                "<h1>FAILURE!</h1>" +
                 "<h1>Allowing etrex-uploader access to your Strava account failed</h1>" +
                 "<h2>You can close your browser now and investigate logs</h2>" +
             "</center>";
