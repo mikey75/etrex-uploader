@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_LOCATION;
+import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 
@@ -139,7 +139,7 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
 
     private void warnAndResetMap() {
         SwingUtils.infoMsg("This activity does not contain a track/route\nWill reset map to default!");
-        EventBus.publish(MAP_RESET, DEFAULT_MAP_START_LOCATION);
+        EventBus.publish(MAP_RESET, DEFAULT_MAP_HOME_LOCATION);
     }
 
     /**
