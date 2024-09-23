@@ -3,6 +3,8 @@ package net.wirelabs.etrex.uploader.common.configuration;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -26,17 +28,31 @@ import static org.mockito.Mockito.*;
  */
 class AppConfigurationTest extends BaseTest {
 
+    private File currentConfig;
+    private File currentConfigCopy;
+
+    @BeforeEach
+    void makeACopyOfCurrentConfigFile() throws IOException {
+
+        currentConfig = new File(System.getProperty("user.dir"), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+        currentConfigCopy = new File(System.getProperty("user.dir"), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
+        if (currentConfig.exists()) {
+            Files.copy(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    @AfterEach
+    void restoreCopiedConfig() throws IOException {
+        if (currentConfigCopy.exists()) {
+            Files.copy(currentConfigCopy.toPath(), currentConfig.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
 
     @Test
-    void shouldLoadDefaultConfigIfNoneGiven() {
+    void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() {
 
         AppConfiguration c = new AppConfiguration();
-        // these are default values that are never modified in any code
-        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-        assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
-        assertThat(c.isDeleteAfterUpload()).isTrue();
-        assertThat(c.isArchiveAfterUpload()).isTrue();
-
+        assertDefaultValues(c);
     }
 
     @Test
@@ -51,14 +67,20 @@ class AppConfigurationTest extends BaseTest {
 
         configuration.store();
 
-        verifyLogged("Saving configuration "+ ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+        verifyLogged("Saving configuration " + ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
         verifyLogged("Can't save configuration");
 
     }
 
     @Test
-    void shouldAssertDefaultValuesWhenNoConfigFile() {
+    void shouldAssertDefaultValuesWhenConfigFileNonExistent() {
         AppConfiguration c = new AppConfiguration(NONEXISTENT_FILE.getPath());
+        assertDefaultValues(c);
+        verifyLogged(NONEXISTENT_FILE.getPath() + " file not found or cannot be loaded. Setting default config values.");
+
+    }
+
+    private void assertDefaultValues(AppConfiguration c) {
         assertThat(c.getStorageRoot()).isEqualTo(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
         assertThat(c.getUserStorageRoots()).isEmpty();
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
@@ -72,12 +94,11 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(60);
         assertThat(c.getMapTrackColor()).isEqualTo("#ff0000");
         assertThat(c.getUserMapDefinitonsDir()).hasToString(System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR);
-        assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + "null");
+        assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + Constants.DEFAULT_MAP);
         assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
         assertThat(c.getStravaCheckTimeout()).isEqualTo(500);
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
-        verifyLogged(NONEXISTENT_FILE.getPath() +" file not found or cannot be loaded");
     }
 
     @Test
@@ -89,7 +110,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.isDeleteAfterUpload()).isFalse();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-        verifyLogged("Loading " +CONFIG_FILE.getPath());
+        verifyLogged("Loading " + CONFIG_FILE.getPath());
 
     }
 
