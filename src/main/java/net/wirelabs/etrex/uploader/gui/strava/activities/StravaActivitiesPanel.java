@@ -33,7 +33,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 
 @Slf4j
-public class ActivitiesPanel extends EventAwareBorderedPanel {
+public class StravaActivitiesPanel extends EventAwareBorderedPanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
@@ -44,7 +44,7 @@ public class ActivitiesPanel extends EventAwareBorderedPanel {
     private final AppConfiguration configuration;
     private int page = 1;
 
-    public ActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
+    public StravaActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
         super("Strava");
         this.configuration = configuration;
         this.stravaService = stravaService;
