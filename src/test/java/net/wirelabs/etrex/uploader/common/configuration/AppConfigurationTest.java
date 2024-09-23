@@ -33,11 +33,16 @@ class AppConfigurationTest extends BaseTest {
 
     @BeforeEach
     void makeACopyOfCurrentConfigFile() throws IOException {
-
+        /*
+            since the test works on config file that might be present on local computer during development
+            lets first preserve it, and then delete so that the test has always
+            default no-config configuration
+         */
         currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
         currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
         if (currentConfig.exists()) {
             Files.copy(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.delete(currentConfig.toPath());
         }
     }
 
@@ -99,6 +104,8 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
         assertThat(c.getStravaCheckTimeout()).isEqualTo(500);
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
+        assertThat(c.getMapHomeLattitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
+        assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
     }
 
     @Test
@@ -120,7 +127,9 @@ class AppConfigurationTest extends BaseTest {
         String[] expectedChange = {
                 "system.wait.drive.timeout=10",
                 "system.drive.observer.delay=100",
-                "system.backup.after.upload=false"
+                "system.backup.after.upload=false",
+                "map.home.lattitude=10.111",
+                "map.home.longitude=30.111"
         };
 
         // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
@@ -133,6 +142,8 @@ class AppConfigurationTest extends BaseTest {
         c.setArchiveAfterUpload(false);
         c.setDeviceDiscoveryDelay(100L);
         c.setWaitDriveTimeout(10L);
+        c.setMapHomeLattitude(10.111);
+        c.setMapHomeLongitude(30.111);
         c.save();
 
         verifyLogged("Loading " + newConfigFile.getPath());

@@ -42,6 +42,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int stravaCheckTimeout;
     private boolean stravaCheckHostBeforeUpload;
     private String lookAndFeelClassName;
+    private Double mapHomeLattitude;
+    private Double mapHomeLongitude;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -64,6 +66,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, "500"));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,"true"));
         lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
+        mapHomeLattitude = Double.valueOf(properties.getProperty(MAP_HOME_LATTITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
+        mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
     }
 
     public AppConfiguration() {
@@ -90,6 +94,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(stravaCheckTimeout));
         properties.setProperty(CHECK_HOSTS_BEFORE_UPLOAD, String.valueOf(stravaCheckHostBeforeUpload));
         properties.setProperty(LOOK_AND_FEEL_CLASS, String.valueOf(lookAndFeelClassName));
+        properties.setProperty(MAP_HOME_LONGITUDE, String.valueOf(mapHomeLongitude));
+        properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
         super.store();
 
     }
