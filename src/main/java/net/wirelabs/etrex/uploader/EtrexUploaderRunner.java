@@ -26,16 +26,14 @@ import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphics
 @Slf4j
 public class EtrexUploaderRunner {
 
-
-   @Getter
-   private static String appVersion;
+   public static String APP_VERSION;
 
     public static void main(String[] args) {
 
         try {
-            appVersion = SystemUtils.getAppVersion();
+            APP_VERSION = SystemUtils.getAppVersion();
             configureCustomLogbackLogging();
-            log.info("Etrex Uploader ver {} starting up....", appVersion);
+            log.info("Etrex Uploader ver {} starting up....", APP_VERSION);
             checkGraphicsEnvironmentPresent();
             setGlobalFontSize(10);
 
