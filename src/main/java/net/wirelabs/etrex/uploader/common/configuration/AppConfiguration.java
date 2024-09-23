@@ -45,7 +45,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
 
     public AppConfiguration(String configFile) {
         super(configFile);
-        storageRoot = Paths.get(properties.getProperty(STORAGE_ROOT, System.getProperty("user.home") + File.separator + Constants.DEFAULT_LOCAL_STORE));
+        storageRoot = Paths.get(properties.getProperty(STORAGE_ROOT, Constants.DEFAULT_LOCAL_STORE));
         userStorageRoots = ListUtils.convertStringListToPaths(properties.getProperty(USER_STORAGE_ROOTS, Constants.EMPTY_STRING));
         deviceDiscoveryDelay = Long.valueOf(properties.getProperty(DRIVE_OBSERVER_DELAY, "500"));
         waitDriveTimeout = Long.valueOf(properties.getProperty(WAIT_DRIVE_TIMEOUT, "15000"));
@@ -58,7 +58,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, "85"));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, "60"));
         mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, "#ff0000");
-        userMapDefinitonsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR));
+        userMapDefinitonsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, Constants.DEFAULT_USER_MAP_DIR));
         mapFile = Paths.get(userMapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE, Constants.DEFAULT_MAP));
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, "true"));
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, "500"));

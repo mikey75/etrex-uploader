@@ -57,7 +57,7 @@ class FileServiceTest extends BaseTest {
                 .map(File::getName)
                 .collect(Collectors.toList());
 
-        assertThat(s).containsOnly(Constants.UPLOADED_FILES_SUBFOLDER, Constants.TRACKS_REPO);
+        assertThat(s).containsOnly(FileService.UPLOADED_FILES_SUBFOLDER, FileService.TRACKS_REPO);
 
     }
 
@@ -65,7 +65,7 @@ class FileServiceTest extends BaseTest {
     void archiveAndDeleteTest() throws IOException {
 
         File track = new File("target/file.gpx");
-        File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);
+        File uploadDir = new File(root, FileService.UPLOADED_FILES_SUBFOLDER);
         File targetDir = new File(uploadDir, "2022/01");
         createTestTrack(track);
         //when
@@ -88,7 +88,7 @@ class FileServiceTest extends BaseTest {
     @Test
     void shouldNotDeleteCurrentgpx() throws IOException {
         File track = new File("target/Current.gpx");
-        File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);
+        File uploadDir = new File(root, FileService.UPLOADED_FILES_SUBFOLDER);
         File targetDir = new File(uploadDir, "2022/01");
         createTestTrack(track);
         //when
@@ -112,7 +112,7 @@ class FileServiceTest extends BaseTest {
         doReturn(false).when(appConfiguration).isDeleteAfterUpload();
 
         File track = new File("target/file.gpx");
-        File uploadDir = new File(root, Constants.UPLOADED_FILES_SUBFOLDER);
+        File uploadDir = new File(root, FileService.UPLOADED_FILES_SUBFOLDER);
 
         createTestTrack(track);
         //when
