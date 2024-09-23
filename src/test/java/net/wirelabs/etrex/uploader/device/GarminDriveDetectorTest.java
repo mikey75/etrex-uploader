@@ -53,7 +53,7 @@ class GarminDriveDetectorTest extends BaseTest {
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
         when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
-        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(HOME_DIR + File.separator + Constants.DEFAULT_LOCAL_STORE));
+        when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(Constants.DEFAULT_LOCAL_STORE));
 
         RootsProvider rootsProvider = Mockito.spy(new RootsProvider());
         doReturn(roots).when(rootsProvider).getRoots();

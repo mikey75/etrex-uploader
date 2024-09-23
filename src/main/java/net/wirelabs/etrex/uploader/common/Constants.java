@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
+import java.io.File;
 
 /**
  * Created 10/27/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -27,10 +28,10 @@ public class Constants {
     public static final String STRAVA_ACTIVITY_URL = "https://www.strava.com/activities";
     public static final String DEFAULT_MAP = "defaultMap.xml";
     public static final String GARMIN_DEVICE_XML = "GarminDevice.xml";
-    public static final String DEFAULT_LOCAL_STORE = "etrex-uploader-store";
-    public static final String DEFAULT_USER_MAP_DIR = "etrex-uploader-maps";
-    public static final String UPLOADED_FILES_SUBFOLDER = "archived-uploads";
-    public static final String TRACKS_REPO = "tracks-archive";
+    // these are home dir based
+    public static final String DEFAULT_LOCAL_STORE = HOME_DIR + File.separator +"etrex-uploader-store";
+    public static final String DEFAULT_USER_MAP_DIR = HOME_DIR + File.separator +"etrex-uploader-maps";
+
     public static final String EMPTY_STRING = "";
     public static final String LINUX_USB_MOUNTDIR = "/media";
 
