@@ -59,11 +59,8 @@ public class SystemUtils {
         }
     }
 
-    public static String getAppVersion() {
-        try {
+    public static String getAppVersion() throws IOException{
             return FileUtils.readFileToString(new File("project.version"), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            return "";
-        }
+
     }
 }

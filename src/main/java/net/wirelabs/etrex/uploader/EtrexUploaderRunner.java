@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
@@ -25,18 +26,24 @@ import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphics
 @Slf4j
 public class EtrexUploaderRunner {
 
+
+   @Getter
+   private static String appVersion;
+
     public static void main(String[] args) {
 
-        configureCustomLogbackLogging();
-        log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
-        checkGraphicsEnvironmentPresent();
-        setGlobalFontSize(10);
-
         try {
+            appVersion = SystemUtils.getAppVersion();
+            configureCustomLogbackLogging();
+            log.info("Etrex Uploader ver {} starting up....", appVersion);
+            checkGraphicsEnvironmentPresent();
+            setGlobalFontSize(10);
+
+
             ApplicationStartupContext ctx = new ApplicationStartupContext();
             SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration());
             Frame window = new EtrexUploader(ctx);
-            window.setMinimumSize(new Dimension(800,600));
+            window.setMinimumSize(new Dimension(800, 600));
             window.setVisible(true);
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
