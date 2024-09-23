@@ -58,7 +58,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, "60"));
         mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, "#ff0000");
         userMapDefinitonsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, System.getProperty("user.home") + File.separator + Constants.DEFAULT_USER_MAP_DIR));
-        mapFile = Paths.get(userMapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE));
+        mapFile = Paths.get(userMapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE, Constants.DEFAULT_MAP));
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, "true"));
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, "500"));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,"true"));

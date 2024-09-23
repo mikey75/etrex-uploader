@@ -34,7 +34,7 @@ public abstract class PropertiesBasedConfiguration implements Serializable {
         try (InputStream is = Files.newInputStream(Paths.get(userDirectory,configFileName))) {
             properties.load(is);
         } catch (IOException e) {
-            log.info("{} file not found or cannot be loaded", configFileName);
+            log.info("{} file not found or cannot be loaded. Setting default config values.", configFileName);
         }
 
     }
