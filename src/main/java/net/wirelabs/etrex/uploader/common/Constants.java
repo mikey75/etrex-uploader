@@ -4,6 +4,7 @@ package net.wirelabs.etrex.uploader.common;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
+import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import java.nio.file.Paths;
@@ -33,9 +34,18 @@ public class Constants {
     public static final String DEFAULT_USER_MAP_DIR = String.valueOf(Paths.get(HOME_DIR, "etrex-uploader-maps"));
 
     public static final String EMPTY_STRING = "";
+    public static final String TRUE = Boolean.TRUE.toString();
     public static final String LINUX_USB_MOUNTDIR = "/media";
 
     public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
+    public static final String DEFAULT_TRACK_COLOR = "#ff0000";
+    public static final SportType DEFAULT_SPORT = SportType.RIDE;
 
-
+    public static final long DEFAULT_DRIVE_OBSERVER_DELAY = 500;
+    public static final long DEFAULT_WAIT_DRIVE_TIMEOUT = 15000;
+    public static final int DEFAULT_TILER_THREAD_COUNT = 8;
+    public static final int DEFAULT_STRAVA_CHECK_TIMEOUT = 500;
+    public static final int DEFAULT_STRAVA_ACTIVITIES_PER_PAGE = 30;
+    public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
+    public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
 }
