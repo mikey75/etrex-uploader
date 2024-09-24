@@ -57,7 +57,7 @@ class FileServiceTest extends BaseTest {
                 .map(File::getName)
                 .collect(Collectors.toList());
 
-        assertThat(s).containsOnly(FileService.UPLOADED_FILES_SUBFOLDER, FileService.TRACKS_REPO);
+        assertThat(s).containsExactlyInAnyOrder(FileService.UPLOADED_FILES_SUBFOLDER, FileService.TRACKS_ARCHIVE_SUBFOLDER);
 
     }
 
