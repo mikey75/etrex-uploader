@@ -1,7 +1,6 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.strava.model.SportType;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,21 +87,21 @@ class AppConfigurationTest extends BaseTest {
     private void assertDefaultValues(AppConfiguration c) {
         assertThat(c.getStorageRoot()).isEqualTo(Paths.get(System.getProperty("user.home") + File.separator + "etrex-uploader-store"));
         assertThat(c.getUserStorageRoots()).isEmpty();
-        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-        assertThat(c.getWaitDriveTimeout()).isEqualTo(15000L);
+        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(Constants.DEFAULT_DRIVE_OBSERVER_DELAY);
+        assertThat(c.getWaitDriveTimeout()).isEqualTo(Constants.DEFAULT_WAIT_DRIVE_TIMEOUT);
         assertThat(c.isDeleteAfterUpload()).isTrue();
         assertThat(c.isArchiveAfterUpload()).isTrue();
-        assertThat(c.getDefaultActivityType()).isEqualTo(SportType.RIDE);
-        assertThat(c.getTilerThreads()).isEqualTo(8);
-        assertThat(c.getPerPage()).isEqualTo(30);
-        assertThat(c.getApiUsageWarnPercent()).isEqualTo(85);
-        assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(60);
-        assertThat(c.getMapTrackColor()).isEqualTo("#ff0000");
+        assertThat(c.getDefaultActivityType()).isEqualTo(Constants.DEFAULT_SPORT);
+        assertThat(c.getTilerThreads()).isEqualTo(Constants.DEFAULT_TILER_THREAD_COUNT);
+        assertThat(c.getPerPage()).isEqualTo(Constants.DEFAULT_STRAVA_ACTIVITIES_PER_PAGE);
+        assertThat(c.getApiUsageWarnPercent()).isEqualTo(Constants.DEFAULT_API_USAGE_WARN_PERCENT);
+        assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(Constants.DEFAULT_UPLOAD_STATUS_WAIT_SECONDS);
+        assertThat(c.getMapTrackColor()).isEqualTo(Constants.DEFAULT_TRACK_COLOR);
         assertThat(c.getUserMapDefinitonsDir()).hasToString(Constants.DEFAULT_USER_MAP_DIR);
         assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + Constants.DEFAULT_MAP);
         assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
-        assertThat(c.getStravaCheckTimeout()).isEqualTo(500);
+        assertThat(c.getStravaCheckTimeout()).isEqualTo(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT);
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
         assertThat(c.getMapHomeLattitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
