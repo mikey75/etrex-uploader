@@ -24,7 +24,7 @@ public class FileService {
     // these are fileservice only, local-store based subdirs - the only configurable is the storage root in appConfiguration
     // so we moved them here from general constants
     static final String UPLOADED_FILES_SUBFOLDER = "archived-uploads";
-    static final String TRACKS_REPO = "tracks-archive";
+    static final String TRACKS_ARCHIVE_SUBFOLDER = "tracks-archive";
 
     public FileService(AppConfiguration appConfiguration) throws IOException {
         this.appConfiguration = appConfiguration;
@@ -39,7 +39,7 @@ public class FileService {
         File defaultUploadedDir = new File(defaultStorageRoot, UPLOADED_FILES_SUBFOLDER);
         FileUtils.createDirIfDoesNotExist(defaultUploadedDir);
 
-        File defaultTracksRepoDir = new File(defaultStorageRoot, TRACKS_REPO);
+        File defaultTracksRepoDir = new File(defaultStorageRoot, TRACKS_ARCHIVE_SUBFOLDER);
         FileUtils.createDirIfDoesNotExist(defaultTracksRepoDir);
     }
 
