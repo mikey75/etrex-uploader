@@ -24,6 +24,10 @@ public abstract class PropertiesBasedConfiguration implements Serializable {
         loadConfigFile(configFileName);
     }
 
+    protected boolean configFileExists() {
+        return new File(CURRENT_WORK_DIR, configFileName).exists();
+    }
+
     private void loadConfigFile(String configFileName) {
 
         log.info("Loading {}", configFileName);

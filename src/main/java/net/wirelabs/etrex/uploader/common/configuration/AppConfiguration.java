@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.common.configuration;
 import com.strava.model.SportType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 
@@ -20,6 +21,7 @@ import static net.wirelabs.etrex.uploader.common.configuration.ConfigurationProp
 
 @Getter
 @Setter
+@Slf4j
 public class AppConfiguration extends PropertiesBasedConfiguration {
 
     private transient Path storageRoot;
@@ -67,6 +69,11 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
         mapHomeLattitude = Double.valueOf(properties.getProperty(MAP_HOME_LATTITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
+
+        if (!configFileExists()) {
+            log.info("Saving new config file with default values");
+            save();
+        }
     }
 
     public AppConfiguration() {

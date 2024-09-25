@@ -16,8 +16,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
-import static net.wirelabs.etrex.uploader.TestConstants.CONFIG_FILE;
-import static net.wirelabs.etrex.uploader.TestConstants.NONEXISTENT_FILE;
+import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -27,6 +26,7 @@ import static org.mockito.Mockito.*;
  */
 class AppConfigurationTest extends BaseTest {
 
+    public static final File APP_CONFIG_FILE = new File("src/test/resources/dupa");
     private final File currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
     private final File currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
 
@@ -39,6 +39,10 @@ class AppConfigurationTest extends BaseTest {
          */
         if (currentConfig.exists()) {
             Files.move(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        // delete previously nonexistent file - but now created by config
+        if (APP_CONFIG_FILE.exists()) {
+            Files.delete(APP_CONFIG_FILE.toPath());
         }
     }
 
@@ -75,10 +79,14 @@ class AppConfigurationTest extends BaseTest {
     }
 
     @Test
-    void shouldAssertDefaultValuesWhenConfigFileNonExistent() {
-        AppConfiguration c = new AppConfiguration(NONEXISTENT_FILE.getPath());
+    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() throws IOException {
+        assertThat(APP_CONFIG_FILE).doesNotExist();
+        AppConfiguration c = new AppConfiguration(APP_CONFIG_FILE.getPath());
         assertDefaultValues(c);
-        verifyLogged(NONEXISTENT_FILE.getPath() + " file not found or cannot be loaded. Setting default config values.");
+        verifyLogged(APP_CONFIG_FILE.getPath() + " file not found or cannot be loaded. Setting default config values.");
+        // verify new config file is created
+        verifyLogged("Saving new config file with default values");
+        assertThat(APP_CONFIG_FILE).exists();
 
     }
 
