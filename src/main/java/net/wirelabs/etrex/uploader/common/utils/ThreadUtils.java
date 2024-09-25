@@ -1,13 +1,10 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.*;
 
 /**
  * Created 11/11/22 by Michał Szwaczko (mikey@wirelabs.net)

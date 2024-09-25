@@ -5,21 +5,18 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
-import net.wirelabs.eventbus.Event;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.UploadService;
-import net.wirelabs.eventbus.IEventType;
+import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
+import net.wirelabs.eventbus.Event;
+import net.wirelabs.eventbus.IEventType;
 
 import javax.swing.*;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 /**

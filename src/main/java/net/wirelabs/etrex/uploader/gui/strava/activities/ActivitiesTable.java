@@ -2,12 +2,10 @@ package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 import com.strava.model.SummaryActivity;
 
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableCellRenderer;
-import java.awt.Color;
-import java.awt.Component;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;

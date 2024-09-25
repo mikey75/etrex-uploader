@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.strava.auth;
 
-import java.net.URL;
 import javax.swing.*;
+import java.net.URL;
 
 public class StravaButton extends JButton {
     

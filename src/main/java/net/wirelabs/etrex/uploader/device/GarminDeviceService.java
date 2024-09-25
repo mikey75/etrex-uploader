@@ -1,12 +1,6 @@
 package net.wirelabs.etrex.uploader.device;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.garmin.xmlschemas.garminDevice.v2.DeviceDocument;
 import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import lombok.Getter;
@@ -14,12 +8,18 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.common.thread.BaseStoppableRunnable;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.eventbus.EventBus;
 import org.apache.xmlbeans.XmlException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**

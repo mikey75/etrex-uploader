@@ -4,15 +4,13 @@ import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 import net.wirelabs.eventbus.swing.EventAwarePanel;
 
-
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

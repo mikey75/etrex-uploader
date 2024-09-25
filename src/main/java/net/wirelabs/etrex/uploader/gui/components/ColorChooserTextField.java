@@ -2,12 +2,8 @@ package net.wirelabs.etrex.uploader.gui.components;
 
 import net.miginfocom.swing.MigLayout;
 
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created 9/9/23 by Michał Szwaczko (mikey@wirelabs.net)

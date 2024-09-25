@@ -1,7 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
-import javax.swing.JLabel;
-import javax.swing.Timer;
+import javax.swing.*;
 import java.io.File;
 import java.util.List;
 

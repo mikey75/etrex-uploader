@@ -19,9 +19,8 @@ import net.wirelabs.eventbus.IEventType;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import javax.swing.event.*;
+import javax.swing.table.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.List;

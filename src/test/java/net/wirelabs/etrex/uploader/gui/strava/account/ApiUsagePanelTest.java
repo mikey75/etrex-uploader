@@ -5,7 +5,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import org.junit.jupiter.api.Test;
 
-import java.awt.Color;
+import java.awt.*;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;

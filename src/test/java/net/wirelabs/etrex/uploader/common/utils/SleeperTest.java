@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created 11/1/22 by Michał Szwaczko (mikey@wirelabs.net)

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.*;
 import java.io.File;
 
 /**

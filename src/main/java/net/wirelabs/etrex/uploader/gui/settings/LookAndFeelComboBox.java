@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui.settings;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;

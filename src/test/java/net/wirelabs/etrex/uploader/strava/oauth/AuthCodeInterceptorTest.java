@@ -1,13 +1,10 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 
-import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_FAIL_MSG;
-import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_OK_MSG;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.common.Constants;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,10 +12,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.StravaException;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_FAIL_MSG;
+import static net.wirelabs.etrex.uploader.strava.oauth.AuthCodeInterceptor.AUTHORIZATION_OK_MSG;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class AuthCodeInterceptorTest {
 
