@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import com.strava.model.SportType;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
-import net.wirelabs.etrex.uploader.strava.model.SportType;
 
 import javax.swing.*;
 
