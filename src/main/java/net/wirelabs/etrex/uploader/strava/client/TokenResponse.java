@@ -2,9 +2,9 @@ package net.wirelabs.etrex.uploader.strava.client;
 
 
 import com.google.gson.annotations.SerializedName;
+import com.strava.model.SummaryAthlete;
 import lombok.Getter;
 import lombok.Setter;
-import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 
 @Getter
 @Setter

@@ -1,19 +1,17 @@
 package net.wirelabs.etrex.uploader.gui.components.filetree;
 
+import com.strava.model.SportType;
+import com.strava.model.Upload;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.FileService;
-
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.strava.model.SportType;
-import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
-import net.wirelabs.eventbus.EventBus;
-
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
+import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.strava.activities;
 
 
+import com.strava.model.LatLng;
+import com.strava.model.StreamSet;
+import com.strava.model.SummaryActivity;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
@@ -9,9 +12,6 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
-import net.wirelabs.etrex.uploader.strava.model.LatLng;
-import net.wirelabs.etrex.uploader.strava.model.StreamSet;
-import net.wirelabs.etrex.uploader.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;

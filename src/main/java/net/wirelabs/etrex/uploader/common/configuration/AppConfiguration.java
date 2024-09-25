@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
-import net.wirelabs.etrex.uploader.strava.model.SportType;
+import com.strava.model.SportType;
 
 import javax.swing.*;
 import java.io.File;

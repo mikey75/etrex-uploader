@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import com.strava.model.ActivityStats;
+import com.strava.model.ActivityTotal;
+import com.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.StravaException;
-import net.wirelabs.etrex.uploader.strava.model.ActivityStats;
-import net.wirelabs.etrex.uploader.strava.model.ActivityTotal;
-import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
 import org.junit.jupiter.api.Test;
