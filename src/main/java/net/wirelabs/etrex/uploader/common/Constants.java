@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -48,4 +49,5 @@ public class Constants {
     public static final int DEFAULT_STRAVA_ACTIVITIES_PER_PAGE = 30;
     public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
+
 }
