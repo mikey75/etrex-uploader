@@ -15,10 +15,8 @@ public class TestConstants {
     public static final File BAD_XML_GPX_1_1_FILE = new File("src/test/resources/trackfiles/gpx11bad.gpx");
     public static final File BAD_XML_TCX_FILE = new File("src/test/resources/trackfiles/tcx1bad.tcx");
     public static final File BAD_FIT_FILE = new File("src/test/resources/trackfiles/fitBad.fit");
-
-    // binary and nonexistent files
+    // not a track
     public static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
-    public static final File NONEXISTENT_FILE = new File("src/test/resources/dupa");
 
     // config files
     public static final File CONFIG_FILE = new File("src/test/resources/config/test.properties");

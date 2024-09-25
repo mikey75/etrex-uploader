@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.TestConstants.*;
@@ -13,7 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class TrackParserTest extends BaseTest {
 
-    private  final TrackParser trackParser = new TrackParser();
+    private final TrackParser trackParser = new TrackParser();
+    private static final File NONEXISTENT_GPX_FILE = new File("src/test/resources/nonexisting.gpx");
 
     @Test
     void shouldNotProcessBadXmlGpx() {
@@ -70,7 +72,7 @@ class TrackParserTest extends BaseTest {
 
     @Test
     void shouldNotProcessNonExistentGPX() {
-        List<Coordinate> coords = trackParser.parseTrackFile(NONEXISTENT_FILE);
+        List<Coordinate> coords = trackParser.parseTrackFile(NONEXISTENT_GPX_FILE);
         assertThat(coords).isEmpty();
     }
 

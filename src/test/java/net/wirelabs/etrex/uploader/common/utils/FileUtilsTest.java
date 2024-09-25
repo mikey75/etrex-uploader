@@ -59,7 +59,7 @@ class FileUtilsTest {
         assertThat(isTrackFile(GPX_FILE_VER_1_1)).isTrue();
         assertThat(isTrackFile(TCX_FILE)).isTrue();
         assertThat(isTrackFile(FIT_FILE)).isTrue();
-        assertThat(isTrackFile(NONEXISTENT_FILE)).isFalse();
+        assertThat(isTrackFile(NOT_TRACK_FILE)).isFalse();
 
     }
 
