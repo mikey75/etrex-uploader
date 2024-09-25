@@ -1,12 +1,12 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
+import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
+
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.io.File;
 import java.util.Objects;
-
-import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
     

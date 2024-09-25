@@ -1,14 +1,9 @@
 package net.wirelabs.etrex.uploader.common.parsers;
 
-import com.garmin.fit.FitDecoder;
-import com.garmin.fit.FitMessages;
-import com.garmin.fit.FitRuntimeException;
-import com.garmin.fit.RecordMesg;
+import com.garmin.fit.*;
 import com.garmin.fit.util.SemicirclesConverter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.parsers.TrackToCoordsParser;
 import net.wirelabs.jmaps.map.geo.Coordinate;
-
 
 import java.io.File;
 import java.io.FileInputStream;

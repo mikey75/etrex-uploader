@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.common.thread;
 
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 
 /**
  * Base implementation of StoppableRunnable - to be used when no other classes need to be extended.

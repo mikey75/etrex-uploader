@@ -3,17 +3,14 @@ package net.wirelabs.etrex.uploader.gui.components.filetree;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 
-
 import javax.swing.*;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class FileTree extends JTree {

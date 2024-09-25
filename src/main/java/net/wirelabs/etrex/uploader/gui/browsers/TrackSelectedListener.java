@@ -4,8 +4,7 @@ import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.eventbus.EventBus;
 
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.*;
 import java.io.File;
 
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;

@@ -9,8 +9,8 @@ import net.wirelabs.jmaps.map.painters.Painter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import java.awt.geom.*;
+import java.awt.image.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;

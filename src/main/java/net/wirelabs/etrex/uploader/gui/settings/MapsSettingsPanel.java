@@ -4,10 +4,10 @@ package net.wirelabs.etrex.uploader.gui.settings;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
-import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
+import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
+import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import javax.swing.*;
