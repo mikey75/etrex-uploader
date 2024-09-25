@@ -3,9 +3,9 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import com.squareup.okhttp.HttpUrl;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 import java.io.IOException;

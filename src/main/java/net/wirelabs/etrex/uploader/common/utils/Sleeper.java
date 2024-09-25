@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import java.util.concurrent.TimeUnit;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

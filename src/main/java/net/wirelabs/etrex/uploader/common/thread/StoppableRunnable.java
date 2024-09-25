@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.common.thread;
 
+import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 
 /**
  * Use to receive automatic implementation of stop() method.

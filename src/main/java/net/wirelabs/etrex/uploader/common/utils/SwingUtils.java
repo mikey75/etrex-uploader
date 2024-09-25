@@ -1,17 +1,16 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+
+import javax.swing.*;
+import javax.swing.plaf.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /**
  * Created 10/23/22 by Michał Szwaczko (mikey@wirelabs.net)

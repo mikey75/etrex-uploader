@@ -2,8 +2,7 @@ package net.wirelabs.etrex.uploader.gui.components;
 
 import net.wirelabs.eventbus.swing.EventAwarePanel;
 
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.*;
 
 public abstract class EventAwareBorderedPanel extends EventAwarePanel {
 

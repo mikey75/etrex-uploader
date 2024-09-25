@@ -8,8 +8,7 @@ import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;

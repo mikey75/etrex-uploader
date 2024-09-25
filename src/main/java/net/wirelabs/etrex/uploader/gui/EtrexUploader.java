@@ -13,13 +13,12 @@ import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.strava.activities.StravaActivitiesPanel;
-import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
+import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;

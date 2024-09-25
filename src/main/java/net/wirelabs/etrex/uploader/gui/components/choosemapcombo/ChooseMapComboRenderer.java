@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.components.choosemapcombo;
 
-import net.wirelabs.jmaps.model.map.MapDocument;
 import net.wirelabs.jmaps.map.readers.MapReader;
+import net.wirelabs.jmaps.model.map.MapDocument;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.io.File;
 

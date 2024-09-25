@@ -1,16 +1,16 @@
 package net.wirelabs.etrex.uploader.device;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.Constants;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j

@@ -1,14 +1,12 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import lombok.extern.slf4j.Slf4j;
 import static net.wirelabs.etrex.uploader.common.Constants.CURRENT_WORK_DIR;
 
 /**

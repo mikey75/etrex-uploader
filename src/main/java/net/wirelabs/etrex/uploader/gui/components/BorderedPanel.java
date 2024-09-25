@@ -1,10 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-
 import lombok.NoArgsConstructor;
+
+import javax.swing.*;
+import javax.swing.border.*;
 
 @NoArgsConstructor
 public abstract class BorderedPanel extends JPanel {

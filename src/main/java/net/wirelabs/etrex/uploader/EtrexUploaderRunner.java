@@ -2,9 +2,7 @@ package net.wirelabs.etrex.uploader;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
