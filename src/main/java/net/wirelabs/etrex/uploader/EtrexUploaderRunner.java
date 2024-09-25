@@ -3,20 +3,19 @@ package net.wirelabs.etrex.uploader;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.eventbus.EventBus;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import static net.wirelabs.etrex.uploader.common.Constants.CURRENT_WORK_DIR;
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
 import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphicsEnvironmentPresent;
 
@@ -51,9 +50,7 @@ public class EtrexUploaderRunner {
 
     private static void configureCustomLogbackLogging() {
 
-        String logbackXml = "logback.xml";
-        String path = CURRENT_WORK_DIR + File.separator + logbackXml;
-        Path logbackXmlLocation = Paths.get(path);
+        Path logbackXmlLocation = Constants.LOGBACK_CONFIG_XML;
 
         try (InputStream configStream = Files.newInputStream(logbackXmlLocation)) {
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -63,7 +60,11 @@ public class EtrexUploaderRunner {
             configurator.setContext(loggerContext);
             configurator.doConfigure(configStream); // loads logback file
         } catch (Exception e) {
-            log.warn("Exception while configuring logging");
+            String message = String.format("Can't find or load config file (%s)%nDo you want to run the app without logging?", Constants.LOGBACK_CONFIG_XML);
+            int result = SwingUtils.yesNoMsg(message);
+            if (result != JOptionPane.YES_OPTION) {
+                System.exit(1);
+            }
         }
     }
 
