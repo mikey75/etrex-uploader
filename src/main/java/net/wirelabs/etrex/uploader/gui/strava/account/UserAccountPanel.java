@@ -1,17 +1,17 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
 
+import com.strava.model.ActivityStats;
+import com.strava.model.SummaryAthlete;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.DateAndUnitConversionUtil;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
-import net.wirelabs.etrex.uploader.StravaException;
-import net.wirelabs.etrex.uploader.strava.model.ActivityStats;
-import net.wirelabs.etrex.uploader.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.imageio.ImageIO;

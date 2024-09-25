@@ -1,12 +1,12 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
 import com.squareup.okhttp.*;
+import com.strava.model.SportType;
+import com.strava.model.Upload;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
-import net.wirelabs.etrex.uploader.strava.model.SportType;
-import net.wirelabs.etrex.uploader.strava.model.Upload;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import java.io.File;
@@ -97,7 +97,7 @@ public class StravaClient  {
 
     }
 
-    public Upload uploadActivityRequest(File file, String name, String description, SportType sportType, boolean virtual,boolean commute) throws StravaException {
+    public Upload uploadActivityRequest(File file, String name, String description, SportType sportType, boolean virtual, boolean commute) throws StravaException {
 
         RequestBody body = buildUploadRequest(file, name, description, sportType, virtual, commute);
 

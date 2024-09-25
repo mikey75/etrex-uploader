@@ -276,8 +276,8 @@
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <additionalProperties>hideGenerationTimestamp=true</additionalProperties>
-                            <modelPackage>net.wirelabs.etrex.uploader.strava.model</modelPackage>
-                            <apiPackage>net.wirelabs.etrex.uploader.strava.client</apiPackage>
+                            <modelPackage>com.strava.model</modelPackage>
+                            <apiPackage>com.strava.api</apiPackage>
                             <addCompileSourceRoot>true</addCompileSourceRoot>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
