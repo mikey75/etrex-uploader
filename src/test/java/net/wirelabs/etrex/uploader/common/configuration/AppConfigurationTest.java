@@ -27,28 +27,26 @@ import static org.mockito.Mockito.*;
  */
 class AppConfigurationTest extends BaseTest {
 
-    private File currentConfig;
-    private File currentConfigCopy;
+    private final File currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+    private final File currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
 
     @BeforeEach
     void makeACopyOfCurrentConfigFile() throws IOException {
         /*
             since the test works on config file that might be present on local computer during development
-            lets first preserve it, and then delete so that the test has always
-            default no-config configuration
+            lets first preserve it, and then delete it (so basically move it) so that the test has always
+            the default no-config configuration
          */
-        currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-        currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
         if (currentConfig.exists()) {
-            Files.copy(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.delete(currentConfig.toPath());
+            Files.move(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
     @AfterEach
     void restoreCopiedConfig() throws IOException {
+        // restore copied config, and remove the copy
         if (currentConfigCopy.exists()) {
-            Files.copy(currentConfigCopy.toPath(), currentConfig.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(currentConfigCopy.toPath(), currentConfig.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
