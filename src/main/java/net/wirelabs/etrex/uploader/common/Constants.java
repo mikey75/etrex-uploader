@@ -49,5 +49,5 @@ public class Constants {
     public static final int DEFAULT_STRAVA_ACTIVITIES_PER_PAGE = 30;
     public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
-    public static final Path LOGBACK_CONFIG_XML = Paths.get(CURRENT_WORK_DIR, "logback.xml");
+
 }
