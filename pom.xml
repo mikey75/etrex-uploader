@@ -215,7 +215,7 @@
                                 <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
                                 <copy toFile="${destDir}/config.properties" file="${basedir}/src/main/resources/config.properties"/>
                                 <copy toFile="${destDir}/maps/defaultMap.xml" file="${basedir}/maps/defaultMap.xml"/>
-                                <echo file="${destDir}/project.version">${project.version}</echo>
+                                <copy toFile="${destDir}/project.version" file="${basedir}/project.version"/>
                                 <zip basedir="${destDir}" destfile="${basedir}/target/etrex-uploader.zip"/>
                             </target>
                         </configuration>
