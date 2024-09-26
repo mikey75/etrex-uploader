@@ -24,6 +24,14 @@ The cause is the use of jaxb in a dependant jmaps-viewer project.
 You need to add jars to the classpath, or add glassfish implementations to pom.xml. None of these solutions is recommended. Just run it from Java 11.
 However, there's a workaround planned so that it works out of the box anytime with any java >=11. Stay tuned, but until then - use Java 11.
 
+RUN
+==
+To run the application outside the development environment
+
+- mvn clean package in the source dir, this will create target/etrex-uploader.zip file
+- Unpack this file to some location on your local computer
+- cd to that location 
+- run it: java -jar etrex-uploader.jar 
 
 BINARY RELEASES
 =
