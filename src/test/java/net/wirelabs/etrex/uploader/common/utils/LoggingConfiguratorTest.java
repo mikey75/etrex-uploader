@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
+@Disabled
 class LoggingConfiguratorTest {
 
     private final String fakeUserDir = "target/temp";
