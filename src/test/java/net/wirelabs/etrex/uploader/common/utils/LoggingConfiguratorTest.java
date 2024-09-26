@@ -1,7 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -18,15 +17,27 @@ import static org.mockito.Mockito.times;
 class LoggingConfiguratorTest {
 
     private final String fakeUserDir = "target/temp";
+    private final Path fakeUserDirPath = Paths.get(fakeUserDir);
     private final Path fakeConfigFilePath = Paths.get(fakeUserDir, "logback.xml");
     private final Path minimalExisting = Paths.get("src/test/resources/logback/minimalLogback.xml");
+    private static String originalWorkdir;
 
     @BeforeEach
     void before() throws IOException {
-        // change work.dir to not operate on existing files
+        if (!fakeUserDirPath.toFile().exists()) {
+            Files.createDirectory(fakeUserDirPath);
+        }
+        // change work.dir to not operate on existing files, but first backup the current workdir
+        originalWorkdir = System.getProperty("user.dir");
         System.setProperty("user.dir", fakeUserDir);
         // delete existing test file
         Files.deleteIfExists(fakeConfigFilePath);
+    }
+
+    @AfterEach
+    void afterEach() {
+        // restore user.dir that we change in these tests
+        System.setProperty("user.dir", originalWorkdir);
     }
 
     @Test
