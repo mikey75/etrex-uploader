@@ -1,3 +1,2 @@
 - add sliders to gui so that user can modify size of activities list and map
-- make a configurable choice to draw polylines or real gpx from activities (requires extra api calls but more precise)
 
