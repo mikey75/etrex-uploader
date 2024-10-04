@@ -6,9 +6,9 @@ import net.wirelabs.etrex.uploader.gui.UploadService;
 
 import javax.swing.*;
 
-public class GarminAndStorageBrowser extends JPanel {
+public class GarminAndStoragePanel extends JPanel {
 
-    public GarminAndStorageBrowser(UploadService uploadService, AppConfiguration appConfiguration) {
+    public GarminAndStoragePanel(UploadService uploadService, AppConfiguration appConfiguration) {
         setLayout(new MigLayout("insets 0px", "[grow]", "[grow][grow]"));
         add(new GarminDeviceBrowser(uploadService), "cell 0 0,grow");
         add(new LocalStorageBrowser(appConfiguration), "cell 0 1,grow");
