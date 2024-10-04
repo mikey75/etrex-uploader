@@ -111,6 +111,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
         assertThat(c.getMapHomeLattitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
+        assertThat(c.isUseSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
     }
 
     @Test
@@ -134,7 +135,8 @@ class AppConfigurationTest extends BaseTest {
                 "system.drive.observer.delay=100",
                 "system.backup.after.upload=false",
                 "map.home.lattitude=10.111",
-                "map.home.longitude=30.111"
+                "map.home.longitude=30.111",
+                "system.look.sliders=true"
         };
 
         // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
@@ -149,6 +151,7 @@ class AppConfigurationTest extends BaseTest {
         c.setWaitDriveTimeout(10L);
         c.setMapHomeLattitude(10.111);
         c.setMapHomeLongitude(30.111);
+        c.setUseSliders(true);
         c.save();
 
         verifyLogged("Loading " + newConfigFile.getPath());

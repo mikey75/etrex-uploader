@@ -45,6 +45,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private String lookAndFeelClassName;
     private Double mapHomeLattitude;
     private Double mapHomeLongitude;
+    private boolean useSliders;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -69,6 +70,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
         mapHomeLattitude = Double.valueOf(properties.getProperty(MAP_HOME_LATTITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
+        useSliders = Boolean.parseBoolean(properties.getProperty(USE_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
 
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
@@ -102,6 +104,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(LOOK_AND_FEEL_CLASS, String.valueOf(lookAndFeelClassName));
         properties.setProperty(MAP_HOME_LONGITUDE, String.valueOf(mapHomeLongitude));
         properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
+        properties.setProperty(USE_SLIDERS, String.valueOf(useSliders));
         super.store();
 
     }
