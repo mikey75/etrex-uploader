@@ -1,7 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
@@ -14,6 +17,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CH
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 public class ApplicationSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
@@ -25,6 +29,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
+    private final JCheckBox useSliders = new JCheckBox("Desktop look with sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
@@ -59,8 +64,26 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         add(deleteAfterUpl, "cell 0 6");
         add(archiveAfterUpload, "cell 1 6");
-
+        add(useSliders, "cell 0 7");
         loadConfiguration();
+
+        useSliders.addActionListener(e -> showRebootNeededMsgDialog(configuration));
+
+    }
+
+    private void showRebootNeededMsgDialog(AppConfiguration configuration) {
+        int dialogResponse =  SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?");
+        // if YES -> update config and reboot app
+        if (dialogResponse == JOptionPane.YES_OPTION) {
+            updateConfiguration();
+            configuration.save();
+            log.info("Restarting application");
+            SystemUtils.createNewInstance();
+            SystemUtils.shutdownAndExit();
+        } else {
+            // if NO -> restore UI status with current config and continue normally
+             useSliders.setSelected(configuration.isUseSliders());
+        }
     }
 
     private void loadConfiguration() {
@@ -72,6 +95,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitonsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
+        useSliders.setSelected(configuration.isUseSliders());
     }
 
     public void updateConfiguration() {
@@ -83,6 +107,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
+        configuration.setUseSliders(useSliders.isSelected());
         EventBus.publish(USER_STORAGE_ROOTS_CHANGED, configuration.getUserStorageRoots());
     }
 

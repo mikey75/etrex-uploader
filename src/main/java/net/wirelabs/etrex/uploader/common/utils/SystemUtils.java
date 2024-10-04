@@ -3,12 +3,14 @@ package net.wirelabs.etrex.uploader.common.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -65,5 +67,23 @@ public class SystemUtils {
             log.warn("Can't find or load etrex-uploader.version file");
             return "UNKNOWN";
         }
+    }
+
+    public static void createNewInstance() {
+        Optional<String> cmd = ProcessHandle.current().info().commandLine();
+        if (cmd.isPresent()) {
+            Runtime rt = Runtime.getRuntime();
+            try {
+                log.info("Creating new application instance");
+                rt.exec(cmd.get());
+            } catch (IOException e) {
+                log.error("Creating new application instance failed!");
+            }
+        }
+    }
+
+    public static void shutdownAndExit() {
+        EventBus.shutdown();
+        System.exit(1);
     }
 }
