@@ -7,7 +7,7 @@ import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStorageBrowser;
+import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStoragePanel;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
@@ -26,16 +26,16 @@ import java.util.stream.Collectors;
 import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
 import static net.wirelabs.etrex.uploader.common.Constants.CURRENT_WORK_DIR;
 
-
 @Slf4j
 public class EtrexUploader extends JFrame {
 
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
-    private GarminAndStorageBrowser garminAndStorageBrowser;
+    private GarminAndStoragePanel garminAndStoragePanel;
     private StravaPanel stravaPanel;
-    private UploadService uploadService;
     private MapPanel mapPanel;
+
+    private transient UploadService uploadService;
 
     public EtrexUploader(ApplicationStartupContext ctx) {
         checkStravaIsUp(ctx.getAppConfiguration());
@@ -56,7 +56,7 @@ public class EtrexUploader extends JFrame {
 
             splash.update("Initializing browsers");
             uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());
-            garminAndStorageBrowser = new GarminAndStorageBrowser(uploadService, ctx.getAppConfiguration());
+            garminAndStoragePanel = new GarminAndStoragePanel(uploadService, ctx.getAppConfiguration());
 
             splash.update("Initializing Strava component");
             stravaPanel = new StravaPanel(ctx.getStravaService(),ctx.getAppConfiguration());
@@ -68,7 +68,7 @@ public class EtrexUploader extends JFrame {
             ctx.getGarminDeviceService().start();
 
             splash.update("Laying out main window");
-            container.add(garminAndStorageBrowser, "cell 0 0 1 3,grow");
+            container.add(garminAndStoragePanel, "cell 0 0 1 3,grow");
             container.add(stravaPanel, "cell 1 0, grow");
             container.add(mapPanel, "cell 1 1 2 2,grow");
 
