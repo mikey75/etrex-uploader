@@ -7,12 +7,10 @@ import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.gui.browsers.GarminDeviceBrowser;
-import net.wirelabs.etrex.uploader.gui.browsers.LocalStorageBrowser;
+import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStorageBrowser;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
-import net.wirelabs.etrex.uploader.gui.strava.account.UserAccountPanel;
-import net.wirelabs.etrex.uploader.gui.strava.activities.StravaActivitiesPanel;
+import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.EventBus;
 
@@ -34,13 +32,10 @@ public class EtrexUploader extends JFrame {
 
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
-
-    private GarminDeviceBrowser devicePanel;
-    private LocalStorageBrowser storageBrowser;
+    private GarminAndStorageBrowser garminAndStorageBrowser;
+    private StravaPanel stravaPanel;
+    private UploadService uploadService;
     private MapPanel mapPanel;
-    private UserAccountPanel athletePanel;
-    private StravaActivitiesPanel activitiesPanel;
-
 
     public EtrexUploader(ApplicationStartupContext ctx) {
         checkStravaIsUp(ctx.getAppConfiguration());
@@ -54,30 +49,28 @@ public class EtrexUploader extends JFrame {
             Container container = getContentPane();
             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-            container.setLayout(new MigLayout("", "[10%,grow][80%,grow][10%,grow]", "[30%][grow][100px:n,grow]"));
+            container.setLayout(new MigLayout("", "[10%][90%]", "[30%][70%]"));
             registerWindowCloseListener(ctx);
 
             splash.update("Initializing Strava GUI components");
-            athletePanel = new UserAccountPanel(ctx.getStravaService(), ctx.getAppConfiguration());
-            activitiesPanel = new StravaActivitiesPanel(ctx.getStravaService(), ctx.getAppConfiguration());
 
             splash.update("Initializing browsers");
-            UploadService uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());
-            devicePanel = new GarminDeviceBrowser(uploadService);
-            storageBrowser = new LocalStorageBrowser(ctx.getAppConfiguration());
+            uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());
+            garminAndStorageBrowser = new GarminAndStorageBrowser(uploadService, ctx.getAppConfiguration());
 
-            splash.update("Initalizing maps");
+            splash.update("Initializing Strava component");
+            stravaPanel = new StravaPanel(ctx.getStravaService(),ctx.getAppConfiguration());
+
+            splash.update("Initalizing maps component");
             mapPanel = new MapPanel(ctx.getAppConfiguration());
 
             splash.update("Starting Garmin drive observer service");
             ctx.getGarminDeviceService().start();
 
             splash.update("Laying out main window");
-            container.add(devicePanel, "cell 0 0 1 2,grow");
-            container.add(activitiesPanel, "cell 1 0,grow");
-            container.add(athletePanel, "cell 2 0,grow");
+            container.add(garminAndStorageBrowser, "cell 0 0 1 3,grow");
+            container.add(stravaPanel, "cell 1 0, grow");
             container.add(mapPanel, "cell 1 1 2 2,grow");
-            container.add(storageBrowser, "cell 0 2,grow");
 
             splash.update("Done");
             setExtendedState(Frame.MAXIMIZED_BOTH);

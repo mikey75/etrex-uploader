@@ -40,7 +40,7 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     private final JScrollPane scrollPane = new JScrollPane();
     private final FileTree tree;
 
-    public GarminDeviceBrowser(UploadService uploadService) {
+    GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device");
         setLayout(new MigLayout("", "[grow]", "[][][][][][grow]"));
 
