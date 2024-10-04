@@ -37,7 +37,7 @@ public class MapPanel extends EventAwareBorderedPanel {
 
     private final transient RoutePainter routePainter;
     private final OverlayEnabler overlayEnabler;
-    private Coordinate mapHome;
+    private transient Coordinate mapHome;
     private final transient TrackParser trackParser;
 
 
