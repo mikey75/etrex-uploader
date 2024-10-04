@@ -24,7 +24,7 @@ public class LocalStorageBrowser extends EventAwareBorderedPanel {
     private final FileTree fileTree;
     private final AppConfiguration appConfiguration;
 
-    public LocalStorageBrowser(AppConfiguration appConfiguration) {
+    LocalStorageBrowser(AppConfiguration appConfiguration) {
         
         super("Local repository");
         this.appConfiguration = appConfiguration;
