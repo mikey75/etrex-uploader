@@ -2,6 +2,8 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
@@ -62,6 +64,23 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         add(archiveAfterUpload, "cell 1 6");
         add(useSliders, "cell 0 7");
         loadConfiguration();
+
+        useSliders.addActionListener(e -> updateConfigAndRebootApp(configuration));
+
+    }
+
+    private void updateConfigAndRebootApp(AppConfiguration configuration) {
+        int question =  SwingUtils.yesNoMsg("This change will need restarting the application. Do you want that.");
+        // if YES -> update config and reboot app
+        if (question == JOptionPane.YES_OPTION) {
+            updateConfiguration();
+            configuration.save();
+            SystemUtils.createNewInstance(); // create new instance
+            System.exit(1); // exit current instance
+        } else {
+            // if NO -> restore UI status with current config and continue normally
+             useSliders.setSelected(configuration.isUseSliders());
+        }
     }
 
     private void loadConfiguration() {
