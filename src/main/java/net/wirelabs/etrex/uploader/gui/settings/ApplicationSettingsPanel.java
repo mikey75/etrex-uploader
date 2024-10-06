@@ -76,7 +76,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
             updateConfiguration();
             configuration.save();
             SystemUtils.createNewInstance(); // create new instance
-            System.exit(1); // exit current instance
+            SystemUtils.shutdownAndExit();
         } else {
             // if NO -> restore UI status with current config and continue normally
              useSliders.setSelected(configuration.isUseSliders());
