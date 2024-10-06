@@ -25,6 +25,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
+    private final JCheckBox useSliders = new JCheckBox("Desktop look with sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
@@ -59,7 +60,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         add(deleteAfterUpl, "cell 0 6");
         add(archiveAfterUpload, "cell 1 6");
-
+        add(useSliders, "cell 0 7");
         loadConfiguration();
     }
 
@@ -72,6 +73,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitonsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
+        useSliders.setSelected(configuration.isUseSliders());
     }
 
     public void updateConfiguration() {
@@ -83,6 +85,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
+        configuration.setUseSliders(useSliders.isSelected());
         EventBus.publish(USER_STORAGE_ROOTS_CHANGED, configuration.getUserStorageRoots());
     }
 
