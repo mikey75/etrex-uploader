@@ -9,6 +9,7 @@ import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStoragePanel;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
+import net.wirelabs.etrex.uploader.gui.components.sliding.DesktopPanel;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
@@ -46,10 +47,9 @@ public class EtrexUploader extends JFrame {
             Splash splash = new Splash();
 
             setTitle(APPLICATION_IDENTIFICATION);
-            Container container = getContentPane();
+
             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-            container.setLayout(new MigLayout("", "[10%][90%]", "[30%][70%]"));
             registerWindowCloseListener(ctx);
 
             splash.update("Initializing Strava GUI components");
@@ -68,9 +68,15 @@ public class EtrexUploader extends JFrame {
             ctx.getGarminDeviceService().start();
 
             splash.update("Laying out main window");
-            container.add(garminAndStoragePanel, "cell 0 0 1 3,grow");
-            container.add(stravaPanel, "cell 1 0, grow");
-            container.add(mapPanel, "cell 1 1 2 2,grow");
+            Container container = getContentPane();
+
+            if (ctx.getAppConfiguration().isUseSliders()) {
+                // desktop-like look with sliders
+                setupDesktopLook(container);
+            } else {
+                // classic look - no sliders
+                setupClassicLook(container);
+            }
 
             splash.update("Done");
             setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -81,6 +87,24 @@ public class EtrexUploader extends JFrame {
             SwingUtils.errorMsg("You are not authorized");
             System.exit(1);
         }
+    }
+
+    private void setupDesktopLook(Container container) {
+
+        DesktopPanel desktopPanel = new DesktopPanel(garminAndStoragePanel,stravaPanel,mapPanel);
+        desktopPanel.setSlidersWidth(5);
+
+        desktopPanel.setVerticalSliderLocation(garminAndStoragePanel.getSize().width); //
+        desktopPanel.setHorizontalSliderLocation(stravaPanel.getSize().height);
+        container.add(desktopPanel);
+        container.getComponents();
+    }
+
+    private void setupClassicLook(Container container) {
+        container.setLayout(new MigLayout("", "[10%][90%]", "[30%][70%]"));
+        container.add(garminAndStoragePanel, "cell 0 0 1 3,grow");
+        container.add(stravaPanel, "cell 1 0, grow");
+        container.add(mapPanel, "cell 1 1 2 2,grow");
     }
 
     private  void checkStravaIsUp(AppConfiguration cfg) {

@@ -49,4 +49,5 @@ public class Constants {
     public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
 
+    public static final boolean DEFAULT_USE_SLIDERS = false;
 }
