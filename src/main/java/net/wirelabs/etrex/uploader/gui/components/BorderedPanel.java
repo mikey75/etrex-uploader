@@ -6,9 +6,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 @NoArgsConstructor
-public abstract class BorderedPanel extends JPanel {
+public class BorderedPanel extends JPanel {
     
-    protected BorderedPanel(String title) {
+    public BorderedPanel(String title) {
         setBorderTitle(title);
     }
     
