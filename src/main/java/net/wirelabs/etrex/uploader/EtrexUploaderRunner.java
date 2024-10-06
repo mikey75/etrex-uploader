@@ -33,8 +33,7 @@ public class EtrexUploaderRunner {
             window.setVisible(true);
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
-            EventBus.shutdown();
-            System.exit(1);
+            SystemUtils.shutdownAndExit();
         }
 
     }
