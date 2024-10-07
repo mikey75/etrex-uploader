@@ -3,9 +3,10 @@ package net.wirelabs.etrex.uploader.common;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.io.File;
@@ -18,8 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * Created 10/30/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -32,12 +32,19 @@ class FileServiceTest extends BaseTest {
     private FileService fileService;
     private AppConfiguration appConfiguration;
     private final File root = new File("target/storage-root");
+    private final MockedStatic<SystemUtils> systemUtilsMock = mockStatic(SystemUtils.class);
 
+    @AfterEach
+    public void afterEach() {
+        systemUtilsMock.close();
+    }
 
     @BeforeEach
     void before() throws IOException {
         FileUtils.recursivelyDeleteDirectory(root);
         setupFileServiceMock();
+        // setup SystemUtils mock since now it is providing now()
+        systemUtilsMock.when(SystemUtils::getNow).thenReturn(testDateTimeNow);
     }
 
     private void setupFileServiceMock() throws IOException {
@@ -46,8 +53,6 @@ class FileServiceTest extends BaseTest {
         doReturn(true).when(appConfiguration).isArchiveAfterUpload();
         doReturn(true).when(appConfiguration).isDeleteAfterUpload();
         fileService = Mockito.spy(new FileService(appConfiguration));
-
-        doReturn(testDateTimeNow).when(fileService).getNow();
     }
 
     @Test
@@ -81,7 +86,7 @@ class FileServiceTest extends BaseTest {
                 f.getName().equals(("file-" + expectedFormattedPart + ".gpx")));
         verifyLogged("Target file exists. Changing name by adding current timestamp to filename");
         verifyLoggedTimes(2, "Archiving " + track.getPath());
-        verifyLoggedTimes(2,"Deleting "+ track.getPath());
+        verifyLoggedTimes(2, "Deleting " + track.getPath());
 
     }
 

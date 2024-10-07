@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
 import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
@@ -47,7 +48,7 @@ public class ApplicationStartupContext {
             StravaConnector connector = new StravaConnector(client);
             if (!connector.getOauthStatus().get()) {
                 SwingUtils.errorMsg(connector.getOauthMessage());
-                System.exit(1);
+                SystemUtils.systemExit(1);
             }
         }
     }

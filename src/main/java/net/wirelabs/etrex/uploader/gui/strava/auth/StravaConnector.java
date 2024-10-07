@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
@@ -46,7 +47,7 @@ public class StravaConnector extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                System.exit(0);
+                SystemUtils.systemExit(0);
             }
         });
     }

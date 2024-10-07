@@ -42,7 +42,7 @@ public class LoggingConfigurator {
         String message = String.format("%s (%s) %nDo you want to run the app without logging?", cause, LOGBACK_CONFIG_XML);
         int result = SwingUtils.yesNoMsg(message);
         if (result != JOptionPane.YES_OPTION) {
-            System.exit(1);
+            SystemUtils.systemExit(1);
         }
     }
 
