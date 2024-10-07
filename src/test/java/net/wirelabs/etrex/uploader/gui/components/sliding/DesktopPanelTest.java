@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DesktopContainerAndPanelTest {
+class DesktopPanelTest {
 
     public static final JComponent LEFT_PANE_COMPONENT_1 = new JLabel("l1");
     public static final JComponent TOP_RIGHT_PANE_COMPONENT_1 = new JLabel("l2");
