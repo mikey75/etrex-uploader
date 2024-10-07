@@ -42,6 +42,13 @@ public class SwingUtils {
 
     }
 
+    public static int yesNoCancelMsg(String message) {
+        return JOptionPane.showConfirmDialog(null,
+                message,
+                "Confirm action",JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+    }
+
     /**
      * Set system look and feel as configured in config.properties
      */

@@ -74,10 +74,10 @@ public class SystemUtils {
         if (cmd.isPresent()) {
             Runtime rt = Runtime.getRuntime();
             try {
-                log.info("Restarting application");
+                log.info("Creating new application instance");
                 rt.exec(cmd.get());
             } catch (IOException e) {
-                log.error("Restarting application failed. Nothing to do. Exiting!");
+                log.error("Creating new application instance failed!");
             }
         }
     }

@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
@@ -16,6 +17,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CH
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 public class ApplicationSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
@@ -65,17 +67,18 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         add(useSliders, "cell 0 7");
         loadConfiguration();
 
-        useSliders.addActionListener(e -> updateConfigAndRebootApp(configuration));
+        useSliders.addActionListener(e -> showRebootNeededMsgDialog(configuration));
 
     }
 
-    private void updateConfigAndRebootApp(AppConfiguration configuration) {
-        int question =  SwingUtils.yesNoMsg("This change will need restarting the application. Do you want that.");
+    private void showRebootNeededMsgDialog(AppConfiguration configuration) {
+        int dialogResponse =  SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?");
         // if YES -> update config and reboot app
-        if (question == JOptionPane.YES_OPTION) {
+        if (dialogResponse == JOptionPane.YES_OPTION) {
             updateConfiguration();
             configuration.save();
-            SystemUtils.createNewInstance(); // create new instance
+            log.info("Restarting application");
+            SystemUtils.createNewInstance();
             SystemUtils.shutdownAndExit();
         } else {
             // if NO -> restore UI status with current config and continue normally
