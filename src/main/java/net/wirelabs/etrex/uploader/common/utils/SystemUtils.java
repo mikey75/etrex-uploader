@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -56,7 +57,7 @@ public class SystemUtils {
     public static void checkGraphicsEnvironmentPresent() {
         if (GraphicsEnvironment.isHeadless()) {
             log.error("This application needs graphics environment - X11 or Windows");
-            System.exit(1);
+            systemExit(1);
         }
     }
 
@@ -85,5 +86,16 @@ public class SystemUtils {
     public static void shutdownAndExit() {
         EventBus.shutdown();
         System.exit(1);
+    }
+
+    public static LocalDateTime getNow() {
+        return LocalDateTime.now();
+    }
+
+    public static void systemExit(int status) {
+        if (!EventBus.getExecutorService().isShutdown()) {
+            EventBus.shutdown();
+        }
+        System.exit(status);
     }
 }
