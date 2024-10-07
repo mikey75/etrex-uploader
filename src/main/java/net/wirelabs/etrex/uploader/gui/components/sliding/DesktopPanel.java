@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class DesktopPanel extends JPanel {
 
+    private static final String ONE_CELL_ONLY = "cell 0 0,grow"; // one cell only
     private final DesktopContainer desktopContainer;
     private final LayoutManager layout = new MigLayout("insets 0", "[grow,fill]", "[grow,fill]");
-    private static final String ONE_CELL_ONLY = "cell 0 0,grow"; // one cell only
 
     public DesktopPanel() {
         desktopContainer = new DesktopContainer();

@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
  * Test application just for local use to test the DesktopPanel component
  */
 
-public class MainFrame extends JFrame {
+public class DesktopPanelTestFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(() -> {
 			try {
 
-				MainFrame frame = new MainFrame();
+				DesktopPanelTestFrame frame = new DesktopPanelTestFrame();
 				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
 				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame() {
+	public DesktopPanelTestFrame() {
 
 		setBounds(100, 100, 450, 300);
 		
@@ -50,6 +50,9 @@ public class MainFrame extends JFrame {
 		desktopPanel.setLeftPane(leftPanel);
 		desktopPanel.setBottomRightPane(mapPanel);
 		desktopPanel.setTopRightPane(stravaPanel);
+		desktopPanel.setHorizontalSliderLocation(100);
+		desktopPanel.setVerticalSliderLocation(200);
+		desktopPanel.setSlidersWidth(20);
 		getContentPane().add(desktopPanel);
 		 
 	}
