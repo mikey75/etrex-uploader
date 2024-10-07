@@ -7,13 +7,13 @@ import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStoragePanel;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
 import net.wirelabs.etrex.uploader.gui.components.sliding.DesktopPanel;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
-import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -85,7 +85,7 @@ public class EtrexUploader extends JFrame {
             log.info("Application initalization finished.");
         } else {
             SwingUtils.errorMsg("You are not authorized");
-            System.exit(1);
+            SystemUtils.systemExit(1);
         }
     }
 
@@ -111,7 +111,7 @@ public class EtrexUploader extends JFrame {
         if (!StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
             SwingUtils.errorMsg("Strava seems to be down! Exiting!");
             log.info("Exiting due to strava being down!");
-            System.exit(1);
+            SystemUtils.systemExit(1);
         }
     }
 
@@ -135,7 +135,7 @@ public class EtrexUploader extends JFrame {
 
         if (configuredMaps.isEmpty()) {
             SwingUtils.errorMsg("Fatal error: No maps defined, check configuration. Exiting!");
-            System.exit(1);
+            SystemUtils.systemExit(1);
         }
     }
 
@@ -147,8 +147,7 @@ public class EtrexUploader extends JFrame {
                 int answer = SwingUtils.yesNoMsg("Are you sure you want to exit?");
                 if (answer == JOptionPane.YES_OPTION) {
                     ctx.getGarminDeviceService().stop();
-                    EventBus.shutdown();
-                    System.exit(0);
+                    SystemUtils.systemExit(0);
                 }
             }
         });

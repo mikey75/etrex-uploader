@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.common;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class FileService {
         String filePart = FileUtils.getFilePart(filename);
         String ext = FileUtils.getExtensionPart(filename);
 
-        LocalDateTime now = getNow();
+        LocalDateTime now = SystemUtils.getNow();
         sb.append(filePart).append("-")
                 .append(duplicateFilePrefixFormatter.format(now))
                 .append(".")
@@ -91,11 +92,8 @@ public class FileService {
 
     private String getYearMonthTimestampedDir() {
 
-        LocalDateTime now = getNow();
+        LocalDateTime now = SystemUtils.getNow();
         return yearMonthFormatter.format(now);
     }
 
-    LocalDateTime getNow() {
-        return LocalDateTime.now();
-    }
 }
