@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.common;
 
 import com.garmin.xmlschemas.trainingCenterDatabase.v2.TrackpointT;
-import com.topografix.gpx.x1.x0.GpxDocument;
+import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg.Trkpt;
 import com.topografix.gpx.x1.x1.WptType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class GPSCoordinate {
                wptType.getEle()!=null ? wptType.getEle().doubleValue() : 0);
     }
     // gpx 1.0
-    public static Coordinate create(GpxDocument.Gpx.Trk.Trkseg.Trkpt trkpt) {
+    public static Coordinate create(Trkpt trkpt) {
        return new Coordinate(trkpt.getLon().doubleValue(), trkpt.getLat().doubleValue(),
                // elevation might not be present so take care for that
                trkpt.getEle()!=null ? trkpt.getEle().doubleValue() : 0);
