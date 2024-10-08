@@ -4,16 +4,19 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GzipUtilsTest {
 
-    // test file contains "She sells sea shells on the sea shore"
-    // and is gzipped with gnu gzip
+    // test file contains the below text and is gzipped with gnu gzip
     private static final String expectedDecompressed = "She sells sea shells on the seashore.";
     private static final File file = new File("src/test/resources/gzipped.gz");
+    private static final File nonExistentFile = new File("nonexistent");
 
     @Test
     void shouldDecompressGzippedFile() throws IOException {
@@ -28,6 +31,21 @@ class GzipUtilsTest {
         byte[] decompressedBytes = FileUtils.readFileToByteArray(file);
         String decompressed = GzipUtils.decompress(decompressedBytes);
         assertThat(decompressed).isEqualTo(expectedDecompressed);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenFileCannotBeReadDuringDecompress() {
+
+        assertThatThrownBy(() -> GzipUtils.decompress(nonExistentFile))
+                .isInstanceOfAny(NoSuchFileException.class,FileNotFoundException.class)
+                .hasMessage(nonExistentFile.getName());
+    }
+
+    @Test
+    void shouldReturnFalseIfFileCannottBeRecognizedBecauseItIsNotExisting() {
+        // todo: this method will additionally catch the FileNotFoundException and log its message
+        // todo: maybe add some LogVerifier class to tests to check such cases fully
+        assertThat(GzipUtils.isGzipped(nonExistentFile)).isFalse();
     }
 
 }
