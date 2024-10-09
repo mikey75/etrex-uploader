@@ -44,19 +44,19 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         super.store();
     }
 
-    boolean hasAccessToken() {
+    private boolean hasAccessToken() {
         return stravaAccessToken != null && !stravaAccessToken.isBlank();
     }
 
-    boolean hasRefreshToken() {
+    private boolean hasRefreshToken() {
         return stravaRefreshToken != null && !stravaRefreshToken.isBlank();
     }
 
-    boolean hasAppId() {
+    private boolean hasAppId() {
         return stravaAppId != null && !stravaAppId.isBlank();
     }
 
-    boolean hasClientSecret() {
+    private boolean hasClientSecret() {
         return stravaClientSecret != null && !stravaClientSecret.isBlank();
     }
 
