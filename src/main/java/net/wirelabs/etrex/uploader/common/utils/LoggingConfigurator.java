@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingConfigurator {
 
-    private static final Path LOGBACK_CONFIG_XML = Paths.get(Constants.CURRENT_WORK_DIR, "logback.xml");
+    private static final Path LOGBACK_CONFIG_XML = Paths.get(SystemUtils.getWorkDir(), "logback.xml");
 
     public static void configureLogger() {
 

@@ -98,4 +98,12 @@ public class SystemUtils {
         }
         System.exit(status);
     }
+
+    public static String getWorkDir() {
+        return System.getProperty("user.dir");
+    }
+
+    public static String getHomeDir() {
+        return System.getProperty("user.home");
+    }
 }
