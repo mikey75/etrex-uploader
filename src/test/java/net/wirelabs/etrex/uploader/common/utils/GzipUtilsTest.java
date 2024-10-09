@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.nio.file.NoSuchFileException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class GzipUtilsTest {
+class GzipUtilsTest extends BaseTest {
 
     // test file contains the below text and is gzipped with gnu gzip
     private static final String expectedDecompressed = "She sells sea shells on the seashore.";
@@ -43,9 +44,8 @@ class GzipUtilsTest {
 
     @Test
     void shouldReturnFalseIfFileCannottBeRecognizedBecauseItIsNotExisting() {
-        // todo: this method will additionally catch the FileNotFoundException and log its message
-        // todo: maybe add some LogVerifier class to tests to check such cases fully
         assertThat(GzipUtils.isGzipped(nonExistentFile)).isFalse();
+        verifyLogged("Exception during gzip detection: " + nonExistentFile.getName());
     }
 
 }

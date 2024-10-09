@@ -39,7 +39,7 @@ public final class GzipUtils {
             int magic = raf.read() & 0xff | ((raf.read() << 8) & 0xff00);
             return magic == GZIPInputStream.GZIP_MAGIC;
         } catch (IOException e) {
-            log.error("Exception during gzip detection", e);
+            log.error("Exception during gzip detection: {}", e.getMessage());
             return false;
         }
     }
