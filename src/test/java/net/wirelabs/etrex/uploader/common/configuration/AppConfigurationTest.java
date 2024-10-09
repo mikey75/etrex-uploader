@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,8 +28,8 @@ import static org.mockito.Mockito.*;
 class AppConfigurationTest extends BaseTest {
 
     public static final File APP_CONFIG_FILE = new File("src/test/resources/dupa");
-    private final File currentConfig = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-    private final File currentConfigCopy = new File(Constants.CURRENT_WORK_DIR, ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
+    private final File currentConfig = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+    private final File currentConfigCopy = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
 
     @BeforeEach
     void makeACopyOfCurrentConfigFile() throws IOException {
