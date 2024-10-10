@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
 
+import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
@@ -30,9 +31,9 @@ public class MapsSettingsPanel extends BorderedPanel {
     private final JLabel lblMapHomeLon = new JLabel("Map home longitude:");
 
     private final JTextField threads = new JTextField();
-    private final JTextField mapHomeLat = new JTextField();
-    private final JTextField mapHomeLon = new JTextField();
-    private final ColorChooserTextField colorChooserTextField = new ColorChooserTextField();
+    @Getter private final JTextField mapHomeLat = new JTextField();
+    @Getter private final JTextField mapHomeLon = new JTextField();
+    @Getter private final ColorChooserTextField colorChooserTextField = new ColorChooserTextField();
 
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps");
@@ -58,6 +59,9 @@ public class MapsSettingsPanel extends BorderedPanel {
     }
 
     private void loadConfiguration() {
+
+
+        // set values from gui
         newMaps.setSelectedItem(configuration.getMapFile().toFile());
         threads.setText(String.valueOf(configuration.getTilerThreads()));
         colorChooserTextField.setText(configuration.getMapTrackColor());
@@ -71,16 +75,33 @@ public class MapsSettingsPanel extends BorderedPanel {
         if (newMaps.getSelectedItem() != null) {
             configuration.setMapFile(((File) newMaps.getSelectedItem()).toPath());
         }
+        // emit events if track color or map home changed
         updateTrackColor();
+        updateMapHome();
+    }
 
+    private void updateMapHome() {
+        // copy original config values for event bus change detection
+        Double origLat = configuration.getMapHomeLattitude();
+        Double origLon = configuration.getMapHomeLongitude();
+        // set new values
         configuration.setMapHomeLongitude(Double.parseDouble(mapHomeLon.getText()));
         configuration.setMapHomeLattitude(Double.parseDouble(mapHomeLat.getText()));
-        EventBus.publish(EventType.MAP_HOME_CHANGED,new Coordinate(configuration.getMapHomeLongitude(), configuration.getMapHomeLattitude()));
+        // publish the map home change event only if it actually really changed
+        if (!origLat.equals(configuration.getMapHomeLattitude()) || !origLon.equals(configuration.getMapHomeLongitude())) {
+            EventBus.publish(EventType.MAP_HOME_CHANGED, new Coordinate(configuration.getMapHomeLongitude(), configuration.getMapHomeLattitude()));
+        }
     }
 
     private void updateTrackColor() {
+        // copy original config values for event bus change detection
+        String origColor = configuration.getMapTrackColor();
+        // set new values
         configuration.setMapTrackColor(colorChooserTextField.getText());
-        EventBus.publish(EventType.TRACK_COLOR_CHANGED, Color.decode(colorChooserTextField.getText()));
+        // publish color change event if it actually really changed
+        if (!configuration.getMapTrackColor().equals(origColor)) {
+            EventBus.publish(EventType.TRACK_COLOR_CHANGED, Color.decode(colorChooserTextField.getText()));
+        }
     }
 
 }
