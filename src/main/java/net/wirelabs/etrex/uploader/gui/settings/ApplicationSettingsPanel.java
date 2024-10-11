@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
@@ -10,7 +11,9 @@ import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
+import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CHANGED;
 
@@ -22,7 +25,8 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
     private final FileChooserTextField storageRoot = new FileChooserTextField(true, false);
-    private final FileChooserTextField userRoots = new FileChooserTextField(true, true);
+    @Getter
+    private final FileChooserTextField userRootsFileChooser = new FileChooserTextField(true, true);
     private final FileChooserTextField mapDefinitionsDir = new FileChooserTextField(true,false);
 
     private final JTextField discoveryDelay = new JTextField();
@@ -43,7 +47,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         JLabel userRootsLabel = new JLabel("User storage roots:");
         add(userRootsLabel, "cell 0 1,alignx trailing");
-        add(userRoots, "cell 1 1,growx");
+        add(userRootsFileChooser, "cell 1 1,growx");
 
         JLabel mapDefinitionsDirLabel = new JLabel("Map definitons dir:");
         add(mapDefinitionsDirLabel, "cell 0 2,alignx trailing");
@@ -88,7 +92,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
     private void loadConfiguration() {
         storageRoot.setPaths(Collections.singletonList(configuration.getStorageRoot()));
-        userRoots.setPaths(configuration.getUserStorageRoots());
+        userRootsFileChooser.setPaths(configuration.getUserStorageRoots());
         discoveryDelay.setText(String.valueOf(configuration.getDeviceDiscoveryDelay()));
         waitDriveTimeout.setText(String.valueOf(configuration.getWaitDriveTimeout()));
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
@@ -99,8 +103,9 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     }
 
     public void updateConfiguration() {
+        List<Path> origStorageRootsString = configuration.getUserStorageRoots();
         configuration.setStorageRoot(storageRoot.getPaths().get(0));
-        configuration.setUserStorageRoots(userRoots.getPaths());
+        configuration.setUserStorageRoots(userRootsFileChooser.getPaths());
         configuration.setDeviceDiscoveryDelay(Long.valueOf(discoveryDelay.getText()));
         configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
@@ -108,7 +113,11 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
         configuration.setUseSliders(useSliders.isSelected());
-        EventBus.publish(USER_STORAGE_ROOTS_CHANGED, configuration.getUserStorageRoots());
+        // publish change if it really changed ;)
+        if (!origStorageRootsString.equals(configuration.getUserStorageRoots())) {
+            log.info("Storage roots changed");
+            EventBus.publish(USER_STORAGE_ROOTS_CHANGED, configuration.getUserStorageRoots());
+        }
     }
 
 }
