@@ -33,7 +33,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
-    private final JCheckBox useSliders = new JCheckBox("Desktop look with sliders");
+    @Getter private final JCheckBox useSliders = new JCheckBox("Desktop look with sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
