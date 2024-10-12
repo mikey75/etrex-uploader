@@ -15,37 +15,37 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class GzipUtilsTest extends BaseTest {
 
     // test file contains the below text and is gzipped with gnu gzip
-    private static final String expectedDecompressed = "She sells sea shells on the seashore.";
-    private static final File file = new File("src/test/resources/gzipped.gz");
-    private static final File nonExistentFile = new File("nonexistent");
+    private static final String EXPECTED_DECOMPRESSED = "She sells sea shells on the seashore.";
+    private static final File GZIPPED_FILE = new File("src/test/resources/gzipped.gz");
+    private static final File NON_EXISTENT_FILE = new File("nonexistent");
 
     @Test
     void shouldDecompressGzippedFile() throws IOException {
-        assertThat(GzipUtils.isGzipped(file)).isTrue();
-        String decompressed = GzipUtils.decompress(file);
-        assertThat(decompressed).isEqualTo(expectedDecompressed);
+        assertThat(GzipUtils.isGzipped(GZIPPED_FILE)).isTrue();
+        String decompressed = GzipUtils.decompress(GZIPPED_FILE);
+        assertThat(decompressed).isEqualTo(EXPECTED_DECOMPRESSED);
     }
 
     @Test
     void shoulDecompressGzippedBytes() throws IOException {
-        assertThat(GzipUtils.isGzipped(file)).isTrue();
-        byte[] decompressedBytes = FileUtils.readFileToByteArray(file);
+        assertThat(GzipUtils.isGzipped(GZIPPED_FILE)).isTrue();
+        byte[] decompressedBytes = FileUtils.readFileToByteArray(GZIPPED_FILE);
         String decompressed = GzipUtils.decompress(decompressedBytes);
-        assertThat(decompressed).isEqualTo(expectedDecompressed);
+        assertThat(decompressed).isEqualTo(EXPECTED_DECOMPRESSED);
     }
 
     @Test
     void shouldThrowExceptionWhenFileCannotBeReadDuringDecompress() {
 
-        assertThatThrownBy(() -> GzipUtils.decompress(nonExistentFile))
+        assertThatThrownBy(() -> GzipUtils.decompress(NON_EXISTENT_FILE))
                 .isInstanceOfAny(NoSuchFileException.class,FileNotFoundException.class)
-                .hasMessage(nonExistentFile.getName());
+                .hasMessage(NON_EXISTENT_FILE.getName());
     }
 
     @Test
     void shouldReturnFalseIfFileCannottBeRecognizedBecauseItIsNotExisting() {
-        assertThat(GzipUtils.isGzipped(nonExistentFile)).isFalse();
-        verifyLogged("Exception during gzip detection: " + nonExistentFile.getName());
+        assertThat(GzipUtils.isGzipped(NON_EXISTENT_FILE)).isFalse();
+        verifyLogged("Exception during gzip detection: " + NON_EXISTENT_FILE.getName());
     }
 
 }

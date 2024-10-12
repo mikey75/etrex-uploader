@@ -4,7 +4,6 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.wirelabs.etrex.uploader.common.Constants;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;

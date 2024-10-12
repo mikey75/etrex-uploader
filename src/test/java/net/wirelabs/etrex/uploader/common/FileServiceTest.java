@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 class FileServiceTest extends BaseTest {
 
     private static final LocalDateTime testDateTimeNow = LocalDateTime.of(2022, 1, 2, 10, 24, 11);
-    private static final String expectedFormattedPart = "2022-01-02-102411";
+    private static final String EXPECTED_FORMATTED_PART = "2022-01-02-102411";
 
     private FileService fileService;
     private AppConfiguration appConfiguration;
@@ -83,7 +83,7 @@ class FileServiceTest extends BaseTest {
         fileService.archiveAndDelete(track);
         // then check if timestamped copy is created
         assertThat(targetDir).isDirectoryContaining(f ->
-                f.getName().equals(("file-" + expectedFormattedPart + ".gpx")));
+                f.getName().equals(("file-" + EXPECTED_FORMATTED_PART + ".gpx")));
         verifyLogged("Target file exists. Changing name by adding current timestamp to filename");
         verifyLoggedTimes(2, "Archiving " + track.getPath());
         verifyLoggedTimes(2, "Deleting " + track.getPath());
@@ -129,10 +129,8 @@ class FileServiceTest extends BaseTest {
     }
 
     private void createTestTrack(File track) throws IOException {
-        if (track.exists()) {
-            if (!track.delete()) {
+        if (track.exists() && !track.delete()) {
                 fail("could not delete file ");
-            }
         }
         if (!track.createNewFile()) {
             fail("Could not create file for test");
