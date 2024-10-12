@@ -73,8 +73,6 @@ class GarminDriveDetectorTest extends BaseTest {
             assertThat(NON_GARMIN_DRIVE).isDirectory();
         });
 
-        //Application.createConfiguration();
-
     }
 
     @Test
@@ -104,8 +102,6 @@ class GarminDriveDetectorTest extends BaseTest {
         //given
         driveDetector.start();
 
-
-        //Sleeper.sleepSeconds(1);
         //when
         addDrive(GARMIN_DRIVE_ONE);
 
@@ -180,7 +176,7 @@ class GarminDriveDetectorTest extends BaseTest {
         driveDetector.start();
         
         // when
-        File targetFile = FileUtils.copyFileToDir(DEVICE_XML_FILE,GARMIN_DRIVE_ONE);
+        FileUtils.copyFileToDir(DEVICE_XML_FILE,GARMIN_DRIVE_ONE);
         addDrive(GARMIN_DRIVE_ONE);
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
             verify(driveDetector, times(1)).publishFoundHardwareInfo(any(DeviceT.class));

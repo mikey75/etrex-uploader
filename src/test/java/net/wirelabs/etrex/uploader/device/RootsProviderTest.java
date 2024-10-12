@@ -25,7 +25,6 @@ class RootsProviderTest {
             systemUtils.when(SystemUtils::isLinux).thenReturn(true);
             systemUtils.when(SystemUtils::isWindows).thenReturn(false);
 
-            //doReturn("Linux").when(rootsProvider).getOperatingSystem();
             // when
             rootsProvider.getRoots();
             // then

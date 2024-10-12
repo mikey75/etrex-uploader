@@ -89,7 +89,7 @@ class AuthCodeInterceptorTest {
     }
 
     @Test
-    void testCorrectCodeInterceptionWithIncorrectScope() throws IOException, InterruptedException, StravaException {
+    void testCorrectCodeInterceptionWithIncorrectScope() throws IOException, InterruptedException {
 
         AuthCodeRetriever authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
 

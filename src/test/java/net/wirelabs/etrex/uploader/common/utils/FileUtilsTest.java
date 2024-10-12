@@ -24,22 +24,22 @@ class FileUtilsTest {
 
     @Test
     void shouldParseFileNameExtensionAndName() throws IOException {
-        String extension_part;
-        String file_part;
+        String extensionPart;
+        String filePart;
 
-        extension_part = getExtensionPart(SINGLE_EXTENSION_FILE.getName());
-        file_part = getFilePart(SINGLE_EXTENSION_FILE.getName());
+        extensionPart = getExtensionPart(SINGLE_EXTENSION_FILE.getName());
+        filePart = getFilePart(SINGLE_EXTENSION_FILE.getName());
 
-        assertThat(file_part).isEqualTo("testfile");
-        assertThat(extension_part).isEqualTo("txt");
+        assertThat(filePart).isEqualTo("testfile");
+        assertThat(extensionPart).isEqualTo("txt");
 
 
 
-        extension_part = getExtensionPart(MULTI_EXTENSION_FILE.getName());
-        file_part = getFilePart(MULTI_EXTENSION_FILE.getName());
+        extensionPart = getExtensionPart(MULTI_EXTENSION_FILE.getName());
+        filePart = getFilePart(MULTI_EXTENSION_FILE.getName());
 
-        assertThat(extension_part).isEqualTo("gpx");
-        assertThat(file_part).isEqualTo("testfile.txt.abc");
+        assertThat(extensionPart).isEqualTo("gpx");
+        assertThat(filePart).isEqualTo("testfile.txt.abc");
 
     }
 
