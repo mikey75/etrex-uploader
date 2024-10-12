@@ -1,7 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;

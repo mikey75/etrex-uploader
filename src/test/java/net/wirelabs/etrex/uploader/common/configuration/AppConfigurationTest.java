@@ -80,7 +80,7 @@ class AppConfigurationTest extends BaseTest {
     }
 
     @Test
-    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() throws IOException {
+    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() {
         assertThat(APP_CONFIG_FILE).doesNotExist();
         AppConfiguration c = new AppConfiguration(APP_CONFIG_FILE.getPath());
         assertDefaultValues(c);

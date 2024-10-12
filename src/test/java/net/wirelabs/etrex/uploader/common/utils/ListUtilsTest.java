@@ -45,11 +45,11 @@ class ListUtilsTest {
     @Test
     void listDifferenceTest() {
 
-        ArrayList<String> LISTA = new ArrayList<>(ListUtils.listOf("Ala","Ola","Kasia","Mariola"));
-        ArrayList<String> LISTB = new ArrayList<>(ListUtils.listOf("Asia","Ola","Magda","Zosia"));
+        ArrayList<String> listA = new ArrayList<>(ListUtils.listOf("Ala","Ola","Kasia","Mariola"));
+        ArrayList<String> listB = new ArrayList<>(ListUtils.listOf("Asia","Ola","Magda","Zosia"));
         Iterable<String> result;
 
-        result = ListUtils.findElementsOfANotPresentInB(LISTA, LISTB);
+        result = ListUtils.findElementsOfANotPresentInB(listA, listB);
 
         // should have elements of listA that are not present in listB
         assertThat(result).containsOnly("Ala","Kasia","Mariola");
@@ -62,17 +62,17 @@ class ListUtilsTest {
 
     @Test
     void testStringToPath() {
-        String s_many = "a ,b ,doc and set";
-        String s_single ="a   ";
-        String s_none ="";
-        String s_NULL = null;
-        List<Path> paths = ListUtils.convertStringListToPaths(s_many);
+        String sMany = "a ,b ,doc and set";
+        String sSingle ="a   ";
+        String sNone ="";
+        String sNull = null;
+        List<Path> paths = ListUtils.convertStringListToPaths(sMany);
         assertThat(paths).containsExactly(Paths.get("a"),Paths.get("b"), Paths.get("doc and set"));
-        paths = ListUtils.convertStringListToPaths(s_single);
+        paths = ListUtils.convertStringListToPaths(sSingle);
         assertThat(paths).containsExactly(Paths.get("a"));
-        paths = ListUtils.convertStringListToPaths(s_none);
+        paths = ListUtils.convertStringListToPaths(sNone);
         assertThat(paths).isEmpty();
-        paths = ListUtils.convertStringListToPaths(s_NULL);
+        paths = ListUtils.convertStringListToPaths(sNull);
         assertThat(paths).isEmpty();
     }
 
