@@ -11,7 +11,7 @@ import java.awt.*;
 public class ColorChooserTextField extends JPanel {
 
     private final JTextField textfield;
-    private final JButton button;
+    final JButton colorChooserInvokerButton;
 
     public ColorChooserTextField() {
 
@@ -24,14 +24,14 @@ public class ColorChooserTextField extends JPanel {
         textfield.setMaximumSize(new Dimension(2400, 18));
 
         // the button
-        button = new JButton("...");
-        button.setMinimumSize(new Dimension(18, 18));
-        button.setMaximumSize(new Dimension(18, 18));
+        colorChooserInvokerButton = new JButton("...");
+        colorChooserInvokerButton.setMinimumSize(new Dimension(18, 18));
+        colorChooserInvokerButton.setMaximumSize(new Dimension(18, 18));
 
-        add(button, "cell 1 0");
+        add(colorChooserInvokerButton, "cell 1 0");
         add(textfield, "cell 0 0,grow");
 
-        button.addActionListener(e -> showColorChooser());
+        colorChooserInvokerButton.addActionListener(e -> showColorChooser());
     }
 
     private void showColorChooser() {
@@ -39,23 +39,24 @@ public class ColorChooserTextField extends JPanel {
 
         if (textfield.getText().isBlank()) {
             chosen = Color.BLACK;
-        } else{
+        } else {
             chosen = Color.decode(textfield.getText());
         }
 
-        Color c = JColorChooser.showDialog(null,"Choose color", chosen );
+        Color c = JColorChooser.showDialog(null, "Choose color", chosen);
         if (c != null) {
-         textfield.setText(convertColorToAscii(c));
+            textfield.setText(convertColorToAscii(c));
         }
     }
 
     private String convertColorToAscii(Color c) {
-         return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
+        return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
     }
 
     public void setText(String text) {
         textfield.setText(text);
     }
+
     public String getText() {
         return textfield.getText();
     }
