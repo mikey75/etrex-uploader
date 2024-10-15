@@ -112,7 +112,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
         assertThat(c.getMapHomeLattitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
-        assertThat(c.isUseSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
+        assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
     }
 
     @Test
@@ -152,7 +152,7 @@ class AppConfigurationTest extends BaseTest {
         c.setWaitDriveTimeout(10L);
         c.setMapHomeLattitude(10.111);
         c.setMapHomeLongitude(30.111);
-        c.setUseSliders(true);
+        c.setEnableDesktopSliders(true);
         c.save();
 
         verifyLogged("Loading " + newConfigFile.getPath());

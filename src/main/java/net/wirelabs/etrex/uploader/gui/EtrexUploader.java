@@ -2,7 +2,6 @@ package net.wirelabs.etrex.uploader.gui;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
@@ -10,7 +9,7 @@ import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStoragePanel;
 import net.wirelabs.etrex.uploader.gui.components.Splash;
-import net.wirelabs.etrex.uploader.gui.components.sliding.DesktopPanel;
+import net.wirelabs.etrex.uploader.gui.components.desktop.DesktopPanel;
 import net.wirelabs.etrex.uploader.gui.map.MapPanel;
 import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
@@ -32,6 +31,7 @@ public class EtrexUploader extends JFrame {
 
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
+    private DesktopPanel desktopPanel;
     private GarminAndStoragePanel garminAndStoragePanel;
     private StravaPanel stravaPanel;
     private MapPanel mapPanel;
@@ -59,7 +59,7 @@ public class EtrexUploader extends JFrame {
             garminAndStoragePanel = new GarminAndStoragePanel(uploadService, ctx.getAppConfiguration());
 
             splash.update("Initializing Strava component");
-            stravaPanel = new StravaPanel(ctx.getStravaService(),ctx.getAppConfiguration());
+            stravaPanel = new StravaPanel(ctx.getStravaService(), ctx.getAppConfiguration());
 
             splash.update("Initalizing maps component");
             mapPanel = new MapPanel(ctx.getAppConfiguration());
@@ -70,13 +70,17 @@ public class EtrexUploader extends JFrame {
             splash.update("Laying out main window");
             Container container = getContentPane();
 
-            if (ctx.getAppConfiguration().isUseSliders()) {
-                // desktop-like look with sliders
-                setupDesktopLook(container);
-            } else {
-                // classic look - no sliders
-                setupClassicLook(container);
+            final boolean slidersEnabled = ctx.getAppConfiguration().isEnableDesktopSliders();
+            desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, slidersEnabled);
+
+            // if sliders enabled - set default slider sizes and locations
+            if (slidersEnabled) {
+                desktopPanel.setSlidersWidth(5);
+                desktopPanel.setVerticalSliderLocation(garminAndStoragePanel.getSize().width);
+                desktopPanel.setHorizontalSliderLocation(stravaPanel.getSize().height);
             }
+
+            container.add(desktopPanel);
 
             splash.update("Done");
             setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -89,25 +93,7 @@ public class EtrexUploader extends JFrame {
         }
     }
 
-    private void setupDesktopLook(Container container) {
-
-        DesktopPanel desktopPanel = new DesktopPanel(garminAndStoragePanel,stravaPanel,mapPanel);
-        desktopPanel.setSlidersWidth(5);
-
-        desktopPanel.setVerticalSliderLocation(garminAndStoragePanel.getSize().width); //
-        desktopPanel.setHorizontalSliderLocation(stravaPanel.getSize().height);
-        container.add(desktopPanel);
-        container.getComponents();
-    }
-
-    private void setupClassicLook(Container container) {
-        container.setLayout(new MigLayout("", "[10%][90%]", "[30%][70%]"));
-        container.add(garminAndStoragePanel, "cell 0 0 1 3,grow");
-        container.add(stravaPanel, "cell 1 0, grow");
-        container.add(mapPanel, "cell 1 1 2 2,grow");
-    }
-
-    private  void checkStravaIsUp(AppConfiguration cfg) {
+    private void checkStravaIsUp(AppConfiguration cfg) {
         if (!StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
             SwingUtils.errorMsg("Strava seems to be down! Exiting!");
             log.info("Exiting due to strava being down!");

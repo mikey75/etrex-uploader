@@ -91,7 +91,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
         doNothing().when(appConfiguration).save();
 
         // this invokes dialog  -  yes option chosen
-        applicationSettingsPanel.getUseSliders().doClick();
+        applicationSettingsPanel.getEnableDesktopSlidersChkbox().doClick();
         // verify reboot dialog was shown and accepted
         swingUtilsMock.verify(() -> SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?"));
         verifyLogged("Restarting application");
@@ -112,7 +112,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
         doNothing().when(appConfiguration).save();
 
         // this invokes dialog -> no option chosen
-        applicationSettingsPanel.getUseSliders().doClick();
+        applicationSettingsPanel.getEnableDesktopSlidersChkbox().doClick();
         // verify reboot dialog was shown but denied
         swingUtilsMock.verify(() -> SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?"));
         verifyNeverLogged("Restarting application");

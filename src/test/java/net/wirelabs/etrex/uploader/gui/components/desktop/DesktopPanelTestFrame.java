@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.components.sliding;
+package net.wirelabs.etrex.uploader.gui.components.desktop;
 
 import java.awt.EventQueue;
 
@@ -26,7 +26,6 @@ public class DesktopPanelTestFrame extends JFrame {
 				frame.setLocationRelativeTo(null);
 				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				frame.setExtendedState(MAXIMIZED_BOTH);
-
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -45,14 +44,10 @@ public class DesktopPanelTestFrame extends JFrame {
 		JPanel stravaPanel = new BorderedPanel("Strava");
 		JPanel mapPanel = new BorderedPanel("Map!");
 
-		DesktopPanel desktopPanel = new DesktopPanel();
+		DesktopPanel desktopPanel = new DesktopPanel(leftPanel,stravaPanel, mapPanel,true);
 		desktopPanel.setSlidersWidth(5);
-		desktopPanel.setLeftPane(leftPanel);
-		desktopPanel.setBottomRightPane(mapPanel);
-		desktopPanel.setTopRightPane(stravaPanel);
 		desktopPanel.setHorizontalSliderLocation(100);
 		desktopPanel.setVerticalSliderLocation(200);
-		desktopPanel.setSlidersWidth(20);
 		getContentPane().add(desktopPanel);
 		 
 	}
