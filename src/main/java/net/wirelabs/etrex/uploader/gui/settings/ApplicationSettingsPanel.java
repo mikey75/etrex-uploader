@@ -27,13 +27,14 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final FileChooserTextField storageRoot = new FileChooserTextField(true, false);
     @Getter
     private final FileChooserTextField userRootsFileChooser = new FileChooserTextField(true, true);
-    private final FileChooserTextField mapDefinitionsDir = new FileChooserTextField(true,false);
+    private final FileChooserTextField mapDefinitionsDir = new FileChooserTextField(true, false);
 
     private final JTextField discoveryDelay = new JTextField();
     private final JTextField waitDriveTimeout = new JTextField();
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
-    @Getter private final JCheckBox useSliders = new JCheckBox("Desktop look with sliders");
+    @Getter
+    private final JCheckBox enableDesktopSlidersChkbox = new JCheckBox("Enable desktop sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
@@ -68,15 +69,15 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         add(deleteAfterUpl, "cell 0 6");
         add(archiveAfterUpload, "cell 1 6");
-        add(useSliders, "cell 0 7");
+        add(enableDesktopSlidersChkbox, "cell 0 7");
         loadConfiguration();
 
-        useSliders.addActionListener(e -> showRebootNeededMsgDialog(configuration));
+        enableDesktopSlidersChkbox.addActionListener(e -> showRebootNeededMsgDialog(configuration));
 
     }
 
     private void showRebootNeededMsgDialog(AppConfiguration configuration) {
-        int dialogResponse =  SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?");
+        int dialogResponse = SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?");
         // if YES -> update config and reboot app
         if (dialogResponse == JOptionPane.YES_OPTION) {
             updateConfiguration();
@@ -86,7 +87,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
             SystemUtils.shutdownAndExit();
         } else {
             // if NO -> restore UI status with current config and continue normally
-             useSliders.setSelected(configuration.isUseSliders());
+            enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
         }
     }
 
@@ -99,7 +100,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitonsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
-        useSliders.setSelected(configuration.isUseSliders());
+        enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
     }
 
     public void updateConfiguration() {
@@ -112,7 +113,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
-        configuration.setUseSliders(useSliders.isSelected());
+        configuration.setEnableDesktopSliders(enableDesktopSlidersChkbox.isSelected());
         // publish change if it really changed ;)
         if (!origStorageRootsString.equals(configuration.getUserStorageRoots())) {
             log.info("Storage roots changed");
