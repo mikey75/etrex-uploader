@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

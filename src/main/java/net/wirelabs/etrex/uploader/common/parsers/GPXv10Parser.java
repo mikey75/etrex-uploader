@@ -5,7 +5,6 @@ import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk;
 import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg;
 import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg.Trkpt;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.GPSCoordinate;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 

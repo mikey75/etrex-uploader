@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.strava.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.eventbus.EventBus;
 
