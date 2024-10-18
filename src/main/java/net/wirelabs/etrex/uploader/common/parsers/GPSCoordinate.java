@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.common;
+package net.wirelabs.etrex.uploader.common.parsers;
 
 import com.garmin.xmlschemas.trainingCenterDatabase.v2.TrackpointT;
 import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg.Trkpt;
