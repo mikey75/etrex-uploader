@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

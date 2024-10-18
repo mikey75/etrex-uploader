@@ -4,7 +4,7 @@ import com.squareup.okhttp.*;
 import com.strava.model.SportType;
 import com.strava.model.Upload;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;

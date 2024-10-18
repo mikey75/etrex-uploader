@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.strava.service;
 
 import com.strava.model.*;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;

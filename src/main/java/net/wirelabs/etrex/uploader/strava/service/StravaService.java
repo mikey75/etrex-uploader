@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.service;
 
 import com.strava.model.*;
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 
 import java.io.File;
 import java.io.Serializable;

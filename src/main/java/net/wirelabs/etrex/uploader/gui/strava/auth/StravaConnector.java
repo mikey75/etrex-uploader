@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.strava.auth;
 
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.StravaException;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;

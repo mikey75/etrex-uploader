@@ -2,7 +2,6 @@ package net.wirelabs.etrex.uploader.common.parsers;
 
 import com.garmin.xmlschemas.trainingCenterDatabase.v2.*;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.GPSCoordinate;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 
