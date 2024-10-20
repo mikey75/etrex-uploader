@@ -6,6 +6,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -19,6 +20,9 @@ public class StravaSettingsPanel extends BorderedPanel {
     private final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
     private final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
     private final JTextField hostTimeout = new JTextField();
+
+    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][][]");
+
     public StravaSettingsPanel(AppConfiguration configuration) {
 
         super("Strava");
@@ -29,7 +33,7 @@ public class StravaSettingsPanel extends BorderedPanel {
         JLabel lblHostTimeout = new JLabel("Strava hosts timeout milliseconds:");
 
         this.configuration = configuration;
-        setLayout(new MigLayout("", "[][grow]", "[][][]"));
+        setLayout(layout);
 
         add(activityTypeLabel, "cell 0 0,alignx trailing");
         activityTypeCombo.setModel(new DefaultComboBoxModel<>(SportType.values()));

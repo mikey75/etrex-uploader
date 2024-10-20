@@ -16,6 +16,7 @@ import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.*;
 import java.io.IOException;
 import java.net.URI;
@@ -47,6 +48,8 @@ public class UserAccountPanel extends BorderedPanel {
     private final JLabel lblStatistics = new JLabel("Statistics");
     private final ApiUsagePanel apiUsagePanel;
 
+    private final LayoutManager layout = new MigLayout("", "[grow][]", "[][][][][][][][][][][][grow][grow,bottom]");
+
     public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
 
         this.stravaService = stravaService;
@@ -62,7 +65,7 @@ public class UserAccountPanel extends BorderedPanel {
 
     private void initVisualComponent() {
         setBorderTitle("My profile");
-        setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][grow][grow,bottom]"));
+        setLayout(layout);
         add(athleteName, "cell 0 1 2 1,alignx center");
         add(athletePicture, "cell 0 0 2 1,alignx center");
         add(lblStatistics, "cell 0 2 2 1");

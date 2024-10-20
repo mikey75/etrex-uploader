@@ -35,10 +35,12 @@ public class MapsSettingsPanel extends BorderedPanel {
     @Getter private final JTextField mapHomeLon = new JTextField();
     @Getter private final ColorChooserTextField colorChooserTextField = new ColorChooserTextField();
 
+    private final LayoutManager layout = new MigLayout("", "[][][][grow]", "[][][grow]");
+
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps");
         this.configuration = configuration;
-        setLayout(new MigLayout("", "[][][][grow]", "[][][grow]"));
+        setLayout(layout);
         add(lblDefaultMap, "cell 0 0,alignx trailing");
         add(newMaps, "cell 1 0, growx");
         add(lblTilerThreads, "cell 2 0,alignx trailing");

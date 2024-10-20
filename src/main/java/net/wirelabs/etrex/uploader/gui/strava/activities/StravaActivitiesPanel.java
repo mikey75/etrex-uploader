@@ -43,6 +43,8 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
     private final AppConfiguration configuration;
     private int page = 1;
 
+    private final LayoutManager layout = new MigLayout("", "[grow][]", "[grow][grow]");
+
     public StravaActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
         super("Strava");
         this.configuration = configuration;
@@ -53,7 +55,7 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
 
     private void createVisualComponent() {
 
-        setLayout(new MigLayout("", "[grow][]", "[grow][grow]"));
+        setLayout(layout);
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");

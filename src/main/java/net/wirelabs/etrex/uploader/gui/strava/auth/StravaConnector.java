@@ -9,6 +9,7 @@ import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,6 +25,7 @@ public class StravaConnector extends JDialog {
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new StravaButton();
+    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][]");
     private final AuthService authService;
     @Getter
     private final AtomicBoolean oauthStatus = new AtomicBoolean(false);
@@ -55,7 +57,7 @@ public class StravaConnector extends JDialog {
     private void createVisualComponent() {
 
         setTitle("Connect to strava");
-        setLayout(new MigLayout("", "[grow]", "[][][][][]"));
+        setLayout(layout);
         add(lblApplicationId, "cell 0 0,alignx center,aligny center");
         add(appIdInput, "cell 0 1,grow");
         add(lblClientSecret, "cell 0 2,alignx center,aligny center");
