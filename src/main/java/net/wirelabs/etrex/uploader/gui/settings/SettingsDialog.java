@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.LogViewerDialog;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class SettingsDialog extends JDialog {
 
@@ -18,6 +19,7 @@ public class SettingsDialog extends JDialog {
 	private final JButton cancelBtn = new JButton("Cancel");
 	private final JButton saveBtn = new JButton("Save settings");
 
+	private final LayoutManager layout = new MigLayout("", "[grow]", "[grow][grow][grow][]");
 
 	/**
 	 * Create the dialog.
@@ -35,7 +37,7 @@ public class SettingsDialog extends JDialog {
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
 
 
-		setLayout(new MigLayout("", "[grow]", "[grow][grow][grow][]"));
+		setLayout(layout);
 		add(applicationSettingsPanel, "cell 0 0,grow");
 		add(stravaSettingsPanel, "cell 0 1,grow");
 		add(mapsSettingsPanel, "cell 0 2,grow");

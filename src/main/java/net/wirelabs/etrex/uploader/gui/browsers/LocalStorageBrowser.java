@@ -10,6 +10,7 @@ import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,11 +25,13 @@ public class LocalStorageBrowser extends EventAwareBorderedPanel {
     private final FileTree fileTree;
     private final AppConfiguration appConfiguration;
 
+    private final LayoutManager layout = new MigLayout("", "[grow]", "[grow]");
+
     LocalStorageBrowser(AppConfiguration appConfiguration) {
         
         super("Local repository");
         this.appConfiguration = appConfiguration;
-        setLayout(new MigLayout("", "[grow]", "[grow]"));
+        setLayout(layout);
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 

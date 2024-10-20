@@ -29,9 +29,11 @@ public class ApiUsagePanel extends EventAwarePanel {
     private Integer allowedDaily;
     private Integer allowed15min;
 
+    private final LayoutManager layout = new MigLayout("insets 0 0 0 0", "[grow][grow]", "[][center][][]");
+
     public ApiUsagePanel(AppConfiguration configuration) {
         this.configuration = configuration;
-        setLayout(new MigLayout("insets 0 0 0 0", "[grow][grow]", "[][center][][]"));
+        setLayout(layout);
 
         JLabel header = new JLabel("API usage:");
 

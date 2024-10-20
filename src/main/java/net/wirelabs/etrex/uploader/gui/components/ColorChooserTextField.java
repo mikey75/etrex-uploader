@@ -13,10 +13,12 @@ public class ColorChooserTextField extends JPanel {
     private final JTextField textfield;
     final JButton colorChooserInvokerButton;
 
+    private final LayoutManager layout = new MigLayout("gapx 0,insets 0", "[grow][]", "[]");
+
     public ColorChooserTextField() {
 
         setBorder(null);
-        setLayout(new MigLayout("gapx 0,insets 0", "[grow][]", "[]"));
+        setLayout(layout);
 
         // the textfield
         textfield = new JTextField();

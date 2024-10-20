@@ -40,6 +40,7 @@ public class MapPanel extends EventAwareBorderedPanel {
     private transient Coordinate mapHome;
     private final transient TrackParser trackParser;
 
+    private final MigLayout layout = new MigLayout("", "[grow]", "[grow]");
 
     public MapPanel(AppConfiguration configuration) {
         super("Map");
@@ -60,7 +61,7 @@ public class MapPanel extends EventAwareBorderedPanel {
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
 
-        setLayout(new MigLayout("", "[grow]", "[grow]"));
+        setLayout(layout);
         add(mapViewer, "cell 0 0,grow");
 
 

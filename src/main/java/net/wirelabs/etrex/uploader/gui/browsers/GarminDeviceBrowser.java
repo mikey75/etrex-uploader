@@ -15,8 +15,10 @@ import net.wirelabs.eventbus.IEventType;
 
 import javax.swing.*;
 import javax.swing.tree.*;
+import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -40,9 +42,11 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     private final JScrollPane scrollPane = new JScrollPane();
     private final FileTree tree;
 
+    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][][grow]");
+
     GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device");
-        setLayout(new MigLayout("", "[grow]", "[][][][][][grow]"));
+        setLayout(layout);
 
         add(lblDevice, "flowx,cell 0 0,alignx left");
         add(lblSerialNo, "flowx,cell 0 1,alignx left");

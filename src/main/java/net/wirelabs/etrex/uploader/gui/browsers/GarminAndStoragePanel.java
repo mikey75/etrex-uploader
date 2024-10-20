@@ -9,8 +9,10 @@ import java.awt.*;
 
 public class GarminAndStoragePanel extends JPanel {
 
+    private final LayoutManager layout = new MigLayout("insets 0px", "[grow]", "[grow][grow]");
+
     public GarminAndStoragePanel(UploadService uploadService, AppConfiguration appConfiguration) {
-        setLayout(new MigLayout("insets 0px", "[grow]", "[grow][grow]"));
+        setLayout(layout);
         add(new GarminDeviceBrowser(uploadService), "cell 0 0,grow");
         add(new LocalStorageBrowser(appConfiguration), "cell 0 1,grow");
         setSize(new Dimension(180, 200));

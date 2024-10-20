@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.awt.*;
 import java.net.URL;
 
 @Slf4j
@@ -11,6 +12,8 @@ public class Splash extends JFrame {
 
     private final JTextArea textArea = new JTextArea();
     private final JLabel iconLabel = new JLabel();
+
+    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][grow]");
 
     public Splash() {
 
@@ -21,7 +24,7 @@ public class Splash extends JFrame {
 
         setUndecorated(true);
         setBounds(0, 0, 418, 137);
-        getContentPane().setLayout(new MigLayout("", "[][grow]", "[][grow]"));
+        getContentPane().setLayout(layout);
         getContentPane().add(appName, "cell 0 0 2 1,alignx center");
         getContentPane().add(iconLabel, "cell 0 1,aligny top");
         getContentPane().add(scrollPane, "cell 1 1,grow");
