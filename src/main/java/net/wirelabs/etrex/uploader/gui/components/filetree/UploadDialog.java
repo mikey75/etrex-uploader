@@ -43,6 +43,8 @@ public class UploadDialog extends JDialog {
     private final StravaService stravaService;
     private final transient FileService fileService;
 
+    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][][grow][][]");
+
     public UploadDialog(StravaService stravaService, FileService fileService) {
         this.stravaService = stravaService;
         this.fileService = fileService;
@@ -69,7 +71,7 @@ public class UploadDialog extends JDialog {
 
         Container container = getContentPane();
 
-        container.setLayout(new MigLayout("", "[grow]", "[][][][][][grow][][]"));
+        container.setLayout(layout);
         container.add(lblActivityName, "cell 0 0");
         container.add(activityTitleTextField, "cell 0 1,grow");
 

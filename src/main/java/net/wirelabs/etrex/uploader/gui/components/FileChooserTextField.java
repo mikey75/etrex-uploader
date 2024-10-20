@@ -18,6 +18,8 @@ public class FileChooserTextField extends JPanel {
 
     private transient List<Path> paths = new ArrayList<>();
 
+    private final LayoutManager layout = new MigLayout("gapx 0,insets 0", "[grow][]", "[]");
+
     public FileChooserTextField() {
         this(false, false);
     }
@@ -26,7 +28,7 @@ public class FileChooserTextField extends JPanel {
         this.dirsOnly = dirsOnly;
         this.allowMultiple = allowMultiple;
         setBorder(null);
-        setLayout(new MigLayout("gapx 0,insets 0", "[grow][]", "[]"));
+        setLayout(layout);
 
         // the textfield
         textfield = new JTextField();

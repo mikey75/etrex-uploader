@@ -11,6 +11,7 @@ import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
+import java.awt.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -37,10 +38,12 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JCheckBox enableDesktopSlidersChkbox = new JCheckBox("Enable desktop sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
+    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][][][][]");
+
     public ApplicationSettingsPanel(AppConfiguration configuration) {
         super("Application");
         this.configuration = configuration;
-        setLayout(new MigLayout("", "[][grow]", "[][][][][]"));
+        setLayout(layout);
 
         JLabel storageRootLabel = new JLabel("Storage root:");
         add(storageRootLabel, "cell 0 0,alignx trailing");

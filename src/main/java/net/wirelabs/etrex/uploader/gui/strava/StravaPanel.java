@@ -11,8 +11,10 @@ import java.awt.*;
 
 public class StravaPanel extends JPanel {
 
+    private final LayoutManager layout = new MigLayout("insets 0px", "[89%][11%]", "[grow][grow]");
+
     public StravaPanel(StravaService stravaService, AppConfiguration appConfiguration) {
-        setLayout(new MigLayout("insets 0px", "[89%][11%]", "[grow][grow]"));
+        setLayout(layout);
         add(new StravaActivitiesPanel(stravaService, appConfiguration), "cell 0 0,grow");
         add(new UserAccountPanel(stravaService,appConfiguration), "cell 1 0,grow");
         setSize(new Dimension(800, 350));

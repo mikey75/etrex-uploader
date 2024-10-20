@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.common.utils.GzipUtils;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -23,12 +24,14 @@ public class LogViewerDialog extends JDialog {
     private final JComboBox<String> comboBox = new JComboBox<>();
     private final JTextArea textArea = new JTextArea();
 
+    private final LayoutManager layout = new MigLayout("", "[grow]", "[][grow][]");
+
     public LogViewerDialog() {
 
         setTitle(LOGVIEWER_WINDOW_TITLE);
         setSize(800, 600);
 
-        getContentPane().setLayout(new MigLayout("", "[grow]", "[][grow][]"));
+        getContentPane().setLayout(layout);
         getContentPane().add(lblLogfiles, "flowx,cell 0 0");
         getContentPane().add(scrollPane, "cell 0 1,grow");
         getContentPane().add(comboBox, "cell 0 0,growx");
