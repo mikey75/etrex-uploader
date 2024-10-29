@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,8 +43,8 @@ class ListUtilsTest {
     @Test
     void listDifferenceTest() {
 
-        ArrayList<String> listA = new ArrayList<>(ListUtils.listOf("Ala","Ola","Kasia","Mariola"));
-        ArrayList<String> listB = new ArrayList<>(ListUtils.listOf("Asia","Ola","Magda","Zosia"));
+        List<String> listA = Arrays.asList("Ala","Ola","Kasia","Mariola");
+        List<String> listB = Arrays.asList("Asia", "Ola", "Magda", "Zosia");
         Iterable<String> result;
 
         result = ListUtils.findElementsOfANotPresentInB(listA, listB);

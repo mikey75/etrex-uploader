@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.io.FileUtils.forceDelete;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
@@ -129,8 +130,8 @@ class FileServiceTest extends BaseTest {
     }
 
     private void createTestTrack(File track) throws IOException {
-        if (track.exists() && !track.delete()) {
-                fail("could not delete file ");
+        if (track.exists()) {
+            forceDelete(track);
         }
         if (!track.createNewFile()) {
             fail("Could not create file for test");
