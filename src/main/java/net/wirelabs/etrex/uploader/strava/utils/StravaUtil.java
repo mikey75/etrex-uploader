@@ -14,7 +14,7 @@ import java.net.URLConnection;
 import java.util.*;
 
 import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.getAllIpsForHost;
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpHttpReachable;
+import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpPortReachable;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -82,7 +82,7 @@ public class StravaUtil {
             for (InetAddress stravaHost : allStravaIpv4Hosts) {
                 String host = stravaHost.getHostAddress();
                 // if one of the hosts is unreachable - false
-                if (!isHostTcpHttpReachable(host, hostTimeout))
+                if (!isHostTcpPortReachable(host, 80,hostTimeout))
                     return false;
             }
             // all hosts reachable
