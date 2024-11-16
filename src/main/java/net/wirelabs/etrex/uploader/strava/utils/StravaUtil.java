@@ -3,15 +3,18 @@ package net.wirelabs.etrex.uploader.strava.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.URLConnection;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.getAllIpsForHost;
+import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpHttpReachable;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -66,6 +69,7 @@ public class StravaUtil {
 
     /**
      * Checks if ipv4 strava hosts are available for http connection
+     *
      * @return yes or no
      */
     public static boolean isStravaUp(int hostTimeout) {
@@ -73,9 +77,7 @@ public class StravaUtil {
         List<InetAddress> allStravaIpv4Hosts;
 
         try {
-            allStravaIpv4Hosts = Arrays.stream(InetAddress.getAllByName("www.strava.com"))
-                    .filter(Inet4Address.class::isInstance)
-                    .collect(Collectors.toList());
+            allStravaIpv4Hosts = getAllIpsForHost("www.strava.com");
 
             for (InetAddress stravaHost : allStravaIpv4Hosts) {
                 String host = stravaHost.getHostAddress();
@@ -92,12 +94,6 @@ public class StravaUtil {
         return false;
     }
 
-    private static boolean isHostTcpHttpReachable(String host, int timeOutMillis) throws IOException {
 
-            try (Socket soc = new Socket()) {
-                soc.connect(new InetSocketAddress(host, 80), timeOutMillis);
-            }
-            return true;
-    }
 }
 
