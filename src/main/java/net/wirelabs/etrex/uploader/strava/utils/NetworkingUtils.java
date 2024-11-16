@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.strava.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class NetworkingUtils {
 
     public static List<InetAddress> getAllIpsForHost(String host) throws UnknownHostException {
@@ -18,10 +20,13 @@ public class NetworkingUtils {
                 .collect(Collectors.toList());
     }
 
-    public static boolean isHostTcpHttpReachable(String host, int timeOutMillis) throws IOException {
+    public static boolean isHostTcpPortReachable(String host, int port, int timeOutMillis)  {
 
         try (Socket soc = new Socket()) {
-            soc.connect(new InetSocketAddress(host, 80), timeOutMillis);
+            soc.connect(new InetSocketAddress(host, port), timeOutMillis);
+        } catch (IOException e) {
+            log.warn("{}:{} is unreachable", host, port);
+            return false;
         }
         return true;
     }
