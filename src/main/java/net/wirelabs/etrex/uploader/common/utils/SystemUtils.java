@@ -10,8 +10,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -26,6 +26,10 @@ public class SystemUtils {
 
     public static boolean isWindows() {
         return getOsName().toLowerCase().startsWith("windows");
+    }
+
+    public static boolean isOSX() {
+        return getOsName().toLowerCase().startsWith("mac os x");
     }
 
     private static String getOsName() {

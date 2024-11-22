@@ -34,6 +34,22 @@ class RootsProviderTest {
     }
 
     @Test
+    void shouldGetOsxRoots() {
+
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
+            systemUtils.when(SystemUtils::isOSX).thenReturn(true);
+            systemUtils.when(SystemUtils::isWindows).thenReturn(false);
+            systemUtils.when(SystemUtils::isLinux).thenReturn(false);
+            // when
+            rootsProvider.getRoots();
+            // then
+            verify(rootsProvider, never()).windowsRoots();
+            verify(rootsProvider, never()).linuxRoots();
+            verify(rootsProvider, times(1)).osxRoots();
+        }
+    }
+
+    @Test
     void shouldGetWindowsRoots() {
         try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
             systemUtils.when(SystemUtils::isLinux).thenReturn(false);
