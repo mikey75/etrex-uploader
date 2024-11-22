@@ -33,7 +33,7 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String TRUE = Boolean.TRUE.toString();
     public static final String LINUX_USB_MOUNTDIR = "/media";
-
+    public static final String OSX_USB_MOUNTDIR = "/Volumes";
     public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     public static final String DEFAULT_TRACK_COLOR = "#ff0000";
     public static final SportType DEFAULT_SPORT = SportType.RIDE;
