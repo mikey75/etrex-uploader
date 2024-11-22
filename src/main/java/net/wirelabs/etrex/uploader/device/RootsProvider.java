@@ -21,6 +21,9 @@ public class RootsProvider {
         if (SystemUtils.isLinux()) {
             return linuxRoots();
         }
+        if (SystemUtils.isOSX()) {
+            return osxRoots();
+        }
         throw new IllegalStateException("Unsupported operating system");
     }
 
@@ -39,6 +42,18 @@ public class RootsProvider {
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
         File root = new File(Constants.LINUX_USB_MOUNTDIR, user);
+        File[] list = root.listFiles();
+
+        if (list != null) {
+            return Arrays.asList(list);
+        } else {
+            return Collections.emptyList();
+        }
+
+    }
+
+    List<File> osxRoots() {
+        File root = new File(Constants.OSX_USB_MOUNTDIR);
         File[] list = root.listFiles();
 
         if (list != null) {
