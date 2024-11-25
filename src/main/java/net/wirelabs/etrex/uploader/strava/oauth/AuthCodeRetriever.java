@@ -70,6 +70,10 @@ class AuthCodeRetriever implements Serializable {
 
     void runDesktopBrowserToAuthorizationUrl(String requestAccessURL) throws IOException {
         log.info("Redirecting user to strava app authorization page");
+        openSystemBrowser(requestAccessURL);
+    }
+
+    void openSystemBrowser(String requestAccessURL) throws IOException {
         SystemUtils.openSystemBrowser(requestAccessURL);
     }
 
