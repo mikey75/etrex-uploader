@@ -1,19 +1,32 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
 import net.wirelabs.etrex.uploader.strava.StravaException;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
+import net.wirelabs.etrex.uploader.tools.FakeHttpServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 
-class StravaUtilTest {
-    
+class StravaUtilTest extends BaseTest {
+
+    private final int FAKE_HTTP_PORT = 8888;
+    private final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
+
     @ParameterizedTest
     @MethodSource("provideFilenames")
     void shouldDetectCorrectUploadTypes(String input, String expected) throws StravaException {
@@ -29,7 +42,7 @@ class StravaUtilTest {
             StravaUtil.guessUploadFileFormat(testFile);
         });
         assertThat(thrown).hasMessage("The file you're uploading is in unsupported format");
-        
+
     }
 
     @Test
@@ -50,17 +63,90 @@ class StravaUtilTest {
 
     }
 
+    @Test
+    void checkStravaHostsInaccessible() {
+
+        // hosts will not be accessible -> no http server, fake 8888 port
+        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
+             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+
+            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(FAKE_HTTP_PORT);
+            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
+            netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
+            netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
+
+            // should log warning, and return false
+            assertThat(StravaUtil.isStravaUp(1000)).isFalse();
+            // should log hosts unavailability
+            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
+            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from stravautil
+        }
+
+    }
+
+    @Test
+    void checkExceptionAndLogOnUnknownHost() {
+        try (MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+            stravaUtil.when(() -> StravaUtil.getStravaHostName()).thenReturn("www.nonexistent.pl");
+            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
+            assertThat(StravaUtil.isStravaUp(1000)).isFalse();
+            verifyLogged("Strava or network is down!");
+        }
+    }
+
+    @Test
+    void testStravaHostAccesible() throws IOException {
+
+        // hosts will be accessible (http server up, alas - we have to run the http port on other than 80 for this
+        // because 80 is root/admin only - so we setup fake server on another port (8888)
+        // and force StravaUtil to use that port
+
+        FakeHttpServer fakeHttpServer = new FakeHttpServer(FAKE_HTTP_PORT);
+        verifyLogged("Fake http server started on port "+FAKE_HTTP_PORT);
+
+        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
+             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+
+            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(FAKE_HTTP_PORT);
+            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
+            netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
+            netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
+
+            // should return true
+            assertThat(StravaUtil.isStravaUp(1000)).isTrue();
+            // should not log host unavailability
+            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
+            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from stravautil
+        } finally {
+            fakeHttpServer.stop();
+        }
+    }
+
+    @Test
+    void shouldReturnDefaultPortAndHost() {
+        assertThat(StravaUtil.getStravaHostName()).isEqualTo(StravaUtil.STRAVA_HOST_NAME);
+        assertThat(StravaUtil.getStravaPort()).isEqualTo(StravaUtil.STRAVA_HTTP_PORT);
+    }
+
+    private static List<InetAddress> getFakeHosts() {
+        try {
+            return List.of(InetAddress.getByName("localhost"), InetAddress.getByName("localhost"));
+        } catch (UnknownHostException ex) {
+            return Collections.emptyList();
+        }
+    }
+
 
     private static Stream<Arguments> provideFilenames() {
         return Stream.of(
-                Arguments.of("file.gpx","gpx"),
-                Arguments.of("file.tcx","tcx"),
-                Arguments.of("file.fit","fit"),
+                Arguments.of("file.gpx", "gpx"),
+                Arguments.of("file.tcx", "tcx"),
+                Arguments.of("file.fit", "fit"),
 
-                Arguments.of("file.gpx.gz","gpx.gz"),
-                Arguments.of("file.tcx.gz","tcx.gz"),
-                Arguments.of("file.fit.gz","fit.gz")
-                
-                );
+                Arguments.of("file.gpx.gz", "gpx.gz"),
+                Arguments.of("file.tcx.gz", "tcx.gz"),
+                Arguments.of("file.fit.gz", "fit.gz")
+
+        );
     }
 }

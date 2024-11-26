@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +13,7 @@ import java.util.concurrent.*;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadUtils {
-
+    @Getter
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static CompletableFuture<Void> runAsync(Runnable runnable) {
