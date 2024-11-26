@@ -27,6 +27,7 @@ public class StravaUtil {
     public static final String ALLOWED_15MINS = "allowed15mins";
     public static final String CURRENT_DAILY = "currentDaily";
     public static final String CURRENT_15MINS = "current15mins";
+    static int STRAVA_HTTP_PORT = 80;
 
     public static String guessUploadFileFormat(File file) throws StravaException {
 
@@ -82,8 +83,10 @@ public class StravaUtil {
             for (InetAddress stravaHost : allStravaIpv4Hosts) {
                 String host = stravaHost.getHostAddress();
                 // if one of the hosts is unreachable - false
-                if (!isHostTcpPortReachable(host, 80,hostTimeout))
+                if (!isHostTcpPortReachable(host, STRAVA_HTTP_PORT, hostTimeout)) {
+                    log.warn("Host {} inaccessible, assume uploads might fail", host);
                     return false;
+                }
             }
             // all hosts reachable
             return true;

@@ -96,6 +96,10 @@ public class SystemUtils {
         if (!EventBus.getExecutorService().isShutdown()) {
             EventBus.shutdown();
         }
+        // also shutdown any lingering threads from ThreadUtils utility methods
+        if (!ThreadUtils.getExecutorService().isShutdown()) {
+            ThreadUtils.shutdownExecutorService();
+        }
         System.exit(status);
     }
 

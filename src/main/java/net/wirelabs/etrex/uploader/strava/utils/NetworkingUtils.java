@@ -30,4 +30,10 @@ public class NetworkingUtils {
         }
         return true;
     }
+
+    public static int getRandomFreeTcpPort() throws IOException {
+        try (ServerSocket serverSocket = new ServerSocket(0)) {
+            return serverSocket.getLocalPort();
+        }
+    }
 }

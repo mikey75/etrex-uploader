@@ -9,8 +9,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.getAllIpsForHost;
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpPortReachable;
+import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -30,8 +29,8 @@ class NetworkingUtilsTest extends BaseTest {
 
     @Test
     void httpReachable() throws IOException {
-        FakeHttpServer f = new FakeHttpServer(12345);
-        boolean b = isHostTcpPortReachable("localhost", 12345, 1000);
+        FakeHttpServer fakeHttpServer = new FakeHttpServer();
+        boolean b = isHostTcpPortReachable("localhost", fakeHttpServer.getListeningPort(), 1000);
         assertThat(b).isTrue();
     }
 
@@ -40,5 +39,11 @@ class NetworkingUtilsTest extends BaseTest {
         boolean b = isHostTcpPortReachable("localhost", 80,1000);
         verifyLogged("localhost:80 is unreachable");
         assertThat(b).isFalse();
+    }
+
+    @Test
+    void getRandomTcpPort() throws IOException {
+        int port = getRandomFreeTcpPort();
+        assertThat(port).isGreaterThan(1024).isLessThan(65535);
     }
 }
