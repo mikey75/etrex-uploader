@@ -3,15 +3,16 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import com.squareup.okhttp.HttpUrl;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.ServerSocket;
 import java.time.Duration;
+
+import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.getRandomFreeTcpPort;
 
 
 @Slf4j
@@ -89,11 +90,7 @@ class AuthCodeRetriever implements Serializable {
         return false;
     }
 
-    int getRandomFreeTcpPort() throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(0)) {
-            return serverSocket.getLocalPort();
-        }
-    }
+
 
     int getAuthCodeTimeoutSeconds() {
         return Constants.DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;

@@ -28,6 +28,9 @@ public class StravaUtil {
     public static final String CURRENT_DAILY = "currentDaily";
     public static final String CURRENT_15MINS = "current15mins";
 
+    static final String STRAVA_HOST_NAME = "www.strava.com";
+    static final int STRAVA_HTTP_PORT = 80;
+
     public static String guessUploadFileFormat(File file) throws StravaException {
 
         String[] allowedFileFormats = {"gpx", "gpx.gz", "fit", "fit.gz", "tcx", "tcx.gz"};
@@ -77,23 +80,31 @@ public class StravaUtil {
         List<InetAddress> allStravaIpv4Hosts;
 
         try {
-            allStravaIpv4Hosts = getAllIpsForHost("www.strava.com");
+            allStravaIpv4Hosts = getAllIpsForHost(getStravaHostName());
 
             for (InetAddress stravaHost : allStravaIpv4Hosts) {
                 String host = stravaHost.getHostAddress();
                 // if one of the hosts is unreachable - false
-                if (!isHostTcpPortReachable(host, 80,hostTimeout))
+                if (!isHostTcpPortReachable(host, getStravaPort(), hostTimeout)) {
+                    log.warn("{}:{} inaccessible, assume uploads might fail", host, getStravaPort());
                     return false;
+                }
             }
             // all hosts reachable
             return true;
 
         } catch (IOException e) {
             log.error("Strava or network is down!");
+            return false;
         }
-        return false;
     }
 
+    static int getStravaPort() {
+        return STRAVA_HTTP_PORT;
+    }
 
+    static String getStravaHostName() {
+        return STRAVA_HOST_NAME;
+    }
 }
 
