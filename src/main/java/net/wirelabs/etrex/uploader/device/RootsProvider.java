@@ -27,41 +27,32 @@ public class RootsProvider {
         throw new IllegalStateException("Unsupported operating system");
     }
 
-
     // windows automounts usb drives as new drives
     List<File> windowsRoots() {
         File[] roots = File.listRoots();
-        if (roots != null) {
-            return Arrays.asList(File.listRoots());
-        } else {
-            return Collections.emptyList();
-        }
+        return createFileList(roots);
     }
 
-    // linux automounts usb drives in /media/$user
+    // linux automounts usb drives in /media/$user (specified in Constants.LINUX_USB_MOUNTDIR)
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
         File root = new File(Constants.LINUX_USB_MOUNTDIR, user);
         File[] list = root.listFiles();
-
-        if (list != null) {
-            return Arrays.asList(list);
-        } else {
-            return Collections.emptyList();
-        }
-
+        return createFileList(list);
     }
 
+    // osx automounts usb drives in /Volumes (specified in Constants.OSX_USB_MOUNTDIR)
     List<File> osxRoots() {
         File root = new File(Constants.OSX_USB_MOUNTDIR);
         File[] list = root.listFiles();
+        return createFileList(list);
+    }
 
+    private List<File> createFileList(File[] list) {
         if (list != null) {
             return Arrays.asList(list);
         } else {
             return Collections.emptyList();
         }
-
     }
-
 }
