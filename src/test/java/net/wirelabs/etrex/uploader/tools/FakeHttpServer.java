@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.tools;
 
 import fi.iki.elonen.NanoHTTPD;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
 
 import java.io.IOException;
@@ -23,6 +24,12 @@ public class FakeHttpServer extends NanoHTTPD {
     private void startServer() throws IOException {
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
         log.info("Fake http server started on port {}", getListeningPort());
+    }
+
+    public void terminate(long socketTimeoutMillis) {
+        Sleeper.sleepMillis(socketTimeoutMillis);
+        closeAllConnections();
+        stop();
     }
 }
 
