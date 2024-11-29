@@ -102,7 +102,7 @@ class StravaUtilTest extends BaseTest {
         // and force StravaUtil to use that port
 
         FakeHttpServer fakeHttpServer = new FakeHttpServer(FAKE_HTTP_PORT);
-        verifyLogged("Fake http server started on port "+FAKE_HTTP_PORT);
+        verifyLogged("Fake http server started on port " + FAKE_HTTP_PORT);
 
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
@@ -118,7 +118,7 @@ class StravaUtilTest extends BaseTest {
             verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
             verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from stravautil
         } finally {
-            fakeHttpServer.stop();
+            fakeHttpServer.terminate(1000);
         }
     }
 
