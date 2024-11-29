@@ -94,9 +94,12 @@ public class EtrexUploader extends JFrame {
     }
 
     private void checkStravaIsUp(AppConfiguration cfg) {
-        if (!StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
+        log.info("Starting Strava status check");
+        if (StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
+            log.info("Strava is up and running!");
+        } else {
             SwingUtils.errorMsg("Strava seems to be down! Exiting!");
-            log.info("Exiting due to strava being down!");
+            log.warn("Strava seems to be down. Exiting!");
             SystemUtils.systemExit(1);
         }
     }
