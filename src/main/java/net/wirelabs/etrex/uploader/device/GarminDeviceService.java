@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class GarminDeviceService extends BaseStoppableRunnable {
 
-
+    @Getter
     private final RootsProvider rootsProvider;
     @Getter
     private final List<File> registeredRoots = new ArrayList<>();
