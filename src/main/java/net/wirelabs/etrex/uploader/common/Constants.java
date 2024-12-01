@@ -47,4 +47,17 @@ public class Constants {
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
 
     public static final boolean DEFAULT_USE_SLIDERS = false;
+
+    public static final String STRAVA_AUTHORIZATION_OK_MSG =
+            "<center>" +
+                "<h1>You have allowed the etrex-uploader access to your strava account</h1>" +
+                "<h2>You can close your browser now and enjoy etrex-uploader</h2>" +
+            "</center>";
+
+    public static final String STRAVA_AUTHORIZATION_FAIL_MSG =
+            "<center>" +
+                "<h1>FAILURE!</h1>" +
+                "<h1>Allowing etrex-uploader access to your Strava account failed</h1>" +
+                "<h2>You can close your browser now and investigate logs</h2>" +
+            "</center>";
 }
