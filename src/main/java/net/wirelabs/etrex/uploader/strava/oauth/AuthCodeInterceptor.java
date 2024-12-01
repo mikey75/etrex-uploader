@@ -11,6 +11,8 @@ import net.wirelabs.etrex.uploader.common.Constants;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
+import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
 
 /**
  * A tiny webserver for interception of auth code in Strava OAuth process
@@ -67,7 +69,7 @@ class AuthCodeInterceptor extends NanoHTTPD {
     }
 
     private Response statusResponse() {
-        Response response = newFixedLengthResponse((isAuthCodeReady() && scopeOK()) ? AUTHORIZATION_OK_MSG : AUTHORIZATION_FAIL_MSG);
+        Response response = newFixedLengthResponse((isAuthCodeReady() && scopeOK()) ? STRAVA_AUTHORIZATION_OK_MSG : STRAVA_AUTHORIZATION_FAIL_MSG);
         response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.addHeader("Pragma", "no-cache");
         response.addHeader("Expires", "0");
@@ -86,17 +88,5 @@ class AuthCodeInterceptor extends NanoHTTPD {
         return authCodeReady.get();
     }
 
-    public static final String AUTHORIZATION_OK_MSG =
-          "<center>" +
-              "<h1>You have allowed the etrex-uploader access to your strava account</h1>" +
-              "<h2>You can close your browser now and enjoy etrex-uploader</h2>" +
-          "</center>";
 
-    public static final String AUTHORIZATION_FAIL_MSG =
-
-            "<center>" +
-                "<h1>FAILURE!</h1>" +
-                "<h1>Allowing etrex-uploader access to your Strava account failed</h1>" +
-                "<h2>You can close your browser now and investigate logs</h2>" +
-            "</center>";
 }
