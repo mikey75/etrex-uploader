@@ -31,10 +31,11 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
-
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>net.wirelabs</groupId>
             <artifactId>jmaps-viewer</artifactId>
@@ -237,7 +238,7 @@
                         <phase>compile</phase>
                         <configuration>
                             <target>
-                                <echo file="${basedir}/etrex-uploader.version">${project.version}</echo>
+                                <echo file="${basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}</echo>
                             </target>
                         </configuration>
                         <goals>
@@ -250,12 +251,16 @@
                             <target>
                                 <property name="destDir" value="${basedir}/target/distpack"/>
                                 <mkdir dir="${destDir}"/>
-                                <copy tofile="${destDir}/etrex-uploader.jar" file="${basedir}/target/etrex-uploader-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
-                                <copy tofile="${destDir}/appIcon.png" file="${basedir}/src/main/resources/images/garmin.png"/>
+                                <copy tofile="${destDir}/etrex-uploader.jar"
+                                      file="${basedir}/target/etrex-uploader-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+                                <copy tofile="${destDir}/appIcon.png"
+                                      file="${basedir}/src/main/resources/images/garmin.png"/>
                                 <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
-                                <copy toFile="${destDir}/config.properties" file="${basedir}/src/main/resources/config.properties"/>
+                                <copy toFile="${destDir}/config.properties"
+                                      file="${basedir}/src/main/resources/config.properties"/>
                                 <copy toFile="${destDir}/maps/defaultMap.xml" file="${basedir}/maps/defaultMap.xml"/>
-                                <copy toFile="${destDir}/etrex-uploader.version" file="${basedir}/etrex-uploader.version"/>
+                                <copy toFile="${destDir}/etrex-uploader.version"
+                                      file="${basedir}/etrex-uploader.version"/>
                                 <zip basedir="${destDir}" destfile="${basedir}/target/etrex-uploader.zip"/>
                             </target>
                         </configuration>
