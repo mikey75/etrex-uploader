@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.*;
 class StravaUtilTest extends BaseTest {
 
     private final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
+    private final String NONEXISTING_HOST = "www.nonexistent.pl";
 
     @ParameterizedTest
     @MethodSource("provideFilenames")
@@ -37,9 +38,7 @@ class StravaUtilTest extends BaseTest {
     @Test
     void shouldThrowExceptionOnUnrecognizedUploadFile() {
         File testFile = new File("garmin.jpg");
-        StravaException thrown = Assertions.assertThrows(StravaException.class, () -> {
-            StravaUtil.guessUploadFileFormat(testFile);
-        });
+        StravaException thrown = Assertions.assertThrows(StravaException.class, () -> StravaUtil.guessUploadFileFormat(testFile));
         assertThat(thrown).hasMessage("The file you're uploading is in unsupported format");
 
     }
@@ -68,11 +67,14 @@ class StravaUtilTest extends BaseTest {
         // hosts will not be accessible -> no http server, no port
         // so setup test with nonexistent, random port
         int FAKE_HTTP_PORT = NetworkingUtils.getRandomFreeTcpPort();
-
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
 
-            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(FAKE_HTTP_PORT);
+            stravaUtil.when(() -> {
+                int port = StravaUtil.getStravaPort();
+                assertThat(port).isNotEqualTo(FAKE_HTTP_PORT);
+            }).thenReturn(FAKE_HTTP_PORT);
+
             stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
@@ -89,7 +91,11 @@ class StravaUtilTest extends BaseTest {
     @Test
     void checkExceptionAndLogOnUnknownHost() {
         try (MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
-            stravaUtil.when(() -> StravaUtil.getStravaHostName()).thenReturn("www.nonexistent.pl");
+            stravaUtil.when(() -> {
+                String hostname = StravaUtil.getStravaHostName();
+                assertThat(hostname).isNotEqualTo(NONEXISTING_HOST);
+            }).thenReturn(NONEXISTING_HOST);
+
             stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
             assertThat(StravaUtil.isStravaUp(1000)).isFalse();
             verifyLogged("Strava or network is down!");
@@ -104,12 +110,16 @@ class StravaUtilTest extends BaseTest {
         // and force StravaUtil to use that port
 
         FakeHttpServer fakeHttpServer = new FakeHttpServer();
-        verifyLogged("Fake http server started on port " + fakeHttpServer.getListeningPort());
+        verifyLogged("Fake http server started on port "+ fakeHttpServer.getListeningPort());
 
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
 
-            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(fakeHttpServer.getListeningPort());
+            stravaUtil.when(() -> {
+                int port = StravaUtil.getStravaPort();
+                assertThat(port).isNotEqualTo(fakeHttpServer.getListeningPort());
+            }).thenReturn(fakeHttpServer.getListeningPort());
+
             stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);

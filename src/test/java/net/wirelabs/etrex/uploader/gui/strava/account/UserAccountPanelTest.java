@@ -91,9 +91,7 @@ class UserAccountPanelTest extends BaseTest {
         doReturn(fakeUser).when(strava).getCurrentAthlete();
         UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        waitUntilAsserted(Duration.ofSeconds(5), () -> {
-                    assertCorrectStats(uap);
-                }
+        waitUntilAsserted(Duration.ofSeconds(5), () -> assertCorrectStats(uap)
         );
     }
 

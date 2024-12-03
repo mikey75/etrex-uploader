@@ -5,7 +5,7 @@ import net.wirelabs.etrex.uploader.common.utils.LoggingConfigurator;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
-import net.wirelabs.eventbus.EventBus;
+
 
 import java.awt.*;
 
