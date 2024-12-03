@@ -26,10 +26,8 @@ public class FakeHttpServer extends NanoHTTPD {
         log.info("Fake http server started on port {}", getListeningPort());
     }
 
-    public void terminate(long socketTimeoutMillis) {
-        Sleeper.sleepMillis(socketTimeoutMillis);
+    public synchronized void terminate() {
         closeAllConnections();
-        stop();
     }
 }
 
