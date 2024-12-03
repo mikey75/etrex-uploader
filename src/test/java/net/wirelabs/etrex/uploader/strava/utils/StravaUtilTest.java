@@ -24,7 +24,6 @@ import static org.mockito.ArgumentMatchers.*;
 
 class StravaUtilTest extends BaseTest {
 
-    private final int FAKE_HTTP_PORT = 8888;
     private final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
 
     @ParameterizedTest
@@ -64,9 +63,12 @@ class StravaUtilTest extends BaseTest {
     }
 
     @Test
-    void checkStravaHostsInaccessible() {
+    void checkStravaHostsInaccessible() throws IOException {
 
-        // hosts will not be accessible -> no http server, fake 8888 port
+        // hosts will not be accessible -> no http server, no port
+        // so setup test with nonexistent, random port
+        int FAKE_HTTP_PORT = NetworkingUtils.getRandomFreeTcpPort();
+
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
 
@@ -98,16 +100,16 @@ class StravaUtilTest extends BaseTest {
     void testStravaHostAccesible() throws IOException {
 
         // hosts will be accessible (http server up, alas - we have to run the http port on other than 80 for this
-        // because 80 is root/admin only - so we setup fake server on another port (8888)
+        // because 80 is root/admin only - so we setup fake server on random port
         // and force StravaUtil to use that port
 
-        FakeHttpServer fakeHttpServer = new FakeHttpServer(FAKE_HTTP_PORT);
-        verifyLogged("Fake http server started on port " + FAKE_HTTP_PORT);
+        FakeHttpServer fakeHttpServer = new FakeHttpServer();
+        verifyLogged("Fake http server started on port " + fakeHttpServer.getListeningPort());
 
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
 
-            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(FAKE_HTTP_PORT);
+            stravaUtil.when(() -> StravaUtil.getStravaPort()).thenReturn(fakeHttpServer.getListeningPort());
             stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
@@ -115,10 +117,10 @@ class StravaUtilTest extends BaseTest {
             // should return true
             assertThat(StravaUtil.isStravaUp(1000)).isTrue();
             // should not log host unavailability
-            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from stravautil
+            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " is unreachable");    // msg from networkingUtils (no http port)
+            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " inaccessible, assume uploads might fail"); // msg from stravautil
         } finally {
-            fakeHttpServer.terminate(1000);
+            fakeHttpServer.terminate();
         }
     }
 

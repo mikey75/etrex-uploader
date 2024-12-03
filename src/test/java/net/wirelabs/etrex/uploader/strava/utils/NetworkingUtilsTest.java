@@ -30,20 +30,22 @@ class NetworkingUtilsTest extends BaseTest {
     @Test
     void httpReachable() throws IOException {
         FakeHttpServer fakeHttpServer = new FakeHttpServer();
-        boolean b = isHostTcpPortReachable("localhost", fakeHttpServer.getListeningPort(), 1000);
-        assertThat(b).isTrue();
+        boolean isPortReachable = isHostTcpPortReachable("localhost", fakeHttpServer.getListeningPort(), 1000);
+        assertThat(isPortReachable).isTrue();
+        fakeHttpServer.terminate();
     }
 
     @Test
     void httpUnreachable()  {
-        boolean b = isHostTcpPortReachable("localhost", 80,1000);
+        // no server - no port 80
+        boolean isPortReachable = isHostTcpPortReachable("localhost", 80,1000);
         verifyLogged("localhost:80 is unreachable");
-        assertThat(b).isFalse();
+        assertThat(isPortReachable).isFalse();
     }
 
     @Test
     void getRandomTcpPortShouldReturnPortInValidRange() throws IOException {
-        int port = getRandomFreeTcpPort();
-        assertThat(port).isGreaterThan(1024).isLessThan(65535);
+        int randomPort = getRandomFreeTcpPort();
+        assertThat(randomPort).isGreaterThan(1024).isLessThan(65535);
     }
 }
