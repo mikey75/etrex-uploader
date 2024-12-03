@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -12,13 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.*;
 
 /**
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-class ApiUsagePanelTest {
+class ApiUsagePanelTest extends BaseTest {
 
     @Test
     void shouldDisplayApiUsage() {
@@ -34,7 +34,7 @@ class ApiUsagePanelTest {
         StravaUtil.sendRateLimitInfo(headers);
 
 
-        await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
             assertThat(p.getDailyLimits().getText()).isEqualTo("(800/1000)");
             assertThat(p.getQuarterLimits().getText()).isEqualTo("(90/100)");
             assertThat(p.getDailyLimits().getForeground()).isEqualTo(Color.RED);
@@ -47,7 +47,7 @@ class ApiUsagePanelTest {
 
         StravaUtil.sendRateLimitInfo(headers);
 
-        await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
             assertThat(p.getDailyLimits().getText()).isEqualTo("(100/1000)");
             assertThat(p.getQuarterLimits().getText()).isEqualTo("(20/100)");
             assertThat(p.getDailyLimits().getForeground()).isEqualTo(p.getForeground());
@@ -59,7 +59,7 @@ class ApiUsagePanelTest {
         headers = new HashMap<>();
         StravaUtil.sendRateLimitInfo(headers);
 
-        await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
             assertThat(p.getDailyLimits().getText()).isEqualTo("(100/1000)");
             assertThat(p.getQuarterLimits().getText()).isEqualTo("(20/100)");
         });
