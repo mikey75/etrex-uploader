@@ -7,8 +7,6 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import org.awaitility.Awaitility;
-import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
@@ -43,7 +41,7 @@ class GarminDeviceServiceTest extends BaseTest {
     private final AppConfiguration testApplicationConfiguration = mock(AppConfiguration.class);
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
 
         when(testApplicationConfiguration.getDeviceDiscoveryDelay()).thenReturn(200L);
         when(testApplicationConfiguration.getWaitDriveTimeout()).thenReturn(200L);
@@ -230,7 +228,4 @@ class GarminDeviceServiceTest extends BaseTest {
         roots.removeAll(Arrays.asList(disk));
     }
 
-    private static void waitUntilAsserted(Duration duration, ThrowingRunnable assertion) {
-        Awaitility.await().atMost(duration).untilAsserted(assertion);
-    }
 }
