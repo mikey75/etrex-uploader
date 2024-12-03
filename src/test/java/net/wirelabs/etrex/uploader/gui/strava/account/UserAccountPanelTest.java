@@ -3,22 +3,22 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 import com.strava.model.ActivityStats;
 import com.strava.model.ActivityTotal;
 import com.strava.model.SummaryAthlete;
-import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.*;
 
-class UserAccountPanelTest {
-    
-    private final File fakePhoto  = new File("src/test/resources/gui/fakeUserPhoto.png");
+class UserAccountPanelTest extends BaseTest {
+
+    private final File fakePhoto = new File("src/test/resources/gui/fakeUserPhoto.png");
     private final StravaService strava = mock(StravaServiceImpl.class);
     private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
     private final ActivityTotal total = new ActivityTotal().count(1).distance(1000F).elapsedTime(3600);
@@ -33,7 +33,7 @@ class UserAccountPanelTest {
 
         UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
                     assertNoPicture(uap);
                 }
@@ -48,7 +48,7 @@ class UserAccountPanelTest {
         
         UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
                     assertThat(uap.athletePicture.getIcon()).isNotNull();
                 }
@@ -63,7 +63,7 @@ class UserAccountPanelTest {
         
         UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertNoAthleteName(uap);
                     assertNoPicture(uap);
                 }
@@ -75,9 +75,9 @@ class UserAccountPanelTest {
         
         fakeUser.setProfileMedium("file:///"); // <-- this triggers IOException inside
         doReturn(fakeUser).when(strava).getCurrentAthlete();
-        UserAccountPanel uap = new UserAccountPanel(strava,mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
                     assertNoPicture(uap);
                 }
@@ -89,9 +89,9 @@ class UserAccountPanelTest {
 
         doReturn(fakeStats).when(strava).getAthleteStats(any());
         doReturn(fakeUser).when(strava).getCurrentAthlete();
-        UserAccountPanel uap = new UserAccountPanel(strava,mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
 
-        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertCorrectStats(uap);
                 }
         );
