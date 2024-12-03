@@ -32,7 +32,7 @@ class Person {
         this.age = age;
         this.car = car;
     }
-    String name;
-    Integer age;
-    String car;
+    final String name;
+    final Integer age;
+    final String car;
 }
