@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1"
+     xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"  version="1.1" creator="http://ridewithgps.com/">
+    <trk>
+        <trkseg>
+            <trkpt lat="51.23217" lon="22.49083"/>
+            <trkpt lat="51.23242" lon="22.49152"/>
+            <trkpt lat="51.2329" lon="22.49108"/>
+        </trkseg>
+    </trk>
+</gpx>
