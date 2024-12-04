@@ -252,7 +252,7 @@
                                 <property name="destDir" value="${basedir}/target/distpack"/>
                                 <mkdir dir="${destDir}"/>
                                 <copy tofile="${destDir}/etrex-uploader.jar"
-                                      file="${basedir}/target/etrex-uploader-${version}-jar-with-dependencies.jar"/>
+                                      file="${basedir}/target/etrex-uploader-${project.version}-jar-with-dependencies.jar"/>
                                 <copy tofile="${destDir}/appIcon.png"
                                       file="${basedir}/src/main/resources/images/garmin.png"/>
                                 <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
