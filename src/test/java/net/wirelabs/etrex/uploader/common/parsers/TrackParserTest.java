@@ -48,18 +48,21 @@ class TrackParserTest extends BaseTest {
     void shouldProcessGpxVerion10() {
         List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_0);
         assertThat(coords).isNotEmpty().hasSize(1000);
+        assertElevationPresentInResultingCoordinates(coords);
     }
 
     @Test
     void shouldProcessGpxVerion11() {
         List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_1);
         assertThat(coords).isNotEmpty().hasSize(1511);
+        assertElevationPresentInResultingCoordinates(coords);
     }
 
     @Test
     void shouldProcessTCX() {
         List<Coordinate> coords = trackParser.parseTrackFile(TCX_FILE);
         assertThat(coords).isNotEmpty().hasSize(263);
+        assertElevationPresentInResultingCoordinates(coords);
     }
 
     @Test
@@ -67,6 +70,7 @@ class TrackParserTest extends BaseTest {
 
         List<Coordinate> coords = trackParser.parseTrackFile(FIT_FILE);
         assertThat(coords).isNotEmpty().hasSize(933);
+        assertElevationPresentInResultingCoordinates(coords);
 
     }
 
@@ -82,6 +86,8 @@ class TrackParserTest extends BaseTest {
         String polyline = "qorxHimgeCKE?E?FDCCU?m@LsANe@Fg@JQJCDK?U?RCHACFOD?ADCCDH@IBBC?EL?NBq@B^@@GQBB?CBJB?CE?HD?S@@GGD?GL@@NDMDBATMs@J\\?JEEA_@?JCFAEOQIJAHB@NMD@FDFXKRD[?e@A@CJ?LDFAEMAFGBK@`@@?ACDHEFGR?HHHAu@IYIA@HCLLFDCCA?E@LEs@GBHJAHDn@Gr@M^APOHGLGp@BZEPEBG@BO@LASCBAA?DAGBHABHDC@GM@GB@@HCE?FCG?I?DDBGIDBC@?TEG?KGJBA@?j@z@d@\\f@Pj@JH?NJXf@RXJBDHBNPNDN?@GCCG@BEL?KEIUQAI@A?MGMGEEOQY@ICIo@Be@IOQ_A[GBO`@G^@C";
         List<Coordinate> coords = trackParser.parsePolyline(polyline, 1E5F);
         assertThat(coords).isNotEmpty().hasSize(175);
+        // polylines have no elevation
+        assertZeroElevationInResultingCoordinates(coords);
 
     }
 
@@ -93,7 +99,35 @@ class TrackParserTest extends BaseTest {
         assertThat(points).isEmpty();
     }
 
+    @Test
+    void assumeElevationZeroWhenNotPresent() {
 
+        List<Coordinate> coords = trackParser.parseTrackFile(NO_ELEVATION_GPX_1_0_FILE);
+        assertZeroElevationInResultingCoordinates(coords);
 
+        coords = trackParser.parseTrackFile(NO_ELEVATION_GPX_1_1_FILE);
+        assertZeroElevationInResultingCoordinates(coords);
+
+        coords = trackParser.parseTrackFile(NO_ELEVATION_TCX_FILE);
+        assertZeroElevationInResultingCoordinates(coords);
+
+        coords = trackParser.parseTrackFile(NO_ELEVATION_FIT_FILE);
+        assertZeroElevationInResultingCoordinates(coords);
+
+    }
+
+    private static void assertZeroElevationInResultingCoordinates(List<Coordinate> coords) {
+
+        assertThat(coords).isNotEmpty()
+                .extracting(Coordinate::getAltitude)
+                .containsOnly(Double.valueOf(0));
+    }
+
+    private static void assertElevationPresentInResultingCoordinates(List<Coordinate> coords) {
+
+        assertThat(coords).isNotEmpty()
+                .extracting(Coordinate::getAltitude)
+                .doesNotContain(Double.valueOf(0));
+    }
 
 }
