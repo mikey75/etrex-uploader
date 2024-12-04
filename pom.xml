@@ -32,6 +32,7 @@
         <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+        <distpack.location>${project.basedir}/target/distpack</distpack.location>
     </properties>
 
     <dependencies>
@@ -238,7 +239,7 @@
                         <phase>compile</phase>
                         <configuration>
                             <target>
-                                <echo file="${basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}</echo>
+                                <echo file="${project.basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}</echo>
                             </target>
                         </configuration>
                         <goals>
@@ -249,19 +250,16 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <property name="destDir" value="${basedir}/target/distpack"/>
-                                <mkdir dir="${destDir}"/>
-                                <copy tofile="${destDir}/etrex-uploader.jar"
-                                      file="${basedir}/target/etrex-uploader-${project.version}-jar-with-dependencies.jar"/>
-                                <copy tofile="${destDir}/appIcon.png"
-                                      file="${basedir}/src/main/resources/images/garmin.png"/>
-                                <copy toFile="${destDir}/logback.xml" file="${basedir}/logback.xml"/>
-                                <copy toFile="${destDir}/config.properties"
-                                      file="${basedir}/src/main/resources/config.properties"/>
-                                <copy toFile="${destDir}/maps/defaultMap.xml" file="${basedir}/maps/defaultMap.xml"/>
-                                <copy toFile="${destDir}/etrex-uploader.version"
-                                      file="${basedir}/etrex-uploader.version"/>
-                                <zip basedir="${destDir}" destfile="${basedir}/target/etrex-uploader.zip"/>
+                                <!-- create distpack -->
+                                <mkdir dir="${distpack.location}"/>
+                                <copy tofile="${distpack.location}/etrex-uploader.jar" file="${project.basedir}/target/etrex-uploader-${project.version}-jar-with-dependencies.jar"/>
+                                <copy tofile="${distpack.location}/appIcon.png" file="${project.basedir}/src/main/resources/images/garmin.png"/>
+                                <copy toFile="${distpack.location}/logback.xml" file="${project.basedir}/logback.xml"/>
+                                <copy toFile="${distpack.location}/config.properties" file="${project.basedir}/src/main/resources/config.properties"/>
+                                <copy toFile="${distpack.location}/maps/defaultMap.xml" file="${project.basedir}/maps/defaultMap.xml"/>
+                                <copy toFile="${distpack.location}/etrex-uploader.version" file="${project.basedir}/etrex-uploader.version"/>
+                                <!-- make a zip distribution package -->
+                                <zip basedir="${distpack.location}" destfile="${project.basedir}/target/etrex-uploader.zip"/>
                             </target>
                         </configuration>
                         <goals>
@@ -311,7 +309,7 @@
                         </goals>
 
                         <configuration>
-                            <inputSpec>${basedir}/src/main/resources/schemas/strava/swagger.json</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/schemas/strava/swagger.json</inputSpec>
                             <language>java</language>
                             <withXml>false</withXml>
                             <generateApis>false</generateApis>
