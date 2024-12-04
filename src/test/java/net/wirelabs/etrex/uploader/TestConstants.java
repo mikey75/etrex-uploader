@@ -17,6 +17,11 @@ public class TestConstants {
     public static final File BAD_FIT_FILE = new File("src/test/resources/trackfiles/fitBad.fit");
     // not a track
     public static final File NOT_TRACK_FILE = new File("src/test/resources/trackfiles/not_a_track.bin");
+    // tracks with no elevation
+    public static final File NO_ELEVATION_GPX_1_0_FILE = new File("src/test/resources/trackfiles/gpx10-noElevation.gpx");
+    public static final File NO_ELEVATION_GPX_1_1_FILE = new File("src/test/resources/trackfiles/gpx11-noElevation.gpx");
+    public static final File NO_ELEVATION_TCX_FILE = new File("src/test/resources/trackfiles/tcx-noElevation.tcx");
+    public static final File NO_ELEVATION_FIT_FILE = new File("src/test/resources/trackfiles/fit-noElevation.fit");
 
     // config files
     public static final File CONFIG_FILE = new File("src/test/resources/config/test.properties");

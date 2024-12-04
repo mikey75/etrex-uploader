@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="Traseo" xmlns="http://www.topografix.com/GPX/1/0">
+    <trk>
+        <trkseg>
+            <trkpt lat="53.3906304" lon="23.5911431"/>
+            <trkpt lat="53.390912" lon="23.59154"/>
+            <trkpt lat="53.3913342" lon="23.5920657"/>
+        </trkseg>
+    </trk>
+</gpx>

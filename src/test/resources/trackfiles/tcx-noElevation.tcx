@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainingCenterDatabase xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd" xmlns:ns5="http://www.garmin.com/xmlschemas/ActivityGoals/v1" xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2" xmlns:ns2="http://www.garmin.com/xmlschemas/UserProfile/v2" xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <Folders/>
+ <Courses>
+  <Course>
+   <Name>Biegiem lasami </Name>
+   <Lap>
+    <TotalTimeSeconds>7620.965839924294</TotalTimeSeconds>
+    <DistanceMeters>20424.18845099711</DistanceMeters>
+    <Intensity>Active</Intensity>
+   </Lap>
+   <Track>
+    <Trackpoint>
+     <Time>2023-02-18T09:49:10+00:00</Time>
+     <Position>
+      <LatitudeDegrees>51.1788400</LatitudeDegrees>
+      <LongitudeDegrees>23.0046900</LongitudeDegrees>
+     </Position>
+     <DistanceMeters>0.0</DistanceMeters>
+    </Trackpoint>
+    <Trackpoint>
+         <Time>2023-02-18T09:49:10+00:00</Time>
+         <Position>
+          <LatitudeDegrees>51.1788433</LatitudeDegrees>
+          <LongitudeDegrees>23.0046933</LongitudeDegrees>
+         </Position>
+         <DistanceMeters>0.1223</DistanceMeters>
+        </Trackpoint>
+    <Trackpoint>
+     <Time>2023-02-18T09:49:35+00:00</Time>
+     <Position>
+      <LatitudeDegrees>51.1789033</LatitudeDegrees>
+      <LongitudeDegrees>23.0058467</LongitudeDegrees>
+     </Position>
+     <DistanceMeters>81.00808706681552</DistanceMeters>
+    </Trackpoint>
+   </Track>
+  </Course>
+ </Courses>
+</TrainingCenterDatabase>
