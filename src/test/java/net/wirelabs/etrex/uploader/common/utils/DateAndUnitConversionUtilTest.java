@@ -39,10 +39,10 @@ class DateAndUnitConversionUtilTest {
     @Test
     void getKilometersPerHourFromMetersPerSecond() {
         String kmh = DateAndUnitConversionUtil.metersPerSecToKilometersPerHourAsString(200);
-        assertThat(kmh).matches("720(\\.|,)00");
+        assertThat(kmh).matches("720[.,]00");
 
         kmh = DateAndUnitConversionUtil.metersPerSecToKilometersPerHourAsString(-120);
-        assertThat(kmh).matches("-432(\\.|,)00");
+        assertThat(kmh).matches("-432[.,]00");
     }
 
     @Test
