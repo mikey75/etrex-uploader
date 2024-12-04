@@ -17,7 +17,6 @@ import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_
 import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class AuthCodeInterceptorTest extends BaseTest {
@@ -56,7 +55,6 @@ class AuthCodeInterceptorTest extends BaseTest {
 
     @Test
     void testNoCodeReceived() throws IOException, InterruptedException {
-        // AuthCodeRetriever authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
 
         HttpRequest requestWithoutCode = HttpRequest.newBuilder()
                 .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b"))
@@ -115,7 +113,6 @@ class AuthCodeInterceptorTest extends BaseTest {
 
     @Test
     void testCodeReceivedButEmpty() throws IOException, InterruptedException {
-        // AuthCodeRetriever authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
 
         HttpRequest requestWithEmptyCode = HttpRequest.newBuilder()
                 .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code="))
