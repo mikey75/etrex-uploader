@@ -41,7 +41,7 @@ public class TCXParser implements TrackToCoordsParser {
             TrainingCenterDatabaseT root = TrainingCenterDatabaseDocument.Factory.parse(file).getTrainingCenterDatabase();
 
             // collect only first track from first course
-            // might consider config options to load all from multi course/multi track file
+            // might consider config options to load all from multi course/multi-track file
             CourseT course = root.getCourses().getCourseList().get(0);
 
 
