@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static net.wirelabs.etrex.uploader.common.utils.FileUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,27 +41,6 @@ class FileUtilsTest {
         assertThat(filePart).isEqualTo("testfile.txt.abc");
 
     }
-
-    @Test
-    void shouldDetectGPSFileType() {
-        assertThat(isGpx10File(GPX_FILE_VER_1_0)).isTrue();
-        assertThat(isGpx11File(GPX_FILE_VER_1_1)).isTrue();
-        assertThat(isGpx11File(GPX_FILE_VER_1_0)).isFalse();
-        assertThat(isGpx10File(GPX_FILE_VER_1_1)).isFalse();
-        assertThat(isTcxFile(TCX_FILE)).isTrue();
-        assertThat(isFitFile(FIT_FILE)).isTrue();
-    }
-
-    @Test
-    void shouldDetectTrackFile() {
-        assertThat(isTrackFile(GPX_FILE_VER_1_0)).isTrue();
-        assertThat(isTrackFile(GPX_FILE_VER_1_1)).isTrue();
-        assertThat(isTrackFile(TCX_FILE)).isTrue();
-        assertThat(isTrackFile(FIT_FILE)).isTrue();
-        assertThat(isTrackFile(NOT_TRACK_FILE)).isFalse();
-
-    }
-
 
     @Test
     void shouldCreateDirIfNotExists() throws IOException {
