@@ -26,4 +26,6 @@ public class TestConstants {
     // config files
     public static final File CONFIG_FILE = new File("src/test/resources/config/test.properties");
 
+    // nonexisting file
+    public static final File NONEXISTENT_FILE = new File("nonexistent");
 }

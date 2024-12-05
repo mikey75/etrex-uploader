@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.common.utils.TrackFileUtils;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.eventbus.EventBus;
 
@@ -14,7 +14,7 @@ public class TrackSelectedListener implements TreeSelectionListener {
     public void valueChanged(TreeSelectionEvent event) {
         FileNode node = (FileNode) event.getPath().getLastPathComponent();
         File file = node.getFile();
-        if (file != null && file.isFile() && FileUtils.isTrackFile(file)) {
+        if (file != null && file.isFile() && TrackFileUtils.isTrackFile(file)) {
             EventBus.publish(MAP_DISPLAY_TRACK, node.getFile());
         }
     }

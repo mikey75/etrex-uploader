@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.common.utils.FileUtils.*;
+import static net.wirelabs.etrex.uploader.common.utils.TrackFileUtils.*;
 
 /*
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
