@@ -1,4 +1,6 @@
 
+![CI](https://github.com/mikey75/etrex-uploader/actions/workflows/build.yml/badge.svg)
+
 ABOUT
 =
 Etrex-uploader is a software for directly uploading your gps tracks from usb-cable connected Garmin devices, like Etrex etc.
