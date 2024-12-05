@@ -6,12 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.apache.commons.io.FileUtils.readFileToString;
 
 
 @Slf4j
@@ -59,37 +57,4 @@ public class FileUtils {
                 .orElseThrow(() -> new IOException("File has no extension"));
     }
 
-    public static boolean isTrackFile(File file) {
-        return isFitFile(file) || isGpxFile(file) || isTcxFile(file);
-    }
-
-    public static boolean isFitFile(File file) {
-        return file.getName().toLowerCase().endsWith(".fit");
-    }
-
-    private static boolean isGpxFile(File file) {
-        return file.getName().toLowerCase().endsWith(".gpx");
-    }
-
-    public static boolean isTcxFile(File file) {
-        return file.getName().toLowerCase().endsWith(".tcx");
-    }
-
-    public static boolean isGpx10File(File file) {
-        return isGpxFileContaining(file, "xmlns=\"http://www.topografix.com/GPX/1/0\"");
-    }
-
-    public static boolean isGpx11File(File file) {
-        return isGpxFileContaining(file, "xmlns=\"http://www.topografix.com/GPX/1/1\"");
-    }
-
-    private static boolean isGpxFileContaining(File fileToCheck, String stringToBeContained) {
-        try {
-            String content = readFileToString(fileToCheck, StandardCharsets.UTF_8);
-            return isGpxFile(fileToCheck) && content.contains(stringToBeContained);
-        } catch (IOException e) {
-            log.error("Could not read file {}", fileToCheck);
-            return false;
-        }
-    }
 }
