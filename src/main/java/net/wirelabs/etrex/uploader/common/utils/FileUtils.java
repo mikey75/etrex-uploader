@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -25,6 +26,13 @@ public class FileUtils {
     public static List<File> listDirectory(File directory) {
         File[] files = directory.listFiles();
         return (files != null) ? new ArrayList<>(Arrays.asList(files)) : Collections.emptyList();
+    }
+
+    public static  List<File> listDirectorySorted(File directory) {
+        return listDirectory(directory)
+                .stream()
+                .sorted(Comparator.comparing(File::getName))
+                .collect(Collectors.toList());
     }
 
     public static boolean recursivelyDeleteDirectory(File directoryToBeDeleted) throws IOException {
