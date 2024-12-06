@@ -19,9 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
 
@@ -106,19 +104,16 @@ public class EtrexUploader extends JFrame {
 
     public void getMapDefinitionFiles(AppConfiguration configuration) {
 
-        // get and sort maps from app's default location
-        List<File> defaultMaps = FileUtils.listDirectory(new File(SystemUtils.getWorkDir() + File.separator + "maps")).stream()
-                .sorted(Comparator.comparing(File::getName))
-                .collect(Collectors.toList());
+        File defaultMapDir = new File(SystemUtils.getWorkDir() + File.separator + "maps");
+        File userMapDefinitionsDir = configuration.getUserMapDefinitonsDir().toFile();
 
+        // get and sort maps from app's default location
+        List<File> sortedDefaultMaps = FileUtils.listDirectorySorted(defaultMapDir);
         // get and sort usermaps
-        File mapsDefinitionsDir = configuration.getUserMapDefinitonsDir().toFile();
-        List<File> sortedUserMaps = FileUtils.listDirectory(mapsDefinitionsDir).stream()
-                .sorted(Comparator.comparing(File::getName))
-                .collect(Collectors.toList());
+        List<File> sortedUserMaps = FileUtils.listDirectorySorted(userMapDefinitionsDir);
 
         // add default map(s)
-        configuredMaps.addAll(defaultMaps);
+        configuredMaps.addAll(sortedDefaultMaps);
         // add sorted usermaps
         configuredMaps.addAll(sortedUserMaps);
 
