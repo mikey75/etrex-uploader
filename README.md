@@ -20,11 +20,9 @@ etrex-uploader setup dialog.
 
 IMPORTANT!
 =
-This application runs best with Java 11. 
-If you run in java version bigger than 11 -> then the runtime does not start, because of changes in built-in JAXB, it's no longer in the jvm itself.  
-The cause is the use of jaxb in a dependant jmaps-viewer project.
-You need to add jars to the classpath, or add glassfish implementations to pom.xml. None of these solutions is recommended. Just run it from Java 11.
-However, there's a workaround planned so that it works out of the box anytime with any java >=11. Stay tuned, but until then - use Java 11.
+This application runs and builds with Java 17 at the moment.<br>
+Lower Java versions are not supported anymore, and higher ones are not tested yet. 
+Use java 17!
 
 RUN
 ==
