@@ -78,7 +78,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void shouldListFilesSorted() {
+    void shouldListSortedFilesInDirectory() {
         // sorting is alphabethic, uppercase first.
         List<File> sorted = listDirectorySorted(LISTER_DIR);
         assertThat(sorted).isNotEmpty()
@@ -87,7 +87,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void shouldListFiles() {
+    void shouldListFilesInDirectory() {
         List<File> unsorted = listDirectory(LISTER_DIR);
         assertThat(unsorted).isNotEmpty()
                 .extracting(File::getName)

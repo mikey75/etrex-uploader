@@ -25,7 +25,7 @@ public class FileUtils {
 
     public static List<File> listDirectory(File directory) {
         File[] files = directory.listFiles();
-        return (files != null) ? new ArrayList<>(Arrays.asList(files)) : Collections.emptyList();
+        return (files != null) ? List.of(files) : Collections.emptyList();
     }
 
     public static  List<File> listDirectorySorted(File directory) {
