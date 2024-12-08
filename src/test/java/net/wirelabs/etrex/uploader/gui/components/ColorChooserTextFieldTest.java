@@ -34,18 +34,18 @@ class ColorChooserTextFieldTest {
 
         // if text color is empty - the jcolor selector starts with black
         colorChooserTextField.setText("");
-        colorChooserTextField.colorChooserInvokerButton.doClick();
+        colorChooserTextField.button.doClick();
         mockColorChooser.verify(() -> JColorChooser.showDialog(any(), any(), eq(Color.BLACK)));
 
         // if text is not empty - the jcolor starts with decoded text color
         colorChooserTextField.setText("#0A0A0A");
-        colorChooserTextField.colorChooserInvokerButton.doClick();
+        colorChooserTextField.button.doClick();
         mockColorChooser.verify(() -> JColorChooser.showDialog(any(), any(), eq(new Color(0x0A, 0x0A, 0x0A))));
 
         // now simulate choosing rgb(0xF0, 0xF0, 0xF0) on color selection dialog
         mockColorChooser.when(() -> JColorChooser.showDialog(any(), any(), any())).thenReturn(new Color(0xF0, 0xF0, 0xF0));
         // click
-        colorChooserTextField.colorChooserInvokerButton.doClick();
+        colorChooserTextField.button.doClick();
         assertThat(colorChooserTextField.getText()).isEqualTo("#F0F0F0");
 
     }
