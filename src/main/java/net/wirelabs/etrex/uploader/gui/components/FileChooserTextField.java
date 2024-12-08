@@ -1,52 +1,26 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileChooserTextField extends JPanel {
+public class FileChooserTextField extends ButtonedTextField {
 
-    private final JTextField textfield;
-    private final JButton button;
     private final boolean allowMultiple;
     private final boolean dirsOnly;
-
     private transient List<Path> paths = new ArrayList<>();
-
-    private final LayoutManager layout = new MigLayout("gapx 0,insets 0", "[grow][]", "[]");
-
-    public FileChooserTextField() {
-        this(false, false);
-    }
 
     public FileChooserTextField(boolean dirsOnly, boolean allowMultiple) {
         this.dirsOnly = dirsOnly;
         this.allowMultiple = allowMultiple;
-        setBorder(null);
-        setLayout(layout);
-
-        // the textfield
-        textfield = new JTextField();
-        textfield.setMinimumSize(new Dimension(32, 18));
-        textfield.setMaximumSize(new Dimension(2400, 18));
-
-        // the button
-        button = new JButton("...");
-        button.setMinimumSize(new Dimension(18, 18));
-        button.setMaximumSize(new Dimension(18, 18));
-
-        add(button, "cell 1 0");
-        add(textfield, "cell 0 0,grow");
-
-        button.addActionListener(e -> showFileChooser());
+        setButtonText("...");
     }
 
-    private void showFileChooser() {
+    @Override
+    protected void onButtonClick() {
         JFileChooser fileChooser = new JFileChooser();
         if (dirsOnly) {
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -62,12 +36,12 @@ public class FileChooserTextField extends JPanel {
         if (allowMultiple) {
             if (!paths.contains(selectedItem)) {
                 paths.add(selectedItem);
-                textfield.setText(ListUtils.convertPathListToString(paths));
+                setText(ListUtils.convertPathListToString(paths));
             }
         } else {
             paths.clear();
             paths.add(selectedItem);
-            textfield.setText(ListUtils.convertPathListToString(paths));
+            setText(ListUtils.convertPathListToString(paths));
         }
     }
 
@@ -78,6 +52,6 @@ public class FileChooserTextField extends JPanel {
 
     public void setPaths(List<Path> paths) {
         this.paths = new ArrayList<>(paths);
-        textfield.setText(ListUtils.convertPathListToString(paths));
+        setText(ListUtils.convertPathListToString(paths));
     }
 }
