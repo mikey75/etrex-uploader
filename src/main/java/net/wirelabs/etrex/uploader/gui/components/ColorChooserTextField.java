@@ -1,5 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
+import lombok.NoArgsConstructor;
+import net.wirelabs.etrex.uploader.common.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -8,23 +11,18 @@ import java.util.Objects;
  * Created 9/9/23 by Michał Szwaczko (mikey@wirelabs.net)
  */
 
+@NoArgsConstructor
 public class ColorChooserTextField extends ButtonedTextField {
 
-    public ColorChooserTextField() {
-        Icon folderIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/colorpal.png")));
-        setButtonIcon(folderIcon);
+    private static final ImageIcon icon = new ImageIcon(Objects.requireNonNull(ColorChooserTextField.class.getResource("/icons/colorpal.png")));
+
+    public ColorChooserTextField(String text) {
+        super(text, Constants.EMPTY_STRING, icon);
     }
 
     @Override
     protected void onButtonClick() {
-        Color chosen;
-
-        if (getText().isBlank()) {
-            chosen = Color.BLACK;
-        } else {
-            chosen = Color.decode(textfield.getText());
-        }
-
+        Color chosen = (getText().isBlank()) ? Color.BLACK : Color.decode(getText());
         Color c = JColorChooser.showDialog(null, "Choose color", chosen);
         if (c != null) {
             setText(convertColorToAscii(c));
