@@ -31,15 +31,20 @@ public class MapsSettingsPanel extends BorderedPanel {
     private final JLabel lblMapHomeLon = new JLabel("Map home longitude:");
 
     private final JTextField threads = new JTextField();
-    @Getter private final JTextField mapHomeLat = new JTextField();
-    @Getter private final JTextField mapHomeLon = new JTextField();
-    @Getter private final ColorChooserTextField colorChooserTextField = new ColorChooserTextField();
+    @Getter
+    private final JTextField mapHomeLat = new JTextField();
+    @Getter
+    private final JTextField mapHomeLon = new JTextField();
+    @Getter
+    private final ColorChooserTextField colorChooserTextField;
 
     private final LayoutManager layout = new MigLayout("", "[][][][grow]", "[][][grow]");
 
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps");
         this.configuration = configuration;
+        this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
+
         setLayout(layout);
         add(lblDefaultMap, "cell 0 0,alignx trailing");
         add(newMaps, "cell 1 0, growx");
@@ -49,10 +54,10 @@ public class MapsSettingsPanel extends BorderedPanel {
         add(lblColor, "cell 0 1, alignx trailing");
         add(colorChooserTextField, "cell 1 1, growx");
 
-        add(lblMapHomeLon,"cell 0 2, alignx trailing");
+        add(lblMapHomeLon, "cell 0 2, alignx trailing");
         add(mapHomeLon, "cell 1 2, growx");
 
-        add(lblMapHomeLat,"cell 0 3, alignx trailing");
+        add(lblMapHomeLat, "cell 0 3, alignx trailing");
         add(mapHomeLat, "cell 1 3, growx");
 
         mapHomeLon.setToolTipText(INFO_MSG);
@@ -66,7 +71,6 @@ public class MapsSettingsPanel extends BorderedPanel {
         // set values from gui
         newMaps.setSelectedItem(configuration.getMapFile().toFile());
         threads.setText(String.valueOf(configuration.getTilerThreads()));
-        colorChooserTextField.setText(configuration.getMapTrackColor());
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
         mapHomeLat.setText(String.valueOf(configuration.getMapHomeLattitude()));
     }

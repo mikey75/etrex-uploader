@@ -25,10 +25,10 @@ import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CH
 public class ApplicationSettingsPanel extends BorderedPanel {
 
     private final AppConfiguration configuration;
-    private final FileChooserTextField storageRoot = new FileChooserTextField(true, false);
+    private final FileChooserTextField storageRoot = new FileChooserTextField();
+    private final FileChooserTextField mapDefinitionsDir = new FileChooserTextField();
     @Getter
     private final FileChooserTextField userRootsFileChooser = new FileChooserTextField(true, true);
-    private final FileChooserTextField mapDefinitionsDir = new FileChooserTextField(true, false);
 
     private final JTextField discoveryDelay = new JTextField();
     private final JTextField waitDriveTimeout = new JTextField();
