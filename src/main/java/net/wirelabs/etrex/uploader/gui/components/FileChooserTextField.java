@@ -13,10 +13,14 @@ public class FileChooserTextField extends ButtonedTextField {
     private final boolean dirsOnly;
     private transient List<Path> paths = new ArrayList<>();
 
+
+    public FileChooserTextField() {
+        this(true, false);
+    }
+
     public FileChooserTextField(boolean dirsOnly, boolean allowMultiple) {
         this.dirsOnly = dirsOnly;
         this.allowMultiple = allowMultiple;
-        setButtonText("...");
     }
 
     @Override
@@ -46,7 +50,7 @@ public class FileChooserTextField extends ButtonedTextField {
     }
 
     public List<Path> getPaths() {
-        this.paths = ListUtils.convertStringListToPaths(textfield.getText());
+        this.paths = ListUtils.convertStringListToPaths(getText());
         return paths;
     }
 
