@@ -20,7 +20,7 @@ class FileUtilsTest {
 
     private static final File SINGLE_EXTENSION_FILE = new File("testfile.txt");
     private static final File MULTI_EXTENSION_FILE = new File("testfile.txt.abc.gpx");
-    private static final File LISTER_DIR = new File("src/test/resources/fileutils/listerdir");
+    private static final File LISTER_DIR = new File("src/test/resources/fileutils/lister");
 
     @Test
     void shouldParseFileNameExtensionAndName() throws IOException {
@@ -83,7 +83,7 @@ class FileUtilsTest {
         List<File> sorted = listDirectorySorted(LISTER_DIR);
         assertThat(sorted).isNotEmpty()
                 .extracting(File::getName)
-                .containsExactly("Ala.txt", "KaKa.txt", "Zosia.txt", "kAka.txt", "kaka.txt");
+                .containsExactly("Ala.txt", "KaKZ.txt", "Kaka.txt", "Zosia.txt", "kaks.txt");
     }
 
     @Test
@@ -91,6 +91,6 @@ class FileUtilsTest {
         List<File> unsorted = listDirectory(LISTER_DIR);
         assertThat(unsorted).isNotEmpty()
                 .extracting(File::getName)
-                .containsExactlyInAnyOrder("Zosia.txt", "Ala.txt", "kaka.txt", "KaKa.txt", "kAka.txt");
+                .containsExactlyInAnyOrder("Zosia.txt", "Ala.txt", "Kaka.txt", "KaKZ.txt", "kaks.txt");
     }
 }
