@@ -27,7 +27,7 @@ public class EtrexUploaderRunner {
 
 
             ApplicationStartupContext ctx = new ApplicationStartupContext();
-            SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration());
+            SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration().getLookAndFeelClassName());
             Frame window = new EtrexUploader(ctx);
             window.setMinimumSize(new Dimension(800, 600));
             window.setVisible(true);

@@ -3,7 +3,6 @@ package net.wirelabs.etrex.uploader.common.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 
 import javax.swing.*;
 import javax.swing.plaf.*;
@@ -50,11 +49,20 @@ public class SwingUtils {
     }
 
     /**
-     * Set system look and feel as configured in config.properties
+     * Set system look and feel by classname string
      */
-    public static void setSystemLookAndFeel(AppConfiguration configuration) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel(configuration.getLookAndFeelClassName());
+    public static void setSystemLookAndFeel(String lafClassName) throws UnsupportedLookAndFeelException, ReflectiveOperationException {
+        UIManager.setLookAndFeel(lafClassName);
     }
+
+    /**
+     * Set system look and feel by classname
+     */
+    public static void setSystemLookAndFeel(Class<? extends LookAndFeel> lafClass) throws UnsupportedLookAndFeelException, ReflectiveOperationException {
+        UIManager.setLookAndFeel(lafClass.getName());
+    }
+
+
 
     public static void setGlobalFontSize(Integer fontsize) {
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -73,23 +81,4 @@ public class SwingUtils {
         }
     }
 
-    public static void addPopup(Component component, final JPopupMenu popup) {
-        component.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    showMenu(e);
-                }
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    showMenu(e);
-                }
-            }
-            private void showMenu(MouseEvent e) {
-                popup.show(e.getComponent(), e.getX(), e.getY());
-            }
-        });
-    }
 }
