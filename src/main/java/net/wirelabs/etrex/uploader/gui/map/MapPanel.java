@@ -136,19 +136,17 @@ public class MapPanel extends EventAwareBorderedPanel {
 
     private void drawTrackOnMap(Event evt) {
         // track is inside a file
-        if (evt.getPayload() instanceof File) {
-            File file = (File) evt.getPayload();
+        if (evt.getPayload() instanceof File filePayload) {
             SwingUtilities.invokeLater(() -> {
-                List<Coordinate> points = trackParser.parseTrackFile(file);
+                List<Coordinate> points = trackParser.parseTrackFile(filePayload);
                 paintTrack(points);
             });
 
         }
         // track is inside a polyline string
-        if (evt.getPayload() instanceof String) {
+        if (evt.getPayload() instanceof String polyLineStringPayload) {
             SwingUtilities.invokeLater(() -> {
-                String polyLine = (String) evt.getPayload();
-                List<Coordinate> points = trackParser.parsePolyline(polyLine, 1E5F);
+                List<Coordinate> points = trackParser.parsePolyline(polyLineStringPayload, 1E5F);
                 paintTrack(points);
             });
         }

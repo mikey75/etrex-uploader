@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -57,7 +56,8 @@ public class LocalStorageBrowser extends EventAwareBorderedPanel {
     private List<File> getCustomStorageRoots() {
 
         return appConfiguration.getUserStorageRoots().stream()
-                .map(f -> Paths.get(f.toString()).toFile()).collect(Collectors.toList());
+                .map(f -> Paths.get(f.toString()).toFile())
+                .toList();
 
     }
 
@@ -70,11 +70,11 @@ public class LocalStorageBrowser extends EventAwareBorderedPanel {
             List<String> userRootsOnTree = fileTree.getRootNodes().stream()
                     .map(Object::toString)
                     .filter(s -> !s.equals(appConfiguration.getStorageRoot().toString()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             List<String> userRootsFromEventPayload = ((List<Path>)event.getPayload()).stream()
                     .map(Object::toString)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (String s: userRootsFromEventPayload) {
                 if (!userRootsOnTree.contains(s))

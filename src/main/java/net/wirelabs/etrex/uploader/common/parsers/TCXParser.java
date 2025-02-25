@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class TCXParser implements TrackToCoordsParser {
@@ -25,7 +24,7 @@ public class TCXParser implements TrackToCoordsParser {
 
             return parseTcxFile(file).stream()
                     .map(GPSCoordinate::create)
-                    .collect(Collectors.toList());
+                    .toList();
 
     }
 
