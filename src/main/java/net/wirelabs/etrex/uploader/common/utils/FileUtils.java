@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -32,7 +31,7 @@ public class FileUtils {
         return listDirectory(directory)
                 .stream()
                 .sorted(Comparator.comparing(File::getName))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static boolean recursivelyDeleteDirectory(File directoryToBeDeleted) throws IOException {

@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created 12/3/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -39,7 +38,7 @@ class FITParser implements TrackToCoordsParser {
                     double altitude = rec.hasField(RecordMesg.AltitudeFieldNum) ? rec.getAltitude().doubleValue() : 0;
                     return new Coordinate(longitude, lattitude, altitude);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

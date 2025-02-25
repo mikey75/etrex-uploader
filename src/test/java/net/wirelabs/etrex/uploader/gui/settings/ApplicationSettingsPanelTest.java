@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 import javax.swing.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,8 +50,8 @@ class ApplicationSettingsPanelTest extends BaseTest {
     void shouldPublishEventsIfUserRootsChanged() {
 
         // given -> change values on the panel and update config
-        // get current list
-        List<Path> currentListOfRoots = applicationSettingsPanel.getUserRootsFileChooser().getPaths();
+        // get current list but wrap it in mutable list since we add element here in test
+        List<Path> currentListOfRoots = new ArrayList<>(applicationSettingsPanel.getUserRootsFileChooser().getPaths());
         // add new element
         currentListOfRoots.add(Paths.get("fakefile"));
         applicationSettingsPanel.getUserRootsFileChooser().setPaths(currentListOfRoots);

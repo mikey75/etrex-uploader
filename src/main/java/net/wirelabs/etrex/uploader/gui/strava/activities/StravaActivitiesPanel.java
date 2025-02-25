@@ -25,7 +25,6 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
@@ -172,7 +171,9 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
 
             // convert strava coords to jmaps coordinates
             List<Coordinate> jmapsCoord = coords.stream()
-                    .map(sc -> new Coordinate(sc.get(1), sc.get(0))).collect(Collectors.toList());
+                    .map(sc -> new Coordinate(sc.get(1), sc.get(0)))
+                    .toList();
+
             if (!jmapsCoord.isEmpty()) {
                 EventBus.publish(MAP_DISPLAY_TRACK, jmapsCoord);
             }

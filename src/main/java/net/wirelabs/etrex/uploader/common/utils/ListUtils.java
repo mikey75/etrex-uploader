@@ -54,19 +54,19 @@ public class ListUtils {
     public static <T> Collection<T> findElementsOfANotPresentInB(List<T> listA, List<T> listB) {
         return listA.stream()
                 .filter(f -> !listB.contains(f))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static List<Path> convertStringListToPaths(String commaSeparatedStrings) {
         if (commaSeparatedStrings != null) {
             List<String> strings = Stream.of(commaSeparatedStrings.split(",", -1))
-                    .collect(Collectors.toList());
+                    .toList();
 
             return strings.stream()
                     .filter(f -> !f.isBlank())
                     .map(String::strip)
                     .map(Paths::get)
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return Collections.emptyList();
     }

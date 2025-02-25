@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.io.FileUtils.forceDelete;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +60,7 @@ class FileServiceTest extends BaseTest {
         assertThat(root).isNotNull();
         List<String> s = Arrays.stream(Objects.requireNonNull(root.listFiles()))
                 .map(File::getName)
-                .collect(Collectors.toList());
+                .toList();
 
         assertThat(s).containsExactlyInAnyOrder(FileService.UPLOADED_FILES_SUBFOLDER, FileService.TRACKS_ARCHIVE_SUBFOLDER);
 
