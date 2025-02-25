@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created 8/3/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -27,7 +26,7 @@ class GPXv11Parser implements TrackToCoordsParser {
 
             return parse(file).stream()
                     .map(GPSCoordinate::create)
-                    .collect(Collectors.toList());
+                    .toList();
 
     }
 

@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -79,7 +78,7 @@ public class LogViewerDialog extends JDialog {
         return FileUtils.listFiles(new File("logs"), new String[]{"gz", "log"}, false)
                 .stream()
                 .sorted(Comparator.comparingLong(File::lastModified).reversed())
-                .collect(Collectors.toList());
+                .toList();
 
     }
 }
