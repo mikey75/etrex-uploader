@@ -7,8 +7,7 @@ import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -75,7 +74,7 @@ public class SystemUtils {
     }
 
     public static void createNewInstance() {
-        Optional<String> cmd = ProcessHandle.current().info().commandLine();
+        Optional<String> cmd = getCommandLine(ProcessHandle.current());
         if (cmd.isPresent()) {
             Runtime rt = Runtime.getRuntime();
             try {
@@ -84,6 +83,8 @@ public class SystemUtils {
             } catch (IOException e) {
                 log.error("Creating new application instance failed!");
             }
+        } else {
+            log.error("No new instance could be created");
         }
     }
 
@@ -113,5 +114,37 @@ public class SystemUtils {
 
     public static String getHomeDir() {
         return System.getProperty("user.home");
+    }
+
+    private static Optional<String> getCommandLine(ProcessHandle processHandle)  {
+        if (!isWindows()) {
+            return processHandle.info().commandLine();
+        }
+        long desiredProcessid = processHandle.pid();
+        try {
+            // run windows command 'wmic process where ProcessID=pidOfTheApp get commandline /format:list'
+            // which gets all running processes and filters it by ProcessID of the current app, and gets its commandline
+            // so basically get a complete commandline of currently running application
+            Process process = new ProcessBuilder("wmic", "process", "where", "ProcessID=" + desiredProcessid, "get",
+                    "commandline", "/format:list").
+                    redirectErrorStream(true).
+                    start();
+            try (InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
+                 BufferedReader reader = new BufferedReader(inputStreamReader)) {
+                while (true) {
+                    String line = reader.readLine();
+                    if (line == null) {
+                        return Optional.empty();
+                    }
+                    if (!line.startsWith("CommandLine=")) {
+                        continue;
+                    }
+                    return Optional.of(line.substring("CommandLine=".length()));
+                }
+            }
+        } catch (IOException e) {
+            log.error("Exception while getting current process command line: {}", e.getMessage());
+            return Optional.empty();
+        }
     }
 }
