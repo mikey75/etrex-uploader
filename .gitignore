@@ -12,3 +12,5 @@
 /config.properties
 /strava.properties
 /logs/
+/jmaps.version
+/etrex-uploader.version
