@@ -64,14 +64,23 @@ public class SystemUtils {
         }
     }
 
+    public static String getJmapsVerion() {
+        return getVersion("jmaps");
+    }
+
     public static String getAppVersion() {
+        return getVersion("etrex-uploader");
+    }
+
+    private static String getVersion(String versionSubject) { // subject is the name of the version file without .version part  so 'etrex-uploader' or 'jmaps' for instance
         try {
-            return FileUtils.readFileToString(new File("etrex-uploader.version"), StandardCharsets.UTF_8);
+            return FileUtils.readFileToString(new File(versionSubject +".version"), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            log.warn("Can't find or load etrex-uploader.version file");
-            return "UNKNOWN";
+            log.warn("Can't find or load {}.version file", versionSubject);
+            return "1.0U"; // default for not found - looks ok for user and quietly suggests problem for developer
         }
     }
+
 
     public static void createNewInstance() {
         Optional<String> cmd = getCommandLine(ProcessHandle.current());
@@ -116,7 +125,7 @@ public class SystemUtils {
         return System.getProperty("user.home");
     }
 
-    private static Optional<String> getCommandLine(ProcessHandle processHandle)  {
+    private static Optional<String> getCommandLine(ProcessHandle processHandle) {
         if (!isWindows()) {
             return processHandle.info().commandLine();
         }
@@ -147,4 +156,5 @@ public class SystemUtils {
             return Optional.empty();
         }
     }
+
 }
