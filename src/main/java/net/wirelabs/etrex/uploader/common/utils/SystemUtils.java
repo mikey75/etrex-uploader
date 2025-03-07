@@ -4,13 +4,18 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.eventbus.EventBus;
+import net.wirelabs.jmaps.map.MapViewer;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -147,4 +152,23 @@ public class SystemUtils {
             return Optional.empty();
         }
     }
+
+    public static String getJmapsVersionUsed() {
+
+        Class<?> theClass = MapViewer.class;
+        String classPath = Objects.requireNonNull(theClass.getResource(theClass.getSimpleName() + ".class")).toString();
+        String libPath = classPath.substring(0, classPath.lastIndexOf("!"));
+        String filePath = libPath + "!/META-INF/MANIFEST.MF";
+
+        Manifest manifest;
+        try {
+            manifest = new Manifest(new URL(filePath).openStream());
+        } catch (IOException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+        Attributes attr = manifest.getMainAttributes();
+        return attr.getValue("Manifest-Version");
+    }
+
+
 }
