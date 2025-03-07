@@ -69,7 +69,16 @@ public class SystemUtils {
             return FileUtils.readFileToString(new File("etrex-uploader.version"), StandardCharsets.UTF_8);
         } catch (IOException e) {
             log.warn("Can't find or load etrex-uploader.version file");
-            return "UNKNOWN";
+            return "1.0U"; // default for not found - looks ok for user and quietly suggests problem for developer
+        }
+    }
+
+    public static String getJmapsVersion() {
+        try {
+            return FileUtils.readFileToString(new File("jmaps.version"), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            log.warn("Can't find or load jmaps.version file");
+            return "1.0U"; // default for not found - looks ok for user and quietly suggests problem for developer
         }
     }
 
@@ -116,7 +125,7 @@ public class SystemUtils {
         return System.getProperty("user.home");
     }
 
-    private static Optional<String> getCommandLine(ProcessHandle processHandle)  {
+    private static Optional<String> getCommandLine(ProcessHandle processHandle) {
         if (!isWindows()) {
             return processHandle.info().commandLine();
         }
@@ -147,4 +156,5 @@ public class SystemUtils {
             return Optional.empty();
         }
     }
+
 }
