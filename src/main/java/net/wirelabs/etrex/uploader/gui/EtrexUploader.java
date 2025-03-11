@@ -37,12 +37,14 @@ public class EtrexUploader extends JFrame {
     private transient UploadService uploadService;
 
     public EtrexUploader(ApplicationStartupContext ctx) {
+
+        Splash splash = new Splash();
+        splash.update("Checking strava status");
         checkStravaIsUp(ctx.getAppConfiguration());
+        splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());
 
         if (ctx.isAuthorized()) {
-
-            Splash splash = new Splash();
 
             setTitle(APPLICATION_IDENTIFICATION);
 

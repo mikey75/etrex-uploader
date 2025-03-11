@@ -1,60 +1,67 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
-import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-@Slf4j
 public class Splash extends JFrame {
 
-    private final JTextArea textArea = new JTextArea();
-    private final JLabel iconLabel = new JLabel();
-
-    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][grow]");
+    private final SplashPanel splashContentPanel = new SplashPanel();
 
     public Splash() {
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(textArea);
-
-        JLabel appName = new JLabel("Etrex Uploader");
+        int height = splashContentPanel.backgroundImage.getHeight(this);
+        int width = splashContentPanel.backgroundImage.getWidth(this);
 
         setUndecorated(true);
-        setBounds(0, 0, 418, 137);
-        getContentPane().setLayout(layout);
-        getContentPane().add(appName, "cell 0 0 2 1,alignx center");
-        getContentPane().add(iconLabel, "cell 0 1,aligny top");
-        getContentPane().add(scrollPane, "cell 1 1,grow");
-
-        setApplicationLogoIcon();
+        setSize(width, height);
         setLocationRelativeTo(null);
+        setContentPane(splashContentPanel);
         setVisible(true);
-        
+
     }
 
-    private void setApplicationLogoIcon() {
-        URL iconLocation = getClass().getResource("/images/garmin.png");
-        if (iconLocation != null) {
-            ImageIcon icon = new ImageIcon(iconLocation);
-            iconLabel.setIcon(icon);
-            iconLabel.update(iconLabel.getGraphics());
+
+    static class SplashPanel extends JPanel {
+
+        private transient Image backgroundImage;
+        private final transient JTextArea textArea = new JTextArea(12, 1);
+
+        public SplashPanel() {
+            URL imageLocation = getClass().getResource("/images/splash.png");
+
+            if (imageLocation != null) {
+                setLayout(null); // x,y absolute layout
+                backgroundImage = new ImageIcon(imageLocation).getImage();
+            }
+
+            textArea.setFont(new Font("Arial", Font.BOLD, 11));
+            textArea.setBounds(12, 150, 350, 140);
+            textArea.setOpaque(false);
+            add(textArea);
+
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
 
     public void update(String message) {
         appendMessage(message);
+        Sleeper.sleepMillis(100);
     }
 
     private void appendMessage(String message) {
-        textArea.append(message + "\r\n");
-        textArea.update(textArea.getGraphics());
+        splashContentPanel.textArea.append(message + "\r\n");
+        splashContentPanel.textArea.update(splashContentPanel.textArea.getGraphics());
     }
 
     public void close(){
         dispose();
     }
-    
 }
