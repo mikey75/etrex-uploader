@@ -27,7 +27,7 @@ public class TokenRequest {
      *
      * @return built request
      */
-    public static Request of(String appId, String clientSecret, String authCode) {
+    public static Request createTokenRequest(String appId, String clientSecret, String authCode) {
         RequestBody body = new FormEncodingBuilder()
                 .add("client_id", appId)
                 .add("client_secret", clientSecret)
@@ -35,10 +35,42 @@ public class TokenRequest {
                 .add("grant_type", "authorization_code")
                 .build();
 
+        return getRequest(body);
+    }
+
+
+
+    /**
+     * Build refresh token request as per strava docs
+     * <p>
+     * Returns the HttpRequest object equivalent to:
+     * <p>
+     * curl -X POST https://www.strava.com/oauth/token \
+     * -d client_id=ReplaceWithClientID \
+     * -d client_secret=ReplaceWithClientSecret \
+     * -d grant_type=refresh_token \
+     * -d refresh_token=ReplaceWithRefreshToken
+     *
+     * @param appId client id
+     * @param clientSecret client secret
+     * @param refreshToken refresh token
+     * @return built request
+     */
+    public static Request createRefreshTokenRequest(String appId, String clientSecret, String refreshToken) {
+        RequestBody body = new FormEncodingBuilder()
+                .add("client_id", appId)
+                .add("client_secret", clientSecret)
+                .add("grant_type", "refresh_token")
+                .add("refresh_token", refreshToken)
+                .build();
+
+        return getRequest(body);
+    }
+
+    private static Request getRequest(RequestBody body) {
         return new Request.Builder()
                 .url(Constants.STRAVA_TOKEN_URL)
                 .post(body)
                 .build();
     }
-
 }

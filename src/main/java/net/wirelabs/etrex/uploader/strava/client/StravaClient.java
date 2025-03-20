@@ -156,7 +156,7 @@ public class StravaClient  {
             long currentTime = Duration.ofMillis(System.currentTimeMillis()).getSeconds();
             if (configuration.getStravaTokenExpires() < currentTime) {
                 log.info("Refreshing token");
-                Request request = RefreshTokenRequest.of(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
+                Request request = TokenRequest.createRefreshTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
                 String response = execute(request);
                 RefreshTokenResponse refreshTokenResponse = deserialize(response, RefreshTokenResponse.class);
                 refreshExpired(refreshTokenResponse);
@@ -167,7 +167,7 @@ public class StravaClient  {
     public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
 
         if (!authCode.isEmpty()) {
-            Request tokenRequest = TokenRequest.of(appId, clientSecret, authCode);
+            Request tokenRequest = TokenRequest.createTokenRequest(appId, clientSecret, authCode);
             String response = execute(tokenRequest);
             TokenResponse tokenResponse = deserialize(response, TokenResponse.class);
             log.info("Got tokens!");
