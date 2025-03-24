@@ -38,11 +38,15 @@ public class SystemUtils {
     public static void openSystemBrowser(String url) throws IOException {
         Runtime runtime = Runtime.getRuntime();
         Process browserSubprocess;
+
         if (SystemUtils.isLinux()) {
             browserSubprocess = runtime.exec("xdg-open " + url);
             waitForSubprocess(browserSubprocess);
         } else if (SystemUtils.isWindows()) {
             browserSubprocess = runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
+            waitForSubprocess(browserSubprocess);
+        } else if (SystemUtils.isOSX()) {
+            browserSubprocess = runtime.exec("open " + url);
             waitForSubprocess(browserSubprocess);
         }
 
