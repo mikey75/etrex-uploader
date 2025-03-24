@@ -137,35 +137,46 @@ public class SystemUtils {
     }
 
     private static Optional<String> getCommandLine(ProcessHandle processHandle) {
-        if (!isWindows()) {
+
+        if (isLinux()) {
             return processHandle.info().commandLine();
         }
-        long desiredProcessid = processHandle.pid();
-        try {
-            // run windows command 'wmic process where ProcessID=pidOfTheApp get commandline /format:list'
-            // which gets all running processes and filters it by ProcessID of the current app, and gets its commandline
-            // so basically get a complete commandline of currently running application
-            Process process = new ProcessBuilder("wmic", "process", "where", "ProcessID=" + desiredProcessid, "get",
-                    "commandline", "/format:list").
-                    redirectErrorStream(true).
-                    start();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
-                 BufferedReader reader = new BufferedReader(inputStreamReader)) {
-                while (true) {
-                    String line = reader.readLine();
-                    if (line == null) {
-                        return Optional.empty();
+
+        if (isWindows()) {
+            long desiredProcessid = processHandle.pid();
+            try {
+                // run windows command 'wmic process where ProcessID=pidOfTheApp get commandline /format:list'
+                // which gets all running processes and filters it by ProcessID of the current app, and gets its commandline
+                // so basically get a complete commandline of currently running application
+                Process process = new ProcessBuilder("wmic", "process", "where", "ProcessID=" + desiredProcessid, "get",
+                        "commandline", "/format:list").
+                        redirectErrorStream(true).
+                        start();
+                try (InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
+                     BufferedReader reader = new BufferedReader(inputStreamReader)) {
+                    while (true) {
+                        String line = reader.readLine();
+                        if (line == null) {
+                            return Optional.empty();
+                        }
+                        if (!line.startsWith("CommandLine=")) {
+                            continue;
+                        }
+                        return Optional.of(line.substring("CommandLine=".length()));
                     }
-                    if (!line.startsWith("CommandLine=")) {
-                        continue;
-                    }
-                    return Optional.of(line.substring("CommandLine=".length()));
                 }
+            } catch (IOException e) {
+                log.error("Exception while getting current process command line: {}", e.getMessage());
+                return Optional.empty();
             }
-        } catch (IOException e) {
-            log.error("Exception while getting current process command line: {}", e.getMessage());
+        }
+
+        if (isOSX()) {
+            log.warn("Not supported for macos as of now");
             return Optional.empty();
         }
+
+        return Optional.empty();
     }
 
 }
