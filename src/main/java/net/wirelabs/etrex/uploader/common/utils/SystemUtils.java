@@ -52,6 +52,13 @@ public class SystemUtils {
 
     }
 
+    public static void checkOsSupport() {
+        if (!isWindows() && !isLinux() && !isOSX()) {
+            SwingUtils.errorMsg("Unsupported operating system, exiting!");
+            System.exit(1);
+        }
+    }
+
     private static void waitForSubprocess(Process browserSubprocess) {
         try {
             int code = browserSubprocess.waitFor();

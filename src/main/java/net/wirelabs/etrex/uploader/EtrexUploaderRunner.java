@@ -11,6 +11,7 @@ import java.awt.*;
 
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
 import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphicsEnvironmentPresent;
+import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkOsSupport;
 
 
 @Slf4j
@@ -23,6 +24,7 @@ public class EtrexUploaderRunner {
             LoggingConfigurator.configureLogger();
             log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
             checkGraphicsEnvironmentPresent();
+            checkOsSupport();
             setGlobalFontSize(10);
 
 
