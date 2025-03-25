@@ -127,11 +127,22 @@ public class MapPanel extends EventAwareBorderedPanel {
             mapHome = (Coordinate) evt.getPayload();
 
         }
+
+        if (evt.getEventType() == EventType.ROUTE_WIDTH_CHANGED) {
+            routePainter.setLineWidth((int) evt.getPayload());
+            mapViewer.repaint();
+        }
     }
 
     @Override
     protected Collection<IEventType> subscribeEvents() {
-        return ListUtils.listOf(EventType.TRACK_COLOR_CHANGED, EventType.MAP_DISPLAY_TRACK, EventType.MAP_RESET, EventType.MAP_HOME_CHANGED);
+        return ListUtils.listOf(
+                EventType.TRACK_COLOR_CHANGED,
+                EventType.MAP_DISPLAY_TRACK,
+                EventType.MAP_RESET,
+                EventType.MAP_HOME_CHANGED,
+                EventType.ROUTE_WIDTH_CHANGED
+        );
     }
 
     private void drawTrackOnMap(Event evt) {

@@ -35,6 +35,7 @@ class ConfigurationPropertyKeys {
     static final String USER_MAP_DEFINITIONS_DIR        = "map.definitions.dir";
     static final String MAP_HOME_LATTITUDE              = "map.home.lattitude";
     static final String MAP_HOME_LONGITUDE              = "map.home.longitude";
+    static final String ROUTE_LINEWIDTH                 = "map.route.linewidth";
 
     // config files constants
     static final String APPLICATION_CONFIGFILE          = "config.properties";
