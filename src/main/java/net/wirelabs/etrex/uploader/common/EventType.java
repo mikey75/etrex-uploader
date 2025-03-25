@@ -20,5 +20,6 @@ public enum EventType implements IEventType {
     TRACK_COLOR_CHANGED,
     RATELIMIT_INFO_UPDATE,
     USER_STORAGE_ROOTS_CHANGED,
+    ROUTE_WIDTH_CHANGED,
     MAP_HOME_CHANGED
 }

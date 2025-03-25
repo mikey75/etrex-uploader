@@ -24,7 +24,11 @@ public class RoutePainter extends Painter<MapViewer> {
     private Color routeColor = Color.RED;
     private BufferedImage startFlagIcon;
     private BufferedImage endFlagIcon;
+    private int routeLineWidth;
 
+    public void setLineWidth(int width) {
+        routeLineWidth = width;
+    }
     public void setColor(Color color) {
         routeColor = color;
     }
@@ -34,6 +38,7 @@ public class RoutePainter extends Painter<MapViewer> {
             routeColor = Color.decode(configuration.getMapTrackColor());
             startFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx-start-point.png")));
             endFlagIcon = ImageIO.read(Objects.requireNonNull(getClass().getResource("/icons/gpx-end-point.png")));
+            routeLineWidth = configuration.getRouteLineWidth();
         } catch (IOException e) {
             log.info("Failed to load icons for start or finish {}", e.getMessage());
         } catch (NumberFormatException nfe) {
@@ -52,7 +57,7 @@ public class RoutePainter extends Painter<MapViewer> {
             graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
             // do the drawing
             graphics.setColor(routeColor);
-            graphics.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            graphics.setStroke(new BasicStroke(routeLineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
             drawRoute(graphics, mapViewer);
             // restore changed settings

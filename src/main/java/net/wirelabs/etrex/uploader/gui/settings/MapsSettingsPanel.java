@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
@@ -38,6 +39,9 @@ public class MapsSettingsPanel extends BorderedPanel {
     @Getter
     private final ColorChooserTextField colorChooserTextField;
 
+    private final JTextField trackWidth = new JTextField();
+    private final JLabel lblTrkWidth = new JLabel("Track width:");
+
     private final LayoutManager layout = new MigLayout("", "[][][][grow]", "[][][grow]");
 
     public MapsSettingsPanel(AppConfiguration configuration) {
@@ -54,11 +58,14 @@ public class MapsSettingsPanel extends BorderedPanel {
         add(lblColor, "cell 0 1, alignx trailing");
         add(colorChooserTextField, "cell 1 1, growx");
 
-        add(lblMapHomeLon, "cell 0 2, alignx trailing");
-        add(mapHomeLon, "cell 1 2, growx");
+        add(lblTrkWidth, "cell 0 2, alignx trailing");
+        add(trackWidth, "cell 1 2, growx");
 
-        add(lblMapHomeLat, "cell 0 3, alignx trailing");
-        add(mapHomeLat, "cell 1 3, growx");
+        add(lblMapHomeLon, "cell 0 3, alignx trailing");
+        add(mapHomeLon, "cell 1 3, growx");
+
+        add(lblMapHomeLat, "cell 0 4, alignx trailing");
+        add(mapHomeLat, "cell 1 4, growx");
 
         mapHomeLon.setToolTipText(INFO_MSG);
         mapHomeLat.setToolTipText(INFO_MSG);
@@ -73,6 +80,7 @@ public class MapsSettingsPanel extends BorderedPanel {
         threads.setText(String.valueOf(configuration.getTilerThreads()));
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
         mapHomeLat.setText(String.valueOf(configuration.getMapHomeLattitude()));
+        trackWidth.setText(String.valueOf(configuration.getRouteLineWidth()));
     }
 
     public void updateConfiguration() {
@@ -81,8 +89,9 @@ public class MapsSettingsPanel extends BorderedPanel {
         if (newMaps.getSelectedItem() != null) {
             configuration.setMapFile(((File) newMaps.getSelectedItem()).toPath());
         }
-        // emit events if track color or map home changed
+        // emit events if track color or track width or map home changed
         updateTrackColor();
+        updateTrackWidth();
         updateMapHome();
     }
 
@@ -107,6 +116,23 @@ public class MapsSettingsPanel extends BorderedPanel {
         // publish color change event if it actually really changed
         if (!configuration.getMapTrackColor().equals(origColor)) {
             EventBus.publish(EventType.TRACK_COLOR_CHANGED, Color.decode(colorChooserTextField.getText()));
+        }
+    }
+
+    private void updateTrackWidth() {
+        // publish line width change if it actually really changed
+        int origLineWidth = configuration.getRouteLineWidth();
+        int newLineWidth = Integer.parseInt(trackWidth.getText());
+        // usable width is about 3-10 pixels, setting more is ugly and unnecessary so
+        // take care for that by setting default (3) if out of allowed range
+        if (newLineWidth >= 3 && newLineWidth <= 10) {
+            configuration.setRouteLineWidth(newLineWidth);
+        } else {
+            configuration.setRouteLineWidth(Constants.DEFAULT_ROUTE_LINEWIDTH);
+        }
+        // publish event if width changed
+        if (configuration.getRouteLineWidth() != origLineWidth) {
+            EventBus.publish(EventType.ROUTE_WIDTH_CHANGED, configuration.getRouteLineWidth());
         }
     }
 
