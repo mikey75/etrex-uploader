@@ -46,6 +46,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private Double mapHomeLattitude;
     private Double mapHomeLongitude;
     private boolean enableDesktopSliders;
+    private int routeLineWidth;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -71,6 +72,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         mapHomeLattitude = Double.valueOf(properties.getProperty(MAP_HOME_LATTITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
         enableDesktopSliders = Boolean.parseBoolean(properties.getProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
+        routeLineWidth = Integer.parseInt(properties.getProperty(ROUTE_LINEWIDTH, String.valueOf(Constants.DEFAULT_ROUTE_LINEWIDTH)));
 
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
@@ -105,6 +107,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_HOME_LONGITUDE, String.valueOf(mapHomeLongitude));
         properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
+        properties.setProperty(ROUTE_LINEWIDTH, String.valueOf(routeLineWidth));
         super.store();
 
     }

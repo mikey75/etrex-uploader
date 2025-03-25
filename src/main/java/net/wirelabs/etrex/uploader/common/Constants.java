@@ -41,6 +41,7 @@ public class Constants {
     public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     public static final String DEFAULT_TRACK_COLOR = "#ff0000";
     public static final SportType DEFAULT_SPORT = SportType.RIDE;
+    public static final int DEFAULT_ROUTE_LINEWIDTH = 3;
 
     public static final long DEFAULT_DRIVE_OBSERVER_DELAY = 500;
     public static final long DEFAULT_WAIT_DRIVE_TIMEOUT = 15000;
