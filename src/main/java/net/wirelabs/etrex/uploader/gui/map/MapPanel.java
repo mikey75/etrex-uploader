@@ -128,7 +128,7 @@ public class MapPanel extends EventAwareBorderedPanel {
 
         }
 
-        if (evt.getEventType() == EventType.ROUTE_WIDTH_CHANGED) {
+        if (evt.getEventType() == EventType.ROUTE_LINE_WIDTH_CHANGED) {
             routePainter.setLineWidth((int) evt.getPayload());
             mapViewer.repaint();
         }
@@ -141,7 +141,7 @@ public class MapPanel extends EventAwareBorderedPanel {
                 EventType.MAP_DISPLAY_TRACK,
                 EventType.MAP_RESET,
                 EventType.MAP_HOME_CHANGED,
-                EventType.ROUTE_WIDTH_CHANGED
+                EventType.ROUTE_LINE_WIDTH_CHANGED
         );
     }
 
