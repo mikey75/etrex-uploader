@@ -37,20 +37,20 @@ public class SystemUtils {
     }
 
     public static void openSystemBrowser(String url) throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        Process browserSubprocess;
 
         if (SystemUtils.isLinux()) {
-            browserSubprocess = runtime.exec("xdg-open " + url);
-            waitForSubprocess(browserSubprocess);
+            launchProcess("xdg-open " + url);
         } else if (SystemUtils.isWindows()) {
-            browserSubprocess = runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
-            waitForSubprocess(browserSubprocess);
+            launchProcess("rundll32 url.dll,FileProtocolHandler " + url);
         } else if (SystemUtils.isOSX()) {
-            browserSubprocess = runtime.exec("open " + url);
-            waitForSubprocess(browserSubprocess);
+            launchProcess("open " + url);
         }
 
+    }
+
+    private static void launchProcess(String processCommand) throws IOException {
+        Process browserSubprocess = Runtime.getRuntime().exec(processCommand);
+        waitForSubprocess(browserSubprocess);
     }
 
     public static void checkOsSupport() {
@@ -178,7 +178,7 @@ public class SystemUtils {
                 }
             }
         } catch (IOException e) {
-            log.error("Exception while getting current process command line: {}", e.getMessage());
+            log.error("Exception while getting current process command line: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
@@ -199,7 +199,7 @@ public class SystemUtils {
                 return (line == null) ? Optional.empty() : Optional.of(line);
             }
         } catch (IOException e) {
-            log.error("Exception while getting current process command line: {}", e.getMessage());
+            log.error("Exception while getting current process command line: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
