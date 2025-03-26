@@ -6,6 +6,7 @@ import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
@@ -39,7 +40,7 @@ public class MapsSettingsPanel extends BorderedPanel {
     @Getter
     private final ColorChooserTextField colorChooserTextField;
 
-    private final JTextField trackWidth = new JTextField();
+    private final JTextField routeLineWidth = new JTextField();
     private final JLabel lblTrkWidth = new JLabel("Track width:");
 
     private final LayoutManager layout = new MigLayout("", "[][][][grow]", "[][][grow]");
@@ -59,7 +60,7 @@ public class MapsSettingsPanel extends BorderedPanel {
         add(colorChooserTextField, "cell 1 1, growx");
 
         add(lblTrkWidth, "cell 0 2, alignx trailing");
-        add(trackWidth, "cell 1 2, growx");
+        add(routeLineWidth, "cell 1 2, growx");
 
         add(lblMapHomeLon, "cell 0 3, alignx trailing");
         add(mapHomeLon, "cell 1 3, growx");
@@ -80,7 +81,7 @@ public class MapsSettingsPanel extends BorderedPanel {
         threads.setText(String.valueOf(configuration.getTilerThreads()));
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
         mapHomeLat.setText(String.valueOf(configuration.getMapHomeLattitude()));
-        trackWidth.setText(String.valueOf(configuration.getRouteLineWidth()));
+        routeLineWidth.setText(String.valueOf(configuration.getRouteLineWidth()));
     }
 
     public void updateConfiguration() {
@@ -122,17 +123,20 @@ public class MapsSettingsPanel extends BorderedPanel {
     private void updateTrackWidth() {
         // publish line width change if it actually really changed
         int origLineWidth = configuration.getRouteLineWidth();
-        int newLineWidth = Integer.parseInt(trackWidth.getText());
+        int newLineWidth = Integer.parseInt(routeLineWidth.getText());
         // usable width is about 3-10 pixels, setting more is ugly and unnecessary so
         // take care for that by setting default (3) if out of allowed range
         if (newLineWidth >= 3 && newLineWidth <= 10) {
             configuration.setRouteLineWidth(newLineWidth);
         } else {
-            configuration.setRouteLineWidth(Constants.DEFAULT_ROUTE_LINEWIDTH);
+            int dialogResult = SwingUtils.yesNoMsg("Route line width is best in 3-10 pixels range\nDo you want to set default (3px)\n\nPressing 'No' will ignore the change");
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                configuration.setRouteLineWidth(Constants.DEFAULT_ROUTE_LINE_WIDTH);
+            }
         }
         // publish event if width changed
         if (configuration.getRouteLineWidth() != origLineWidth) {
-            EventBus.publish(EventType.ROUTE_WIDTH_CHANGED, configuration.getRouteLineWidth());
+            EventBus.publish(EventType.ROUTE_LINE_WIDTH_CHANGED, configuration.getRouteLineWidth());
         }
     }
 
