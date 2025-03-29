@@ -109,7 +109,7 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
         ThreadUtils.runAsync(() -> {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             try {
-                List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, 30);
+                List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, configuration.getPerPage());
                 activitiesTable.setData(activities);
 
             } catch (StravaException e) {
