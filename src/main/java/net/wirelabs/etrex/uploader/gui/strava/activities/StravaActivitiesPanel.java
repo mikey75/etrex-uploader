@@ -111,7 +111,9 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
             try {
                 List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, configuration.getPerPage());
                 activitiesTable.setData(activities);
-
+                // always select first activity on a page
+                activitiesTable.requestFocus();
+                activitiesTable.changeSelection(0, 0, false, false);
             } catch (StravaException e) {
                 SwingUtils.errorMsg(e.getMessage());
             }
