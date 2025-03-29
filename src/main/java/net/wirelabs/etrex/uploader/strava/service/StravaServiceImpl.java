@@ -56,7 +56,7 @@ public class StravaServiceImpl implements StravaService {
 
         Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(page));
-        params.put("per_page", String.valueOf(configuration.getPerPage()));
+        params.put("per_page", String.valueOf(perPage));
 
         SummaryActivity[] activitiesList = client.makeGetRequest(athleteActivities,  SummaryActivity[].class, params);
         return Arrays.asList(activitiesList);
@@ -81,7 +81,7 @@ public class StravaServiceImpl implements StravaService {
 
     @Override
     public List<SummaryActivity> getCurrentAthleteActivities() throws StravaException {
-        return getCurrentAthleteActivities(1, 30);
+        return getCurrentAthleteActivities(1, configuration.getPerPage());
     }
 
     @Override
