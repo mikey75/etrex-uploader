@@ -15,7 +15,7 @@ import java.util.Properties;
 @Slf4j
 public abstract class PropertiesBasedConfiguration implements Serializable {
 
-    protected Properties properties = new Properties();
+    protected Properties properties = new SortedProperties();
     private final String configFileName;
 
 
