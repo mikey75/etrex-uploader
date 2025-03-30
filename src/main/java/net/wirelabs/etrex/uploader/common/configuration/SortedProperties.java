@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Properties;
+import java.util.*;
 
 @Slf4j
 class SortedProperties extends Properties {
@@ -12,7 +12,9 @@ class SortedProperties extends Properties {
     @Override
     public void store(OutputStream outputStream, String comments) throws IOException {
 
-        this.keySet().stream().map(k -> (String) k).sorted().forEach(k -> {
+        Set<Object> keys = new TreeSet<>(this.keySet());
+
+        keys.forEach(k -> {
             try {
                 outputStream.write(String.format("%s=%s%n", k, get(k)).getBytes());
             } catch (IOException e) {

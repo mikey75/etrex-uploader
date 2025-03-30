@@ -10,16 +10,16 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.linesOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 class SortedPropertiesTest extends BaseTest {
 
-    Path path = Paths.get("target/test-config-alpha.config");
+    private static final Path path = Paths.get("target/test-config-alpha.config");
 
     @BeforeEach
     void before() throws IOException {
@@ -42,11 +42,7 @@ class SortedPropertiesTest extends BaseTest {
         properties.store(os, "");
 
         // then -> check resulting stored file
-        List<String> lines = Files.readAllLines(path);
-        assertThat(lines.get(0)).isEqualTo("a=budda");
-        assertThat(lines.get(1)).isEqualTo("g=africa");
-        assertThat(lines.get(2)).isEqualTo("x=zaxon");
-
+        assertThat(linesOf(path)).containsExactly("a=budda", "g=africa", "x=zaxon");
     }
 
     @Test
