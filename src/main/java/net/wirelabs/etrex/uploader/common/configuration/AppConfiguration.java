@@ -108,7 +108,11 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
-        super.store();
+        try {
+            super.store();
+        } catch (IllegalStateException e) {
+            log.error("Can't save config file: {}", e.getMessage(), e);
+        }
 
     }
 

@@ -45,7 +45,7 @@ public abstract class PropertiesBasedConfiguration implements Serializable {
         try (OutputStream os = Files.newOutputStream(Paths.get(SystemUtils.getWorkDir(),configFileName))) {
             properties.store(os, "");
         } catch (IOException e) {
-            log.error("Can't save configuration");
+            throw new IllegalStateException(e.getMessage());
         }
     }
 }

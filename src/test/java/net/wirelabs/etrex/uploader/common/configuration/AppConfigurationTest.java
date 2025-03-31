@@ -1,11 +1,8 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
 import javax.swing.*;
@@ -15,9 +12,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
+import java.util.*;
 
-import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -26,68 +22,106 @@ import static org.mockito.Mockito.*;
  * Created 10/25/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 class AppConfigurationTest extends BaseTest {
+    // config files
+    private static final File USER_CONFIG = new File("config.properties"); // possible user config that we dont wanna touch!
+    private static final List<String> origUserConfigContent = new ArrayList<>();
+    private static final List<String> currentUserConfigContent = new ArrayList<>();
 
-    public static final File APP_CONFIG_FILE = new File("src/test/resources/dupa");
-    private final File currentConfig = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-    private final File currentConfigCopy = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
+    private final File TEST_CONFIG_FILE = new File("src/test/resources/config/test.properties");
+    private final File NONEXISTENT = new File("target/nonexisting.properties");
 
-    @BeforeEach
-    void makeACopyOfCurrentConfigFile() throws IOException {
-        /*
-            since the test works on config file that might be present on local computer during development
-            lets first preserve it, and then delete it (so basically move it) so that the test has always
-            the default no-config configuration
-         */
-        if (currentConfig.exists()) {
-            Files.move(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
-        // delete previously nonexistent file - but now created by config
-        if (APP_CONFIG_FILE.exists()) {
-            Files.delete(APP_CONFIG_FILE.toPath());
+
+    @BeforeAll
+    static void beforeAll() throws IOException {
+        // store user's file (if it exists) content for later comparison
+        if (USER_CONFIG.exists()) {
+            origUserConfigContent.addAll(Files.readAllLines(USER_CONFIG.toPath()));
         }
     }
 
-    @AfterEach
-    void restoreCopiedConfig() throws IOException {
-        // restore copied config, and remove the copy
-        if (currentConfigCopy.exists()) {
-            Files.move(currentConfigCopy.toPath(), currentConfig.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    @AfterAll
+    static void afterAll() throws IOException {
+        // check if user's file (if it exists) was not touched - just to be sure
+        if (USER_CONFIG.exists()) {
+            currentUserConfigContent.addAll(Files.readAllLines(USER_CONFIG.toPath()));
+            assertThat(currentUserConfigContent).hasSameElementsAs(origUserConfigContent);
         }
-    }
-
-    @Test
-    void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() {
-
-        AppConfiguration c = new AppConfiguration();
-        assertDefaultValues(c);
     }
 
     @Test
     void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
-
-        AppConfiguration configuration = new AppConfiguration();
+        Files.deleteIfExists(NONEXISTENT.toPath());
+        AppConfiguration configuration = new AppConfiguration(NONEXISTENT.getPath());
         configuration.properties = Mockito.spy(configuration.properties);
 
-        doThrow(new IOException())
+        doThrow(new IOException("I/O exception"))
                 .when(configuration.properties)
                 .store(any(OutputStream.class), anyString());
 
-        configuration.store();
+        configuration.save();
 
-        verifyLogged("Saving configuration " + ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-        verifyLogged("Can't save configuration");
+        verifyLogged("Saving configuration " + NONEXISTENT);
+        verifyLogged("Can't save config file: I/O exception");
 
     }
 
     @Test
-    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() {
-        assertThat(APP_CONFIG_FILE).doesNotExist();
-        AppConfiguration c = new AppConfiguration(APP_CONFIG_FILE.getPath());
+    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() throws IOException {
+        Files.deleteIfExists(NONEXISTENT.toPath());
+        AppConfiguration c = new AppConfiguration(NONEXISTENT.getPath());
         assertDefaultValues(c);
-        verifyLogged(APP_CONFIG_FILE.getPath() + " file not found or cannot be loaded. Setting default config values.");
+        verifyLogged(NONEXISTENT.getPath() + " file not found or cannot be loaded. Setting default config values.");
         // verify new config file is created
         verifyLogged("Saving new config file with default values");
-        assertThat(APP_CONFIG_FILE).exists();
+        assertThat(NONEXISTENT).exists();
+
+    }
+
+
+    @Test
+    void shouldReadAndParseCorrectConfig() {
+        AppConfiguration c = new AppConfiguration(TEST_CONFIG_FILE.getPath());
+        assertThat(c.getStorageRoot()).isEqualTo(Paths.get("/test/root"));
+        assertThat(c.getUserStorageRoots()).containsExactly(Paths.get("/test/1"), Paths.get("test/2"));
+        assertThat(c.isArchiveAfterUpload()).isTrue();
+        assertThat(c.isDeleteAfterUpload()).isFalse();
+        assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
+        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
+        verifyLogged("Loading " + TEST_CONFIG_FILE.getPath());
+
+    }
+
+    @Test
+    void shouldStoreChangedConfig() throws IOException {
+
+        String[] expectedChange = {
+                "system.wait.drive.timeout=10",
+                "system.drive.observer.delay=100",
+                "system.backup.after.upload=false",
+                "map.home.lattitude=10.111",
+                "map.home.longitude=30.111",
+                "system.look.sliders=true"
+        };
+
+        // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
+        File configFile = new File(TEST_CONFIG_FILE.getPath());
+        File newConfigFile = new File("target", TEST_CONFIG_FILE.getName());
+
+        Files.copy(configFile.toPath(), newConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        AppConfiguration c = new AppConfiguration(newConfigFile.getPath());
+        c.setArchiveAfterUpload(false);
+        c.setDeviceDiscoveryDelay(100L);
+        c.setWaitDriveTimeout(10L);
+        c.setMapHomeLattitude(10.111);
+        c.setMapHomeLongitude(30.111);
+        c.setEnableDesktopSliders(true);
+        c.save();
+
+        verifyLogged("Loading " + newConfigFile.getPath());
+        verifyLogged("Saving configuration " + newConfigFile.getPath());
+        // now reload changed file and check
+        assertThat(Files.readAllLines(newConfigFile.toPath())).containsAll(Arrays.asList(expectedChange));
 
     }
 
@@ -114,52 +148,4 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
         assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
     }
-
-    @Test
-    void shouldReadAndParseCorrectConfig() {
-        AppConfiguration c = new AppConfiguration(CONFIG_FILE.getPath());
-        assertThat(c.getStorageRoot()).isEqualTo(Paths.get("/test/root"));
-        assertThat(c.getUserStorageRoots()).containsExactly(Paths.get("/test/1"), Paths.get("test/2"));
-        assertThat(c.isArchiveAfterUpload()).isTrue();
-        assertThat(c.isDeleteAfterUpload()).isFalse();
-        assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
-        assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-        verifyLogged("Loading " + CONFIG_FILE.getPath());
-
-    }
-
-    @Test
-    void shouldStoreChangedConfig() throws IOException {
-
-        String[] expectedChange = {
-                "system.wait.drive.timeout=10",
-                "system.drive.observer.delay=100",
-                "system.backup.after.upload=false",
-                "map.home.lattitude=10.111",
-                "map.home.longitude=30.111",
-                "system.look.sliders=true"
-        };
-
-        // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
-        File configFile = new File(CONFIG_FILE.getPath());
-        File newConfigFile = new File("target", CONFIG_FILE.getName());
-
-        Files.copy(configFile.toPath(), newConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-        AppConfiguration c = new AppConfiguration(newConfigFile.getPath());
-        c.setArchiveAfterUpload(false);
-        c.setDeviceDiscoveryDelay(100L);
-        c.setWaitDriveTimeout(10L);
-        c.setMapHomeLattitude(10.111);
-        c.setMapHomeLongitude(30.111);
-        c.setEnableDesktopSliders(true);
-        c.save();
-
-        verifyLogged("Loading " + newConfigFile.getPath());
-        verifyLogged("Saving configuration " + newConfigFile.getPath());
-        // now reload changed file and check
-        assertThat(Files.readAllLines(newConfigFile.toPath())).containsAll(Arrays.asList(expectedChange));
-
-    }
-
 }
