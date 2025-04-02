@@ -32,7 +32,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
     }
 
     public StravaConfiguration() {
-        this(STRAVA_CONFIGFILE);
+        this(Constants.DEFAULT_STRAVA_CONFIGFILE);
     }
 
     public void save() {
@@ -41,7 +41,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_ACCESS_TOKEN, stravaAccessToken);
         properties.setProperty(STRAVA_REFRESH_TOKEN, stravaRefreshToken);
         properties.setProperty(STRAVA_ACCESS_TOKEN_EXPIRES_AT, String.valueOf(stravaTokenExpires));
-        super.store();
+        storePropertiesToFile();
     }
 
     boolean hasAccessToken() {

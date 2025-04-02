@@ -1,8 +1,11 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import net.wirelabs.eventbus.Event;
+import net.wirelabs.eventbus.EventBus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.List;
 
-import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -27,9 +30,10 @@ import static org.mockito.Mockito.*;
  */
 class AppConfigurationTest extends BaseTest {
 
+    private final File CONFIG_FILE = new File("src/test/resources/config/test.properties");
     public static final File APP_CONFIG_FILE = new File("src/test/resources/dupa");
-    private final File currentConfig = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
-    private final File currentConfigCopy = new File(SystemUtils.getWorkDir(), ConfigurationPropertyKeys.APPLICATION_CONFIGFILE + "-copy");
+    private final File currentConfig = new File(SystemUtils.getWorkDir(), Constants.DEFAULT_APPLICATION_CONFIGFILE);
+    private final File currentConfigCopy = new File(SystemUtils.getWorkDir(), Constants.DEFAULT_APPLICATION_CONFIGFILE + "-copy");
 
     @BeforeEach
     void makeACopyOfCurrentConfigFile() throws IOException {
@@ -72,9 +76,17 @@ class AppConfigurationTest extends BaseTest {
                 .when(configuration.properties)
                 .store(any(OutputStream.class), anyString());
 
-        configuration.store();
+        configuration.save();
 
-        verifyLogged("Saving configuration " + ConfigurationPropertyKeys.APPLICATION_CONFIGFILE);
+        // check event thrown -> since in test no evbus client is subscribed to this event
+        // it will be found in dead events
+        List<Event> events = EventBus.getDeadEvents();
+        assertThat(events.stream()
+                .filter(e -> e.getEventType().equals(EventType.ERROR_SAVING_CONFIGURATION))
+                .toList()).isNotEmpty();
+
+
+        verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIGFILE);
         verifyLogged("Can't save configuration");
 
     }

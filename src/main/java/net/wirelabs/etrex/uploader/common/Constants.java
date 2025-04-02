@@ -34,6 +34,10 @@ public class Constants {
     public static final String DEFAULT_LOCAL_STORE = String.valueOf(Paths.get(SystemUtils.getHomeDir(), "etrex-uploader-store"));
     public static final String DEFAULT_USER_MAP_DIR = String.valueOf(Paths.get(SystemUtils.getHomeDir(), "etrex-uploader-maps"));
 
+    // default config files
+    public static final String DEFAULT_APPLICATION_CONFIGFILE = "config.properties";
+    public static final String DEFAULT_STRAVA_CONFIGFILE = "strava.properties";
+
     public static final String EMPTY_STRING = "";
     public static final String TRUE = Boolean.TRUE.toString();
     public static final String LINUX_USB_MOUNTDIR = "/media";
