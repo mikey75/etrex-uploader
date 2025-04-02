@@ -81,7 +81,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     }
 
     public AppConfiguration() {
-        this(APPLICATION_CONFIGFILE);
+        this(Constants.DEFAULT_APPLICATION_CONFIGFILE);
     }
 
     public void save() {
@@ -108,7 +108,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
-        super.store();
+        storePropertiesToFile();
 
     }
 

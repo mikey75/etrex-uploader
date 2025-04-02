@@ -3,11 +3,15 @@ package net.wirelabs.etrex.uploader.common.utils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static net.wirelabs.etrex.uploader.TestConstants.*;
 import static net.wirelabs.etrex.uploader.common.utils.TrackFileUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TrackFileUtilsTest extends BaseTest {
+
+    private final File NONEXISTENT_FILE = new File("nonexistent.gpx");
 
     @Test
     void shouldDetectGPSFileType() {
@@ -19,6 +23,7 @@ class TrackFileUtilsTest extends BaseTest {
         assertThat(isFitFile(FIT_FILE)).isTrue();
 
         // test exception logging on not being able to read file
+        assertThat(NONEXISTENT_FILE).doesNotExist();
         assertThat(isGpx11File(NONEXISTENT_FILE)).isFalse();
         verifyLogged("Could not read file " + NONEXISTENT_FILE.getName());
     }

@@ -37,7 +37,4 @@ class ConfigurationPropertyKeys {
     static final String MAP_HOME_LONGITUDE              = "map.home.longitude";
     static final String ROUTE_LINE_WIDTH                = "map.route.line.width";
 
-    // config files constants
-    static final String APPLICATION_CONFIGFILE          = "config.properties";
-    static final String STRAVA_CONFIGFILE               = "strava.properties";
 }
