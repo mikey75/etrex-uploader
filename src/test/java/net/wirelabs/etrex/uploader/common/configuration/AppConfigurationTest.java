@@ -6,9 +6,8 @@ import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import javax.swing.*;
@@ -17,12 +16,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 
 
 /**
@@ -30,76 +30,70 @@ import static org.mockito.Mockito.*;
  */
 class AppConfigurationTest extends BaseTest {
 
-    private final File CONFIG_FILE = new File("src/test/resources/config/test.properties");
-    public static final File APP_CONFIG_FILE = new File("src/test/resources/dupa");
-    private final File currentConfig = new File(SystemUtils.getWorkDir(), Constants.DEFAULT_APPLICATION_CONFIGFILE);
-    private final File currentConfigCopy = new File(SystemUtils.getWorkDir(), Constants.DEFAULT_APPLICATION_CONFIGFILE + "-copy");
+    // nonexisting test config file
+    private static final File NONEXISTENT_FILE = new File("target/nonexistent.properties");
+    // existing test config file
+    private static final File TEST_CONFIG_FILE = new File("src/test/resources/config/test.properties");
 
-    @BeforeEach
-    void makeACopyOfCurrentConfigFile() throws IOException {
-        /*
-            since the test works on config file that might be present on local computer during development
-            lets first preserve it, and then delete it (so basically move it) so that the test has always
-            the default no-config configuration
-         */
-        if (currentConfig.exists()) {
-            Files.move(currentConfig.toPath(), currentConfigCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
-        // delete previously nonexistent file - but now created by config
-        if (APP_CONFIG_FILE.exists()) {
-            Files.delete(APP_CONFIG_FILE.toPath());
-        }
-    }
-
-    @AfterEach
-    void restoreCopiedConfig() throws IOException {
-        // restore copied config, and remove the copy
-        if (currentConfigCopy.exists()) {
-            Files.move(currentConfigCopy.toPath(), currentConfig.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
-    }
 
     @Test
-    void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() {
+    void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() throws IOException {
+        // to safely test no-arg constructor here - we need to make it use some testdir for configfile
+        // not the production one ;) so that not mess with original possible existing config
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class)) {
+            sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
+            sysUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
 
-        AppConfiguration c = new AppConfiguration();
-        assertDefaultValues(c);
+            Files.deleteIfExists(Paths.get("target/config.properties")); // make sure file is not there
+            AppConfiguration c = new AppConfiguration();
+            assertDefaultValues(c);
+            assertThat(Paths.get("target/config.properties").toFile()).exists();
+        }
     }
 
     @Test
     void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
-
-        AppConfiguration configuration = new AppConfiguration();
-        configuration.properties = Mockito.spy(configuration.properties);
-
-        doThrow(new IOException())
-                .when(configuration.properties)
-                .store(any(OutputStream.class), anyString());
-
-        configuration.save();
-
-        // check event thrown -> since in test no evbus client is subscribed to this event
-        // it will be found in dead events
-        List<Event> events = EventBus.getDeadEvents();
-        assertThat(events.stream()
-                .filter(e -> e.getEventType().equals(EventType.ERROR_SAVING_CONFIGURATION))
-                .toList()).isNotEmpty();
+        // to safely test no-arg constructor here - we need to make it use some testdir for configfile
+        // not the production one ;) so that not mess with original possible existing config
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class)) {
+            sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
+            sysUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
 
 
-        verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIGFILE);
-        verifyLogged("Can't save configuration");
+            AppConfiguration configuration = new AppConfiguration();
+            configuration.properties = Mockito.spy(configuration.properties);
 
+            doThrow(new IOException())
+                    .when(configuration.properties)
+                    .store(any(OutputStream.class), anyString());
+
+            configuration.save();
+
+            // check event thrown -> since in test no evbus client is subscribed to this event
+            // it will be found in dead events
+            List<Event> events = EventBus.getDeadEvents();
+            assertThat(events.stream()
+                    .filter(e -> e.getEventType().equals(EventType.ERROR_SAVING_CONFIGURATION))
+                    .toList()).isNotEmpty();
+
+
+            verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIGFILE);
+            verifyLogged("Can't save configuration");
+        }
     }
 
     @Test
-    void shouldAssertDefaultValuesWhenConfigFileNonExistentAndCreateConfigFile() {
-        assertThat(APP_CONFIG_FILE).doesNotExist();
-        AppConfiguration c = new AppConfiguration(APP_CONFIG_FILE.getPath());
+    void shouldAssertDefaultValuesAndSaveFileWhenConfigFileNonExistent() throws IOException {
+
+        Files.deleteIfExists(NONEXISTENT_FILE.toPath());
+
+        AppConfiguration c = new AppConfiguration(NONEXISTENT_FILE.getPath());
         assertDefaultValues(c);
-        verifyLogged(APP_CONFIG_FILE.getPath() + " file not found or cannot be loaded. Setting default config values.");
+        verifyLogged(NONEXISTENT_FILE + " file not found or cannot be loaded. Setting default config values.");
+
         // verify new config file is created
         verifyLogged("Saving new config file with default values");
-        assertThat(APP_CONFIG_FILE).exists();
+        assertThat(NONEXISTENT_FILE).exists();
 
     }
 
@@ -129,14 +123,16 @@ class AppConfigurationTest extends BaseTest {
 
     @Test
     void shouldReadAndParseCorrectConfig() {
-        AppConfiguration c = new AppConfiguration(CONFIG_FILE.getPath());
+        // when
+        AppConfiguration c = new AppConfiguration(TEST_CONFIG_FILE.getPath());
+        // then
         assertThat(c.getStorageRoot()).isEqualTo(Paths.get("/test/root"));
         assertThat(c.getUserStorageRoots()).containsExactly(Paths.get("/test/1"), Paths.get("test/2"));
         assertThat(c.isArchiveAfterUpload()).isTrue();
         assertThat(c.isDeleteAfterUpload()).isFalse();
         assertThat(c.getWaitDriveTimeout()).isEqualTo(100L);
         assertThat(c.getDeviceDiscoveryDelay()).isEqualTo(500L);
-        verifyLogged("Loading " + CONFIG_FILE.getPath());
+        verifyLogged("Loading " + TEST_CONFIG_FILE.getPath());
 
     }
 
@@ -152,13 +148,16 @@ class AppConfigurationTest extends BaseTest {
                 "system.look.sliders=true"
         };
 
-        // because configuration save() overwrites src file, we need to operate on copy (newConfigFile)
-        File configFile = new File(CONFIG_FILE.getPath());
-        File newConfigFile = new File("target", CONFIG_FILE.getName());
+        // we dont want to modify existing test file, so work on a temp config
+        File newConfigFile = new File("target","testfile");
+        Files.deleteIfExists(newConfigFile.toPath());
 
-        Files.copy(configFile.toPath(), newConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        AppConfiguration c = new AppConfiguration(newConfigFile.toString()); // file will be created anew so that the change evaluation is always correct
+        assertDefaultValues(c);
+        verifyLogged("Saving new config file with default values");
 
-        AppConfiguration c = new AppConfiguration(newConfigFile.getPath());
+        // now re-read this file, change some values, save it, and check if they're changed
+        c = new AppConfiguration(newConfigFile.getPath());
         c.setArchiveAfterUpload(false);
         c.setDeviceDiscoveryDelay(100L);
         c.setWaitDriveTimeout(10L);
