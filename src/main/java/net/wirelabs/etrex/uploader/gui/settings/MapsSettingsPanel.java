@@ -86,14 +86,20 @@ public class MapsSettingsPanel extends BorderedPanel {
 
     public void updateConfiguration() {
         configuration.setTilerThreads(Integer.parseInt(threads.getText()));
+        // emit events if track color/width, map home, and default map changed
+        updateTrackColor(); // emit events for updated track color
+        updateTrackWidth(); // emit events for updated track width
+        updateMapHome();    // emit events for changed map home
+        updateDefaultMap(); // emit events for changed map
 
-        if (newMaps.getSelectedItem() != null) {
+    }
+
+    private void updateDefaultMap() {
+
+        if (newMaps.getSelectedItem() != null && !configuration.getMapFile().toString().equals(newMaps.getSelectedItem().toString())) {
             configuration.setMapFile(((File) newMaps.getSelectedItem()).toPath());
+            EventBus.publish(EventType.MAP_CHANGED,newMaps.getSelectedItem());
         }
-        // emit events if track color or track width or map home changed
-        updateTrackColor();
-        updateTrackWidth();
-        updateMapHome();
     }
 
     private void updateMapHome() {
