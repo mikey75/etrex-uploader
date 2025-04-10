@@ -41,6 +41,7 @@ public class MapPanel extends EventAwareBorderedPanel {
     private final transient TrackParser trackParser;
 
     private final MigLayout layout = new MigLayout("", "[grow]", "[grow]");
+    private final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
     public MapPanel(AppConfiguration configuration) {
         super("Map");
@@ -63,15 +64,12 @@ public class MapPanel extends EventAwareBorderedPanel {
 
         setLayout(layout);
         add(mapViewer, "cell 0 0,grow");
-
-
         configureMapSelector();
 
     }
 
     private void configureMapSelector() {
 
-        final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
         if (!EtrexUploader.getConfiguredMaps().isEmpty()) {
 
@@ -132,6 +130,12 @@ public class MapPanel extends EventAwareBorderedPanel {
             routePainter.setLineWidth((int) evt.getPayload());
             mapViewer.repaint();
         }
+
+        if (evt.getEventType() == EventType.MAP_CHANGED) {
+            changeMap((File) evt.getPayload());
+            mapSelector.setSelectedItem(evt.getPayload());
+            mapViewer.repaint();
+        }
     }
 
     @Override
@@ -141,6 +145,7 @@ public class MapPanel extends EventAwareBorderedPanel {
                 EventType.MAP_DISPLAY_TRACK,
                 EventType.MAP_RESET,
                 EventType.MAP_HOME_CHANGED,
+                EventType.MAP_CHANGED,
                 EventType.ROUTE_LINE_WIDTH_CHANGED
         );
     }
