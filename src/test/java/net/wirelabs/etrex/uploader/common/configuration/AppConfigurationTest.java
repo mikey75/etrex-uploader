@@ -14,12 +14,13 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.util.Files.linesOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -173,4 +174,52 @@ class AppConfigurationTest extends BaseTest {
 
     }
 
+    @Test
+    void shouldSortPropertiesOnSave() throws IOException {
+
+        // given
+        File f = File.createTempFile("props", "sorted");
+        OutputStream os = Files.newOutputStream(f.toPath());
+
+        // when -> create and save the props to file
+        Properties properties = new SortedProperties();
+        properties.setProperty("x", "zaxon");
+        properties.setProperty("a", "budda");
+        properties.setProperty("g", "africa");
+        properties.setProperty("vvv", "łąka");
+        properties.setProperty("color", "#ff0000");
+        properties.setProperty("multielement", "a,b,c,d");
+        properties.store(os, "");
+
+        os.close();
+
+        // since we mess with system based class, first check properties object internals
+        String[] expectedSortedKeys = new String[]{"a", "color", "g", "multielement", "vvv", "x"};
+        Enumeration<Object> keys = properties.keys();
+        Iterator<String> expected = Arrays.stream(expectedSortedKeys).iterator();
+
+        while (keys.hasMoreElements() && expected.hasNext()) {
+            Object key = keys.nextElement();
+            if (key instanceof String) {
+                assertThat(key).isEqualTo(expected.next());
+            }
+        }
+
+        // then check resulting stored file
+        assertThat(linesOf(f, Charset.defaultCharset()).stream()
+                // filter out comment lines added by properties
+                .filter(s -> !s.startsWith("#")))
+                //check values are sorted alphabetically (by keys! - for stasiej!)
+                .containsExactly(
+                        "a=budda",
+                        "color=\\#ff0000",
+                        "g=africa",
+                        "multielement=a,b,c,d",
+                        "vvv=\\u0142\\u0105ka",
+                        "x=zaxon"
+                );
+
+        // be polite :)
+        Files.deleteIfExists(f.toPath());
+    }
 }
