@@ -18,7 +18,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.ERROR_SAVING_CONFIGUR
 @Slf4j
 public abstract class PropertiesBasedConfiguration implements Serializable {
 
-    protected Properties properties = new Properties();
+    protected Properties properties = new SortedProperties();
     private final String configFileName;
 
 
