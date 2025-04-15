@@ -13,7 +13,9 @@ Here's a simple screenshot of the application's main window.
 This software needs configuring your Strava account for API usage. It is not normally used but if you want to use Strava
 remotely via the API (like this application does) you need to setup your own API application.
 Go to https://www.strava.com/settings/api, setup your API Application,  and use the  application client secret and id in the initial 
-etrex-uploader setup dialog.
+etrex-uploader setup dialog. Important: when configuring your api application, for callback domain set localhost, 
+since the app collects the changed autorization token with all your permissions from the callback url 
+via local webserver auth interceptor.
 
 ![](src/main/resources/setupApiApp.png)
 
