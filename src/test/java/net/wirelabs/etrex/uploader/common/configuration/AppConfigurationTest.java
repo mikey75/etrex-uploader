@@ -195,6 +195,9 @@ class AppConfigurationTest extends BaseTest {
 
         // since we mess with system based class, first check properties object internals
         String[] expectedSortedKeys = new String[]{"a", "color", "g", "multielement", "vvv", "x"};
+
+        assertThat(expectedSortedKeys).hasSameSizeAs(properties.keySet());
+
         Enumeration<Object> keys = properties.keys();
         Iterator<String> expected = Arrays.stream(expectedSortedKeys).iterator();
 
