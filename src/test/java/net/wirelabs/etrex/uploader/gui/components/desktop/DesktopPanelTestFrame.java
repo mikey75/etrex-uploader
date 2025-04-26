@@ -12,8 +12,6 @@ import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 
 public class DesktopPanelTestFrame extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Launch the application.
 	 */
