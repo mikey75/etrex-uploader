@@ -36,25 +36,26 @@ class AppConfigurationTest extends BaseTest {
     private static final File NONEXISTENT_FILE = new File("target/nonexistent.properties");
     // existing test config file
     private static final File TEST_CONFIG_FILE = new File("src/test/resources/config/test.properties");
-
+    // temporary config file
+    private static final File TEMP_TEST_FILE = new File("target/config.properties");
 
     @Test
     void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() throws IOException {
-        // to safely test no-arg constructor here - we need to make it use some testdir for configfile
+        // to safely test no-arg constructor here - we need to make it use some test dir for config file
         // not the production one ;) so that not mess with original possible existing config
         try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
 
-            Files.deleteIfExists(Paths.get("target/config.properties")); // make sure file is not there
+            Files.deleteIfExists(TEMP_TEST_FILE.toPath()); // make sure file is not there
             AppConfiguration c = new AppConfiguration();
             assertDefaultValues(c);
-            assertThat(Paths.get("target/config.properties").toFile()).exists();
+            assertThat(TEMP_TEST_FILE).exists();
         }
     }
 
     @Test
     void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
-        // to safely test no-arg constructor here - we need to make it use some testdir for configfile
+        // to safely test no-arg constructor here - we need to make it use some test dir for config file
         // not the production one ;) so that not mess with original possible existing config
         try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
@@ -148,7 +149,7 @@ class AppConfigurationTest extends BaseTest {
                 "system.look.sliders=true"
         };
 
-        // we dont want to modify existing test file, so work on a temp config
+        // we don't want to modify existing test file, so work on a temp config
         File newConfigFile = new File("target","testfile");
         Files.deleteIfExists(newConfigFile.toPath());
 
