@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -64,11 +64,10 @@ class RootsProviderTest {
     }
 
     @Test
-    void shouldThrowIllegalStateExceptionWhenUnknownOS() {
+    void shouldReturnEmptyRootsCollection() {
         try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            systemUtils.when(SystemUtils::isLinux).thenReturn(false);
-            systemUtils.when(SystemUtils::isWindows).thenReturn(false);
-            assertThrows(IllegalStateException.class, rootsProvider::getRoots, "Unsupported operating system");
+            systemUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator 1.0");
+            assertThat(rootsProvider.getRoots()).isEmpty();
         }
     }
 
