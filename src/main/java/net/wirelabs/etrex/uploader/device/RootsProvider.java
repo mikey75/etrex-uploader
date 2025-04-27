@@ -24,7 +24,7 @@ public class RootsProvider {
         if (SystemUtils.isOSX()) {
             return osxRoots();
         }
-        throw new IllegalStateException("Unsupported operating system");
+        return Collections.emptyList();
     }
 
     // windows automounts usb drives as new drives

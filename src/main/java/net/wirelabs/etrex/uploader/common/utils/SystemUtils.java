@@ -32,7 +32,7 @@ public class SystemUtils {
         return getOsName().toLowerCase().startsWith("mac os x");
     }
 
-    private static String getOsName() {
+    public static String getOsName() {
         return System.getProperty("os.name");
     }
 
@@ -55,8 +55,8 @@ public class SystemUtils {
 
     public static void checkOsSupport() {
         if (!isWindows() && !isLinux() && !isOSX()) {
-            SwingUtils.errorMsg("Unsupported operating system, exiting!");
-            System.exit(1);
+            // throw exception that will be caught in main app - easier to test and does the same anyway
+            throw new IllegalStateException("Unsupported OS");
         }
     }
 
