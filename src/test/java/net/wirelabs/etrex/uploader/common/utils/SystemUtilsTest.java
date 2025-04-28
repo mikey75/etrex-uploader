@@ -14,7 +14,7 @@ class SystemUtilsTest extends BaseTest {
 
         assertThat(ver)
                 .isNotNull()
-                .isEqualTo("1.3");
+                .isEqualTo("1.4.0");
     }
 
 }
