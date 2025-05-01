@@ -6,9 +6,11 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import javax.swing.*;
+import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -82,10 +84,25 @@ class SwingUtilsTest extends BaseTest {
 
     @Test
     void shouldSetGlobalFontSize() {
-        SwingUtils.setGlobalFontSize(22);
+        int changedFontSize = 22;
+        SwingUtils.setGlobalFontSize(changedFontSize);
         UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         assertThat(lafs).isNotEmpty();
         Arrays.stream(lafs).forEach(laf -> verifyLogged("Setting font size 22 for look " + laf.getName()));
+
+        Arrays.stream(lafs).forEach(laf -> {
+            UIDefaults defaults = UIManager.getDefaults();
+            Enumeration<Object> keys = defaults.keys();
+
+            while (keys.hasMoreElements()) {
+                Object key = keys.nextElement();
+                if ((key instanceof String str) && str.endsWith(".font")) {
+                    FontUIResource font = (FontUIResource) UIManager.get(str);
+                    assertThat(font.getSize()).isEqualTo(changedFontSize);
+                }
+            }
+        });
+
     }
 
 }
