@@ -23,8 +23,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testLinuxDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            when(SystemUtils.isLinux()).thenCallRealMethod();
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Linux");
             assertThat(SystemUtils.isLinux()).isTrue();
         }
@@ -32,8 +31,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testOSXDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            when(SystemUtils.isOSX()).thenCallRealMethod();
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Mac OS X Sequoia 15.11");
             assertThat(SystemUtils.isOSX()).isTrue();
         }
@@ -41,8 +39,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testWindowsDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            when(SystemUtils.isWindows()).thenCallRealMethod();
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Windows 11 NT x64");
             assertThat(SystemUtils.isWindows()).isTrue();
         }
@@ -50,9 +47,8 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testUnknownOSDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator 1.0");
-            systemUtils.when(SystemUtils::checkOsSupport).thenCallRealMethod();
             assertThrows(IllegalStateException.class, SystemUtils::checkOsSupport,"Unsupported OS");
         }
     }

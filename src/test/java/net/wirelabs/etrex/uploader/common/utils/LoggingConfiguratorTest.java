@@ -38,7 +38,7 @@ class LoggingConfiguratorTest {
     @BeforeEach
     void beforeEach() {
         swingUtilsMock = Mockito.mockStatic(SwingUtils.class);
-        logConf = Mockito.mockStatic(LoggingConfigurator.class);
+        logConf = Mockito.mockStatic(LoggingConfigurator.class,CALLS_REAL_METHODS);
         sysUtilsMock = Mockito.mockStatic(SystemUtils.class);
     }
 
@@ -53,8 +53,6 @@ class LoggingConfiguratorTest {
     void shouldIssueAConfirmationDialogWhenNoConfigXMLFound() throws IOException {
         Files.deleteIfExists(Paths.get("logback.xml"));
 
-        logConf.when(() -> LoggingConfigurator.issueConfirmationDialog(any())).thenCallRealMethod();
-        logConf.when(LoggingConfigurator::configureLogger).thenCallRealMethod();
 
         // when
         LoggingConfigurator.configureLogger();
@@ -66,7 +64,6 @@ class LoggingConfiguratorTest {
 
     @Test
     void shouldIssueConfirmationDialogAndAccept() {
-        logConf.when(() -> LoggingConfigurator.issueConfirmationDialog(any())).thenCallRealMethod();
         // setup YES as yesNoMsg dialog response
         swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
         // do not really exit() during test on exit
@@ -81,7 +78,6 @@ class LoggingConfiguratorTest {
 
     @Test
     void shouldIssueConfirmationDialogAndNotAccept() {
-        logConf.when(() -> LoggingConfigurator.issueConfirmationDialog(any())).thenCallRealMethod();
         // setup NO as yesNoMsg dialog response
         swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.NO_OPTION);
         // do not really exit() during test on exit
@@ -96,7 +92,6 @@ class LoggingConfiguratorTest {
     void shouldIssueDialogFromJoranExceptionToo() throws IOException {
         // create 'empty' real config file - the joran exception will be thrown (parsing xml errror)
         Files.createFile(ORIGINAL_LOGBACK_XML_PATH);
-        logConf.when(LoggingConfigurator::configureLogger).thenCallRealMethod();
 
         LoggingConfigurator.configureLogger();
         logConf.verify(() -> LoggingConfigurator.issueConfirmationDialog(contains("Problem parsing XML document")), times(1));
@@ -108,13 +103,10 @@ class LoggingConfiguratorTest {
 
         // create minimal 'existing' config file
         Files.copy(MINIMAL_EXISTING_LOGBACK_XML_PATH, ORIGINAL_LOGBACK_XML_PATH, StandardCopyOption.REPLACE_EXISTING);
-        logConf.when(LoggingConfigurator::configureLogger).thenCallRealMethod();
 
         LoggingConfigurator.configureLogger();
         // then
         logConf.verify(() -> LoggingConfigurator.issueConfirmationDialog(any()), never());
-
-
 
     }
 }
