@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 class StravaUtilTest extends BaseTest {
 
@@ -67,16 +68,14 @@ class StravaUtilTest extends BaseTest {
         // hosts will not be accessible -> no http server, no port
         // so setup test with nonexistent, random port
         int FAKE_HTTP_PORT = NetworkingUtils.getRandomFreeTcpPort();
-        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
-             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
+             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class,CALLS_REAL_METHODS)) {
 
             stravaUtil.when(() -> {
                 int port = StravaUtil.getStravaPort();
                 assertThat(port).isNotEqualTo(FAKE_HTTP_PORT);
             }).thenReturn(FAKE_HTTP_PORT);
 
-            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
-            netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
 
             // should log warning, and return false
@@ -90,13 +89,12 @@ class StravaUtilTest extends BaseTest {
 
     @Test
     void checkExceptionAndLogOnUnknownHost() {
-        try (MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+        try (MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class, CALLS_REAL_METHODS)) {
             stravaUtil.when(() -> {
                 String hostname = StravaUtil.getStravaHostName();
                 assertThat(hostname).isNotEqualTo(NONEXISTING_HOST);
             }).thenReturn(NONEXISTING_HOST);
 
-            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
             assertThat(StravaUtil.isStravaUp(1000)).isFalse();
             verifyLogged("Strava or network is down!");
         }
@@ -112,16 +110,14 @@ class StravaUtilTest extends BaseTest {
         FakeHttpServer fakeHttpServer = new FakeHttpServer();
         verifyLogged("Fake http server started on port "+ fakeHttpServer.getListeningPort());
 
-        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class);
-             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class)) {
+        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
+             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class, CALLS_REAL_METHODS)) {
 
             stravaUtil.when(() -> {
                 int port = StravaUtil.getStravaPort();
                 assertThat(port).isNotEqualTo(fakeHttpServer.getListeningPort());
             }).thenReturn(fakeHttpServer.getListeningPort());
 
-            stravaUtil.when(() -> StravaUtil.isStravaUp(anyInt())).thenCallRealMethod();
-            netUtils.when(() -> NetworkingUtils.isHostTcpPortReachable(anyString(), anyInt(), anyInt())).thenCallRealMethod();
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
 
             // should return true
