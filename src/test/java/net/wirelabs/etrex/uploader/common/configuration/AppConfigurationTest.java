@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Files.linesOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doThrow;
 
 
@@ -41,9 +42,8 @@ class AppConfigurationTest extends BaseTest {
     void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() throws IOException {
         // to safely test no-arg constructor here - we need to make it use some testdir for configfile
         // not the production one ;) so that not mess with original possible existing config
-        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class)) {
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
-            sysUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
 
             Files.deleteIfExists(Paths.get("target/config.properties")); // make sure file is not there
             AppConfiguration c = new AppConfiguration();
@@ -56,9 +56,8 @@ class AppConfigurationTest extends BaseTest {
     void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
         // to safely test no-arg constructor here - we need to make it use some testdir for configfile
         // not the production one ;) so that not mess with original possible existing config
-        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class)) {
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
-            sysUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
 
 
             AppConfiguration configuration = new AppConfiguration();
