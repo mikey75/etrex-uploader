@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.plaf.*;
 import java.awt.*;
 import java.util.Enumeration;
-import java.util.Hashtable;
 
 /**
  * Created 10/23/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -66,14 +65,14 @@ public class SwingUtils {
     public static void setGlobalFontSize(Integer fontsize) {
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
             log.info("Setting font size {} for look {}" , fontsize, info.getName());
-            Hashtable<Object, Object> defaults = UIManager.getDefaults();
+            UIDefaults defaults = UIManager.getDefaults();
             Enumeration<Object> keys = defaults.keys();
             while (keys.hasMoreElements()) {
                 Object key = keys.nextElement();
-                if ((key instanceof String) && (((String) key).endsWith(".font"))) {
-                    FontUIResource font = (FontUIResource) UIManager.get(key);
+                if ((key instanceof String str) && str.endsWith(".font")) {
+                    FontUIResource font = (FontUIResource) UIManager.get(str);
                     FontUIResource newFont = new FontUIResource(font.getFamily(), font.getStyle(), fontsize);
-                    defaults.put(key, newFont);
+                    defaults.put(str, newFont);
                 }
             }
             
