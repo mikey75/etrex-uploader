@@ -37,7 +37,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int apiUsageWarnPercent;
     private int uploadStatusWaitSeconds;
     private String mapTrackColor;
-    private transient Path userMapDefinitonsDir;
+    private transient Path userMapDefinitionsDir;
     private transient Path mapFile;
     private boolean usePolyLines;
     private int stravaCheckTimeout;
@@ -63,8 +63,8 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(Constants.DEFAULT_API_USAGE_WARN_PERCENT)));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(Constants.DEFAULT_UPLOAD_STATUS_WAIT_SECONDS)));
         mapTrackColor = properties.getProperty(MAP_TRACK_COLOR, Constants.DEFAULT_TRACK_COLOR);
-        userMapDefinitonsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, Constants.DEFAULT_USER_MAP_DIR));
-        mapFile = Paths.get(userMapDefinitonsDir + File.separator + properties.getProperty(MAP_FILE, Constants.DEFAULT_MAP));
+        userMapDefinitionsDir = Paths.get(properties.getProperty(USER_MAP_DEFINITIONS_DIR, Constants.DEFAULT_USER_MAP_DIR));
+        mapFile = Paths.get(userMapDefinitionsDir + File.separator + properties.getProperty(MAP_FILE, Constants.DEFAULT_MAP));
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, Constants.TRUE));
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT)));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,Constants.TRUE));
@@ -98,7 +98,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
         properties.setProperty(UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
         properties.setProperty(MAP_TRACK_COLOR, mapTrackColor);
-        properties.setProperty(USER_MAP_DEFINITIONS_DIR, userMapDefinitonsDir.toString());
+        properties.setProperty(USER_MAP_DEFINITIONS_DIR, userMapDefinitionsDir.toString());
         properties.setProperty(MAP_FILE, mapFile.getFileName().toString());
         properties.setProperty(USE_POLYLINES, String.valueOf(usePolyLines));
         properties.setProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(stravaCheckTimeout));

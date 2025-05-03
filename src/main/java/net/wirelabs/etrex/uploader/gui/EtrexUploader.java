@@ -107,7 +107,7 @@ public class EtrexUploader extends JFrame {
     private void getMapDefinitionFiles(AppConfiguration configuration) {
 
         File defaultMapDefinitionsDir = new File(SystemUtils.getWorkDir(), "maps");
-        File userMapDefinitionsDir = configuration.getUserMapDefinitonsDir().toFile();
+        File userMapDefinitionsDir = configuration.getUserMapDefinitionsDir().toFile();
 
         // get and sort maps from app's default location
         List<File> sortedDefaultMaps = FileUtils.listDirectorySorted(defaultMapDefinitionsDir);
