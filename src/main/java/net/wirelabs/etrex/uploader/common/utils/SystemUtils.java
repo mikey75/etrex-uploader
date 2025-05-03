@@ -73,7 +73,7 @@ public class SystemUtils {
     public static void checkGraphicsEnvironmentPresent() {
         if (GraphicsEnvironment.isHeadless()) {
             log.error("This application needs graphics environment - X11 or Windows");
-            systemExit(1);
+            throw new IllegalStateException("No graphics environment present");
         }
     }
 
