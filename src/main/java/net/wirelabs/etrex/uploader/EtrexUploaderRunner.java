@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.utils.LoggingConfigurator;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 
@@ -10,6 +10,7 @@ import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import java.awt.*;
 
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
+import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setSystemLookAndFeel;
 import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkGraphicsEnvironmentPresent;
 import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkOsSupport;
 
@@ -17,6 +18,8 @@ import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.checkOsSuppor
 @Slf4j
 public class EtrexUploaderRunner {
 
+    @Getter
+    private static ApplicationStartupContext appContext;
 
     public static void main(String[] args) {
 
@@ -28,14 +31,14 @@ public class EtrexUploaderRunner {
             setGlobalFontSize(10);
 
 
-            ApplicationStartupContext ctx = new ApplicationStartupContext();
-            SwingUtils.setSystemLookAndFeel(ctx.getAppConfiguration().getLookAndFeelClassName());
-            Frame window = new EtrexUploader(ctx);
+            appContext = new ApplicationStartupContext();
+            setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
+            Frame window = new EtrexUploader(appContext);
             window.setMinimumSize(new Dimension(800, 600));
             window.setVisible(true);
         } catch (Exception e) {
             log.error("Fatal exception, application terminated {}", e.getMessage(), e);
-            SystemUtils.shutdownAndExit();
+            SystemUtils.systemExit(1);
         }
 
     }

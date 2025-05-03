@@ -87,7 +87,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
             configuration.save();
             log.info("Restarting application");
             SystemUtils.createNewInstance();
-            SystemUtils.shutdownAndExit();
+            SystemUtils.systemExit(0);
         } else {
             // if NO -> restore UI status with current config and continue normally
             enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
