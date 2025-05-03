@@ -59,18 +59,33 @@ class ListUtilsTest {
     }
 
     @Test
-    void testStringToPath() {
-        String sMany = "a ,b ,doc and set";
-        String sSingle ="a   ";
-        String sNone ="";
-        String sNull = null;
-        List<Path> paths = ListUtils.convertStringListToPaths(sMany);
-        assertThat(paths).containsExactly(Paths.get("a"),Paths.get("b"), Paths.get("doc and set"));
-        paths = ListUtils.convertStringListToPaths(sSingle);
-        assertThat(paths).containsExactly(Paths.get("a"));
-        paths = ListUtils.convertStringListToPaths(sNone);
+    void testStringListToPath() {
+        // multi element string
+        String multiElementString = "a ,b ,doc and set";
+        // expected resulting paths
+        Path expected_first_path = Paths.get("a");
+        Path expected_second_path = Paths.get("b");
+        Path expected_third_path = Paths.get("doc and set");
+
+        // single element string
+        String singleElementString ="z   ";
+        // expected resulting path
+        Path expected_single_element_path = Paths.get("z");
+
+        // check multi element path parsing
+        List<Path> paths = ListUtils.convertStringListToPaths(multiElementString);
+        assertThat(paths).containsExactly(expected_first_path, expected_second_path, expected_third_path);
+
+        // check single element path parsing
+        paths = ListUtils.convertStringListToPaths(singleElementString);
+        assertThat(paths).containsExactly(expected_single_element_path);
+
+        // check empty path parsing
+        paths = ListUtils.convertStringListToPaths("");
         assertThat(paths).isEmpty();
-        paths = ListUtils.convertStringListToPaths(sNull);
+
+        // check null path parsing
+        paths = ListUtils.convertStringListToPaths(null);
         assertThat(paths).isEmpty();
     }
 
