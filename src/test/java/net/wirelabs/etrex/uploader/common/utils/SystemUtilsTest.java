@@ -6,10 +6,13 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class SystemUtilsTest extends BaseTest {
@@ -73,4 +76,85 @@ class SystemUtilsTest extends BaseTest {
             verifyNeverLogged("This application needs graphics environment - X11 or Windows");
         }
     }
+
+    @Test
+    void testLaunchingLinuxSystemBrowser() throws IOException {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS);
+             MockedStatic<Runtime> runtime = Mockito.mockStatic(Runtime.class, CALLS_REAL_METHODS)) {
+
+            Runtime mockRuntime = mock(Runtime.class);
+            runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
+            when(mockRuntime.exec(anyString())).thenReturn(mock(Process.class));
+
+            systemUtils.when(SystemUtils::getOsName).thenReturn("Linux");
+            assertThat(SystemUtils.isLinux()).isTrue();
+
+            SystemUtils.openSystemBrowser("http://kaka.pl");
+
+            systemUtils.verify(() -> SystemUtils.launchProcess("xdg-open http://kaka.pl"));
+            assertSuccessfulLaunch(systemUtils);
+        }
+    }
+
+    @Test
+    void testLaunchingOSXSystemBrowser() throws IOException {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS);
+             MockedStatic<Runtime> runtime = Mockito.mockStatic(Runtime.class, CALLS_REAL_METHODS)) {
+
+            Runtime mockRuntime = mock(Runtime.class);
+            runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
+            when(mockRuntime.exec(anyString())).thenReturn(mock(Process.class));
+
+            systemUtils.when(SystemUtils::getOsName).thenReturn("Mac OS X");
+            assertThat(SystemUtils.isOSX()).isTrue();
+
+            SystemUtils.openSystemBrowser("http://kaka.pl");
+
+            systemUtils.verify(() -> SystemUtils.launchProcess("open http://kaka.pl"));
+            assertSuccessfulLaunch(systemUtils);
+        }
+    }
+
+    @Test
+    void testLaunchingWindowsSystemBrowser() throws IOException {
+
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS);
+             MockedStatic<Runtime> runtime = Mockito.mockStatic(Runtime.class, CALLS_REAL_METHODS)) {
+
+            Runtime mockRuntime = mock(Runtime.class);
+            runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
+            when(mockRuntime.exec(anyString())).thenReturn(mock(Process.class));
+
+            systemUtils.when(SystemUtils::getOsName).thenReturn("Windows NT");
+            assertThat(SystemUtils.isWindows()).isTrue();
+
+            SystemUtils.openSystemBrowser("http://kaka.pl");
+
+            systemUtils.verify(() -> SystemUtils.launchProcess("rundll32 url.dll,FileProtocolHandler http://kaka.pl"));
+            assertSuccessfulLaunch(systemUtils);
+
+        }
+
+    }
+
+    @Test
+    void testProcessLauncher() throws IOException {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
+
+            // everyone running these tests has java ;)
+            String processCmd = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java --version";
+
+            SystemUtils.launchProcess(processCmd);
+
+            assertSuccessfulLaunch(systemUtils);
+        }
+    }
+
+    private void assertSuccessfulLaunch(MockedStatic<SystemUtils> systemUtils) {
+        // when waitForSubprocess() is called, it means the launch succeeded
+        systemUtils.verify(() -> SystemUtils.waitForSubprocess(any()));
+        // check logs for 100% sure
+        verifyLogged("Process finished, exit code:0");
+    }
+
 }
