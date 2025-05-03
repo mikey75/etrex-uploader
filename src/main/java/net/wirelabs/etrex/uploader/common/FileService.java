@@ -81,7 +81,7 @@ public class FileService {
         String filePart = FileUtils.getFilePart(filename);
         String ext = FileUtils.getExtensionPart(filename);
 
-        LocalDateTime now = SystemUtils.getNow();
+        LocalDateTime now = LocalDateTime.now();
         sb.append(filePart).append("-")
                 .append(duplicateFilePrefixFormatter.format(now))
                 .append(".")
@@ -92,7 +92,7 @@ public class FileService {
 
     private String getYearMonthTimestampedDir() {
 
-        LocalDateTime now = SystemUtils.getNow();
+        LocalDateTime now = LocalDateTime.now();
         return yearMonthFormatter.format(now);
     }
 

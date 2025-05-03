@@ -114,9 +114,6 @@ public class SystemUtils {
         System.exit(1);
     }
 
-    public static LocalDateTime getNow() {
-        return LocalDateTime.now();
-    }
 
     public static void systemExit(int status) {
         if (!EventBus.getExecutorService().isShutdown()) {

@@ -32,11 +32,11 @@ class FileServiceTest extends BaseTest {
     private FileService fileService;
     private AppConfiguration appConfiguration;
     private final File root = new File("target/storage-root");
-    private final MockedStatic<SystemUtils> systemUtilsMock = mockStatic(SystemUtils.class);
+    private final MockedStatic<LocalDateTime> localDateTimeMock = mockStatic(LocalDateTime.class);
 
     @AfterEach
     public void afterEach() {
-        systemUtilsMock.close();
+        localDateTimeMock.close();
     }
 
     @BeforeEach
@@ -44,7 +44,7 @@ class FileServiceTest extends BaseTest {
         FileUtils.recursivelyDeleteDirectory(root);
         setupFileServiceMock();
         // setup SystemUtils mock since now it is providing now()
-        systemUtilsMock.when(SystemUtils::getNow).thenReturn(testDateTimeNow);
+        localDateTimeMock.when(LocalDateTime::now).thenReturn(testDateTimeNow);
     }
 
     private void setupFileServiceMock() throws IOException {
