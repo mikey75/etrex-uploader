@@ -3,6 +3,8 @@ package net.wirelabs.etrex.uploader.common.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.ApplicationStartupContext;
+import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -109,18 +110,19 @@ public class SystemUtils {
         }
     }
 
-    public static void shutdownAndExit() {
-        EventBus.shutdown();
-        System.exit(1);
-    }
-
 
     public static void systemExit(int status) {
-        if (!EventBus.getExecutorService().isShutdown()) {
+        ApplicationStartupContext ctx = EtrexUploaderRunner.getAppContext();
+        // close garmin service
+        if (ctx !=null && ctx.getGarminDeviceService() != null) {
+            ctx.getGarminDeviceService().stop();
+        }
+        // close eventbus
+        if (EventBus.getExecutorService() != null && !EventBus.getExecutorService().isShutdown()) {
             EventBus.shutdown();
         }
         // also shutdown any lingering threads from ThreadUtils utility methods
-        if (!ThreadUtils.getExecutorService().isShutdown()) {
+        if (ThreadUtils.getExecutorService() != null && !ThreadUtils.getExecutorService().isShutdown()) {
             ThreadUtils.shutdownExecutorService();
         }
         System.exit(status);
