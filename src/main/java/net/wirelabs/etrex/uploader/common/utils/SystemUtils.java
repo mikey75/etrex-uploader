@@ -49,7 +49,7 @@ public class SystemUtils {
 
     }
 
-    private static void launchProcess(String processCommand) throws IOException {
+    static void launchProcess(String processCommand) throws IOException {
         Process browserSubprocess = Runtime.getRuntime().exec(processCommand);
         waitForSubprocess(browserSubprocess);
     }
@@ -61,10 +61,10 @@ public class SystemUtils {
         }
     }
 
-    private static void waitForSubprocess(Process browserSubprocess) {
+    static void waitForSubprocess(Process process) {
         try {
-            int code = browserSubprocess.waitFor();
-            log.info("Browser subprocess launched, exit code:{}", code);
+            int code = process.waitFor();
+            log.info("Process finished, exit code:{}", code);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
