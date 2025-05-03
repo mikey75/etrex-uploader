@@ -111,8 +111,8 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getApiUsageWarnPercent()).isEqualTo(Constants.DEFAULT_API_USAGE_WARN_PERCENT);
         assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(Constants.DEFAULT_UPLOAD_STATUS_WAIT_SECONDS);
         assertThat(c.getMapTrackColor()).isEqualTo(Constants.DEFAULT_TRACK_COLOR);
-        assertThat(c.getUserMapDefinitonsDir()).hasToString(Constants.DEFAULT_USER_MAP_DIR);
-        assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitonsDir().toString() + File.separator + Constants.DEFAULT_MAP);
+        assertThat(c.getUserMapDefinitionsDir()).hasToString(Constants.DEFAULT_USER_MAP_DIR);
+        assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitionsDir().toString() + File.separator + Constants.DEFAULT_MAP);
         assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
         assertThat(c.getStravaCheckTimeout()).isEqualTo(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT);

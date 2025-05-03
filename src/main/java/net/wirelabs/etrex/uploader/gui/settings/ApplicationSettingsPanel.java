@@ -101,7 +101,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         waitDriveTimeout.setText(String.valueOf(configuration.getWaitDriveTimeout()));
         deleteAfterUpl.setSelected(configuration.isDeleteAfterUpload());
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
-        mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitonsDir()));
+        mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitionsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
         enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
     }
@@ -114,7 +114,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setWaitDriveTimeout(Long.valueOf(waitDriveTimeout.getText()));
         configuration.setDeleteAfterUpload(deleteAfterUpl.isSelected());
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
-        configuration.setUserMapDefinitonsDir(mapDefinitionsDir.getPaths().get(0));
+        configuration.setUserMapDefinitionsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
         configuration.setEnableDesktopSliders(enableDesktopSlidersChkbox.isSelected());
         // publish change if it really changed ;)
