@@ -29,7 +29,7 @@ public class MapsSettingsPanel extends BorderedPanel {
     private final JLabel lblDefaultMap = new JLabel("Default map:");
     private final JLabel lblTilerThreads = new JLabel("Threads:");
     private final JLabel lblColor = new JLabel("Track color:");
-    private final JLabel lblMapHomeLat = new JLabel("Map home lattitude:");
+    private final JLabel lblMapHomeLat = new JLabel("Map home latitude:");
     private final JLabel lblMapHomeLon = new JLabel("Map home longitude:");
 
     private final JTextField threads = new JTextField();
@@ -80,7 +80,7 @@ public class MapsSettingsPanel extends BorderedPanel {
         newMaps.setSelectedItem(configuration.getMapFile().toFile());
         threads.setText(String.valueOf(configuration.getTilerThreads()));
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
-        mapHomeLat.setText(String.valueOf(configuration.getMapHomeLattitude()));
+        mapHomeLat.setText(String.valueOf(configuration.getMapHomeLatitude()));
         routeLineWidth.setText(String.valueOf(configuration.getRouteLineWidth()));
     }
 
@@ -104,14 +104,14 @@ public class MapsSettingsPanel extends BorderedPanel {
 
     private void updateMapHome() {
         // copy original config values for event bus change detection
-        Double origLat = configuration.getMapHomeLattitude();
+        Double origLat = configuration.getMapHomeLatitude();
         Double origLon = configuration.getMapHomeLongitude();
         // set new values
         configuration.setMapHomeLongitude(Double.parseDouble(mapHomeLon.getText()));
-        configuration.setMapHomeLattitude(Double.parseDouble(mapHomeLat.getText()));
+        configuration.setMapHomeLatitude(Double.parseDouble(mapHomeLat.getText()));
         // publish the map home change event only if it actually really changed
-        if (!origLat.equals(configuration.getMapHomeLattitude()) || !origLon.equals(configuration.getMapHomeLongitude())) {
-            EventBus.publish(EventType.MAP_HOME_CHANGED, new Coordinate(configuration.getMapHomeLongitude(), configuration.getMapHomeLattitude()));
+        if (!origLat.equals(configuration.getMapHomeLatitude()) || !origLon.equals(configuration.getMapHomeLongitude())) {
+            EventBus.publish(EventType.MAP_HOME_CHANGED, new Coordinate(configuration.getMapHomeLongitude(), configuration.getMapHomeLatitude()));
         }
     }
 

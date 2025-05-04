@@ -46,7 +46,7 @@ public class MapPanel extends EventAwareBorderedPanel {
     public MapPanel(AppConfiguration configuration) {
         super("Map");
         this.configuration = configuration;
-        this.mapHome = new Coordinate(configuration.getMapHomeLongitude(),configuration.getMapHomeLattitude());
+        this.mapHome = new Coordinate(configuration.getMapHomeLongitude(),configuration.getMapHomeLatitude());
         this.routePainter = new RoutePainter(configuration);
         this.trackParser = new TrackParser();
         this.overlayEnabler = new OverlayEnabler(mapViewer, routePainter);

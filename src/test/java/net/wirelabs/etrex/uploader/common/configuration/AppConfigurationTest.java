@@ -117,7 +117,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
         assertThat(c.getStravaCheckTimeout()).isEqualTo(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT);
         assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
-        assertThat(c.getMapHomeLattitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
+        assertThat(c.getMapHomeLatitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
         assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
     }
@@ -144,7 +144,7 @@ class AppConfigurationTest extends BaseTest {
                 "system.wait.drive.timeout=10",
                 "system.drive.observer.delay=100",
                 "system.backup.after.upload=false",
-                "map.home.lattitude=10.111",
+                "map.home.latitude=10.111",
                 "map.home.longitude=30.111",
                 "system.look.sliders=true"
         };
@@ -162,7 +162,7 @@ class AppConfigurationTest extends BaseTest {
         c.setArchiveAfterUpload(false);
         c.setDeviceDiscoveryDelay(100L);
         c.setWaitDriveTimeout(10L);
-        c.setMapHomeLattitude(10.111);
+        c.setMapHomeLatitude(10.111);
         c.setMapHomeLongitude(30.111);
         c.setEnableDesktopSliders(true);
         c.save();

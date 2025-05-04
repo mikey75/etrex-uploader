@@ -33,7 +33,7 @@ class ConfigurationPropertyKeys {
     static final String MAP_TILER_THREAD_COUNT          = "map.tiler.threads";
     static final String MAP_TRACK_COLOR                 = "map.track.color";
     static final String USER_MAP_DEFINITIONS_DIR        = "map.definitions.dir";
-    static final String MAP_HOME_LATTITUDE              = "map.home.lattitude";
+    static final String MAP_HOME_LATITUDE               = "map.home.latitude";
     static final String MAP_HOME_LONGITUDE              = "map.home.longitude";
     static final String ROUTE_LINE_WIDTH                = "map.route.line.width";
 

@@ -32,11 +32,11 @@ class FITParser implements TrackToCoordsParser {
         return records.stream()
                 .filter(rec -> rec.hasField(RecordMesg.PositionLongFieldNum) && rec.hasField(RecordMesg.PositionLatFieldNum))
                 .map(rec -> {
-                    double lattitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLat());
+                    double latitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLat());
                     double longitude = SemicirclesConverter.semicirclesToDegrees(rec.getPositionLong());
                     // if altitude not present in file, assume zero
                     double altitude = rec.hasField(RecordMesg.AltitudeFieldNum) ? rec.getAltitude().doubleValue() : 0;
-                    return new Coordinate(longitude, lattitude, altitude);
+                    return new Coordinate(longitude, latitude, altitude);
                 })
                 .toList();
     }
