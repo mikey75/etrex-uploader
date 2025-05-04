@@ -35,7 +35,7 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
-    private final JLabel pwrdByImageLabel = new JLabel();
+    private final JLabel poweredByImageLabel = new JLabel();
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
     private final StravaService stravaService;
@@ -77,8 +77,8 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
     // this is required by strava api branding guidelines
     private void setPoweredByLogo() {
         ImageIcon poweredBy = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/pwrdBystrava.png")));
-        pwrdByImageLabel.setIcon(poweredBy);
-        add(pwrdByImageLabel, "cell 1 1,aligny center");
+        poweredByImageLabel.setIcon(poweredBy);
+        add(poweredByImageLabel, "cell 1 1,aligny center");
     }
 
     private void applyMouseListenerToActivityTitleColumn() {
@@ -172,12 +172,12 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
             List<LatLng> coords = streamSet.getLatlng().getData();
 
             // convert strava coords to jmaps coordinates
-            List<Coordinate> jmapsCoord = coords.stream()
+            List<Coordinate> jmapsCoords = coords.stream()
                     .map(sc -> new Coordinate(sc.get(1), sc.get(0)))
                     .toList();
 
-            if (!jmapsCoord.isEmpty()) {
-                EventBus.publish(MAP_DISPLAY_TRACK, jmapsCoord);
+            if (!jmapsCoords.isEmpty()) {
+                EventBus.publish(MAP_DISPLAY_TRACK, jmapsCoords);
             }
         } catch (StravaException e) {
             SwingUtils.errorMsg(e.getMessage());

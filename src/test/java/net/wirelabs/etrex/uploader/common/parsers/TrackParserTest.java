@@ -45,14 +45,14 @@ class TrackParserTest extends BaseTest {
     }
 
     @Test
-    void shouldProcessGpxVerion10() {
+    void shouldProcessGpxVersion10() {
         List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_0);
         assertThat(coords).isNotEmpty().hasSize(1000);
         assertElevationPresentInResultingCoordinates(coords);
     }
 
     @Test
-    void shouldProcessGpxVerion11() {
+    void shouldProcessGpxVersion11() {
         List<Coordinate> coords = trackParser.parseTrackFile(GPX_FILE_VER_1_1);
         assertThat(coords).isNotEmpty().hasSize(1511);
         assertElevationPresentInResultingCoordinates(coords);
@@ -82,7 +82,7 @@ class TrackParserTest extends BaseTest {
 
     @Test
     void shouldProcessPolylineTrack() {
-        // this polyline is taken from one of strava activities, i checked it on strava and it has 175 waypoints
+        // this polyline is taken from one of strava activities, I checked it on strava, and it has 175 waypoints
         String polyline = "qorxHimgeCKE?E?FDCCU?m@LsANe@Fg@JQJCDK?U?RCHACFOD?ADCCDH@IBBC?EL?NBq@B^@@GQBB?CBJB?CE?HD?S@@GGD?GL@@NDMDBATMs@J\\?JEEA_@?JCFAEOQIJAHB@NMD@FDFXKRD[?e@A@CJ?LDFAEMAFGBK@`@@?ACDHEFGR?HHHAu@IYIA@HCLLFDCCA?E@LEs@GBHJAHDn@Gr@M^APOHGLGp@BZEPEBG@BO@LASCBAA?DAGBHABHDC@GM@GB@@HCE?FCG?I?DDBGIDBC@?TEG?KGJBA@?j@z@d@\\f@Pj@JH?NJXf@RXJBDHBNPNDN?@GCCG@BEL?KEIUQAI@A?MGMGEEOQY@ICIo@Be@IOQ_A[GBO`@G^@C";
         List<Coordinate> coords = trackParser.parsePolyline(polyline, 1E5F);
         assertThat(coords).isNotEmpty().hasSize(175);

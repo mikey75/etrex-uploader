@@ -27,13 +27,13 @@ public class RootsProvider {
         return Collections.emptyList();
     }
 
-    // windows automounts usb drives as new drives
+    // windows auto-mounts usb drives as new drives
     List<File> windowsRoots() {
         File[] roots = File.listRoots();
         return createFileList(roots);
     }
 
-    // linux automounts usb drives in /media/$user (specified in Constants.LINUX_USB_MOUNTDIR)
+    // linux auto-mounts usb drives in /media/$user (specified in Constants.LINUX_USB_MOUNT_DIR)
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
         File root = new File(Constants.LINUX_USB_MOUNT_DIR, user);
@@ -41,7 +41,7 @@ public class RootsProvider {
         return createFileList(list);
     }
 
-    // osx automounts usb drives in /Volumes (specified in Constants.OSX_USB_MOUNTDIR)
+    // osx auto-mounts usb drives in /Volumes (specified in Constants.OSX_USB_MOUNT_DIR)
     List<File> osxRoots() {
         File root = new File(Constants.OSX_USB_MOUNT_DIR);
         File[] list = root.listFiles();

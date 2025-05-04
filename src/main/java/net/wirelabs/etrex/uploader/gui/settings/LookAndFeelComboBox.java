@@ -21,7 +21,7 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         Arrays.stream(getInstalledLookAndFeels()).forEach(k -> map.put(k.getClassName(),k.getName()));
         // set the classnames to model
         Arrays.stream(getInstalledLookAndFeels()).forEach(a -> addItem(a.getClassName()));
-        // add renderer to print Laf name instead of classname in the jcombobox
+        // add renderer to print Laf name instead of classname in the JComboBox
         setRenderer(new BasicComboBoxRenderer() {
 
             @Override

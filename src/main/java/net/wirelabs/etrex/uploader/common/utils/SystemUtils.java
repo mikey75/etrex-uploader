@@ -77,7 +77,7 @@ public class SystemUtils {
         }
     }
 
-    public static String getJmapsVerion() {
+    public static String getJmapsVersion() {
         return getVersion("jmaps");
     }
 

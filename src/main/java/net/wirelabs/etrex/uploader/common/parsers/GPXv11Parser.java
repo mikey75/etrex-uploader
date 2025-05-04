@@ -17,7 +17,7 @@ import java.util.List;
 class GPXv11Parser implements TrackToCoordsParser {
 
     /**
-     * Parses gpx file in geoposition format
+     * Parses gpx file in geo position format
      *
      * @param file input file
      * @return list of waypoints in GeoPosition format
@@ -34,7 +34,7 @@ class GPXv11Parser implements TrackToCoordsParser {
      * Parses gpx file (note: all tracks and all segments are merged into one set of waypoints)
      *
      * @param file input file
-     * @return list of waypoints in GPX's own Wpt format
+     * @return list of waypoints in GPX own Wpt format
      */
     private List<WptType> parse(File file) {
         List<WptType> result = new ArrayList<>();

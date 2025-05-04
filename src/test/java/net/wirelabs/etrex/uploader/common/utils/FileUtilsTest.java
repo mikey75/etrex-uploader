@@ -79,7 +79,7 @@ class FileUtilsTest {
 
     @Test
     void shouldListSortedFilesInDirectory() {
-        // sorting is alphabethic, uppercase first.
+        // sorting is alphabetic, uppercase first.
         List<File> sorted = listDirectorySorted(LISTER_DIR);
         assertThat(sorted).isNotEmpty()
                 .extracting(File::getName)

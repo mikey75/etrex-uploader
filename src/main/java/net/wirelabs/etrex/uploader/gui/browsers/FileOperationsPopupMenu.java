@@ -43,7 +43,7 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         enableMenuItem(menuItemDelete);
         menuItemDelete.addActionListener(e -> deleteSelectedFileAndCorrespondingTreeNode(tree));
 
-        // upload to strava/device is dependant on how it is called
+        // upload to strava/device is dependent on how it is called
         if (uploadService == null) {
             enableMenuItem(menuItemUpload);
             enableMenuItem(menuitemUploadToDevice);
@@ -53,7 +53,7 @@ public class FileOperationsPopupMenu extends JPopupMenu {
             disableMenuItem(menuitemUploadToDevice);
             menuItemUpload.addActionListener(e -> uploadSelectedToStrava(tree, uploadService));
         }
-        // enable file oprations/uploads only if a file is selected
+        // enable file operations/uploads only if a file is selected
         addPropertyChangeListener("visible", evt -> {
             FileNode node = (FileNode) tree.getLastSelectedPathComponent();
             boolean enabled = node != null && node.getFile() != null && node.getFile().isFile();
@@ -102,7 +102,7 @@ public class FileOperationsPopupMenu extends JPopupMenu {
             FileUtils.delete(selectedFile);
             log.info("Deleted {}", selectedFile);
 
-            // update treemodel
+            // update tree model
             DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) node.getParent();
             parentNode.remove(node);
             ((DefaultTreeModel) tree.getModel()).nodeStructureChanged(parentNode);

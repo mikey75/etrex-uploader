@@ -28,7 +28,7 @@ class AuthCodeInterceptor extends NanoHTTPD {
     public AuthCodeInterceptor(int port) throws IOException {
         super("127.0.0.1", port);
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
-        log.info("Started authcode interceptor http server on port {}", getListeningPort());
+        log.info("Started auth code interceptor http server on port {}", getListeningPort());
     }
 
     /**

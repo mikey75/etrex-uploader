@@ -47,7 +47,7 @@ class StravaConfigurationTest {
     void shouldSavedChangedConfig() throws IOException {
 
         try {
-            // backup file which we're gonna change
+            // backup file which we're changing
             Files.copy(new File(TEST_USER_DIR, GOOD_STRAVA_CONFIG_FILE).toPath(), BACKUP_FILE, StandardCopyOption.REPLACE_EXISTING);
 
             sysUtils.when(SystemUtils::getWorkDir).thenReturn(TEST_USER_DIR);

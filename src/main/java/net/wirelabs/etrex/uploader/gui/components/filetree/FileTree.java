@@ -143,7 +143,7 @@ public class FileTree extends JTree {
                 // non-directory after directory
                 return 1;
             }
-            // compare two pathnames lexicographically
+            // compare two path names lexicographically
             return o1.compareTo(o2);
         }
 

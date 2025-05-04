@@ -27,7 +27,7 @@ public class StravaSettingsPanel extends BorderedPanel {
 
         super("Strava");
 
-        JLabel activityTypeLabel = new JLabel("Default activty type:");
+        JLabel activityTypeLabel = new JLabel("Default activity type:");
         JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
         JLabel lblWarnQuotaPercent = new JLabel("Warn quota percent:");
         JLabel lblHostTimeout = new JLabel("Strava hosts timeout milliseconds:");

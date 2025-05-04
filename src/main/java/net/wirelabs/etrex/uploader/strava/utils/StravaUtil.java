@@ -34,10 +34,10 @@ public class StravaUtil {
     public static String guessUploadFileFormat(File file) throws StravaException {
 
         String[] allowedFileFormats = {"gpx", "gpx.gz", "fit", "fit.gz", "tcx", "tcx.gz"};
-        String fname = file.getName().toLowerCase();
+        String fileName = file.getName().toLowerCase();
 
         for (String extension : allowedFileFormats) {
-            if (fname.endsWith("." + extension)) return extension;
+            if (fileName.endsWith("." + extension)) return extension;
         }
 
         throw new StravaException("The file you're uploading is in unsupported format");

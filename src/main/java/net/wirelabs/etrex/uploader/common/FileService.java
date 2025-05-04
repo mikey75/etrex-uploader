@@ -3,7 +3,6 @@ package net.wirelabs.etrex.uploader.common;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class FileService {
 
     private final AppConfiguration appConfiguration;
 
-    // these are fileservice only, local-store based subdirs - the only configurable is the storage root in appConfiguration
+    // these are FileService only, local-store based sub-dirs - the only configurable is the storage root in appConfiguration,
     // so we moved them here from general constants
     static final String UPLOADED_FILES_SUBFOLDER = "archived-uploads";
     static final String TRACKS_ARCHIVE_SUBFOLDER = "tracks-archive";
