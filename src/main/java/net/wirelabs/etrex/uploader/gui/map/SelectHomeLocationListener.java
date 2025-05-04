@@ -32,7 +32,7 @@ public class SelectHomeLocationListener extends MouseAdapter {
 
                 if (result == JOptionPane.YES_OPTION) {
                     log.info("Setting new map home position");
-                    appConfiguration.setMapHomeLattitude(mouseLatLon.getLatitude());
+                    appConfiguration.setMapHomeLatitude(mouseLatLon.getLatitude());
                     appConfiguration.setMapHomeLongitude(mouseLatLon.getLongitude());
                     appConfiguration.save();
                     EventBus.publish(EventType.MAP_HOME_CHANGED, new Coordinate(mouseLatLon.getLongitude(), mouseLatLon.getLatitude()));

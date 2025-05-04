@@ -43,7 +43,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int stravaCheckTimeout;
     private boolean stravaCheckHostBeforeUpload;
     private String lookAndFeelClassName;
-    private Double mapHomeLattitude;
+    private Double mapHomeLatitude;
     private Double mapHomeLongitude;
     private boolean enableDesktopSliders;
     private int routeLineWidth;
@@ -69,7 +69,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT)));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,Constants.TRUE));
         lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
-        mapHomeLattitude = Double.valueOf(properties.getProperty(MAP_HOME_LATTITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
+        mapHomeLatitude = Double.valueOf(properties.getProperty(MAP_HOME_LATITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
         enableDesktopSliders = Boolean.parseBoolean(properties.getProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
         routeLineWidth = Integer.parseInt(properties.getProperty(ROUTE_LINE_WIDTH, String.valueOf(Constants.DEFAULT_ROUTE_LINE_WIDTH)));
@@ -105,7 +105,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(CHECK_HOSTS_BEFORE_UPLOAD, String.valueOf(stravaCheckHostBeforeUpload));
         properties.setProperty(LOOK_AND_FEEL_CLASS, String.valueOf(lookAndFeelClassName));
         properties.setProperty(MAP_HOME_LONGITUDE, String.valueOf(mapHomeLongitude));
-        properties.setProperty(MAP_HOME_LATTITUDE, String.valueOf(mapHomeLattitude));
+        properties.setProperty(MAP_HOME_LATITUDE, String.valueOf(mapHomeLatitude));
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
         storePropertiesToFile();
