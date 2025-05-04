@@ -36,14 +36,14 @@ public class RootsProvider {
     // linux automounts usb drives in /media/$user (specified in Constants.LINUX_USB_MOUNTDIR)
     List<File> linuxRoots() {
         String user = System.getProperty("user.name");
-        File root = new File(Constants.LINUX_USB_MOUNTDIR, user);
+        File root = new File(Constants.LINUX_USB_MOUNT_DIR, user);
         File[] list = root.listFiles();
         return createFileList(list);
     }
 
     // osx automounts usb drives in /Volumes (specified in Constants.OSX_USB_MOUNTDIR)
     List<File> osxRoots() {
-        File root = new File(Constants.OSX_USB_MOUNTDIR);
+        File root = new File(Constants.OSX_USB_MOUNT_DIR);
         File[] list = root.listFiles();
         return createFileList(list);
     }

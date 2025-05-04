@@ -78,7 +78,7 @@ class AppConfigurationTest extends BaseTest {
                     .toList()).isNotEmpty();
 
 
-            verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIGFILE);
+            verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIG_FILE);
             verifyLogged("Can't save configuration");
         }
     }
