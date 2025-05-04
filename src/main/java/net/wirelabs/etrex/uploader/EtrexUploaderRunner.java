@@ -6,7 +6,6 @@ import net.wirelabs.etrex.uploader.common.utils.LoggingConfigurator;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 
-
 import java.awt.*;
 
 import static net.wirelabs.etrex.uploader.common.utils.SwingUtils.setGlobalFontSize;
@@ -28,11 +27,11 @@ public class EtrexUploaderRunner {
             log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
             checkGraphicsEnvironmentPresent();
             checkOsSupport();
-            setGlobalFontSize(10);
 
 
             appContext = new ApplicationStartupContext();
             setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
+            setGlobalFontSize(10);
             Frame window = new EtrexUploader(appContext);
             window.setMinimumSize(new Dimension(800, 600));
             window.setVisible(true);
