@@ -8,8 +8,10 @@ import org.mockito.Mockito;
 import javax.swing.*;
 import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
+
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Enumeration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,22 +88,32 @@ class SwingUtilsTest extends BaseTest {
     void shouldSetGlobalFontSize() {
         int changedFontSize = 22;
         SwingUtils.setGlobalFontSize(changedFontSize);
-        UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
-        assertThat(lookAndFeels).isNotEmpty();
-        Arrays.stream(lookAndFeels).forEach(laf -> verifyLogged("Setting font size 22 for look " + laf.getName()));
+        verifyLogged("Setting global font size " + changedFontSize);
 
-        Arrays.stream(lookAndFeels).forEach(laf -> {
-            UIDefaults defaults = UIManager.getDefaults();
-            Enumeration<Object> keys = defaults.keys();
+        UIDefaults defaults = UIManager.getDefaults();
+        assertThat(defaults).isNotEmpty();
 
-            while (keys.hasMoreElements()) {
-                Object key = keys.nextElement();
-                if ((key instanceof String str) && str.endsWith(".font")) {
-                    FontUIResource font = (FontUIResource) UIManager.get(str);
-                    assertThat(font.getSize()).isEqualTo(changedFontSize);
-                }
+        Enumeration<Object> keys = defaults.keys();
+        assertThat(keys.hasMoreElements()).isTrue();
+
+        // collect all system font resources to a list
+        List<FontUIResource> fonts = new ArrayList<>();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = defaults.get(key);
+
+            if (value instanceof FontUIResource font) {
+                fonts.add(font);
             }
-        });
+        }
+
+        // assert there are fonts
+        assertThat(fonts).isNotEmpty();
+
+        // check all fonts have new size
+        assertThat(fonts)
+                .extracting(FontUIResource::getSize)
+                .containsOnly(changedFontSize);
 
     }
 

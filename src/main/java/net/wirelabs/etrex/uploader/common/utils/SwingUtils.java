@@ -61,21 +61,20 @@ public class SwingUtils {
     }
 
 
+    public static void setGlobalFontSize(int fontSize) {
 
-    public static void setGlobalFontSize(Integer fontsize) {
-        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-            log.info("Setting font size {} for look {}" , fontsize, info.getName());
-            UIDefaults defaults = UIManager.getDefaults();
-            Enumeration<Object> keys = defaults.keys();
-            while (keys.hasMoreElements()) {
-                Object key = keys.nextElement();
-                if ((key instanceof String str) && str.endsWith(".font")) {
-                    FontUIResource font = (FontUIResource) UIManager.get(str);
-                    FontUIResource newFont = new FontUIResource(font.getFamily(), font.getStyle(), fontsize);
-                    defaults.put(str, newFont);
-                }
+        log.info("Setting global font size {}", fontSize);
+        UIDefaults defaults = UIManager.getDefaults();
+        Enumeration<Object> keys = defaults.keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = defaults.get(key);
+            if (value instanceof FontUIResource font) {
+                FontUIResource newFont = new FontUIResource(
+                        font.getFamily(),
+                        font.getStyle(), fontSize);
+                UIManager.put(key, newFont);
             }
-            
         }
     }
 
