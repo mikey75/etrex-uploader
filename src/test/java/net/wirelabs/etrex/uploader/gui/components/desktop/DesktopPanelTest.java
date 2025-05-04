@@ -15,7 +15,7 @@ class DesktopPanelTest {
 
     @Test
     void testDefaultClassicDesktop() {
-        // default desktop is sliderless (classic)
+        // default desktop is slider-less (classic)
         DesktopPanel container = new DesktopPanel();
 
         // verify

@@ -42,7 +42,7 @@ public class DesktopPanel extends JPanel {
 
     private final JSplitPane rightContainerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     private final JSplitPane leftContainerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-    private static final String ONE_CELL_ONLY = "cell 0 0,grow"; // one cell only - both jsplitpanes put into one and only cell on the panel
+    private static final String ONE_CELL_ONLY = "cell 0 0,grow"; // one cell only - both JSplitPanes put into one and only cell on the panel
 
     @Getter
     private final boolean slidersEnabled;
@@ -61,7 +61,7 @@ public class DesktopPanel extends JPanel {
     @Getter
     private int verticalSliderLocation;
 
-    // default empty constructor invokes empty classic, sliderless panel
+    // default empty constructor invokes empty classic, slider-less panel
     public DesktopPanel() {
         this(false);
     }
@@ -88,7 +88,7 @@ public class DesktopPanel extends JPanel {
 
     private void setSlidingDesktop(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
         setLayout(LAYOUT_WITH_SLIDERS);
-        // connect two splitpanes creating the final component -> leftcontainer is now the root of the layout,
+        // connect two JSplitPanes creating the final component -> left container is now the root of the layout,
         leftContainerPane.setRightComponent(rightContainerPane);
         setPanes(leftPane, topRightPane, bottomRightPane);
         setDefaultSlidersParameters();
@@ -137,14 +137,14 @@ public class DesktopPanel extends JPanel {
         bottomRightPane = component;
     }
 
-    public void setVerticalSliderWidth(int widthpx) {
-        rightContainerPane.setDividerSize(widthpx);
-        verticalSliderWidth = widthpx;
+    public void setVerticalSliderWidth(int pixels) {
+        rightContainerPane.setDividerSize(pixels);
+        verticalSliderWidth = pixels;
     }
 
-    public void setHorizontalSliderWidth(int widthpx) {
-        leftContainerPane.setDividerSize(widthpx);
-        horizontalSliderWidth = widthpx;
+    public void setHorizontalSliderWidth(int pixels) {
+        leftContainerPane.setDividerSize(pixels);
+        horizontalSliderWidth = pixels;
     }
 
     public void setVerticalSliderLocation(int location) {
@@ -157,9 +157,9 @@ public class DesktopPanel extends JPanel {
         horizontalSliderLocation = location;
     }
 
-    public void setSlidersWidth(int widthpx) {
-        setVerticalSliderWidth(widthpx);
-        setHorizontalSliderWidth(widthpx);
+    public void setSlidersWidth(int pixels) {
+        setVerticalSliderWidth(pixels);
+        setHorizontalSliderWidth(pixels);
     }
 
     private static JPanel defaultEmptyPanel() {

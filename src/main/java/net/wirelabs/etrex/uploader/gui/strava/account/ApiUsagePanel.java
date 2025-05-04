@@ -63,15 +63,15 @@ public class ApiUsagePanel extends EventAwarePanel {
     }
 
     private void warnIfPercentageReached() {
-        double percDaily = calculatePercentage(currentDaily.doubleValue(), allowedDaily.doubleValue());
-        double perc15min = calculatePercentage(current15min.doubleValue(), allowed15min.doubleValue());
+        double percentDaily = calculatePercentage(currentDaily.doubleValue(), allowedDaily.doubleValue());
+        double percent15min = calculatePercentage(current15min.doubleValue(), allowed15min.doubleValue());
 
-        if (percDaily >= configuration.getApiUsageWarnPercent()) {
+        if (percentDaily >= configuration.getApiUsageWarnPercent()) {
             dailyLimits.setForeground(Color.RED);
         } else {
             dailyLimits.setForeground(getForeground());
         }
-        if (perc15min >= configuration.getApiUsageWarnPercent()) {
+        if (percent15min >= configuration.getApiUsageWarnPercent()) {
             quarterLimits.setForeground(Color.RED);
         } else {
             quarterLimits.setForeground(getForeground());

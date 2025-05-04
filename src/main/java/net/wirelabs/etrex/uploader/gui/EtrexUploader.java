@@ -61,7 +61,7 @@ public class EtrexUploader extends JFrame {
             splash.update("Initializing Strava component");
             stravaPanel = new StravaPanel(ctx.getStravaService(), ctx.getAppConfiguration());
 
-            splash.update("Initalizing maps component");
+            splash.update("Initializing maps component");
             mapPanel = new MapPanel(ctx.getAppConfiguration());
 
             splash.update("Starting Garmin drive observer service");
@@ -86,7 +86,7 @@ public class EtrexUploader extends JFrame {
             setExtendedState(Frame.MAXIMIZED_BOTH);
             splash.close();
             setVisible(true);
-            log.info("Application initalization finished.");
+            log.info("Application initialization finished.");
         } else {
             SwingUtils.errorMsg("You are not authorized");
             SystemUtils.systemExit(1);
@@ -111,7 +111,7 @@ public class EtrexUploader extends JFrame {
 
         // get and sort maps from app's default location
         List<File> sortedDefaultMaps = FileUtils.listDirectorySorted(defaultMapDefinitionsDir);
-        // get and sort usermaps
+        // get and sort user maps
         List<File> sortedUserMaps = FileUtils.listDirectorySorted(userMapDefinitionsDir);
         // add them to application's map source
         configuredMaps.addAll(sortedDefaultMaps);

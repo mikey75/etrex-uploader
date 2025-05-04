@@ -65,8 +65,8 @@ public class StravaClient  {
         return deserialize(result, type);
     }
 
-    private String decorateUrlWithParams(String enpointUlr, Map<String, String> parameters) {
-        HttpUrl.Builder url = HttpUrl.parse(enpointUlr).newBuilder();
+    private String decorateUrlWithParams(String endpointUrl, Map<String, String> parameters) {
+        HttpUrl.Builder url = HttpUrl.parse(endpointUrl).newBuilder();
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             url.addQueryParameter(entry.getKey(), entry.getValue());
         }

@@ -9,11 +9,11 @@ import java.awt.*;
 import java.util.Objects;
 
 /**
- * Common 'Textfield with button' component
+ * Common 'TextField with button' component
  */
 public abstract class ButtonedTextField extends JPanel {
 
-    private final JTextField textfield = new JTextField();
+    private final JTextField textField = new JTextField();
     private final JButton button = new JButton();
     private final LayoutManager layout = new MigLayout("gapx 0,insets 0", "[grow][]", "[]");
 
@@ -28,13 +28,13 @@ public abstract class ButtonedTextField extends JPanel {
         setBorder(null);
         setLayout(layout);
 
-        textfield.setMinimumSize(new Dimension(32, 18));
-        textfield.setMaximumSize(new Dimension(2400, 18));
+        textField.setMinimumSize(new Dimension(32, 18));
+        textField.setMaximumSize(new Dimension(2400, 18));
 
         button.setMinimumSize(new Dimension(18, 18));
         button.setMaximumSize(new Dimension(18, 18));
 
-        add(textfield, "cell 0 0,grow");
+        add(textField, "cell 0 0,grow");
         add(button, "cell 1 0");
 
         setupComponent(text, buttonText, buttonIcon);
@@ -59,11 +59,11 @@ public abstract class ButtonedTextField extends JPanel {
     }
 
     public void setText(String text) {
-        textfield.setText(text);
+        textField.setText(text);
     }
 
     public String getText() {
-        return textfield.getText();
+        return textField.getText();
     }
 
     public void setButtonText(String text) {

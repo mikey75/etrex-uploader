@@ -12,7 +12,6 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class SystemUtilsTest extends BaseTest {
@@ -20,7 +19,7 @@ class SystemUtilsTest extends BaseTest {
     @Test
     void getJmapsVersionTest() {
 
-        String ver = SystemUtils.getJmapsVerion();
+        String ver = SystemUtils.getJmapsVersion();
 
         assertThat(ver)
                 .isNotNull()

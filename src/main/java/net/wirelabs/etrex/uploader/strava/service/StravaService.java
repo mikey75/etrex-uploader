@@ -15,7 +15,7 @@ public interface StravaService extends Serializable {
     SummaryAthlete getCurrentAthlete() throws StravaException;
     ActivityStats getAthleteStats(Long id) throws StravaException;
 
-    List<SummaryActivity> getCurrentAthleteActivities(int page, int perpage) throws StravaException;
+    List<SummaryActivity> getCurrentAthleteActivities(int page, int perPage) throws StravaException;
     List<SummaryActivity> getCurrentAthleteActivities() throws StravaException;
     DetailedActivity getActivityById(Long id) throws StravaException;
 

@@ -17,18 +17,18 @@ import static org.mockito.Mockito.*;
 class MapsSettingsPanelTest {
 
     private MapsSettingsPanel mapsSettingsPanel;
-    private MockedStatic<EventBus> evbusMock;
+    private MockedStatic<EventBus> eventBusMock;
 
     @BeforeEach
     void beforeEach() {
         AppConfiguration appConfiguration = new AppConfiguration("src/test/resources/config/test.properties");
         mapsSettingsPanel = Mockito.spy(new MapsSettingsPanel(appConfiguration));
-        evbusMock = Mockito.mockStatic(EventBus.class);
+        eventBusMock = Mockito.mockStatic(EventBus.class);
     }
 
     @AfterEach
     void afterEach() {
-        evbusMock.close();
+        eventBusMock.close();
     }
 
     @Test
@@ -43,8 +43,8 @@ class MapsSettingsPanelTest {
             mapsSettingsPanel.updateConfiguration();
 
             // verify changes will be published in the order from updateConfiguration
-            evbusMock.verify(() -> EventBus.publish(eq(EventType.TRACK_COLOR_CHANGED), any(Color.class)));
-            evbusMock.verify(() -> EventBus.publish(eq(EventType.MAP_HOME_CHANGED), any(Coordinate.class)));
+            eventBusMock.verify(() -> EventBus.publish(eq(EventType.TRACK_COLOR_CHANGED), any(Color.class)));
+            eventBusMock.verify(() -> EventBus.publish(eq(EventType.MAP_HOME_CHANGED), any(Coordinate.class)));
 
     }
 
@@ -56,8 +56,8 @@ class MapsSettingsPanelTest {
             mapsSettingsPanel.updateConfiguration();
 
             // verify changes will NOT be published since nothing changed
-            evbusMock.verify(() -> EventBus.publish(eq(EventType.TRACK_COLOR_CHANGED), any(Color.class)), never());
-            evbusMock.verify(() -> EventBus.publish(eq(EventType.MAP_HOME_CHANGED), any(Coordinate.class)), never());
+            eventBusMock.verify(() -> EventBus.publish(eq(EventType.TRACK_COLOR_CHANGED), any(Color.class)), never());
+            eventBusMock.verify(() -> EventBus.publish(eq(EventType.MAP_HOME_CHANGED), any(Coordinate.class)), never());
     }
 
 }

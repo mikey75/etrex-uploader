@@ -27,7 +27,7 @@ class GzipUtilsTest extends BaseTest {
     }
 
     @Test
-    void shoulDecompressGzippedBytes() throws IOException {
+    void shouldDecompressGzippedBytes() throws IOException {
         assertThat(GzipUtils.isGzipped(GZIPPED_FILE)).isTrue();
         byte[] decompressedBytes = FileUtils.readFileToByteArray(GZIPPED_FILE);
         String decompressed = GzipUtils.decompress(decompressedBytes);
@@ -43,7 +43,7 @@ class GzipUtilsTest extends BaseTest {
     }
 
     @Test
-    void shouldReturnFalseIfFileCannottBeRecognizedBecauseItIsNotExisting() {
+    void shouldReturnFalseIfFileCannotBeRecognizedBecauseItIsNotExisting() {
         assertThat(GzipUtils.isGzipped(NON_EXISTENT_FILE)).isFalse();
         verifyLogged("Exception during gzip detection: " + NON_EXISTENT_FILE.getName());
     }

@@ -3,7 +3,6 @@ package net.wirelabs.etrex.uploader.common;
 
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
@@ -91,7 +90,7 @@ class FileServiceTest extends BaseTest {
     }
 
     @Test
-    void shouldNotDeleteCurrentgpx() throws IOException {
+    void shouldNotDeleteCurrentGpx() throws IOException {
         File track = new File("target/Current.gpx");
         File uploadDir = new File(root, FileService.UPLOADED_FILES_SUBFOLDER);
         File targetDir = new File(uploadDir, "2022/01");

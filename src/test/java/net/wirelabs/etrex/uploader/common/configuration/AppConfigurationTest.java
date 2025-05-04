@@ -70,7 +70,7 @@ class AppConfigurationTest extends BaseTest {
 
             configuration.save();
 
-            // check event thrown -> since in test no evbus client is subscribed to this event
+            // check event thrown -> since in test no EventBus client is subscribed to this event
             // it will be found in dead events
             List<Event> events = EventBus.getDeadEvents();
             assertThat(events.stream()

@@ -21,7 +21,7 @@ public class Constants {
     public static final String APPLICATION_IDENTIFICATION = String.format(
             "Etrex Uploader ver: %s (Jmaps ver: %s) © 2022 Michał Szwaczko, WireLabs Technologies" ,
             SystemUtils.getAppVersion(),
-            SystemUtils.getJmapsVerion()
+            SystemUtils.getJmapsVersion()
     );
     public static final String STRAVA_DEFAULT_APP_ACCESS_SCOPE = "activity:read,activity:write,read_all";
     public static final String STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize";
