@@ -32,7 +32,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
     }
 
     public StravaConfiguration() {
-        this(Constants.DEFAULT_STRAVA_CONFIGFILE);
+        this(Constants.DEFAULT_STRAVA_CONFIG_FILE);
     }
 
     public void save() {
