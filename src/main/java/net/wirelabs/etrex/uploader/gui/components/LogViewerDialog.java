@@ -15,7 +15,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class LogViewerDialog extends JDialog {
 
-    public static final String LOGVIEWER_WINDOW_TITLE = "Application Log viewer";
+    public static final String LOG_VIEWER_WINDOW_TITLE = "Application Log viewer";
 
     private final JButton closeBtn = new JButton("Close");
     private final JLabel lblLogfiles = new JLabel("Logfile:");
@@ -27,7 +27,7 @@ public class LogViewerDialog extends JDialog {
 
     public LogViewerDialog() {
 
-        setTitle(LOGVIEWER_WINDOW_TITLE);
+        setTitle(LOG_VIEWER_WINDOW_TITLE);
         setSize(800, 600);
 
         getContentPane().setLayout(layout);
@@ -54,7 +54,7 @@ public class LogViewerDialog extends JDialog {
         for (File f : findLogfilesAndSortThemByModDate()) {
             comboBox.addItem(f.getName());
         }
-        setTitle(LOGVIEWER_WINDOW_TITLE);
+        setTitle(LOG_VIEWER_WINDOW_TITLE);
 
     }
 

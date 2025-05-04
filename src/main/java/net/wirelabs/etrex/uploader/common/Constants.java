@@ -35,13 +35,13 @@ public class Constants {
     public static final String DEFAULT_USER_MAP_DIR = String.valueOf(Paths.get(SystemUtils.getHomeDir(), "etrex-uploader-maps"));
 
     // default config files
-    public static final String DEFAULT_APPLICATION_CONFIGFILE = "config.properties";
-    public static final String DEFAULT_STRAVA_CONFIGFILE = "strava.properties";
+    public static final String DEFAULT_APPLICATION_CONFIG_FILE = "config.properties";
+    public static final String DEFAULT_STRAVA_CONFIG_FILE = "strava.properties";
 
     public static final String EMPTY_STRING = "";
     public static final String TRUE = Boolean.TRUE.toString();
-    public static final String LINUX_USB_MOUNTDIR = "/media";
-    public static final String OSX_USB_MOUNTDIR = "/Volumes";
+    public static final String LINUX_USB_MOUNT_DIR = "/media";
+    public static final String OSX_USB_MOUNT_DIR = "/Volumes";
     public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     public static final String DEFAULT_TRACK_COLOR = "#ff0000";
     public static final SportType DEFAULT_SPORT = SportType.RIDE;

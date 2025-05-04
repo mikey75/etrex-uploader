@@ -81,7 +81,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     }
 
     public AppConfiguration() {
-        this(Constants.DEFAULT_APPLICATION_CONFIGFILE);
+        this(Constants.DEFAULT_APPLICATION_CONFIG_FILE);
     }
 
     public void save() {
