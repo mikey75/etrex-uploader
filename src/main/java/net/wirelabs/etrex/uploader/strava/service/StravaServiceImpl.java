@@ -94,7 +94,7 @@ public class StravaServiceImpl implements StravaService {
         Upload upload = client.uploadActivityRequest(file, name, desc, sportType, virtual, commute);
 
         // wait for success or fail
-        // i.e poll Upload's activity id for uploadStatusTimeout seconds
+        // i.e. poll Upload's activity id for uploadStatusTimeout seconds
         // in 2 seconds intervals
         while (getUpload(upload.getId()).getActivityId() == null && System.currentTimeMillis() < uploadStatusTimeout) {
             Sleeper.sleepSeconds(2);

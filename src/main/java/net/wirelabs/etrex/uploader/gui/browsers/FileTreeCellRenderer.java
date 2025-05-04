@@ -35,9 +35,9 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
 
         if (node.getFile() != null) {
 
-            File userobject = node.getFile();
+            File userObject = node.getFile();
 
-            if (userobject.isDirectory()) {
+            if (userObject.isDirectory()) {
                 if (node.isGarminSystemDrive()) {
                     icon = iconGarmin;
                 } else {
@@ -47,7 +47,7 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                 icon = iconRegularFile;
             }
             result.setIcon(icon);
-            result.setText(userobject.getName().length() > 0 ? userobject.getName() : userobject.getAbsolutePath());
+            result.setText(userObject.getName().length() > 0 ? userObject.getName() : userObject.getAbsolutePath());
         }
         return result;
     }

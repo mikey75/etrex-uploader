@@ -35,7 +35,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JCheckBox deleteAfterUpl = new JCheckBox("Delete after upload");
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
     @Getter
-    private final JCheckBox enableDesktopSlidersChkbox = new JCheckBox("Enable desktop sliders");
+    private final JCheckBox enableDesktopSlidersCheckBox = new JCheckBox("Enable desktop sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
     private final LayoutManager layout = new MigLayout("", "[][grow]", "[][][][][]");
@@ -53,7 +53,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         add(userRootsLabel, "cell 0 1,alignx trailing");
         add(userRootsFileChooser, "cell 1 1,growx");
 
-        JLabel mapDefinitionsDirLabel = new JLabel("Map definitons dir:");
+        JLabel mapDefinitionsDirLabel = new JLabel("Map definitions dir:");
         add(mapDefinitionsDirLabel, "cell 0 2,alignx trailing");
         add(mapDefinitionsDir, "cell 1 2,growx");
 
@@ -72,10 +72,10 @@ public class ApplicationSettingsPanel extends BorderedPanel {
 
         add(deleteAfterUpl, "cell 0 6");
         add(archiveAfterUpload, "cell 1 6");
-        add(enableDesktopSlidersChkbox, "cell 0 7");
+        add(enableDesktopSlidersCheckBox, "cell 0 7");
         loadConfiguration();
 
-        enableDesktopSlidersChkbox.addActionListener(e -> showRebootNeededMsgDialog(configuration));
+        enableDesktopSlidersCheckBox.addActionListener(e -> showRebootNeededMsgDialog(configuration));
 
     }
 
@@ -90,7 +90,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
             SystemUtils.systemExit(0);
         } else {
             // if NO -> restore UI status with current config and continue normally
-            enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
+            enableDesktopSlidersCheckBox.setSelected(configuration.isEnableDesktopSliders());
         }
     }
 
@@ -103,7 +103,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         archiveAfterUpload.setSelected(configuration.isArchiveAfterUpload());
         mapDefinitionsDir.setPaths(Collections.singletonList(configuration.getUserMapDefinitionsDir()));
         lookAndFeelSelector.setSelectedItem(configuration.getLookAndFeelClassName());
-        enableDesktopSlidersChkbox.setSelected(configuration.isEnableDesktopSliders());
+        enableDesktopSlidersCheckBox.setSelected(configuration.isEnableDesktopSliders());
     }
 
     public void updateConfiguration() {
@@ -116,7 +116,7 @@ public class ApplicationSettingsPanel extends BorderedPanel {
         configuration.setArchiveAfterUpload(archiveAfterUpload.isSelected());
         configuration.setUserMapDefinitionsDir(mapDefinitionsDir.getPaths().get(0));
         configuration.setLookAndFeelClassName((String) lookAndFeelSelector.getSelectedItem());
-        configuration.setEnableDesktopSliders(enableDesktopSlidersChkbox.isSelected());
+        configuration.setEnableDesktopSliders(enableDesktopSlidersCheckBox.isSelected());
         // publish change if it really changed ;)
         if (!origStorageRootsString.equals(configuration.getUserStorageRoots())) {
             log.info("Storage roots changed");

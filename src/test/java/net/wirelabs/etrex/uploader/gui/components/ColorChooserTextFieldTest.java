@@ -65,7 +65,7 @@ class ColorChooserTextFieldTest {
     @Test
     void shouldCreateComponent() {
         colorChooserTextField = new ColorChooserTextField();
-        // verify creation - there are 2 subcomponents - textfield and button
+        // verify creation - there are 2 subcomponents - text field and button
         assertThat(colorChooserTextField.getComponents()).hasSize(2);
         assertThat(colorChooserTextField.getComponents()[0]).isInstanceOf(JTextField.class);
         assertThat(colorChooserTextField.getComponents()[1]).isInstanceOf(JButton.class);
@@ -81,11 +81,11 @@ class ColorChooserTextFieldTest {
         // must review all subcomponents
         JButton button = findButton(colorChooserTextField);
 
-        // if text color is empty - the jcolor selector starts with black
+        // if text color is empty - the color selector starts with black
         button.doClick(); //
         mockColorChooser.verify(() -> JColorChooser.showDialog(any(), any(), eq(Color.BLACK)));
 
-        // if text is not empty - the jcolor starts with decoded text color
+        // if text is not empty - the color starts with decoded text color
         colorChooserTextField.setText("#0A0A0A");
         button.doClick();
         mockColorChooser.verify(() -> JColorChooser.showDialog(any(), any(), eq(new Color(0x0A, 0x0A, 0x0A))));

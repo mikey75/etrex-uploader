@@ -82,7 +82,7 @@ class StravaUtilTest extends BaseTest {
             assertThat(StravaUtil.isStravaUp(1000)).isFalse();
             // should log hosts unavailability
             verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from stravautil
+            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from StravaUtil
         }
 
     }
@@ -101,10 +101,10 @@ class StravaUtilTest extends BaseTest {
     }
 
     @Test
-    void testStravaHostAccesible() throws IOException {
+    void testStravaHostAccessible() throws IOException {
 
         // hosts will be accessible (http server up, alas - we have to run the http port on other than 80 for this
-        // because 80 is root/admin only - so we setup fake server on random port
+        // because 80 is root/admin only - so we set up fake server on random port
         // and force StravaUtil to use that port
 
         FakeHttpServer fakeHttpServer = new FakeHttpServer();
@@ -124,7 +124,7 @@ class StravaUtilTest extends BaseTest {
             assertThat(StravaUtil.isStravaUp(1000)).isTrue();
             // should not log host unavailability
             verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " inaccessible, assume uploads might fail"); // msg from stravautil
+            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " inaccessible, assume uploads might fail"); // msg from StravaUtil
         } finally {
             fakeHttpServer.terminate();
         }

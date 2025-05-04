@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Observes filesystem for new drive appearance and checks if they're garmin drives
  * (by looking if they contain 'Garmin' subdir)
- * publishes events of drive connect/disconect
+ * publishes events of drive connect/disconnect
  * maintains the current list of available drives
  */
 @Slf4j

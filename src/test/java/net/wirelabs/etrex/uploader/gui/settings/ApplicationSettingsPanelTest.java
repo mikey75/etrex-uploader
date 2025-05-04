@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class ApplicationSettingsPanelTest extends BaseTest {
 
     private ApplicationSettingsPanel applicationSettingsPanel;
-    private MockedStatic<EventBus> evbusMock;
+    private MockedStatic<EventBus> eventBusMock;
     private MockedStatic<SwingUtils> swingUtilsMock;
     private MockedStatic<SystemUtils> systemUtilsMock;
     private AppConfiguration appConfiguration;
@@ -34,14 +34,14 @@ class ApplicationSettingsPanelTest extends BaseTest {
     void beforeEach() {
         appConfiguration = Mockito.spy(new AppConfiguration("src/test/resources/config/test.properties"));
         applicationSettingsPanel = Mockito.spy(new ApplicationSettingsPanel(appConfiguration));
-        evbusMock = Mockito.mockStatic(EventBus.class);
+        eventBusMock = Mockito.mockStatic(EventBus.class);
         swingUtilsMock = Mockito.mockStatic(SwingUtils.class);
         systemUtilsMock = Mockito.mockStatic(SystemUtils.class);
     }
 
     @AfterEach
     void afterEach() {
-        evbusMock.close();
+        eventBusMock.close();
         swingUtilsMock.close();
         systemUtilsMock.close();
     }
@@ -61,7 +61,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
 
         // verify changes are made and the event published
         assertThat(applicationSettingsPanel.getUserRootsFileChooser().getPaths()).hasSize(3);
-        evbusMock.verify(() -> EventBus.publish(eq(EventType.USER_STORAGE_ROOTS_CHANGED), any(List.class)));
+        eventBusMock.verify(() -> EventBus.publish(eq(EventType.USER_STORAGE_ROOTS_CHANGED), any(List.class)));
         verifyLogged("Storage roots changed");
     }
 
@@ -73,7 +73,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
         applicationSettingsPanel.updateConfiguration();
 
         // verify changes will NOT be published since nothing changed
-        evbusMock.verify(() -> EventBus.publish(eq(EventType.USER_STORAGE_ROOTS_CHANGED), any(List.class)), never());
+        eventBusMock.verify(() -> EventBus.publish(eq(EventType.USER_STORAGE_ROOTS_CHANGED), any(List.class)), never());
         verifyNeverLogged("Storage roots changed");
     }
 
@@ -82,15 +82,15 @@ class ApplicationSettingsPanelTest extends BaseTest {
 
         // set yes answer on dialog
         swingUtilsMock.when(() -> SwingUtils.yesNoCancelMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
-        // dont do anything on system exit and create new instance
+        // don't do anything on system exit and create new instance
         systemUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer((Answer<Void>) invocation -> null);
         systemUtilsMock.when(SystemUtils::createNewInstance).thenAnswer((Answer<Void>) invocation -> null);
-        // dont do anything on updateConfiguration and save
+        // don't do anything on updateConfiguration and save
         doNothing().when(applicationSettingsPanel).updateConfiguration();
         doNothing().when(appConfiguration).save();
 
         // this invokes dialog  -  yes option chosen
-        applicationSettingsPanel.getEnableDesktopSlidersChkbox().doClick();
+        applicationSettingsPanel.getEnableDesktopSlidersCheckBox().doClick();
         // verify reboot dialog was shown and accepted
         swingUtilsMock.verify(() -> SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?"));
         verifyLogged("Restarting application");
@@ -99,19 +99,19 @@ class ApplicationSettingsPanelTest extends BaseTest {
     }
 
     @Test
-    void shouldNotRebooIfDesktopNotChanged() {
+    void shouldNotRebootIfDesktopNotChanged() {
 
         // set yes answer on dialog
         swingUtilsMock.when(() -> SwingUtils.yesNoCancelMsg(anyString())).thenReturn(JOptionPane.NO_OPTION);
-        // dont do anything on system exit and create new instance
+        // don't do anything on system exit and create new instance
         systemUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer((Answer<Void>) invocation -> null);
         systemUtilsMock.when(SystemUtils::createNewInstance).thenAnswer((Answer<Void>) invocation -> null);
-        // dont do anything on updateConfiguration and save
+        // don't do anything on updateConfiguration and save
         doNothing().when(applicationSettingsPanel).updateConfiguration();
         doNothing().when(appConfiguration).save();
 
         // this invokes dialog -> no option chosen
-        applicationSettingsPanel.getEnableDesktopSlidersChkbox().doClick();
+        applicationSettingsPanel.getEnableDesktopSlidersCheckBox().doClick();
         // verify reboot dialog was shown but denied
         swingUtilsMock.verify(() -> SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?"));
         verifyNeverLogged("Restarting application");

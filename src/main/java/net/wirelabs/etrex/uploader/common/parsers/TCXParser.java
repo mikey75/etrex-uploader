@@ -15,7 +15,7 @@ public class TCXParser implements TrackToCoordsParser {
 
 
     /**
-     * Parses tcx file in geoposition format
+     * Parses tcx file in geo position format
      *
      * @param file input file
      * @return list of waypoints in GeoPosition format
@@ -32,7 +32,7 @@ public class TCXParser implements TrackToCoordsParser {
      * Parses tcx file (note: only first course and first track, no merging yet as in gpx)
      *
      * @param file input file
-     * @return list of waypoints in GPX's own Wpt format
+     * @return list of waypoints in GPX own Wpt format
      */
     public List<TrackpointT> parseTcxFile(File file) {
         List<TrackpointT> result = new ArrayList<>();

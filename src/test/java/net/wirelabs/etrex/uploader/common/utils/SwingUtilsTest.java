@@ -86,11 +86,11 @@ class SwingUtilsTest extends BaseTest {
     void shouldSetGlobalFontSize() {
         int changedFontSize = 22;
         SwingUtils.setGlobalFontSize(changedFontSize);
-        UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-        assertThat(lafs).isNotEmpty();
-        Arrays.stream(lafs).forEach(laf -> verifyLogged("Setting font size 22 for look " + laf.getName()));
+        UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
+        assertThat(lookAndFeels).isNotEmpty();
+        Arrays.stream(lookAndFeels).forEach(laf -> verifyLogged("Setting font size 22 for look " + laf.getName()));
 
-        Arrays.stream(lafs).forEach(laf -> {
+        Arrays.stream(lookAndFeels).forEach(laf -> {
             UIDefaults defaults = UIManager.getDefaults();
             Enumeration<Object> keys = defaults.keys();
 

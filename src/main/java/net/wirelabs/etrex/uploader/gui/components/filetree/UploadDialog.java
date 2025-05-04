@@ -29,7 +29,7 @@ public class UploadDialog extends JDialog {
     @Setter private int hostCheckupTimeout;
     private final JTextField activityTitleTextField;
     private final JComboBox<SportType> activityTypeCombo;
-    private final JTextArea activityDesctiptionArea;
+    private final JTextArea activityDescriptionArea;
 
     
     private final JLabel lblActivityName;
@@ -53,7 +53,7 @@ public class UploadDialog extends JDialog {
         lblActivityType = new JLabel("Activity Type");
         scrollPane = new JScrollPane();
         activityTitleTextField = new JTextField();
-        activityDesctiptionArea = new JTextArea();
+        activityDescriptionArea = new JTextArea();
         btnOk = new JButton("Upload");
         btnCancel = new JButton("Cancel");
         activityTypeCombo = new JComboBox<>(SportType.values());
@@ -82,12 +82,12 @@ public class UploadDialog extends JDialog {
         container.add(scrollPane, "cell 0 5,grow");
         container.add(commute, "cell 0 6");
         container.add(virtual, "cell 0 6");
-        //  container.add(statusLabel, "cell 0 6"); <-- tu zrobic mozna progressbar teraz
+        //  container.add(statusLabel, "cell 0 6"); <-- here, it is now possible to add a progressbar
         container.add(btnOk, "flowx,cell 0 7");
         container.add(btnCancel, "cell 0 7");
 
         activityTitleTextField.setColumns(10);
-        scrollPane.setViewportView(activityDesctiptionArea);
+        scrollPane.setViewportView(activityDescriptionArea);
 
         btnCancel.addActionListener(e -> dispose());
 
@@ -110,7 +110,7 @@ public class UploadDialog extends JDialog {
 
             Upload upload = stravaService.uploadActivity(trackFile,
                     activityTitleTextField.getText(),
-                    activityDesctiptionArea.getText(),
+                    activityDescriptionArea.getText(),
                     (SportType) activityTypeCombo.getSelectedItem(),
                     virtual.isSelected(), commute.isSelected());
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -127,8 +127,8 @@ public class UploadDialog extends JDialog {
     }
 
     private void handleUnsuccessfulUpload(Upload upload) {
-        log.error("Upload unsucessful [API response: {}]", upload.getError());
-        SwingUtils.errorMsg("Upload unsucessful [API response:" + upload.getError() + "]");
+        log.error("Upload unsuccessful [API response: {}]", upload.getError());
+        SwingUtils.errorMsg("Upload unsuccessful [API response:" + upload.getError() + "]");
         dispose();
     }
 

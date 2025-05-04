@@ -90,7 +90,7 @@ class LoggingConfiguratorTest {
 
     @Test
     void shouldIssueDialogFromJoranExceptionToo() throws IOException {
-        // create 'empty' real config file - the joran exception will be thrown (parsing xml errror)
+        // create 'empty' real config file - the joran exception will be thrown (parsing xml error)
         Files.createFile(ORIGINAL_LOGBACK_XML_PATH);
 
         LoggingConfigurator.configureLogger();

@@ -23,8 +23,8 @@ class GarminUtilsTest extends BaseTest {
     }
 
     @Test
-    void testReadingUnexistingFile() {
-        // if we check unexisting drive, GarminDevice.xml is not found, exception thrown and path empty
+    void testReadingNonExistentFile() {
+        // if we check nonexistent drive, GarminDevice.xml is not found, exception thrown and path empty
         Optional<Path> path = GarminUtils.getGarminDeviceXmlFile(NONEXISTING_DRIVE);
         assertThat(path).isEmpty();
         verifyLogged("I/O exception looking for GarminDevice.xml file");

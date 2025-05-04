@@ -41,7 +41,7 @@ public class UserAccountPanel extends BorderedPanel {
     private final AppConfiguration configuration;
     private final JLabel lblYtdRides = new JLabel("YTD rides:");
     private final JLabel lblYtdDist = new JLabel("YTD distance:");
-    private final JLabel lblYTDtime = new JLabel("YTD time:");
+    private final JLabel lblYtdTime = new JLabel("YTD time:");
     private final JLabel lblTotalRides = new JLabel("Total rides:");
     private final JLabel lblTotalDist = new JLabel("Total distance:");
     private final JLabel lblTotalTime = new JLabel("Total time:");
@@ -74,7 +74,7 @@ public class UserAccountPanel extends BorderedPanel {
         add(ytdRides, "cell 1 4");
         add(lblYtdDist, "cell 0 5");
         add(ytdDist, "cell 1 5");
-        add(lblYTDtime, "cell 0 6");
+        add(lblYtdTime, "cell 0 6");
         add(ytdTime, "cell 1 6");
         add(new JSeparator(), "cell 0 7 2 1,growx");
         add(lblTotalRides, "cell 0 8");

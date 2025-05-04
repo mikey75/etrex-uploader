@@ -22,7 +22,7 @@ class NetworkingUtilsTest extends BaseTest {
     }
 
     @Test
-    void shouldThrowWnenUnknownHost() {
+    void shouldThrowWhenUnknownHost() {
         assertThatThrownBy(() -> getAllIpsForHost("kaka.nonexistent.pl"))
                 .isInstanceOf(UnknownHostException.class);
     }
