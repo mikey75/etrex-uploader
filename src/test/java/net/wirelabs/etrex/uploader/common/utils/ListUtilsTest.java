@@ -57,40 +57,45 @@ class ListUtilsTest {
         assertThat(result).isEmpty();
 
     }
-
     @Test
-    void testStringListToPath() {
-        // multi element string
-        String multiElementString = "a ,b ,doc and set";
-        // expected resulting paths
-        Path expected_first_path = Paths.get("a");
-        Path expected_second_path = Paths.get("b");
-        Path expected_third_path = Paths.get("doc and set");
-
+    void shouldConvertSingleElementStringListToPath() {
         // single element string
         String singleElementString ="z   ";
         // expected resulting path
-        Path expected_single_element_path = Paths.get("z");
+        Path expectedSingleElementPath = Paths.get("z");
+        // check single element path parsing
+        List<Path> paths = ListUtils.convertStringListToPaths(singleElementString);
+        assertThat(paths).containsExactly(expectedSingleElementPath);
+    }
 
+    @Test
+    void shouldConvertMultiElementStringListToPath() {
+        // multi element string
+        String multiElementString = "a ,b ,doc and set";
+        // expected paths
+        Path expectedFirstPath = Paths.get("a");
+        Path expectedSecondPath = Paths.get("b");
+        Path expectedThirdPath = Paths.get("doc and set");
         // check multi element path parsing
         List<Path> paths = ListUtils.convertStringListToPaths(multiElementString);
-        assertThat(paths).containsExactly(expected_first_path, expected_second_path, expected_third_path);
+        assertThat(paths).containsExactly(expectedFirstPath, expectedSecondPath, expectedThirdPath);
+    }
 
-        // check single element path parsing
-        paths = ListUtils.convertStringListToPaths(singleElementString);
-        assertThat(paths).containsExactly(expected_single_element_path);
-
+    @Test
+    void shouldParseEmptyConvertStringListToEmptyPath() {
         // check empty path parsing
-        paths = ListUtils.convertStringListToPaths("");
+        List<Path> paths = ListUtils.convertStringListToPaths("");
         assertThat(paths).isEmpty();
-
+    }
+    @Test
+    void shouldParseNullStringListToEmptyPath() {
         // check null path parsing
-        paths = ListUtils.convertStringListToPaths(null);
+        List<Path> paths = ListUtils.convertStringListToPaths(null);
         assertThat(paths).isEmpty();
     }
 
     @Test
-    void testPathListToString () {
+    void shouldConvertPathListToString() {
         List<Path> p = List.of(Paths.get("Documents and Settings"),Paths.get("B"), Paths.get("C"));
         String result = ListUtils.convertPathListToString(p);
         assertThat(result).isEqualTo("Documents and Settings,B,C");
