@@ -36,20 +36,19 @@ class AppConfigurationTest extends BaseTest {
     private static final File NONEXISTENT_FILE = new File("target/nonexistent.properties");
     // existing test config file
     private static final File TEST_CONFIG_FILE = new File("src/test/resources/config/test.properties");
-    // temporary config file
-    private static final File TEMP_TEST_FILE = new File("target/config.properties");
 
     @Test
     void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() throws IOException {
+        final File tempTestFile = new File("target/config.properties");
         // to safely test no-arg constructor here - we need to make it use some test dir for config file
         // not the production one ;) so that not mess with original possible existing config
         try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
             sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
 
-            Files.deleteIfExists(TEMP_TEST_FILE.toPath()); // make sure file is not there
+            Files.deleteIfExists(tempTestFile.toPath()); // make sure file is not there
             AppConfiguration c = new AppConfiguration();
             assertDefaultValues(c);
-            assertThat(TEMP_TEST_FILE).exists();
+            assertThat(tempTestFile).exists();
         }
     }
 
