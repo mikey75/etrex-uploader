@@ -17,7 +17,7 @@ public final class ThreadUtils {
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static CompletableFuture<Void> runAsync(Runnable runnable) {
-        return CompletableFuture.runAsync(runnable, executorService);
+        return CompletableFuture.runAsync(runnable, getExecutorService());
     }
 
     public static void waitForCompleted(CompletableFuture<Void> future) {
@@ -27,7 +27,7 @@ public final class ThreadUtils {
     }
 
     public static void shutdownExecutorService() {
-        executorService.shutdown();
+        getExecutorService().shutdown();
         waitForExecutorServiceTermination();
     }
 
@@ -35,7 +35,7 @@ public final class ThreadUtils {
         while (true) {
             try {
                 log.info("Waiting for the main ExecutorService to terminate...");
-                if (executorService.awaitTermination(1, TimeUnit.SECONDS)) {
+                if (getExecutorService().awaitTermination(1, TimeUnit.SECONDS)) {
                     log.info("Done.");
                     break;
                 }
