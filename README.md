@@ -1,4 +1,5 @@
 ![CI](https://github.com/mikey75/etrex-uploader/actions/workflows/build.yml/badge.svg)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Developer notes 
 ==
