@@ -8,6 +8,8 @@ import org.mockito.Mockito;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.FileUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -17,13 +19,48 @@ import static org.mockito.Mockito.*;
 class SystemUtilsTest extends BaseTest {
 
     @Test
-    void getJmapsVersionTest() {
+    void getJmapsVersionTest() throws IOException {
 
-        String ver = SystemUtils.getJmapsVersion();
+        String fileContent = getFileContent("src/test/resources/versionfiles/fake-jmaps.version");
 
-        assertThat(ver)
-                .isNotNull()
-                .isEqualTo("1.4.0");
+        try (MockedStatic<FileUtils> fileUtils = Mockito.mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            fileUtils.when(() -> FileUtils.readFileToString(any(File.class), eq(StandardCharsets.UTF_8)))
+                    .thenReturn(fileContent);
+            // when
+            String ver = SystemUtils.getJmapsVersion();
+            // then
+            assertThat(ver).isEqualTo("3.3.3");
+        }
+    }
+
+    @Test
+    void getAppVersionTest() throws IOException {
+
+        String fileContent = getFileContent("src/test/resources/versionfiles/fake-etrex.version");
+
+        try (MockedStatic<FileUtils> fileUtils = Mockito.mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            fileUtils.when(() -> FileUtils.readFileToString(any(File.class), eq(StandardCharsets.UTF_8)))
+                    .thenReturn(fileContent);
+            // when
+            String ver = SystemUtils.getAppVersion();
+            // then
+            assertThat(ver).contains("2.2.2"); // contains because version file could contain -SNAPSHOT and always contains build date
+        }
+    }
+
+    @Test
+    void shouldSetDefaultWarningVersionWhenVersionFileCannotBeRead() {
+        // mock used apache fileutils to throw IOException on reading file (simulating error reading file)
+        try (MockedStatic<FileUtils> fileUtils = Mockito.mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            fileUtils.when(() -> FileUtils.readFileToString(any(File.class), eq(StandardCharsets.UTF_8)))
+                    .thenThrow(new IOException("Forced exception"));
+            // when
+            String version = SystemUtils.getJmapsVersion();
+            // then
+            assertThat(version).isEqualTo("1.0U");
+            verifyLogged("Can't find or load jmaps.version file");
+
+        }
     }
 
     @Test
@@ -154,6 +191,13 @@ class SystemUtilsTest extends BaseTest {
         systemUtils.verify(() -> SystemUtils.waitForSubprocess(any()));
         // check logs for 100% sure
         verifyLogged("Process finished, exit code:0");
+    }
+
+
+    private static String getFileContent(String pathname) throws IOException {
+        File version = new File(pathname);
+        assertThat(version).exists().isNotEmpty();
+        return FileUtils.readFileToString(version, StandardCharsets.UTF_8);
     }
 
 }
