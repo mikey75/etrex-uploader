@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.gui.browsers;
 
 import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import com.garmin.xmlschemas.garminDevice.v2.ModelT;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -28,10 +29,10 @@ import java.util.List;
 public class GarminDeviceBrowser extends EventAwareBorderedPanel {
 
     private final List<File> garminDrives = new ArrayList<>();
-    private final JLabel device = new JLabel();
-    private final JLabel serialNo = new JLabel();
-    private final JLabel partNo = new JLabel();
-    private final JLabel softwareVer = new JLabel();
+    @Getter private final JLabel device = new JLabel();
+    @Getter private final JLabel serialNo = new JLabel();
+    @Getter private final JLabel partNo = new JLabel();
+    @Getter private final JLabel softwareVer = new JLabel();
     private final JLabel status = new DeviceStatusLabel(garminDrives);
 
     private final JLabel lblDevice = new JLabel("Model:");
