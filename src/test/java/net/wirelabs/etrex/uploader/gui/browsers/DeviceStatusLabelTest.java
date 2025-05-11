@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,10 +23,8 @@ class DeviceStatusLabelTest {
     }
 
     @Test
-    void deviceLabelShouldNotWaitAndFlashWhenFilesExist() {
-        List<File> list = new ArrayList<>();
-        list.add(new File("dupa"));
-        list.add(new File("dupa2"));
+    void deviceLabelShouldNotWaitAndFlashWhenAnyFilesGiven() {
+        List<File> list = List.of(new File("dupa"), new File("dupa2"));
 
         // if given a list, at once it should be empty
         DeviceStatusLabel l = new DeviceStatusLabel(list);

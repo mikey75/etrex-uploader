@@ -6,17 +6,19 @@ import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.xmlbeans.XmlException;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 class GarminDeviceBrowserTest {
 
-    UploadService uploadService = mock(UploadService.class);
+    private final UploadService uploadService = mock(UploadService.class);
 
     @Test
     void shouldDisplayGarminInfo() throws XmlException, IOException {
@@ -32,34 +34,35 @@ class GarminDeviceBrowserTest {
 
         // then - assert it has fields correctly filled-in
         Sleeper.sleepMillis(500); // give it time to process event
-        assertThat(gbrowser.getPartNo().getText()).isEqualTo("006-B3445-00");
-        assertThat(gbrowser.getDevice().getText()).isEqualTo("eTrex 32x");
-        assertThat(gbrowser.getSoftwareVer().getText()).isEqualTo("270");
-        assertThat(gbrowser.getSerialNo().getText()).isEqualTo("3403532495");
+        assertThat(gbrowser.getLblPartNoValue().getText()).isEqualTo("006-B3445-00");
+        assertThat(gbrowser.getLblDeviceValue().getText()).isEqualTo("eTrex 32x");
+        assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEqualTo("270");
+        assertThat(gbrowser.getLblSerialNoValue().getText()).isEqualTo("3403532495");
 
     }
 
     @Test
-    void shouldUnregisterAndClearInfo() {
+    void shouldEmptyLabelsWhenDriveUnregisteredEventIssued() {
         GarminDeviceBrowser gbrowser = new GarminDeviceBrowser(uploadService);
-        EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, new File("kaka"));
+        EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, new File("kaka")); // this can be any File() in this test
         assertDeviceFieldsEmpty(gbrowser);
     }
 
     @Test
-    void registerFakeGarmin() {
+    void shouldNotFillLabelsWhenIssuingDriveRegisterEventWithNonExistingOrIncorrectGarminDrive() {
         // create file directory structure for fake drive
         GarminDeviceBrowser gbrowser = new GarminDeviceBrowser(uploadService);
-        EventBus.publish(EventType.DEVICE_DRIVE_REGISTERED, new File("kaka"));
+        EventBus.publish(EventType.DEVICE_DRIVE_REGISTERED, new File("kaka")); // this can be any File() in this test
         assertDeviceFieldsEmpty(gbrowser);
     }
 
     private static void assertDeviceFieldsEmpty(GarminDeviceBrowser gbrowser) {
-        Sleeper.sleepMillis(500); // give it time to process event
-        assertThat(gbrowser.getPartNo().getText()).isEmpty();
-        assertThat(gbrowser.getDevice().getText()).isEmpty();
-        assertThat(gbrowser.getSoftwareVer().getText()).isEmpty();
-        assertThat(gbrowser.getSerialNo().getText()).isEmpty();
+        Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+            assertThat(gbrowser.getLblPartNoValue().getText()).isEmpty();
+            assertThat(gbrowser.getLblDeviceValue().getText()).isEmpty();
+            assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEmpty();
+            assertThat(gbrowser.getLblSerialNoValue().getText()).isEmpty();
+        });
     }
 
 }
