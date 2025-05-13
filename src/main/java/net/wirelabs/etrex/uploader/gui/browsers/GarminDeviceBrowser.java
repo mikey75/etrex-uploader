@@ -55,15 +55,16 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
         setLayout(layout);
 
         add(lblModelDescription, "flowx,cell 0 0,alignx left");
-        add(lblSerialNo, "flowx,cell 0 1,alignx left");
-        add(lblPartNo, "flowx,cell 0 2,alignx left");
-        add(lblSoftwareVersion, "flowx,cell 0 3,alignx left");
-        add(lblStatus, "flowx,cell 0 4");
         add(lblModelDescriptionValue, "cell 0 0,alignx left");
+        add(lblSerialNo, "flowx,cell 0 1,alignx left");
         add(lblSerialNoValue, "cell 0 1,alignx left");
+        add(lblPartNo, "flowx,cell 0 2,alignx left");
         add(lblPartNoValue, "cell 0 2,alignx left");
+        add(lblSoftwareVersion, "flowx,cell 0 3,alignx left");
         add(lblSoftwareVerValue, "cell 0 3,alignx left");
+        add(lblStatus, "flowx,cell 0 4");
         add(lblStatusValue, "cell 0 4");
+
         add(scrollPane, "cell 0 5,grow");
 
         tree = new FileTree(); 
