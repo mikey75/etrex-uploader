@@ -2,7 +2,6 @@ package net.wirelabs.etrex.uploader.gui.browsers;
 
 import com.garmin.xmlschemas.garminDevice.v2.DeviceDocument;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.xmlbeans.XmlException;
@@ -36,7 +35,7 @@ class GarminDeviceBrowserTest {
 
         Awaitility.await().atMost(Duration.ofSeconds(1)).untilAsserted( () -> {
             assertThat(gbrowser.getLblPartNoValue().getText()).isEqualTo("006-B3445-00");
-            assertThat(gbrowser.getLblDeviceValue().getText()).isEqualTo("eTrex 32x");
+            assertThat(gbrowser.getLblModelDescriptionValue().getText()).isEqualTo("eTrex 32x");
             assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEqualTo("270");
             assertThat(gbrowser.getLblSerialNoValue().getText()).isEqualTo("3403532495");
         });
@@ -61,7 +60,7 @@ class GarminDeviceBrowserTest {
     private static void assertDeviceFieldsEmpty(GarminDeviceBrowser gbrowser) {
         Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
             assertThat(gbrowser.getLblPartNoValue().getText()).isEmpty();
-            assertThat(gbrowser.getLblDeviceValue().getText()).isEmpty();
+            assertThat(gbrowser.getLblModelDescriptionValue().getText()).isEmpty();
             assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEmpty();
             assertThat(gbrowser.getLblSerialNoValue().getText()).isEmpty();
         });

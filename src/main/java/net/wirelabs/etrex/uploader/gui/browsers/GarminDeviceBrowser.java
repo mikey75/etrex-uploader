@@ -31,7 +31,7 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
 
     private final List<File> garminDrives = new ArrayList<>();
     @Getter(value = AccessLevel.PACKAGE)
-    private final JLabel lblDeviceValue = new JLabel();
+    private final JLabel lblModelDescriptionValue = new JLabel();
     @Getter(value = AccessLevel.PACKAGE)
     private final JLabel lblSerialNoValue = new JLabel();
     @Getter(value = AccessLevel.PACKAGE)
@@ -40,7 +40,7 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     private final JLabel lblSoftwareVerValue = new JLabel();
     private final JLabel lblStatusValue = new DeviceStatusLabel(garminDrives);
 
-    private final JLabel lblModel = new JLabel("Model:");
+    private final JLabel lblModelDescription = new JLabel("Model:");
     private final JLabel lblSerialNo = new JLabel("Serial Number:");
     private final JLabel lblPartNo = new JLabel("Part Number:");
     private final JLabel lblSoftwareVersion = new JLabel("Software version:");
@@ -54,12 +54,12 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
         super("Garmin device");
         setLayout(layout);
 
-        add(lblModel, "flowx,cell 0 0,alignx left");
+        add(lblModelDescription, "flowx,cell 0 0,alignx left");
         add(lblSerialNo, "flowx,cell 0 1,alignx left");
         add(lblPartNo, "flowx,cell 0 2,alignx left");
         add(lblSoftwareVersion, "flowx,cell 0 3,alignx left");
         add(lblStatus, "flowx,cell 0 4");
-        add(lblDeviceValue, "cell 0 0,alignx left");
+        add(lblModelDescriptionValue, "cell 0 0,alignx left");
         add(lblSerialNoValue, "cell 0 1,alignx left");
         add(lblPartNoValue, "cell 0 2,alignx left");
         add(lblSoftwareVerValue, "cell 0 3,alignx left");
@@ -113,7 +113,7 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     }
 
     private void clearGarminInfo() {
-        lblDeviceValue.setText("");
+        lblModelDescriptionValue.setText("");
         lblSoftwareVerValue.setText("");
         lblPartNoValue.setText("");
         lblSerialNoValue.setText("");
@@ -124,7 +124,7 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
         DeviceT deviceInfo = (DeviceT)  evt.getPayload();
         ModelT modelInfo = deviceInfo.getModel();
         
-        lblDeviceValue.setText(modelInfo.getDescription());
+        lblModelDescriptionValue.setText(modelInfo.getDescription());
         lblSoftwareVerValue.setText(String.valueOf(modelInfo.getSoftwareVersion()));
         lblPartNoValue.setText(modelInfo.getPartNumber());
         lblSerialNoValue.setText(String.valueOf(deviceInfo.getId()));
