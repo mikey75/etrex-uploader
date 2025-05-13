@@ -2,6 +2,8 @@ package net.wirelabs.etrex.uploader.gui.browsers;
 
 import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import com.garmin.xmlschemas.garminDevice.v2.ModelT;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -28,13 +30,17 @@ import java.util.List;
 public class GarminDeviceBrowser extends EventAwareBorderedPanel {
 
     private final List<File> garminDrives = new ArrayList<>();
-    private final JLabel device = new JLabel();
-    private final JLabel serialNo = new JLabel();
-    private final JLabel partNo = new JLabel();
-    private final JLabel softwareVer = new JLabel();
-    private final JLabel status = new DeviceStatusLabel(garminDrives);
+    @Getter(value = AccessLevel.PACKAGE)
+    private final JLabel lblModelDescriptionValue = new JLabel();
+    @Getter(value = AccessLevel.PACKAGE)
+    private final JLabel lblSerialNoValue = new JLabel();
+    @Getter(value = AccessLevel.PACKAGE)
+    private final JLabel lblPartNoValue = new JLabel();
+    @Getter(value = AccessLevel.PACKAGE)
+    private final JLabel lblSoftwareVerValue = new JLabel();
+    private final JLabel lblStatusValue = new DeviceStatusLabel(garminDrives);
 
-    private final JLabel lblDevice = new JLabel("Model:");
+    private final JLabel lblModelDescription = new JLabel("Model:");
     private final JLabel lblSerialNo = new JLabel("Serial Number:");
     private final JLabel lblPartNo = new JLabel("Part Number:");
     private final JLabel lblSoftwareVersion = new JLabel("Software version:");
@@ -48,16 +54,17 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
         super("Garmin device");
         setLayout(layout);
 
-        add(lblDevice, "flowx,cell 0 0,alignx left");
+        add(lblModelDescription, "flowx,cell 0 0,alignx left");
+        add(lblModelDescriptionValue, "cell 0 0,alignx left");
         add(lblSerialNo, "flowx,cell 0 1,alignx left");
+        add(lblSerialNoValue, "cell 0 1,alignx left");
         add(lblPartNo, "flowx,cell 0 2,alignx left");
+        add(lblPartNoValue, "cell 0 2,alignx left");
         add(lblSoftwareVersion, "flowx,cell 0 3,alignx left");
+        add(lblSoftwareVerValue, "cell 0 3,alignx left");
         add(lblStatus, "flowx,cell 0 4");
-        add(device, "cell 0 0,alignx left");
-        add(serialNo, "cell 0 1,alignx left");
-        add(partNo, "cell 0 2,alignx left");
-        add(softwareVer, "cell 0 3,alignx left");
-        add(status, "cell 0 4");
+        add(lblStatusValue, "cell 0 4");
+
         add(scrollPane, "cell 0 5,grow");
 
         tree = new FileTree(); 
@@ -107,10 +114,10 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     }
 
     private void clearGarminInfo() {
-        device.setText("");
-        softwareVer.setText("");
-        partNo.setText("");
-        serialNo.setText("");
+        lblModelDescriptionValue.setText("");
+        lblSoftwareVerValue.setText("");
+        lblPartNoValue.setText("");
+        lblSerialNoValue.setText("");
         
     }
 
@@ -118,11 +125,11 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
         DeviceT deviceInfo = (DeviceT)  evt.getPayload();
         ModelT modelInfo = deviceInfo.getModel();
         
-        device.setText(modelInfo.getDescription());
-        softwareVer.setText(String.valueOf(modelInfo.getSoftwareVersion()));
-        partNo.setText(modelInfo.getPartNumber());
-        serialNo.setText(String.valueOf(deviceInfo.getId()));
-        status.setText("Connected");
+        lblModelDescriptionValue.setText(modelInfo.getDescription());
+        lblSoftwareVerValue.setText(String.valueOf(modelInfo.getSoftwareVersion()));
+        lblPartNoValue.setText(modelInfo.getPartNumber());
+        lblSerialNoValue.setText(String.valueOf(deviceInfo.getId()));
+        lblStatusValue.setText("Connected");
     }
 
     @Override
