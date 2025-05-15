@@ -186,6 +186,51 @@ class SystemUtilsTest extends BaseTest {
         }
     }
 
+    @Test
+    void shouldCreateNewInstance() throws IOException {
+        try (MockedStatic<Runtime> runtime = Mockito.mockStatic(Runtime.class, CALLS_REAL_METHODS)) {
+            // given
+            Runtime mockRuntime = mock(Runtime.class);
+            runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
+            when(mockRuntime.exec(anyString())).thenAnswer(invocation -> null); // do not really exec anything
+            // when
+            SystemUtils.createNewInstance();
+            // then
+            verifyLogged("Creating new application instance");
+            verifyNeverLogged("Creating new application instance failed!");
+
+        }
+
+    }
+
+    @Test
+    void shouldNotCreateNewInstanceOnException() throws IOException {
+        try (MockedStatic<Runtime> runtime = Mockito.mockStatic(Runtime.class, CALLS_REAL_METHODS)) {
+            // given
+            Runtime mockRuntime = mock(Runtime.class);
+            runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
+            when(mockRuntime.exec(anyString())).thenThrow(IOException.class);
+            // when
+            SystemUtils.createNewInstance();
+            // then
+            verifyLogged("Creating new application instance");
+            verifyLogged("Creating new application instance failed!");
+        }
+    }
+
+    @Test
+    void shouldNotCreateNewInstanceOnNonexistentCommandline() {
+        // to simulate nonexisting process commandline we fake the OS to unknown, so the
+        // getCommandLine(..) returns Optional.empty() - its default behavior on unknown OS
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
+            sysUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator");
+            // when
+            SystemUtils.createNewInstance();
+            // then
+            verifyLogged("No new instance could be created");
+        }
+    }
+
     private void assertSuccessfulLaunch(MockedStatic<SystemUtils> systemUtils) {
         // when waitForSubprocess() is called, it means the launch succeeded
         systemUtils.verify(() -> SystemUtils.waitForSubprocess(any()));
