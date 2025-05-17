@@ -30,6 +30,12 @@ via local webserver auth interceptor.
 
 ![](src/main/resources/setupApiApp.png)
 
+OS SUPPORT
+=
+Application should work on Linux, Windows 64bit and MacOSX. I only use Linux during development, and sometime have a chance 
+to run the code on Win and Mac, but it is not very frequent hence I cannot test all variants on a regular basis, so if you find that 
+something does not work on Windows or Mac, file an issue. 
+
 IMPORTANT!
 =
 This application runs and builds with Java 17 at the moment.<br>
