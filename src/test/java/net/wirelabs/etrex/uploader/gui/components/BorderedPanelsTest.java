@@ -21,7 +21,7 @@ class BorderedPanelsTest extends BaseTest {
 
     @Test
     void BorderedPanelTest() {
-        BorderedPanel testPanel = new BorderedPanel(TEST_PANEL_TITLE);
+        BasePanel testPanel = new BasePanel(TEST_PANEL_TITLE);
         assertPanelIsBorderedAndHasCorrectTitle(testPanel);
     }
 

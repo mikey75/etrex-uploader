@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -25,7 +26,7 @@ class SwingUtilsTest extends BaseTest {
         int panelWidth = 400;
         int panelHeight = 300;
 
-        JPanel panel = new JPanel();
+        BasePanel panel = new BasePanel();
         panel.setSize(panelWidth, panelHeight);
 
         // when

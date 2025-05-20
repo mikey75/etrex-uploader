@@ -1,10 +1,12 @@
 package net.wirelabs.etrex.uploader.gui.components.desktop;
 
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
+
 import java.awt.EventQueue;
 
 import javax.swing.*;
 
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+
 
 /**
  * Test application just for local use to test the DesktopPanel component
@@ -38,15 +40,15 @@ public class DesktopPanelTestFrame extends JFrame {
 
 		setBounds(100, 100, 450, 300);
 		
-		JPanel leftPanel = new BorderedPanel("Browser");
-		JPanel stravaPanel = new BorderedPanel("Strava");
-		JPanel mapPanel = new BorderedPanel("Map!");
+		JPanel leftPanel = new BasePanel("Browser");
+		JPanel stravaPanel = new BasePanel("Strava");
+		JPanel mapPanel = new BasePanel("Map!");
 
 		DesktopPanel desktopPanel = new DesktopPanel(leftPanel,stravaPanel, mapPanel,true);
 		desktopPanel.setSlidersWidth(5);
 		desktopPanel.setHorizontalSliderLocation(100);
 		desktopPanel.setVerticalSliderLocation(200);
-		getContentPane().add(desktopPanel);
+		add(desktopPanel);
 		 
 	}
 

@@ -4,19 +4,17 @@ package net.wirelabs.etrex.uploader.gui.strava.account;
 import com.strava.model.ActivityStats;
 import com.strava.model.SummaryAthlete;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.DateAndUnitConversionUtil;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
 import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.*;
 import java.io.IOException;
 import java.net.URI;
@@ -25,7 +23,7 @@ import java.net.URI;
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class UserAccountPanel extends BorderedPanel {
+public class UserAccountPanel extends BasePanel {
 
     final JLabel athleteName = new JLabel();
     final JLabel athletePicture = new JLabel();
@@ -48,10 +46,9 @@ public class UserAccountPanel extends BorderedPanel {
     private final JLabel lblStatistics = new JLabel("Statistics");
     private final ApiUsagePanel apiUsagePanel;
 
-    private final LayoutManager layout = new MigLayout("", "[grow][]", "[][][][][][][][][][][][grow][grow,bottom]");
 
     public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
-
+        super("My profile");
         this.stravaService = stravaService;
         this.configuration = configuration;
         apiUsagePanel = new ApiUsagePanel(configuration);
@@ -64,7 +61,9 @@ public class UserAccountPanel extends BorderedPanel {
     }
 
     private void initVisualComponent() {
-        setBorderTitle("My profile");
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow][]");
+        layout.setRowConstraints("[][][][][][][][][][][][grow][grow,bottom]");
         setLayout(layout);
         add(athleteName, "cell 0 1 2 1,alignx center");
         add(athletePicture, "cell 0 0 2 1,alignx center");

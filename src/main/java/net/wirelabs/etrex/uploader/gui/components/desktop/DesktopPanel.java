@@ -1,10 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.components.desktop;
 
 import lombok.Getter;
-import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Component to create application's main desktop panel with optionally resizable components
@@ -30,10 +29,7 @@ import java.awt.*;
  *             +--- vertical slider
  * </pre>
  */
-public class DesktopPanel extends JPanel {
-
-    static final LayoutManager LAYOUT_WITH_SLIDERS = new MigLayout("insets 0", "[grow,fill]", "[grow,fill]");
-    static final LayoutManager LAYOUT_WITHOUT_SLIDERS = new MigLayout("", "[10%][90%]", "[30%][70%]");
+public class DesktopPanel extends BasePanel {
 
     static final int DEFAULT_HORIZONTAL_SLIDER_WIDTH = 5;
     static final int DEFAULT_VERTICAL_SLIDER_WIDTH = 5;
@@ -82,12 +78,18 @@ public class DesktopPanel extends JPanel {
     }
 
     private void setClassicDesktop(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
-        setLayout(LAYOUT_WITHOUT_SLIDERS);
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[10%][90%]");
+        layout.setRowConstraints("[30%][70%]");
+        setLayout(layout);
         setPanes(leftPane, topRightPane, bottomRightPane);
     }
 
     private void setSlidingDesktop(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
-        setLayout(LAYOUT_WITH_SLIDERS);
+        layout.setLayoutConstraints("insets 0");
+        layout.setColumnConstraints("[grow,fill]");
+        layout.setRowConstraints("[grow,fill]");
+        setLayout(layout);
         // connect two JSplitPanes creating the final component -> left container is now the root of the layout,
         leftContainerPane.setRightComponent(rightContainerPane);
         setPanes(leftPane, topRightPane, bottomRightPane);
@@ -162,7 +164,7 @@ public class DesktopPanel extends JPanel {
         setHorizontalSliderWidth(pixels);
     }
 
-    private static JPanel defaultEmptyPanel() {
-        return new JPanel();
+    private static BasePanel defaultEmptyPanel() {
+        return new BasePanel();
     }
 }

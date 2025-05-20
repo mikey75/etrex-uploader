@@ -1,6 +1,5 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.Constants;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,11 +10,10 @@ import java.util.Objects;
 /**
  * Common 'TextField with button' component
  */
-public abstract class ButtonedTextField extends JPanel {
+public abstract class ButtonedTextField extends BasePanel {
 
     private final JTextField textField = new JTextField();
     private final JButton button = new JButton();
-    private final LayoutManager layout = new MigLayout("gapx 0,insets 0", "[grow][]", "[]");
 
     // default constructor: no text, 3 dots as button text, and no icon
     protected ButtonedTextField() {
@@ -26,6 +24,9 @@ public abstract class ButtonedTextField extends JPanel {
     protected ButtonedTextField(String text, String buttonText, Icon buttonIcon) {
 
         setBorder(null);
+        layout.setLayoutConstraints("gapx 0, insets 0");
+        layout.setColumnConstraints("[grow][]");
+        layout.setRowConstraints("[]");
         setLayout(layout);
 
         textField.setMinimumSize(new Dimension(32, 18));
