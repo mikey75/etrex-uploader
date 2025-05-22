@@ -63,7 +63,7 @@ class BasePanelsTest {
     }
 
     private static void assertDefaultLayout(MigLayout d) {
-        assertThat(d).isNotNull().isInstanceOf(MigLayout.class);
+        assertThat(d).isNotNull();
         assertThat(d.getLayoutConstraints()).isEqualTo("");
         assertThat(d.getColumnConstraints()).isEqualTo("[grow]");
         assertThat(d.getRowConstraints()).isEqualTo("[grow]");
