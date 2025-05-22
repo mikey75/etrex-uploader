@@ -2,16 +2,14 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
-import java.awt.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +20,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CH
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class ApplicationSettingsPanel extends BorderedPanel {
+public class ApplicationSettingsPanel extends BasePanel {
 
     private final AppConfiguration configuration;
     private final FileChooserTextField storageRoot = new FileChooserTextField();
@@ -38,11 +36,13 @@ public class ApplicationSettingsPanel extends BorderedPanel {
     private final JCheckBox enableDesktopSlidersCheckBox = new JCheckBox("Enable desktop sliders");
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
-    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][][][][]");
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
         super("Application");
         this.configuration = configuration;
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[][grow]");
+        layout.setRowConstraints("[][][][][]");
         setLayout(layout);
 
         JLabel storageRootLabel = new JLabel("Storage root:");

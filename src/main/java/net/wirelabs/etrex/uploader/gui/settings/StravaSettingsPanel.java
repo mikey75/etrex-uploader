@@ -1,17 +1,15 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
 import com.strava.model.SportType;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class StravaSettingsPanel extends BorderedPanel {
+public class StravaSettingsPanel extends BasePanel {
 
     private final AppConfiguration configuration;
     private final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
@@ -21,7 +19,6 @@ public class StravaSettingsPanel extends BorderedPanel {
     private final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
     private final JTextField hostTimeout = new JTextField();
 
-    private final LayoutManager layout = new MigLayout("", "[][grow]", "[][][]");
 
     public StravaSettingsPanel(AppConfiguration configuration) {
 
@@ -33,6 +30,9 @@ public class StravaSettingsPanel extends BorderedPanel {
         JLabel lblHostTimeout = new JLabel("Strava hosts timeout milliseconds:");
 
         this.configuration = configuration;
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[][grow]");
+        layout.setRowConstraints("[][][]");
         setLayout(layout);
 
         add(activityTypeLabel, "cell 0 0,alignx trailing");

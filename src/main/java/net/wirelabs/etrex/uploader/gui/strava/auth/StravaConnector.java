@@ -1,15 +1,14 @@
 package net.wirelabs.etrex.uploader.gui.strava.auth;
 
 import lombok.Getter;
-import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.gui.components.BaseDialog;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,14 +17,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created 12/8/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class StravaConnector extends JDialog {
+public class StravaConnector extends BaseDialog {
 
     private final JLabel lblApplicationId = new JLabel("Client ID");
     private final JLabel lblClientSecret = new JLabel("Client secret");
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new StravaButton();
-    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][]");
     private final AuthService authService;
     @Getter
     private final AtomicBoolean oauthStatus = new AtomicBoolean(false);
@@ -57,6 +55,9 @@ public class StravaConnector extends JDialog {
     private void createVisualComponent() {
 
         setTitle("Connect to strava");
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow]");
+        layout.setRowConstraints("[][][][][]");
         setLayout(layout);
         add(lblApplicationId, "cell 0 0,alignx center,aligny center");
         add(appIdInput, "cell 0 1,grow");

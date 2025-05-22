@@ -5,11 +5,10 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.device.GarminUtils;
 import net.wirelabs.etrex.uploader.gui.UploadService;
-import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.eventbus.Event;
@@ -17,7 +16,6 @@ import net.wirelabs.eventbus.IEventType;
 
 import javax.swing.*;
 import javax.swing.tree.*;
-import java.awt.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -27,7 +25,7 @@ import java.util.List;
  * Created 9/8/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class GarminDeviceBrowser extends EventAwareBorderedPanel {
+public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
     private final List<File> garminDrives = new ArrayList<>();
     @Getter(value = AccessLevel.PACKAGE)
@@ -48,10 +46,12 @@ public class GarminDeviceBrowser extends EventAwareBorderedPanel {
     private final JScrollPane scrollPane = new JScrollPane();
     private final FileTree tree;
 
-    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][][grow]");
 
     GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device");
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow]");
+        layout.setRowConstraints("[][][][][][grow]");
         setLayout(layout);
 
         add(lblModelDescription, "flowx,cell 0 0,alignx left");

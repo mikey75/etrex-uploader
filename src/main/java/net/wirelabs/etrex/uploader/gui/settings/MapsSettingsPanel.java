@@ -2,12 +2,11 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 
 import lombok.Getter;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.gui.components.BorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.eventbus.EventBus;
@@ -20,7 +19,7 @@ import java.io.File;
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class MapsSettingsPanel extends BorderedPanel {
+public class MapsSettingsPanel extends BasePanel {
 
     public static final String INFO_MSG = "<html>You can write new home position here,<br>but you can also use the map,<br> and select it with double click</html>";
     private final AppConfiguration configuration;
@@ -43,13 +42,15 @@ public class MapsSettingsPanel extends BorderedPanel {
     private final JTextField routeLineWidth = new JTextField();
     private final JLabel lblTrkWidth = new JLabel("Track width:");
 
-    private final LayoutManager layout = new MigLayout("", "[][][][grow]", "[][][grow]");
 
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps");
         this.configuration = configuration;
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
 
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[][][][grow]");
+        layout.setRowConstraints("[][][grow]");
         setLayout(layout);
         add(lblDefaultMap, "cell 0 0,alignx trailing");
         add(newMaps, "cell 1 0, growx");
