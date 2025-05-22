@@ -1,16 +1,14 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.filetree.FileTree;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,17 +17,20 @@ import java.util.List;
 
 
 @Slf4j
-public class LocalStorageBrowser extends EventAwareBorderedPanel {
+public class LocalStorageBrowser extends BaseEventAwarePanel {
 
     private final FileTree fileTree;
     private final AppConfiguration appConfiguration;
-
-    private final LayoutManager layout = new MigLayout("", "[grow]", "[grow]");
 
     LocalStorageBrowser(AppConfiguration appConfiguration) {
         
         super("Local repository");
         this.appConfiguration = appConfiguration;
+        // we could just setLayout() since it has default constraints here,
+        // but for correctness with original code - use old way
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow]");
+        layout.setRowConstraints("[grow]");
         setLayout(layout);
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");

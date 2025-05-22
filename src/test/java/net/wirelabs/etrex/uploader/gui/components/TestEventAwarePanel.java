@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.components;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
@@ -9,10 +10,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Slf4j
-class TestEventAwarePanel extends EventAwareBorderedPanel {
+@NoArgsConstructor
+class TestEventAwarePanel extends BaseEventAwarePanel {
 
     public final JTextField textField = new JTextField();
-
     TestEventAwarePanel(String title) {
         super(title);
     }

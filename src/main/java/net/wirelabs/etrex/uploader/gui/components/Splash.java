@@ -26,7 +26,7 @@ public class Splash extends JFrame {
     }
 
 
-    static class SplashPanel extends JPanel {
+    static class SplashPanel extends BasePanel {
 
         private final URL imageLocation = getClass().getResource("/images/splash.png");
         // if image is not found (unlikely) we do wish to continue so just get null image

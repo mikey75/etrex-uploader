@@ -68,7 +68,6 @@ public class EtrexUploader extends JFrame {
             ctx.getGarminDeviceService().start();
 
             splash.update("Laying out main window");
-            Container container = getContentPane();
 
             final boolean slidersEnabled = ctx.getAppConfiguration().isEnableDesktopSliders();
             desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, slidersEnabled);
@@ -80,7 +79,7 @@ public class EtrexUploader extends JFrame {
                 desktopPanel.setHorizontalSliderLocation(stravaPanel.getSize().height);
             }
 
-            container.add(desktopPanel);
+            add(desktopPanel);
 
             splash.update("Done");
             setExtendedState(Frame.MAXIMIZED_BOTH);

@@ -5,13 +5,12 @@ import com.strava.model.LatLng;
 import com.strava.model.StreamSet;
 import com.strava.model.SummaryActivity;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
-import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
@@ -31,7 +30,7 @@ import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 
 @Slf4j
-public class StravaActivitiesPanel extends EventAwareBorderedPanel {
+public class StravaActivitiesPanel extends BaseEventAwarePanel {
 
     private final JScrollPane scrollPane = new JScrollPane();
     private final ActivitiesTable activitiesTable = new ActivitiesTable();
@@ -42,7 +41,6 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
     private final AppConfiguration configuration;
     private int page = 1;
 
-    private final LayoutManager layout = new MigLayout("", "[grow][]", "[grow][grow]");
 
     public StravaActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
         super("Strava");
@@ -53,7 +51,9 @@ public class StravaActivitiesPanel extends EventAwareBorderedPanel {
     }
 
     private void createVisualComponent() {
-
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow][]");
+        layout.setRowConstraints("[grow][grow]");
         setLayout(layout);
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");

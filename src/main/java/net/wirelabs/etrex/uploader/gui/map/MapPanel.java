@@ -1,14 +1,13 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.parsers.TrackParser;
 import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
-import net.wirelabs.etrex.uploader.gui.components.EventAwareBorderedPanel;
+import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.components.OverlayEnabler;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.eventbus.Event;
@@ -28,7 +27,7 @@ import java.util.List;
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
 
 @Slf4j
-public class MapPanel extends EventAwareBorderedPanel {
+public class MapPanel extends BaseEventAwarePanel {
 
 
 
@@ -40,7 +39,6 @@ public class MapPanel extends EventAwareBorderedPanel {
     private transient Coordinate mapHome;
     private final transient TrackParser trackParser;
 
-    private final MigLayout layout = new MigLayout("", "[grow]", "[grow]");
     private final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
     public MapPanel(AppConfiguration configuration) {
@@ -61,7 +59,9 @@ public class MapPanel extends EventAwareBorderedPanel {
         mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
-
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow]");
+        layout.setRowConstraints("[grow]");
         setLayout(layout);
         add(mapViewer, "cell 0 0,grow");
         configureMapSelector();

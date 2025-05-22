@@ -6,7 +6,7 @@ import net.wirelabs.jmaps.map.MapViewer;
 
 import javax.swing.*;
 
-public class OverlayEnabler extends JPanel  {
+public class OverlayEnabler extends BasePanel  {
 
     @Getter
     private final JCheckBox showOverlaysCheckbox = new JCheckBox("Show user overlays", true);

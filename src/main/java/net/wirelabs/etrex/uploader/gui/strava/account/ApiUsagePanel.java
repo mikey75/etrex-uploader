@@ -1,13 +1,12 @@
 package net.wirelabs.etrex.uploader.gui.strava.account;
 
 import lombok.Getter;
-import net.miginfocom.swing.MigLayout;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
-import net.wirelabs.eventbus.swing.EventAwarePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +17,7 @@ import java.util.Map;
 /**
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public class ApiUsagePanel extends EventAwarePanel {
+public class ApiUsagePanel extends BaseEventAwarePanel {
     private final AppConfiguration configuration;
     @Getter
     private final JLabel dailyLimits;
@@ -29,10 +28,12 @@ public class ApiUsagePanel extends EventAwarePanel {
     private Integer allowedDaily;
     private Integer allowed15min;
 
-    private final LayoutManager layout = new MigLayout("insets 0 0 0 0", "[grow][grow]", "[][center][][]");
 
     public ApiUsagePanel(AppConfiguration configuration) {
         this.configuration = configuration;
+        layout.setLayoutConstraints("insets 0");
+        layout.setColumnConstraints("[grow][grow]");
+        layout.setRowConstraints("[][center][][]");
         setLayout(layout);
 
         JLabel header = new JLabel("API usage:");

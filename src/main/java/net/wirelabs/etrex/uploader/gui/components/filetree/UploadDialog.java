@@ -4,11 +4,11 @@ import com.strava.model.SportType;
 import com.strava.model.Upload;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.miginfocom.swing.MigLayout;
-import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.gui.components.BaseDialog;
+import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.service.StravaService;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.EventBus;
@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 @Slf4j
-public class UploadDialog extends JDialog {
+public class UploadDialog extends BaseDialog {
 
 
     private File trackFile;
@@ -43,7 +43,6 @@ public class UploadDialog extends JDialog {
     private final StravaService stravaService;
     private final transient FileService fileService;
 
-    private final LayoutManager layout = new MigLayout("", "[grow]", "[][][][][][grow][][]");
 
     public UploadDialog(StravaService stravaService, FileService fileService) {
         this.stravaService = stravaService;
@@ -69,22 +68,23 @@ public class UploadDialog extends JDialog {
         setSize(600, 300);
         SwingUtils.centerComponent(this);
 
-        Container container = getContentPane();
+        layout.setLayoutConstraints("");
+        layout.setColumnConstraints("[grow]");
+        layout.setRowConstraints("[][][][][][grow][][]");
+        setLayout(layout);
+        add(lblActivityName, "cell 0 0");
+        add(activityTitleTextField, "cell 0 1,grow");
 
-        container.setLayout(layout);
-        container.add(lblActivityName, "cell 0 0");
-        container.add(activityTitleTextField, "cell 0 1,grow");
+        add(lblActivityType, "cell 0 2");
 
-        container.add(lblActivityType, "cell 0 2");
-
-        container.add(activityTypeCombo, "cell 0 3,grow");
-        container.add(lblActivityDescription, "cell 0 4");
-        container.add(scrollPane, "cell 0 5,grow");
-        container.add(commute, "cell 0 6");
-        container.add(virtual, "cell 0 6");
+        add(activityTypeCombo, "cell 0 3,grow");
+        add(lblActivityDescription, "cell 0 4");
+        add(scrollPane, "cell 0 5,grow");
+        add(commute, "cell 0 6");
+        add(virtual, "cell 0 6");
         //  container.add(statusLabel, "cell 0 6"); <-- here, it is now possible to add a progressbar
-        container.add(btnOk, "flowx,cell 0 7");
-        container.add(btnCancel, "cell 0 7");
+        add(btnOk, "flowx,cell 0 7");
+        add(btnCancel, "cell 0 7");
 
         activityTitleTextField.setColumns(10);
         scrollPane.setViewportView(activityDescriptionArea);
