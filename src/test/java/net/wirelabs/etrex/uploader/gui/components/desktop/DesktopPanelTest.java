@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DesktopPanelTest {
@@ -21,7 +23,7 @@ class DesktopPanelTest {
         DesktopPanel container = new DesktopPanel();
 
         // verify
-        assertSliderLessDesktop((MigLayout) container.getLayout());
+        assertSliderLessDesktop(container.getLayout());
         assertThat(container.getLeftPane()).isNotNull().isInstanceOf(JPanel.class);
         assertThat(container.getBottomRightPane()).isNotNull().isInstanceOf(JPanel.class);
         assertThat(container.getTopRightPane()).isNotNull().isInstanceOf(JPanel.class);
@@ -32,7 +34,7 @@ class DesktopPanelTest {
     void testDefaultSlidingDesktop() {
         // set sliders enables (classic look = false)
         DesktopPanel container = new DesktopPanel(true);
-        assertSlideredDesktop((MigLayout) container.getLayout());
+        assertSlideredDesktop(container.getLayout());
         assertThat(container.getLeftPane()).isNotNull().isInstanceOf(JPanel.class);
         assertThat(container.getBottomRightPane()).isNotNull().isInstanceOf(JPanel.class);
         assertThat(container.getTopRightPane()).isNotNull().isInstanceOf(JPanel.class);
@@ -50,7 +52,7 @@ class DesktopPanelTest {
         DesktopPanel container = new DesktopPanel(LEFT_PANE_COMPONENT, TOP_RIGHT_PANE_COMPONENT, BOTTOM_RIGHT_PANE_COMPONENT, false);
 
         // verify
-        assertSliderLessDesktop((MigLayout) container.getLayout());
+        assertSliderLessDesktop(container.getLayout());
         assertThat(container.getLeftPane()).isNotNull().isEqualTo(LEFT_PANE_COMPONENT);
         assertThat(container.getBottomRightPane()).isNotNull().isEqualTo(BOTTOM_RIGHT_PANE_COMPONENT);
         assertThat(container.getTopRightPane()).isNotNull().isEqualTo(TOP_RIGHT_PANE_COMPONENT);
@@ -74,7 +76,7 @@ class DesktopPanelTest {
         container.setHorizontalSliderLocation(100);
 
         // verify
-        assertSlideredDesktop((MigLayout) container.getLayout());
+        assertSlideredDesktop(container.getLayout());
         assertThat(container.getLeftPane()).isNotNull().isEqualTo(LEFT_PANE_COMPONENT);
         assertThat(container.getBottomRightPane()).isNotNull().isEqualTo(BOTTOM_RIGHT_PANE_COMPONENT);
         assertThat(container.getTopRightPane()).isNotNull().isEqualTo(TOP_RIGHT_PANE_COMPONENT);
@@ -85,13 +87,17 @@ class DesktopPanelTest {
 
     }
 
-    private static void assertSliderLessDesktop(MigLayout layout) {
+    private static void assertSliderLessDesktop(LayoutManager layoutManager) {
+        assertThat(layoutManager).isInstanceOf(MigLayout.class);
+        MigLayout layout = (MigLayout) layoutManager;
         assertThat(layout.getLayoutConstraints()).isEqualTo("");
         assertThat(layout.getColumnConstraints()).isEqualTo("[10%][90%]");
         assertThat(layout.getRowConstraints()).isEqualTo("[30%][70%]");
     }
 
-    private static void assertSlideredDesktop(MigLayout layout) {
+    private static void assertSlideredDesktop(LayoutManager layoutManager) {
+        assertThat(layoutManager).isInstanceOf(MigLayout.class);
+        MigLayout layout = (MigLayout) layoutManager;
         assertThat(layout.getLayoutConstraints()).isEqualTo("insets 0");
         assertThat(layout.getColumnConstraints()).isEqualTo("[grow,fill]");
         assertThat(layout.getRowConstraints()).isEqualTo("[grow,fill]");
