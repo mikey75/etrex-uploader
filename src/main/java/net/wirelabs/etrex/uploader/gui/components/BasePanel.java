@@ -12,13 +12,24 @@ import javax.swing.border.*;
  * - want titled: call string-argument constructor
  */
 @NoArgsConstructor
-public class BasePanel extends JPanel {
+public class BasePanel extends JPanel implements LayoutConstraintsSettable {
     // default layout grid 1x1 fill all space
     protected final MigLayout layout = new MigLayout("","[grow]","[grow]");
-
-    // titled bordered panel
+    // no border no title, constraints specified
+    public BasePanel(String layoutConstraints, String columnConstraints, String rowConstraints) {
+        setConstraints(layout, layoutConstraints,columnConstraints,rowConstraints);
+        setLayout(layout);
+    }
+    // border, title , constraints specified
+    public BasePanel(String title, String layoutConstraints, String columnConstraints, String rowConstraints) {
+        setConstraints(layout, layoutConstraints, columnConstraints, rowConstraints);
+        setBorderTitle(title);
+        setLayout(layout);
+    }
+    // border, title, constraints not specified (means: default constraints)
     public BasePanel(String title) {
         setBorderTitle(title);
+        setLayout(layout);
     }
 
     protected void setBorderTitle(String title) {

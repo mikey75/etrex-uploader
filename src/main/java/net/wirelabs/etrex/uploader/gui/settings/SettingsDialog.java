@@ -23,9 +23,8 @@ public class SettingsDialog extends BaseDialog {
 	 * Create the dialog.
 	 */
 	public SettingsDialog(AppConfiguration appConfiguration) {
+		super("Settings","","[grow]","[grow][grow][grow][]");
 		this.configuration = appConfiguration;
-
-		setTitle("Settings");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -33,11 +32,6 @@ public class SettingsDialog extends BaseDialog {
 		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
 		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
-
-		layout.setLayoutConstraints("");
-		layout.setColumnConstraints("[grow]");
-		layout.setRowConstraints("[grow][grow][grow][]");
-		setLayout(layout);
 		add(applicationSettingsPanel, "cell 0 0,grow");
 		add(stravaSettingsPanel, "cell 0 1,grow");
 		add(mapsSettingsPanel, "cell 0 2,grow");

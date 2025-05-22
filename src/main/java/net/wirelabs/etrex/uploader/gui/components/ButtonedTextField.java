@@ -22,13 +22,8 @@ public abstract class ButtonedTextField extends BasePanel {
 
     // custom constructor: specify all attributes
     protected ButtonedTextField(String text, String buttonText, Icon buttonIcon) {
-
+        super("gapx 0,insets 0", "[grow][]","[]");
         setBorder(null);
-        layout.setLayoutConstraints("gapx 0, insets 0");
-        layout.setColumnConstraints("[grow][]");
-        layout.setRowConstraints("[]");
-        setLayout(layout);
-
         textField.setMinimumSize(new Dimension(32, 18));
         textField.setMaximumSize(new Dimension(2400, 18));
 

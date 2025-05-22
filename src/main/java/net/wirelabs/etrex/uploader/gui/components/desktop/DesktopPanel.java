@@ -69,6 +69,7 @@ public class DesktopPanel extends BasePanel {
 
     // custom desktop, set panels and sliders explicitly
     public DesktopPanel(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane, boolean slidersEnabled) {
+        super(getLayoutConstraints(slidersEnabled), getColumnConstraints(slidersEnabled), getRowConstraints(slidersEnabled)); //
         this.slidersEnabled = slidersEnabled;
         if (slidersEnabled) {
             setSlidingDesktop(leftPane, topRightPane, bottomRightPane);
@@ -78,18 +79,10 @@ public class DesktopPanel extends BasePanel {
     }
 
     private void setClassicDesktop(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[10%][90%]");
-        layout.setRowConstraints("[30%][70%]");
-        setLayout(layout);
         setPanes(leftPane, topRightPane, bottomRightPane);
     }
 
     private void setSlidingDesktop(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
-        layout.setLayoutConstraints("insets 0");
-        layout.setColumnConstraints("[grow,fill]");
-        layout.setRowConstraints("[grow,fill]");
-        setLayout(layout);
         // connect two JSplitPanes creating the final component -> left container is now the root of the layout,
         leftContainerPane.setRightComponent(rightContainerPane);
         setPanes(leftPane, topRightPane, bottomRightPane);
@@ -167,4 +160,17 @@ public class DesktopPanel extends BasePanel {
     private static BasePanel defaultEmptyPanel() {
         return new BasePanel();
     }
+
+    private static String getLayoutConstraints(boolean slidersEnabled) {
+        return slidersEnabled ? "insets 0" : "";
+    }
+
+    private static String getColumnConstraints(boolean slidersEnabled) {
+        return slidersEnabled ? "[grow,fill]" : "[10%][90%]";
+    }
+
+    private static String getRowConstraints(boolean slidersEnabled) {
+        return slidersEnabled ? "[grow,fill]" : "[30%][70%]";
+    }
+
 }
