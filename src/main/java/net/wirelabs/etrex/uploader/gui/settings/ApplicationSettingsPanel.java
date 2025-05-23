@@ -38,12 +38,8 @@ public class ApplicationSettingsPanel extends BasePanel {
 
 
     public ApplicationSettingsPanel(AppConfiguration configuration) {
-        super("Application");
+        super("Application","","[][grow]","[][][][][]");
         this.configuration = configuration;
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[][grow]");
-        layout.setRowConstraints("[][][][][]");
-        setLayout(layout);
 
         JLabel storageRootLabel = new JLabel("Storage root:");
         add(storageRootLabel, "cell 0 0,alignx trailing");

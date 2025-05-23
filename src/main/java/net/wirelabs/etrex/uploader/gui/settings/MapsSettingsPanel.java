@@ -44,14 +44,10 @@ public class MapsSettingsPanel extends BasePanel {
 
 
     public MapsSettingsPanel(AppConfiguration configuration) {
-        super("Maps");
+        super("Maps","","[][][][grow]","[][][grow]");
         this.configuration = configuration;
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
 
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[][][][grow]");
-        layout.setRowConstraints("[][][grow]");
-        setLayout(layout);
         add(lblDefaultMap, "cell 0 0,alignx trailing");
         add(newMaps, "cell 1 0, growx");
         add(lblTilerThreads, "cell 2 0,alignx trailing");

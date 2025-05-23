@@ -12,11 +12,24 @@ import javax.swing.border.*;
  * - want titled: call string-argument constructor
  */
 @NoArgsConstructor
-public abstract class BaseEventAwarePanel extends EventAwarePanel {
+public abstract class BaseEventAwarePanel extends EventAwarePanel implements LayoutConstraintsSettable {
     // default layout grid 1x1 fill all space
     protected final MigLayout layout = new MigLayout("","[grow]","[grow]");
+
+    // no borderTitle present, constraints specified
+    protected BaseEventAwarePanel(String layoutConstraints, String columnConstraints, String rowConstraints) {
+        setConstraints(layout, layoutConstraints,columnConstraints,rowConstraints);
+        setLayout(layout);
+    }
+    // borderTitle present, constraints specified
+    protected BaseEventAwarePanel(String title, String layoutConstraints, String columnConstraints, String rowConstraints) {
+        this(layoutConstraints, columnConstraints, rowConstraints);
+        setBorderTitle(title);
+    }
+    // borderTitle present, constraints not specified (means: default constraints)
     protected BaseEventAwarePanel(String title) {
         setBorderTitle(title);
+        setLayout(layout);
     }
 
     protected void setBorderTitle(String title) {

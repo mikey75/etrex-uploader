@@ -59,10 +59,6 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[grow]");
-        setLayout(layout);
         add(mapViewer, "cell 0 0,grow");
         configureMapSelector();
 

@@ -23,14 +23,9 @@ public class LogViewerDialog extends BaseDialog {
 
 
     public LogViewerDialog() {
-
-        setTitle(LOG_VIEWER_WINDOW_TITLE);
+        super(LOG_VIEWER_WINDOW_TITLE,"","[grow]","[][grow][]");
         setSize(800, 600);
 
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[][grow][]");
-        setLayout(layout);
         add(lblLogfiles, "flowx,cell 0 0");
         add(scrollPane, "cell 0 1,grow");
         add(comboBox, "cell 0 0,growx");

@@ -31,7 +31,7 @@ public class StravaConnector extends BaseDialog {
     private String oauthMessage;
 
     public StravaConnector(StravaClient client)  {
-
+        super("Connect to strava","","[grow]","[][][][][]");
         authService = new AuthService(client);
 
         createVisualComponent();
@@ -54,11 +54,6 @@ public class StravaConnector extends BaseDialog {
 
     private void createVisualComponent() {
 
-        setTitle("Connect to strava");
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[][][][][]");
-        setLayout(layout);
         add(lblApplicationId, "cell 0 0,alignx center,aligny center");
         add(appIdInput, "cell 0 1,grow");
         add(lblClientSecret, "cell 0 2,alignx center,aligny center");

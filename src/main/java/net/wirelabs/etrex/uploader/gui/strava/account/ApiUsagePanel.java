@@ -30,11 +30,8 @@ public class ApiUsagePanel extends BaseEventAwarePanel {
 
 
     public ApiUsagePanel(AppConfiguration configuration) {
+        super("insets 0","[grow][grow]","[][center][][]");
         this.configuration = configuration;
-        layout.setLayoutConstraints("insets 0");
-        layout.setColumnConstraints("[grow][grow]");
-        layout.setRowConstraints("[][center][][]");
-        setLayout(layout);
 
         JLabel header = new JLabel("API usage:");
 

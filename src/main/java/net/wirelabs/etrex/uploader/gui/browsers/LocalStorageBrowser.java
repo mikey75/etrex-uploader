@@ -26,12 +26,6 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
         
         super("Local repository");
         this.appConfiguration = appConfiguration;
-        // we could just setLayout() since it has default constraints here,
-        // but for correctness with original code - use old way
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[grow]");
-        setLayout(layout);
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 

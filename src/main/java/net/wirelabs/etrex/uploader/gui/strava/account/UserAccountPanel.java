@@ -48,7 +48,7 @@ public class UserAccountPanel extends BasePanel {
 
 
     public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
-        super("My profile");
+        super("My profile","","[grow][]","[][][][][][][][][][][][grow][grow,bottom]");
         this.stravaService = stravaService;
         this.configuration = configuration;
         apiUsagePanel = new ApiUsagePanel(configuration);
@@ -61,10 +61,6 @@ public class UserAccountPanel extends BasePanel {
     }
 
     private void initVisualComponent() {
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow][]");
-        layout.setRowConstraints("[][][][][][][][][][][][grow][grow,bottom]");
-        setLayout(layout);
         add(athleteName, "cell 0 1 2 1,alignx center");
         add(athletePicture, "cell 0 0 2 1,alignx center");
         add(lblStatistics, "cell 0 2 2 1");

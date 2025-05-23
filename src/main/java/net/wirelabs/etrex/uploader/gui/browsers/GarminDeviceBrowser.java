@@ -48,12 +48,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
 
     GarminDeviceBrowser(UploadService uploadService) {
-        super("Garmin device");
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[][][][][][grow]");
-        setLayout(layout);
-
+        super("Garmin device","","[grow]","[][][][][][grow]");
         add(lblModelDescription, "flowx,cell 0 0,alignx left");
         add(lblModelDescriptionValue, "cell 0 0,alignx left");
         add(lblSerialNo, "flowx,cell 0 1,alignx left");
