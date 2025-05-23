@@ -16,18 +16,17 @@ public abstract class BaseEventAwarePanel extends EventAwarePanel implements Lay
     // default layout grid 1x1 fill all space
     protected final MigLayout layout = new MigLayout("","[grow]","[grow]");
 
-    // no border, no title, constraints specified
+    // no borderTitle present, constraints specified
     protected BaseEventAwarePanel(String layoutConstraints, String columnConstraints, String rowConstraints) {
         setConstraints(layout, layoutConstraints,columnConstraints,rowConstraints);
         setLayout(layout);
     }
-    // border, title , constraints specified
+    // borderTitle present, constraints specified
     protected BaseEventAwarePanel(String title, String layoutConstraints, String columnConstraints, String rowConstraints) {
-        setConstraints(layout,layoutConstraints, columnConstraints, rowConstraints);
+        this(layoutConstraints, columnConstraints, rowConstraints);
         setBorderTitle(title);
-        setLayout(layout);
     }
-    // border, title, constraints not specified (means: default constraints)
+    // borderTitle present, constraints not specified (means: default constraints)
     protected BaseEventAwarePanel(String title) {
         setBorderTitle(title);
         setLayout(layout);
