@@ -43,7 +43,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
 
 
     public StravaActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
-        super("Strava");
+        super("Strava", "","[grow][]","[grow][grow]");
         this.configuration = configuration;
         this.stravaService = stravaService;
         createVisualComponent();
@@ -51,10 +51,6 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     }
 
     private void createVisualComponent() {
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow][]");
-        layout.setRowConstraints("[grow][grow]");
-        setLayout(layout);
         add(scrollPane, "cell 0 0 2 1,grow");
         add(btnPrevPage, "flowx,cell 0 1");
         add(btnNextPage, "cell 0 1");

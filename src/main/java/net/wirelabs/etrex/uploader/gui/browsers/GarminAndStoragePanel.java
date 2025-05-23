@@ -9,16 +9,10 @@ import java.awt.*;
 public class GarminAndStoragePanel extends BasePanel {
 
     public GarminAndStoragePanel(UploadService uploadService, AppConfiguration appConfiguration) {
-        initializeLayout();
+        super("insets 0","[grow]","[grow][grow]");
         add(new GarminDeviceBrowser(uploadService), "cell 0 0,grow");
         add(new LocalStorageBrowser(appConfiguration), "cell 0 1,grow");
         setSize(new Dimension(180, 200));
     }
 
-    private void initializeLayout() {
-        layout.setLayoutConstraints("insets 0px");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[grow][grow]");
-        setLayout(layout);
-    }
 }

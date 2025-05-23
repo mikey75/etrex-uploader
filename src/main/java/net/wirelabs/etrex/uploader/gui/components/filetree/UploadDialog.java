@@ -45,6 +45,7 @@ public class UploadDialog extends BaseDialog {
 
 
     public UploadDialog(StravaService stravaService, FileService fileService) {
+        super("Upload","","[grow]","[][][][][][grow][][]");
         this.stravaService = stravaService;
         this.fileService = fileService;
         lblActivityName = new JLabel("Name");
@@ -68,10 +69,6 @@ public class UploadDialog extends BaseDialog {
         setSize(600, 300);
         SwingUtils.centerComponent(this);
 
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[grow]");
-        layout.setRowConstraints("[][][][][][grow][][]");
-        setLayout(layout);
         add(lblActivityName, "cell 0 0");
         add(activityTitleTextField, "cell 0 1,grow");
 

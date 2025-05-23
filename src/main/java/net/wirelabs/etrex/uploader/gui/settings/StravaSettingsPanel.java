@@ -22,7 +22,7 @@ public class StravaSettingsPanel extends BasePanel {
 
     public StravaSettingsPanel(AppConfiguration configuration) {
 
-        super("Strava");
+        super("Strava","","[][grow]","[][][]");
 
         JLabel activityTypeLabel = new JLabel("Default activity type:");
         JLabel lblActivitiesPerPage = new JLabel("Activities per page:");
@@ -30,10 +30,6 @@ public class StravaSettingsPanel extends BasePanel {
         JLabel lblHostTimeout = new JLabel("Strava hosts timeout milliseconds:");
 
         this.configuration = configuration;
-        layout.setLayoutConstraints("");
-        layout.setColumnConstraints("[][grow]");
-        layout.setRowConstraints("[][][]");
-        setLayout(layout);
 
         add(activityTypeLabel, "cell 0 0,alignx trailing");
         activityTypeCombo.setModel(new DefaultComboBoxModel<>(SportType.values()));
