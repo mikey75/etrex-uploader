@@ -5,7 +5,6 @@ import com.garmin.xmlschemas.garminDevice.v2.DeviceT;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -53,6 +52,14 @@ class GarminDeviceServiceTest extends BaseTest {
         garminDeviceService = Mockito.spy(new GarminDeviceService(mockRootsProvider, testApplicationConfiguration));
     }
 
+    @AfterEach
+    void after() {
+        // not every test executes service.start() so stop service only if it is running
+        if (garminDeviceService.getThreadHandle() != null) {
+            stopAndAssertTermination();
+        }
+    }
+
     @BeforeAll
     static void beforeAll() throws IOException {
         // create fake config
@@ -74,33 +81,21 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldStartAndStopDetectorService() {
         // given
-
         assertThat(garminDeviceService.getThreadHandle()).isNull();
         // when
         garminDeviceService.start();
         // then
-        waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getThreadHandle()).isNotNull());
-        verifyLogged("Starting Garmin device discovery thread");
-        verifyLogged("Registering already connected drives");
-        verifyLogged("Listening for new drives");
-
-        // when
-        garminDeviceService.stop();
-        // then
-        waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getThreadHandle().isDone()).isTrue());
-        verifyLogged("Garmin Device Service stopping");
-        verifyLogged("Device observer stopped");
+        assertServiceStarted();
+        stopAndAssertTermination();
     }
 
     @Test
     void shouldDetectOneGarminDrive() {
-
         //given
         garminDeviceService.start();
-
+        assertServiceStarted();
         //when
         addDrive(GARMIN_DRIVE_ONE);
-
         //then
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
             verify(garminDeviceService, times(1)).registerDrive(GARMIN_DRIVE_ONE);
@@ -113,21 +108,13 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldDetectTwoGarminDrives() {
         //given
-
         garminDeviceService.start();
-
-        Sleeper.sleepSeconds(1);
-
+        assertServiceStarted();
         // when
         addDrive(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
-
+        // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
-
-
-            assertThat(garminDeviceService.getRegisteredRoots())
-                    .hasSize(2)
-                    .containsOnly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
-
+            assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsOnly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
             assertThat(garminDeviceService.getRegisteredRoots().get(0)).isEqualTo(GARMIN_DRIVE_ONE);
             assertThat(garminDeviceService.getRegisteredRoots().get(1)).isEqualTo(GARMIN_DRIVE_TWO);
         });
@@ -136,68 +123,65 @@ class GarminDeviceServiceTest extends BaseTest {
 
     @Test
     void shouldDetectDriveDisconnection() {
-
+        // given
         garminDeviceService.getRegisteredRoots().add(GARMIN_DRIVE_ONE); // make drive appear as if it is already registered
         garminDeviceService.start();
-        Sleeper.sleepSeconds(1);
-
-
+        assertServiceStarted();
+        // when
         removeDrive(GARMIN_DRIVE_ONE);
-
         // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getRegisteredRoots()).isEmpty());
-
 
     }
 
     @Test
     void shouldNotRegisterDriveIfNotGarmin() {
-
-
+        // given
         garminDeviceService.start();
+        assertServiceStarted();
         // when
         addDrive(NON_GARMIN_DRIVE);
-
         // then
-
         assertThat(garminDeviceService.getRegisteredRoots()).isEmpty();
 
     }
 
     @Test
-    void shouldFindAndPublishDeviceInfo() throws IOException  {
-
+    void shouldFindAndPublishDeviceInfo() throws IOException {
+        // given
         garminDeviceService.start();
-        
+        assertServiceStarted();
         // when
-        FileUtils.copyFileToDir(DEVICE_XML_FILE,GARMIN_DRIVE_ONE);
+        FileUtils.copyFileToDir(DEVICE_XML_FILE, GARMIN_DRIVE_ONE);
         addDrive(GARMIN_DRIVE_ONE);
+        // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> verify(garminDeviceService, times(1)).publishFoundHardwareInfo(any(DeviceT.class)));
     }
 
     @Test
-    void shouldNotFindDeviceInfoFileIfNotExists() throws IOException  {
-
-        FileUtils.recursivelyDeleteDirectory(GARMIN_DRIVE_ONE);
-
+    void shouldNotFindDeviceInfoFileIfNotExists() throws IOException {
+        // given
+        FileUtils.recursivelyDeleteDirectory(GARMIN_DRIVE_ONE); // delete garmin files
         garminDeviceService.start();
+        assertServiceStarted();
+        // when
         addDrive(GARMIN_DRIVE_ONE);
-
+        // then
         waitUntilAsserted(Duration.ofSeconds(2), () -> {
-                    verifyLogged("Listening for new drives");
-                    verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
-                });
+            verifyLogged("Listening for new drives");
+            verifyLogged("Failed waiting for drive " + GARMIN_DRIVE_ONE.getPath() + " being available");
+        });
     }
 
     @Test
-    void shouldLogWarningWhenXMLisInvalid() throws IOException  {
-
+    void shouldLogWarningWhenXMLisInvalid() throws IOException {
+        // given
         garminDeviceService.start();
-
+        assertServiceStarted();
         // when
         Files.copy(DEVICE_XML_FILE_INVALID.toPath(), new File(GARMIN_DRIVE_ONE, Constants.GARMIN_DEVICE_XML).toPath(), StandardCopyOption.REPLACE_EXISTING);
-
         addDrive(GARMIN_DRIVE_ONE);
+        // then
         // when garmin xml is invalid, we should issue warning and the reason but still listen for new drives
         waitUntilAsserted(Duration.ofSeconds(2), () -> {
             verifyLogged("Can't parse " + Constants.GARMIN_DEVICE_XML + " on drive " + GARMIN_DRIVE_ONE);
@@ -211,15 +195,6 @@ class GarminDeviceServiceTest extends BaseTest {
         assertThat(garminDeviceServiceDef.getRootsProvider()).isNotNull().isInstanceOf(RootsProvider.class);
     }
 
-    @AfterEach
-    void after() {
-        // not every test executes service.start() so stop service only if it is running
-        if (garminDeviceService.getThreadHandle() != null) {
-            garminDeviceService.stop();
-            waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getThreadHandle().isDone()).isTrue());
-        }
-    }
-    
     private void addDrive(File... disk) {
         roots.addAll(Arrays.asList(disk));
     }
@@ -228,4 +203,19 @@ class GarminDeviceServiceTest extends BaseTest {
         roots.removeAll(Arrays.asList(disk));
     }
 
+    private void stopAndAssertTermination() {
+        garminDeviceService.stop();
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
+            assertThat(garminDeviceService.getThreadHandle().isDone()).isTrue();
+            verifyLogged("Garmin Device Service stopping");
+            verifyLogged("Device observer stopped");
+        });
+    }
+
+    private void assertServiceStarted() {
+        waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getThreadHandle()).isNotNull());
+        verifyLogged("Starting Garmin device discovery thread");
+        verifyLogged("Registering already connected drives");
+        verifyLogged("Listening for new drives");
+    }
 }
