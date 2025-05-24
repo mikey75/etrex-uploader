@@ -96,17 +96,13 @@ public class SystemUtils {
 
 
     public static void createNewInstance() {
-        Optional<String> cmd = getCommandLine(ProcessHandle.current());
-        if (cmd.isPresent()) {
+        try {
+            String cmd = getCommandLine(ProcessHandle.current()).orElseThrow(() -> new IOException("No command line"));
             Runtime rt = Runtime.getRuntime();
-            try {
-                log.info("Creating new application instance");
-                rt.exec(cmd.get());
-            } catch (IOException e) {
-                log.error("Creating new application instance failed!");
-            }
-        } else {
-            log.error("No new instance could be created");
+            log.info("Creating new application instance");
+            rt.exec(cmd);
+        } catch (IOException e) {
+            log.error("Creating new application instance failed! {}" , e.getMessage());
         }
     }
 
