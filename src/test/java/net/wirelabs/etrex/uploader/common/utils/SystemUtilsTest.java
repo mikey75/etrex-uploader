@@ -209,12 +209,12 @@ class SystemUtilsTest extends BaseTest {
             // given
             Runtime mockRuntime = mock(Runtime.class);
             runtime.when(Runtime::getRuntime).thenReturn(mockRuntime);
-            when(mockRuntime.exec(anyString())).thenThrow(IOException.class);
+            when(mockRuntime.exec(anyString())).thenThrow(new IOException("exec() throws exception"));
             // when
             SystemUtils.createNewInstance();
             // then
             verifyLogged("Creating new application instance");
-            verifyLogged("Creating new application instance failed!");
+            verifyLogged("Creating new application instance failed! exec() throws exception");
         }
     }
 
@@ -227,7 +227,7 @@ class SystemUtilsTest extends BaseTest {
             // when
             SystemUtils.createNewInstance();
             // then
-            verifyLogged("No new instance could be created");
+            verifyLogged("Creating new application instance failed! No command line");
         }
     }
 
