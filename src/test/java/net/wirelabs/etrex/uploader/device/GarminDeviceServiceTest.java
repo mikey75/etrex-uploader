@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -168,7 +168,7 @@ class GarminDeviceServiceTest extends BaseTest {
         // given
         startAndAssertStarted();
         // when
-        Files.copy(DEVICE_XML_FILE_INVALID.toPath(), new File(GARMIN_DRIVE_ONE, Constants.GARMIN_DEVICE_XML).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        copyFile(DEVICE_XML_FILE_INVALID, new File(GARMIN_DRIVE_ONE,Constants.GARMIN_DEVICE_XML),StandardCopyOption.REPLACE_EXISTING);
         addDrive(GARMIN_DRIVE_ONE);
         // then
         // when garmin xml is invalid, we should issue warning and the reason but still listen for new drives
