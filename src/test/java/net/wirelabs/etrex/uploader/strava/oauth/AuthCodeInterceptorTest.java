@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,6 +31,14 @@ class AuthCodeInterceptorTest extends BaseTest {
     void before() throws IOException {
         authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
         doNothing().when(authCodeRetriever).openSystemBrowser(any());
+        verifyLogged("Started auth code interceptor http server on port " + authCodeRetriever.getPort());
+        doReturn(2).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
+    }
+
+    @AfterEach
+    void after() {
+        authCodeRetriever.shutdown();
+        verifyLogged("auth code interceptor shut down");
     }
 
     @Test
@@ -42,15 +51,9 @@ class AuthCodeInterceptorTest extends BaseTest {
                 "&approval_prompt=force" +
                 "&scope=" + Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE;
 
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
-        doReturn(1).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
 
-        StravaException ex = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
-        assertThat(ex).hasMessage("Timed out waiting for code");
-
+        runGetAuthAndAssertMessage("Timed out waiting for code", null, null);
         verify(authCodeRetriever).runDesktopBrowserToAuthorizationUrl(expectedUrl);
-        verifyLogged("Redirecting user to strava app authorization page");
-        authCodeRetriever.shutdown();
     }
 
     @Test
@@ -61,17 +64,9 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .GET()
                 .build();
 
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
-        doReturn(3).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
 
         HttpResponse<String> response = client.send(requestWithoutCode, HttpResponse.BodyHandlers.ofString());
-
-        StravaException ex = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
-        assertThat(ex).hasMessage("Timed out waiting for code");
-        verifyLogged("Redirecting user to strava app authorization page");
-
-        assertThat(response.body()).isEqualTo(STRAVA_AUTHORIZATION_FAIL_MSG);
-        authCodeRetriever.shutdown();
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -81,15 +76,9 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=" + Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE))
                 .GET()
                 .build();
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
 
         HttpResponse<String> response = client.send(requestWithCode, HttpResponse.BodyHandlers.ofString());
-        String code = authCodeRetriever.getAuthCode(FAKE_APP_ID);
-
-        assertThat(code).isEqualTo(AUTH_CODE);
-        assertThat(response.body()).isEqualTo(STRAVA_AUTHORIZATION_OK_MSG);
-        verifyLogged("Redirecting user to strava app authorization page");
-        authCodeRetriever.shutdown();
+        runGetAuthAndAssertCorrectAuthCodeAndSuccessMessage(response.body());
     }
 
     @Test
@@ -99,16 +88,9 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=activity:read"))
                 .GET()
                 .build();
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
 
         HttpResponse<String> response = client.send(requestWithCodeAndIncorrectScope, HttpResponse.BodyHandlers.ofString());
-
-        StravaException thrown = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
-
-        assertThat(thrown).hasMessage("You must approve all requested authorization scopes");
-        verifyLogged("Redirecting user to strava app authorization page");
-        assertThat(response.body()).isEqualTo(STRAVA_AUTHORIZATION_FAIL_MSG);
-        authCodeRetriever.shutdown();
+        runGetAuthAndAssertMessage("You must approve all requested authorization scopes", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -119,30 +101,28 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .GET()
                 .build();
 
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
-        doReturn(3).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
-
         HttpResponse<String> response = client.send(requestWithEmptyCode, HttpResponse.BodyHandlers.ofString());
-
-        StravaException ex = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
-        assertThat(ex).hasMessage("Timed out waiting for code");
-
-        assertThat(response.body()).isEqualTo(STRAVA_AUTHORIZATION_FAIL_MSG);
-        verifyLogged("Redirecting user to strava app authorization page");
-        authCodeRetriever.shutdown();
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
-    void testCodeNotReceivedAtAll() throws IOException {
-
-        doNothing().when(authCodeRetriever).openSystemBrowser(any());
-        doReturn(3).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
-
-        StravaException ex = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
-        assertThat(ex).hasMessage("Timed out waiting for code");
-        verifyLogged("Redirecting user to strava app authorization page");
-        authCodeRetriever.shutdown();
-
+    void testCodeNotReceivedAtAll() {
+        runGetAuthAndAssertMessage("Timed out waiting for code", null, null);
     }
 
+    private void runGetAuthAndAssertMessage(String message, String responseBody, String bodyMsg) {
+        StravaException ex = assertThrows(StravaException.class, () -> authCodeRetriever.getAuthCode(FAKE_APP_ID));
+        assertThat(responseBody).isEqualTo(bodyMsg);
+        verifyLogged("Starting Strava OAuth process");
+        verifyLogged("Redirecting user to strava app authorization page");
+        assertThat(ex).hasMessage(message);
+    }
+
+    private void runGetAuthAndAssertCorrectAuthCodeAndSuccessMessage(String responseBody) throws IOException, StravaException {
+        String code = authCodeRetriever.getAuthCode(FAKE_APP_ID);
+        assertThat(code).isEqualTo(AUTH_CODE);
+        verifyLogged("Starting Strava OAuth process");
+        verifyLogged("Redirecting user to strava app authorization page");
+        assertThat(responseBody).isEqualTo(STRAVA_AUTHORIZATION_OK_MSG);
+    }
 }
