@@ -82,25 +82,21 @@ class GarminDeviceServiceTest extends BaseTest {
     void shouldStartAndStopDetectorService() {
         // given
         assertThat(garminDeviceService.getThreadHandle()).isNull();
-        // when
-        garminDeviceService.start();
-        // then
-        assertServiceStarted();
+        // when & then
+        startAndAssertStarted();
         stopAndAssertTermination();
     }
 
     @Test
     void shouldDetectOneGarminDrive() {
         //given
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         //when
         addDrive(GARMIN_DRIVE_ONE);
         //then
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
             verify(garminDeviceService, times(1)).registerDrive(GARMIN_DRIVE_ONE);
             assertThat(garminDeviceService.getRegisteredRoots()).hasSize(1).containsOnly(GARMIN_DRIVE_ONE);
-            assertThat(garminDeviceService.getRegisteredRoots().get(0)).isEqualTo(GARMIN_DRIVE_ONE);
         });
 
     }
@@ -108,15 +104,12 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldDetectTwoGarminDrives() {
         //given
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         // when
         addDrive(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
         // then
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
-            assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsOnly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
-            assertThat(garminDeviceService.getRegisteredRoots().get(0)).isEqualTo(GARMIN_DRIVE_ONE);
-            assertThat(garminDeviceService.getRegisteredRoots().get(1)).isEqualTo(GARMIN_DRIVE_TWO);
+            assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsExactly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
         });
 
     }
@@ -125,8 +118,8 @@ class GarminDeviceServiceTest extends BaseTest {
     void shouldDetectDriveDisconnection() {
         // given
         garminDeviceService.getRegisteredRoots().add(GARMIN_DRIVE_ONE); // make drive appear as if it is already registered
-        garminDeviceService.start();
-        assertServiceStarted();
+        assertThat(garminDeviceService.getRegisteredRoots()).contains(GARMIN_DRIVE_ONE); // assure drive exists
+        startAndAssertStarted();
         // when
         removeDrive(GARMIN_DRIVE_ONE);
         // then
@@ -137,8 +130,7 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldNotRegisterDriveIfNotGarmin() {
         // given
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         // when
         addDrive(NON_GARMIN_DRIVE);
         // then
@@ -149,8 +141,7 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldFindAndPublishDeviceInfo() throws IOException {
         // given
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         // when
         FileUtils.copyFileToDir(DEVICE_XML_FILE, GARMIN_DRIVE_ONE);
         addDrive(GARMIN_DRIVE_ONE);
@@ -162,8 +153,7 @@ class GarminDeviceServiceTest extends BaseTest {
     void shouldNotFindDeviceInfoFileIfNotExists() throws IOException {
         // given
         FileUtils.recursivelyDeleteDirectory(GARMIN_DRIVE_ONE); // delete garmin files
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         // when
         addDrive(GARMIN_DRIVE_ONE);
         // then
@@ -176,8 +166,7 @@ class GarminDeviceServiceTest extends BaseTest {
     @Test
     void shouldLogWarningWhenXMLisInvalid() throws IOException {
         // given
-        garminDeviceService.start();
-        assertServiceStarted();
+        startAndAssertStarted();
         // when
         Files.copy(DEVICE_XML_FILE_INVALID.toPath(), new File(GARMIN_DRIVE_ONE, Constants.GARMIN_DEVICE_XML).toPath(), StandardCopyOption.REPLACE_EXISTING);
         addDrive(GARMIN_DRIVE_ONE);
@@ -212,7 +201,8 @@ class GarminDeviceServiceTest extends BaseTest {
         });
     }
 
-    private void assertServiceStarted() {
+    private void startAndAssertStarted() {
+        garminDeviceService.start();
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertThat(garminDeviceService.getThreadHandle()).isNotNull());
         verifyLogged("Starting Garmin device discovery thread");
         verifyLogged("Registering already connected drives");
