@@ -1,85 +1,73 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
-import org.junit.jupiter.api.AfterAll;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.StandardCopyOption;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 class StravaConfigurationTest {
 
-    private static final String TEST_USER_DIR = "src/test/resources/config/";
-    private static final String GOOD_STRAVA_CONFIG_FILE = "good-strava.properties";
-    private static final String BAD_STRAVA_CONFIG_FILE = "bad-strava.properties";
-    private static final Path BACKUP_FILE = Paths.get("target/backup.properties");
-    private static final MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class);
+    private static final File GOOD_STRAVA_CONFIG_FILE = new File("src/test/resources/config/good-strava.properties");
+    private static final File BAD_STRAVA_CONFIG_FILE = new File("src/test/resources/config/bad-strava.properties");
+    private static final File BACKUP_FILE = new File("target/backup.properties");
 
-    @AfterAll
-    static void afterAll() {
-        sysUtils.close();
+    @BeforeEach
+    void before() throws IOException {
+        // backup file which we're changing since tests might change test file
+        FileUtils.copyFile(GOOD_STRAVA_CONFIG_FILE, BACKUP_FILE, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @AfterEach
+    void after() throws IOException {
+        // restore original file
+        FileUtils.copyFile(BACKUP_FILE, GOOD_STRAVA_CONFIG_FILE, StandardCopyOption.REPLACE_EXISTING);
+        FileUtils.deleteQuietly(BACKUP_FILE);
+        assertThat(BACKUP_FILE).doesNotExist();
     }
 
     @Test
     void testCorrectStravaConfig() {
-        sysUtils.when(SystemUtils::getWorkDir).thenReturn(TEST_USER_DIR);
-        StravaConfiguration s = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE);
+        StravaConfiguration s = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE.getPath());
         assertDefaultValues(s);
         assertThat(s.hasAllTokensAndCredentials()).isTrue();
     }
 
-    @Test
-    void testCorrectDefaultConfig() {
-        sysUtils.when(SystemUtils::getWorkDir).thenReturn(TEST_USER_DIR);
-        StravaConfiguration s = new StravaConfiguration(); // will load default => strava.config
-        assertDefaultValues(s);
-        assertThat(s.hasAllTokensAndCredentials()).isTrue();
-    }
 
     @Test
-    void shouldSavedChangedConfig() throws IOException {
+    void shouldSavedChangedConfig() {
 
-        try {
-            // backup file which we're changing
-            Files.copy(new File(TEST_USER_DIR, GOOD_STRAVA_CONFIG_FILE).toPath(), BACKUP_FILE, StandardCopyOption.REPLACE_EXISTING);
+        StravaConfiguration s = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE.getPath());
 
-            sysUtils.when(SystemUtils::getWorkDir).thenReturn(TEST_USER_DIR);
+        s.setStravaAppId("111");
+        s.setStravaAccessToken("aaa");
+        s.setStravaRefreshToken("bbb");
+        s.setStravaTokenExpires(1234823L);
+        s.setStravaClientSecret("xxx");
+        s.save();
 
-            StravaConfiguration s = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE);
+        // now reload file and check changed values
+        StravaConfiguration load = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE.getPath());
 
-            s.setStravaAppId("111");
-            s.setStravaAccessToken("aaa");
-            s.setStravaRefreshToken("bbb");
-            s.setStravaTokenExpires(1234823L);
-            s.setStravaClientSecret("xxx");
-            s.save();
+        //verify
+        assertThat(load.getStravaAppId()).isEqualTo("111");
+        assertThat(load.getStravaAccessToken()).isEqualTo("aaa");
+        assertThat(load.getStravaRefreshToken()).isEqualTo("bbb");
+        assertThat(load.getStravaTokenExpires()).isEqualTo(1234823L);
+        assertThat(load.getStravaClientSecret()).isEqualTo("xxx");
 
-            // now reload file and check changed values
-            StravaConfiguration load = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE);
-
-            //verify
-            assertThat(load.getStravaAppId()).isEqualTo("111");
-            assertThat(load.getStravaAccessToken()).isEqualTo("aaa");
-            assertThat(load.getStravaRefreshToken()).isEqualTo("bbb");
-            assertThat(load.getStravaTokenExpires()).isEqualTo(1234823L);
-            assertThat(load.getStravaClientSecret()).isEqualTo("xxx");
-        } finally {
-            // restore original file
-            Files.copy(BACKUP_FILE, new File(TEST_USER_DIR, GOOD_STRAVA_CONFIG_FILE).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
     }
 
     @Test
     void shouldReactToIncompleteData() {
-        sysUtils.when(SystemUtils::getWorkDir).thenReturn(TEST_USER_DIR);
-        StravaConfiguration s = new StravaConfiguration(BAD_STRAVA_CONFIG_FILE);
+        StravaConfiguration s = new StravaConfiguration(BAD_STRAVA_CONFIG_FILE.getPath());
         assertThat(s.hasAllTokensAndCredentials()).isFalse();
     }
 

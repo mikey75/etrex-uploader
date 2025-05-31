@@ -31,10 +31,6 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
 
     }
 
-    public StravaConfiguration() {
-        this(Constants.DEFAULT_STRAVA_CONFIG_FILE);
-    }
-
     public void save() {
         properties.setProperty(STRAVA_APP_ID, stravaAppId);
         properties.setProperty(STRAVA_CLIENT_SECRET, stravaClientSecret);

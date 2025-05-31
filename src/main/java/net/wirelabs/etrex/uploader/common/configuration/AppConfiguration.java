@@ -80,10 +80,6 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         }
     }
 
-    public AppConfiguration() {
-        this(Constants.DEFAULT_APPLICATION_CONFIG_FILE);
-    }
-
     public void save() {
         properties.setProperty(STORAGE_ROOT, storageRoot.toString());
         properties.setProperty(USER_STORAGE_ROOTS, ListUtils.convertPathListToString(userStorageRoots));
