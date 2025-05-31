@@ -1,21 +1,29 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
 import com.squareup.okhttp.Request;
+import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 class TokenRequestTest {
 
+    private static final String TOKEN_URL = "https://localhost:8080/oauth/token";
+    private static final String BASE_URL = "https://localhost:8080/strava";
+    private static final String STRAVA_CONFIG = "src/test/resources/config/good-strava.properties";
+
+    private static final StravaConfiguration config = new StravaConfiguration(STRAVA_CONFIG);
+    private static final StravaClient client = new StravaClient(config, BASE_URL, TOKEN_URL);
+
     @Test
     void getToken() {
-        Request r = TokenRequest.createTokenRequest("kaka","secret", "xxx");
+        Request r = client.createTokenRequest("kaka", "secret", "xxx");
         verifyRequest(r);
 
     }
 
     @Test
     void refreshToken() {
-        Request r = TokenRequest.createRefreshTokenRequest("kaka","secret", "xxx");
+        Request r = client.createRefreshTokenRequest("kaka", "secret", "xxx");
         verifyRequest(r);
     }
 
@@ -28,7 +36,7 @@ class TokenRequestTest {
         assertThat(r.method()).isEqualTo("POST");
 
         assertThat(r.url().getProtocol()).isEqualTo("https");
-        assertThat(r.url()).hasToString("https://www.strava.com/oauth/token");
+        assertThat(r.url()).hasToString("https://localhost:8080/oauth/token");
 
     }
 }
