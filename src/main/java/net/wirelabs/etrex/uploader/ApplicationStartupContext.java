@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader;
 
 import lombok.Getter;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
@@ -31,8 +32,8 @@ public class ApplicationStartupContext {
 
     public ApplicationStartupContext() throws IOException {
         // load config files
-        this.appConfiguration = new AppConfiguration();
-        this.stravaConfiguration = new StravaConfiguration();
+        this.appConfiguration = new AppConfiguration(Constants.DEFAULT_APPLICATION_CONFIG_FILE);
+        this.stravaConfiguration = new StravaConfiguration(Constants.DEFAULT_STRAVA_CONFIG_FILE);
         // create necessary services
         this.fileService = new FileService(appConfiguration);
         this.garminDeviceService = new GarminDeviceService(appConfiguration);

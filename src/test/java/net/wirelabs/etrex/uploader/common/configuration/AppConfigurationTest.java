@@ -6,6 +6,9 @@ import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -17,13 +20,12 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Files.linesOf;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 
 
@@ -36,50 +38,43 @@ class AppConfigurationTest extends BaseTest {
     private static final File NONEXISTENT_FILE = new File("target/nonexistent.properties");
     // existing test config file
     private static final File TEST_CONFIG_FILE = new File("src/test/resources/config/test.properties");
+    // preservation copy
+    private static final File TEST_FILE_COPY = new File("target/test.properties.copy");
 
-    @Test
-    void shouldLoadDefaultConfigValuesIfNoneConfigFileGiven() throws IOException {
-        final File tempTestFile = new File("target/config.properties");
-        // to safely test no-arg constructor here - we need to make it use some test dir for config file
-        // not the production one ;) so that not mess with original possible existing config
-        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
-            sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
-
-            Files.deleteIfExists(tempTestFile.toPath()); // make sure file is not there
-            AppConfiguration c = new AppConfiguration();
-            assertDefaultValues(c);
-            assertThat(tempTestFile).exists();
-        }
+    @BeforeEach
+    void before() throws IOException {
+        // preserve original testfile since the test might change its content
+        FileUtils.copyFile(TEST_CONFIG_FILE, TEST_FILE_COPY, StandardCopyOption.REPLACE_EXISTING);
+    }
+    @AfterEach
+    void after() throws IOException {
+        // restore the original file
+        FileUtils.copyFile(TEST_FILE_COPY,TEST_CONFIG_FILE,StandardCopyOption.REPLACE_EXISTING);
+        FileUtils.deleteQuietly(TEST_FILE_COPY);
+        assertThat(TEST_FILE_COPY).doesNotExist();
     }
 
     @Test
     void shouldThrowAndLogWhenCannotSaveConfig() throws IOException {
-        // to safely test no-arg constructor here - we need to make it use some test dir for config file
-        // not the production one ;) so that not mess with original possible existing config
-        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
-            sysUtils.when(SystemUtils::getWorkDir).thenReturn("target");
 
-
-            AppConfiguration configuration = new AppConfiguration();
+            AppConfiguration configuration = new AppConfiguration(TEST_CONFIG_FILE.getPath());
             configuration.properties = Mockito.spy(configuration.properties);
 
-            doThrow(new IOException())
+            doThrow(new IOException("test file I/O exception"))
                     .when(configuration.properties)
-                    .store(any(OutputStream.class), anyString());
+                    .store(any(OutputStream.class), eq(""));
 
             configuration.save();
 
-            // check event thrown -> since in test no EventBus client is subscribed to this event
+            // check event is submitted -> since in test no EventBus client is subscribed to this event
             // it will be found in dead events
             List<Event> events = EventBus.getDeadEvents();
             assertThat(events.stream()
                     .filter(e -> e.getEventType().equals(EventType.ERROR_SAVING_CONFIGURATION))
                     .toList()).isNotEmpty();
 
-
-            verifyLogged("Saving configuration " + Constants.DEFAULT_APPLICATION_CONFIG_FILE);
-            verifyLogged("Can't save configuration");
-        }
+            verifyLogged("Saving configuration " + TEST_CONFIG_FILE.getPath());
+            verifyLogged("Can't save configuration: test file I/O exception");
     }
 
     @Test
