@@ -35,7 +35,7 @@ public class ApplicationStartupContext {
         // create necessary services
         this.fileService = new FileService(appConfiguration);
         this.garminDeviceService = new GarminDeviceService(appConfiguration);
-        this.stravaClient = new StravaClient(stravaConfiguration);
+        this.stravaClient = new StravaClient(stravaConfiguration, Constants.STRAVA_BASE_URL,Constants.STRAVA_TOKEN_URL);
         this.stravaService = new StravaServiceImpl(appConfiguration,stravaClient);
         this.uploadService = new UploadService(appConfiguration, stravaService, fileService);
     }

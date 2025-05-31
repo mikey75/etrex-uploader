@@ -3,9 +3,9 @@ package net.wirelabs.etrex.uploader.strava.client;
 import com.squareup.okhttp.*;
 import com.strava.model.SportType;
 import com.strava.model.Upload;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
@@ -25,15 +25,22 @@ public class StravaClient  {
 
     private final OkHttpClient httpClient;
     private final StravaConfiguration configuration;
+    @Getter
+    private final String baseUrl;
+    @Getter
+    private final String baseTokenUrl;
 
-    public StravaClient(StravaConfiguration configuration) {
+    public StravaClient(StravaConfiguration configuration, String baseUrl, String baseTokenUrl) {
         this.configuration = configuration;
+        this.baseUrl = baseUrl;
+        this.baseTokenUrl = baseTokenUrl;
         this.httpClient = new OkHttpClient();
     }
 
     public String execute(Request request) throws StravaException {
         Response response;
         try {
+            log.debug("[Strava request] {}", request.url());
             response = httpClient.newCall(request).execute();
             try (ResponseBody body = response.body()) {
                 if (!response.isSuccessful()) {
@@ -105,7 +112,7 @@ public class StravaClient  {
 
         Request request = new Request.Builder()
                 .headers(authHeader())
-                .url(Constants.STRAVA_BASE_URL + "/uploads")
+                .url(baseUrl + "/uploads")
                 .post(body)
                 .build();
 
@@ -156,7 +163,7 @@ public class StravaClient  {
             long currentTime = Duration.ofMillis(System.currentTimeMillis()).getSeconds();
             if (configuration.getStravaTokenExpires() < currentTime) {
                 log.info("Refreshing token");
-                Request request = TokenRequest.createRefreshTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
+                Request request = createRefreshTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
                 String response = execute(request);
                 RefreshTokenResponse refreshTokenResponse = deserialize(response, RefreshTokenResponse.class);
                 refreshExpired(refreshTokenResponse);
@@ -167,7 +174,7 @@ public class StravaClient  {
     public void exchangeAuthCodeForAccessToken(String appId, String clientSecret, String authCode) throws StravaException {
 
         if (!authCode.isEmpty()) {
-            Request tokenRequest = TokenRequest.createTokenRequest(appId, clientSecret, authCode);
+            Request tokenRequest = createTokenRequest(appId, clientSecret, authCode);
             String response = execute(tokenRequest);
             TokenResponse tokenResponse = deserialize(response, TokenResponse.class);
             log.info("Got tokens!");
@@ -176,5 +183,35 @@ public class StravaClient  {
         } else {
             throw new StravaException("Could not get tokens. auth code was empty");
         }
+    }
+
+
+    Request createTokenRequest(String appId, String clientSecret, String authCode) {
+        RequestBody body = new FormEncodingBuilder()
+                .add("client_id", appId)
+                .add("client_secret", clientSecret)
+                .add("code", authCode)
+                .add("grant_type", "authorization_code")
+                .build();
+
+        return getTokenRequest(body);
+    }
+
+    Request createRefreshTokenRequest(String appId, String clientSecret, String refreshToken) {
+        RequestBody body = new FormEncodingBuilder()
+                .add("client_id", appId)
+                .add("client_secret", clientSecret)
+                .add("grant_type", "refresh_token")
+                .add("refresh_token", refreshToken)
+                .build();
+
+        return getTokenRequest(body);
+    }
+
+    private  Request getTokenRequest(RequestBody body) {
+        return new Request.Builder()
+                .url(getBaseTokenUrl())
+                .post(body)
+                .build();
     }
 }

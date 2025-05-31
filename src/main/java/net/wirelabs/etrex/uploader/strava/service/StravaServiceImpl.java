@@ -4,7 +4,6 @@ package net.wirelabs.etrex.uploader.strava.service;
 import com.strava.model.*;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
@@ -18,6 +17,7 @@ public class StravaServiceImpl implements StravaService {
 
     private final AppConfiguration configuration;
     private final transient StravaClient client;
+    private final String baseUrl;
     private SummaryAthlete currentAthlete;
 
     private String activities;
@@ -29,16 +29,17 @@ public class StravaServiceImpl implements StravaService {
     public StravaServiceImpl(AppConfiguration configuration, StravaClient stravaClient) {
         this.client = stravaClient;
         this.configuration = configuration;
+        this.baseUrl = stravaClient.getBaseUrl();
         setupUrls();
     }
 
     private void setupUrls() {
-        String apiBaseUrl = Constants.STRAVA_BASE_URL;
-        activities = apiBaseUrl + "/activities";
-        athlete = apiBaseUrl + "/athlete";
-        athletes = apiBaseUrl + "/athletes";
-        athleteActivities = apiBaseUrl + "/athlete/activities";
-        uploads = apiBaseUrl + "/uploads";
+
+        activities = baseUrl + "/activities";
+        athlete = baseUrl + "/athlete";
+        athletes = baseUrl + "/athletes";
+        athleteActivities = baseUrl + "/athlete/activities";
+        uploads = baseUrl + "/uploads";
     }
 
     @Override
