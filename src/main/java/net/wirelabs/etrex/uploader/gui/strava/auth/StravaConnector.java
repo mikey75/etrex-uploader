@@ -34,11 +34,14 @@ public class StravaConnector extends BaseDialog {
         super("Connect to strava","","[grow]","[][][][][]");
         authService = new AuthService(client);
 
-        createVisualComponent();
         registerExitOnCloseListener();
+        registerActionOnClickConnect();
+        createVisualComponent();
 
-        connectBtn.addActionListener(this::connectWithStrava);
-        setVisible(true);
+        if (!getOauthStatus().get()) {
+            SwingUtils.errorMsg(getOauthMessage());
+            SystemUtils.systemExit(1);
+        }
     }
     
 
@@ -47,9 +50,14 @@ public class StravaConnector extends BaseDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
+                dispose();
                 SystemUtils.systemExit(0);
             }
         });
+    }
+
+    private void registerActionOnClickConnect() {
+        connectBtn.addActionListener(this::connectWithStrava);
     }
 
     private void createVisualComponent() {
@@ -65,6 +73,8 @@ public class StravaConnector extends BaseDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         SwingUtils.centerComponent(this);
+        setAlwaysOnTop(true);
+        setVisible(true);
     }
 
 

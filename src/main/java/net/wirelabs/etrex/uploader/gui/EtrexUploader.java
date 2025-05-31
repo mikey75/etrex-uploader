@@ -34,7 +34,6 @@ public class EtrexUploader extends JFrame {
     private StravaPanel stravaPanel;
     private MapPanel mapPanel;
 
-    private transient UploadService uploadService;
 
     public EtrexUploader(ApplicationStartupContext ctx) {
 
@@ -44,7 +43,7 @@ public class EtrexUploader extends JFrame {
         splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());
 
-        if (ctx.isAuthorized()) {
+        if (ctx.getStravaConfiguration().hasAllTokensAndCredentials()) {
 
             setTitle(APPLICATION_IDENTIFICATION);
 
@@ -55,8 +54,7 @@ public class EtrexUploader extends JFrame {
             splash.update("Initializing Strava GUI components");
 
             splash.update("Initializing browsers");
-            uploadService = new UploadService(ctx.getAppConfiguration(), ctx.getStravaService(), ctx.getFileService());
-            garminAndStoragePanel = new GarminAndStoragePanel(uploadService, ctx.getAppConfiguration());
+            garminAndStoragePanel = new GarminAndStoragePanel(ctx.getUploadService(), ctx.getAppConfiguration());
 
             splash.update("Initializing Strava component");
             stravaPanel = new StravaPanel(ctx.getStravaService(), ctx.getAppConfiguration());
