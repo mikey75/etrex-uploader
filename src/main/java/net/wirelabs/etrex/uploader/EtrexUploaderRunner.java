@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.utils.LoggingConfigurator;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
+import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
 
 import java.awt.*;
 
@@ -32,6 +33,12 @@ public class EtrexUploaderRunner {
             appContext = new ApplicationStartupContext();
             setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
             setGlobalFontSize(10);
+
+            if (!appContext.getStravaConfiguration().hasAllTokensAndCredentials()) {
+                log.info("Running strava connector...");
+                new StravaConnector(appContext.getStravaClient());
+            }
+
             Frame window = new EtrexUploader(appContext);
             window.setMinimumSize(new Dimension(800, 600));
             window.setVisible(true);
