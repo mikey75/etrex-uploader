@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.strava.service;
+package net.wirelabs.etrex.uploader.strava.client;
 
 import com.strava.model.*;
 import net.wirelabs.etrex.uploader.strava.StravaException;
@@ -10,7 +10,7 @@ import java.util.List;
 /*
  * Created 11/4/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
-public interface StravaService extends Serializable {
+interface StravaAPI extends Serializable {
     
     SummaryAthlete getCurrentAthlete() throws StravaException;
     ActivityStats getAthleteStats(Long id) throws StravaException;
