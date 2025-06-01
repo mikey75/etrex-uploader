@@ -9,7 +9,7 @@ import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.BaseDialog;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.EventBus;
 
@@ -40,13 +40,13 @@ public class UploadDialog extends BaseDialog {
     private final JButton btnCancel;
     private final JCheckBox commute; // is the activity a commute
     private final JCheckBox virtual; // is the activity a virtual/trainer ride
-    private final StravaService stravaService;
+    private final StravaClient stravaClient;
     private final transient FileService fileService;
 
 
-    public UploadDialog(StravaService stravaService, FileService fileService) {
+    public UploadDialog(StravaClient stravaClient, FileService fileService) {
         super("Upload","","[grow]","[][][][][][grow][][]");
-        this.stravaService = stravaService;
+        this.stravaClient = stravaClient;
         this.fileService = fileService;
         lblActivityName = new JLabel("Name");
         lblActivityDescription = new JLabel("Description");
@@ -105,7 +105,7 @@ public class UploadDialog extends BaseDialog {
             log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-            Upload upload = stravaService.uploadActivity(trackFile,
+            Upload upload = stravaClient.uploadActivity(trackFile,
                     activityTitleTextField.getText(),
                     activityDescriptionArea.getText(),
                     (SportType) activityTypeCombo.getSelectedItem(),

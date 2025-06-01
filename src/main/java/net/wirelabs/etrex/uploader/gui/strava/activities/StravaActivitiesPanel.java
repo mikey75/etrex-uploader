@@ -11,7 +11,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.eventbus.IEventType;
@@ -37,15 +37,15 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private final JLabel poweredByImageLabel = new JLabel();
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
-    private final StravaService stravaService;
+    private final StravaClient stravaClient;
     private final AppConfiguration configuration;
     private int page = 1;
 
 
-    public StravaActivitiesPanel(StravaService stravaService, AppConfiguration configuration) {
+    public StravaActivitiesPanel(StravaClient stravaClient, AppConfiguration configuration) {
         super("Strava", "","[grow][]","[grow][grow]");
         this.configuration = configuration;
-        this.stravaService = stravaService;
+        this.stravaClient = stravaClient;
         createVisualComponent();
         updateActivities(page);
     }
@@ -105,7 +105,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
         ThreadUtils.runAsync(() -> {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             try {
-                List<SummaryActivity> activities = stravaService.getCurrentAthleteActivities(page, configuration.getPerPage());
+                List<SummaryActivity> activities = stravaClient.getCurrentAthleteActivities(page, configuration.getPerPage());
                 activitiesTable.setData(activities);
                 // always select first activity on a page
                 activitiesTable.requestFocus();
@@ -163,7 +163,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private void drawTrackFromActivityStream() {
         try {
             SummaryActivity selectedActivity = activitiesTable.getActivityAtRow(activitiesTable.getSelectedRow());
-            StreamSet streamSet = stravaService.getActivityStreams(selectedActivity.getId(), "latlng,altitude", true);
+            StreamSet streamSet = stravaClient.getActivityStreams(selectedActivity.getId(), "latlng,altitude", true);
 
             List<LatLng> coords = streamSet.getLatlng().getData();
 
