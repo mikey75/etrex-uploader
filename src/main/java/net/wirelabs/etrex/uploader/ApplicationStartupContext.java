@@ -8,8 +8,6 @@ import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
 import net.wirelabs.etrex.uploader.gui.UploadService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
-import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
 
 import java.io.IOException;
 
@@ -25,7 +23,6 @@ public class ApplicationStartupContext {
     private final UploadService uploadService;
     private final FileService fileService;
     private final GarminDeviceService garminDeviceService;
-    private final StravaService stravaService;
     private final StravaClient stravaClient;
 
     public ApplicationStartupContext() throws IOException {
@@ -35,9 +32,8 @@ public class ApplicationStartupContext {
         // create necessary services
         this.fileService = new FileService(appConfiguration);
         this.garminDeviceService = new GarminDeviceService(appConfiguration);
-        this.stravaClient = new StravaClient(stravaConfiguration, Constants.STRAVA_BASE_URL,Constants.STRAVA_TOKEN_URL);
-        this.stravaService = new StravaServiceImpl(appConfiguration,stravaClient);
-        this.uploadService = new UploadService(appConfiguration, stravaService, fileService);
+        this.stravaClient = new StravaClient(stravaConfiguration, appConfiguration, Constants.STRAVA_BASE_URL,Constants.STRAVA_TOKEN_URL);
+        this.uploadService = new UploadService(stravaClient, fileService);
     }
 
 

@@ -57,7 +57,7 @@ public class EtrexUploader extends JFrame {
             garminAndStoragePanel = new GarminAndStoragePanel(ctx.getUploadService(), ctx.getAppConfiguration());
 
             splash.update("Initializing Strava component");
-            stravaPanel = new StravaPanel(ctx.getStravaService(), ctx.getAppConfiguration());
+            stravaPanel = new StravaPanel(ctx.getStravaClient(), ctx.getAppConfiguration());
 
             splash.update("Initializing maps component");
             mapPanel = new MapPanel(ctx.getAppConfiguration());

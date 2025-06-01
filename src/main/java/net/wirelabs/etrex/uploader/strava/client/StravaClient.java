@@ -1,18 +1,21 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
 import com.squareup.okhttp.*;
-import com.strava.model.SportType;
-import com.strava.model.Upload;
+import com.strava.model.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
+import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
+import java.util.*;
 
 import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.deserialize;
 import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.serialize;
@@ -21,20 +24,33 @@ import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.serialize;
  * Created 12/17/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class StravaClient  {
+public class StravaClient implements StravaAPI {
 
-    private final OkHttpClient httpClient;
-    private final StravaConfiguration configuration;
+    private final transient StravaConfigUpdater stravaUpdater;
+    private String activities;
+    private String athlete;
+    private String athletes;
+    private String athleteActivities;
+    private String uploads;
+
+    private SummaryAthlete currentAthlete;
+
+    private final transient OkHttpClient httpClient;
+    private final StravaConfiguration stravaConfiguration;
+    @Getter
+    private final AppConfiguration appConfiguration;
     @Getter
     private final String baseUrl;
-    @Getter
     private final String baseTokenUrl;
 
-    public StravaClient(StravaConfiguration configuration, String baseUrl, String baseTokenUrl) {
-        this.configuration = configuration;
+    public StravaClient(StravaConfiguration stravaConfiguration,AppConfiguration appConfiguration, String baseUrl, String baseTokenUrl) {
+        this.stravaConfiguration = stravaConfiguration;
+        this.stravaUpdater = new StravaConfigUpdater(stravaConfiguration);
+        this.appConfiguration = appConfiguration;
         this.baseUrl = baseUrl;
         this.baseTokenUrl = baseTokenUrl;
         this.httpClient = new OkHttpClient();
+        setupUrls();
     }
 
     public String execute(Request request) throws StravaException {
@@ -82,7 +98,7 @@ public class StravaClient  {
 
     private Headers authHeader() {
         return new Headers.Builder()
-                .add("Authorization", "Bearer " + configuration.getStravaAccessToken())
+                .add("Authorization", "Bearer " + stravaConfiguration.getStravaAccessToken())
                 .build();
     }
 
@@ -112,7 +128,7 @@ public class StravaClient  {
 
         Request request = new Request.Builder()
                 .headers(authHeader())
-                .url(baseUrl + "/uploads")
+                .url(uploads)
                 .post(body)
                 .build();
 
@@ -138,35 +154,17 @@ public class StravaClient  {
                 .build();
     }
 
-    private void refreshExpired(RefreshTokenResponse response) {
-        configuration.setStravaAccessToken(response.getAccessToken());
-        configuration.setStravaRefreshToken(response.getRefreshToken());
-        configuration.setStravaTokenExpires(response.getExpiresAt());
-        configuration.save();
-    }
 
-    private void updateToken(TokenResponse tokenInfo) {
-        configuration.setStravaAccessToken(tokenInfo.getAccessToken());
-        configuration.setStravaRefreshToken(tokenInfo.getRefreshToken());
-        configuration.setStravaTokenExpires(tokenInfo.getExpiresAt());
-        configuration.save();
-    }
-
-    private void updateCredentials(String appId, String clientSecret) {
-        configuration.setStravaAppId(appId);
-        configuration.setStravaClientSecret(clientSecret);
-        configuration.save();
-    }
 
     private void refreshTokenIfExpired() throws StravaException {
         synchronized (this) {
             long currentTime = Duration.ofMillis(System.currentTimeMillis()).getSeconds();
-            if (configuration.getStravaTokenExpires() < currentTime) {
+            if (stravaConfiguration.getStravaTokenExpires() < currentTime) {
                 log.info("Refreshing token");
-                Request request = createRefreshTokenRequest(configuration.getStravaAppId(), configuration.getStravaClientSecret(), configuration.getStravaRefreshToken());
+                Request request = createRefreshTokenRequest(stravaConfiguration.getStravaAppId(), stravaConfiguration.getStravaClientSecret(), stravaConfiguration.getStravaRefreshToken());
                 String response = execute(request);
                 RefreshTokenResponse refreshTokenResponse = deserialize(response, RefreshTokenResponse.class);
-                refreshExpired(refreshTokenResponse);
+                stravaUpdater.refreshExpired(refreshTokenResponse);
             }
         }
     }
@@ -178,8 +176,8 @@ public class StravaClient  {
             String response = execute(tokenRequest);
             TokenResponse tokenResponse = deserialize(response, TokenResponse.class);
             log.info("Got tokens!");
-            updateToken(tokenResponse);
-            updateCredentials(appId, clientSecret);
+            stravaUpdater.updateToken(tokenResponse);
+            stravaUpdater.updateCredentials(appId, clientSecret);
         } else {
             throw new StravaException("Could not get tokens. auth code was empty");
         }
@@ -210,8 +208,94 @@ public class StravaClient  {
 
     private  Request getTokenRequest(RequestBody body) {
         return new Request.Builder()
-                .url(getBaseTokenUrl())
+                .url(baseTokenUrl)
                 .post(body)
                 .build();
+    }
+
+
+    @Override
+    public SummaryAthlete getCurrentAthlete() throws StravaException {
+
+        if (currentAthlete == null) {
+            currentAthlete = makeGetRequest(athlete, SummaryAthlete.class, null);
+        }
+        return currentAthlete;
+
+    }
+
+    @Override
+    public List<SummaryActivity> getCurrentAthleteActivities(int page, int perPage) throws StravaException {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", String.valueOf(page));
+        params.put("per_page", String.valueOf(perPage));
+
+        SummaryActivity[] activitiesList = makeGetRequest(athleteActivities,  SummaryActivity[].class, params);
+        return Arrays.asList(activitiesList);
+
+    }
+
+    @Override
+    public ActivityStats getAthleteStats(Long id) throws StravaException {
+        return makeGetRequest(athletes + "/" + id + "/stats", ActivityStats.class, null);
+    }
+
+    @Override
+    public DetailedActivity updateActivity(Long id, UpdatableActivity update) throws StravaException {
+        return makePutRequest(activities + "/" + id, update, DetailedActivity.class);
+    }
+
+    @Override
+    public DetailedActivity getActivityById(Long id) throws StravaException {
+        return makeGetRequest(activities + "/" + id, DetailedActivity.class, null);
+
+    }
+
+    @Override
+    public List<SummaryActivity> getCurrentAthleteActivities() throws StravaException {
+        return getCurrentAthleteActivities(1, appConfiguration.getPerPage());
+    }
+
+    @Override
+    public Upload uploadActivity(File file, String name, String desc, SportType sportType, boolean virtual, boolean commute) throws StravaException {
+
+        int uploadWaitTimeSeconds = appConfiguration.getUploadStatusWaitSeconds();
+        long uploadStatusTimeout = System.currentTimeMillis() + uploadWaitTimeSeconds * 1000L;
+
+        // make upload request
+        Upload upload = uploadActivityRequest(file, name, desc, sportType, virtual, commute);
+
+        // wait for success or fail
+        // i.e. poll Upload's activity id for uploadStatusTimeout seconds
+        // in 2 seconds intervals
+        while (getUpload(upload.getId()).getActivityId() == null && System.currentTimeMillis() < uploadStatusTimeout) {
+            Sleeper.sleepSeconds(2);
+        }
+        // return upload
+        return getUpload(upload.getId());
+
+    }
+
+    @Override
+    public StreamSet getActivityStreams(Long activityId, String keys, boolean keyByType) throws StravaException {
+        Map<String, String> params = new HashMap<>();
+        params.put("keys", keys);
+        params.put("key_by_type",String.valueOf(keyByType));
+        return makeGetRequest(activities + "/" + activityId + "/streams" , StreamSet.class, params);
+    }
+
+    private Upload getUpload(Long uploadId) throws StravaException {
+        String urlPart = uploads + "/" + uploadId;
+        return makeGetRequest(urlPart, Upload.class,null);
+    }
+
+    private void setupUrls() {
+
+        activities = baseUrl + "/activities";
+        athlete = baseUrl + "/athlete";
+        athletes = baseUrl + "/athletes";
+        athleteActivities = baseUrl + "/athlete/activities";
+        uploads = baseUrl + "/uploads";
     }
 }

@@ -5,8 +5,7 @@ import com.strava.model.ActivityTotal;
 import com.strava.model.SummaryAthlete;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
-import net.wirelabs.etrex.uploader.strava.service.StravaServiceImpl;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
 class UserAccountPanelTest extends BaseTest {
 
     private final File fakePhoto = new File("src/test/resources/gui/fakeUserPhoto.png");
-    private final StravaService strava = mock(StravaServiceImpl.class);
+    private final StravaClient strava = mock(StravaClient.class);
     private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
     private final ActivityTotal total = new ActivityTotal().count(1).distance(1000F).elapsedTime(3600);
     private final ActivityStats fakeStats = new ActivityStats().allRideTotals(total).ytdRideTotals(total);

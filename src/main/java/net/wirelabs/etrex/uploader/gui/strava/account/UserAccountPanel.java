@@ -11,7 +11,7 @@ import net.wirelabs.etrex.uploader.common.utils.DateAndUnitConversionUtil;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.settings.SettingsDialog;
-import net.wirelabs.etrex.uploader.strava.service.StravaService;
+import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class UserAccountPanel extends BasePanel {
     final JLabel totalDist = new JLabel();
     final JLabel totalTime = new JLabel();
 
-    private final StravaService stravaService;
+    private final StravaClient stravaClient;
     private final JButton btnSettings = new JButton("Settings");
     private final AppConfiguration configuration;
     private final JLabel lblYtdRides = new JLabel("YTD rides:");
@@ -47,9 +47,9 @@ public class UserAccountPanel extends BasePanel {
     private final ApiUsagePanel apiUsagePanel;
 
 
-    public UserAccountPanel(StravaService stravaService, AppConfiguration configuration) {
+    public UserAccountPanel(StravaClient stravaClient, AppConfiguration configuration) {
         super("My profile","","[grow][]","[][][][][][][][][][][][grow][grow,bottom]");
-        this.stravaService = stravaService;
+        this.stravaClient = stravaClient;
         this.configuration = configuration;
         apiUsagePanel = new ApiUsagePanel(configuration);
         initVisualComponent();
@@ -94,7 +94,7 @@ public class UserAccountPanel extends BasePanel {
         BufferedImage img = null;
 
         try {
-            athlete = stravaService.getCurrentAthlete();
+            athlete = stravaClient.getCurrentAthlete();
             String profilePicFilename = athlete.getProfileMedium();
             if (profilePicFilename != null) {
                 img = ImageIO.read(URI.create(profilePicFilename).toURL());
@@ -110,8 +110,8 @@ public class UserAccountPanel extends BasePanel {
 
     private void updateAthleteStats() {
         try {
-            SummaryAthlete athlete = stravaService.getCurrentAthlete();
-            ActivityStats stats = stravaService.getAthleteStats(athlete.getId());
+            SummaryAthlete athlete = stravaClient.getCurrentAthlete();
+            ActivityStats stats = stravaClient.getAthleteStats(athlete.getId());
 
             ytdDist.setText(Math.round(stats.getYtdRideTotals().getDistance() / 1000F) + " km");
             ytdRides.setText(String.valueOf(stats.getYtdRideTotals().getCount()));
