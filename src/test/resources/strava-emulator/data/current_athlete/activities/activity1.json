@@ -1,0 +1,61 @@
+{
+  "resource_state": 2,
+  "athlete": {
+    "id": 12345678,
+    "resource_state": 1
+  },
+  "name": "Spacerniak #3",
+  "distance": 7049.4,
+  "moving_time": 5195,
+  "elapsed_time": 6220,
+  "total_elevation_gain": 90.9,
+  "type": "Walk",
+  "sport_type": "Walk",
+  "id": 14030618589,
+  "start_date": "2025-03-30T12:08:42Z",
+  "start_date_local": "2025-03-30T14:08:42Z",
+  "timezone": "(GMT+01:00) Europe/Warsaw",
+  "utc_offset": 7200.0,
+  "location_city": null,
+  "location_state": null,
+  "location_country": null,
+  "achievement_count": 0,
+  "kudos_count": 27,
+  "comment_count": 0,
+  "athlete_count": 1,
+  "photo_count": 0,
+  "map": {
+    "id": "a14030618589",
+    "summary_polyline": "wjuwHarghCI@JFBAECC@AYFG?Gp@e@NOJ]AWUgAMOG@e@b@aBfB_@j@WP]DGDYUQJe@p@qAvASXKZQRSLY?a@f@i@d@i@VCDCf@Wt@KTMLw@xB]n@[t@ERs@zA_@vAQz@K^q@jBWj@a@f@UJg@LYGACIAQFy@t@WNe@f@[d@_@\\MRWV]t@{@vAKX[lAIPACp@LRHT?RHL?LFbAEr@DTAFGN}@LKnCu@tAe@nAQTEl@YVEn@EPDLHNVJz@FzALxAF\\Tv@Ft@HrB@vAFzALbBDvBJbADvAHXZPTHR@t@\\NL?FKJBAC@BKAB?C@HBAP@PNLN^l@bB~Cf@x@Tr@Lv@Lt@LzB@fAG~@BlCLhBD|AFl@LtB@v@BRR\\HANMrA?vBCXEv@El@Hh@@dALP@l@PPLl@z@z@fBf@dBjApD\\nAt@vBNXRVxA|AD@RTTFFGBW?eAA[@yBHgAFaDLw@DaCFyA@iBNiD?uACmFGmBBeAI_@gAyCAM@@DCT[RQZcD^yBZeDVoD@qBLqDAoAB}@Eq@GKg@C]Ya@m@EB?C^HFeBAYM[MwAKkB@m@Ag@JoCJm@EY?[FODiCB]P{@T{A~A}SRcB`@gGLuA@i@X}BP}ADgAj@oG@u@DED[@YCEp@_IGeAOk@U[QMc@AaAMcPq@Md@S^Mt@Iz@GnAOrAEfAUJq@?sAQ[fAONQb@Gb@K^ALACA@@EEP?CG?@BBAEHEt@WnAKxAgCvCk@XUh@Mf@Ub@}@t@Er@@|@B\\N\\BTUp@SP_@r@@MYISD",
+    "resource_state": 2
+  },
+  "trainer": false,
+  "commute": false,
+  "manual": false,
+  "private": false,
+  "visibility": "everyone",
+  "flagged": false,
+  "gear_id": "g22577373",
+  "start_latlng": [
+    51.23,
+    22.49
+  ],
+  "end_latlng": [
+    51.23,
+    22.49
+  ],
+  "average_speed": 1.357,
+  "max_speed": 1.977,
+  "has_heartrate": false,
+  "heartrate_opt_out": false,
+  "display_hide_heartrate_option": false,
+  "elev_high": 261.1,
+  "elev_low": 211.1,
+  "upload_id": 14977109218,
+  "upload_id_str": "14977109218",
+  "external_id": "stripped_Spacerniak #31743344704133.gpx",
+  "from_accepted_tag": false,
+  "pr_count": 0,
+  "total_photo_count": 11,
+  "has_kudoed": false
+}
