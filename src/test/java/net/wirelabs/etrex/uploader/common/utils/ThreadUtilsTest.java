@@ -2,10 +2,12 @@ package net.wirelabs.etrex.uploader.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,15 +54,17 @@ class ThreadUtilsTest extends BaseTest {
             ThreadUtils.runAsync(r);
             // shutdown executor service
             ThreadUtils.shutdownExecutorService();
-            Sleeper.sleepSeconds(1);
-            verifyLoggedTimes(4, "Running runnable task in a separate thread"); // assert task is run
-            verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
-            verifyLogged("Executor service shut down!"); // assert it is shut down
-            assertThat(testExecutorService.isShutdown()).isTrue();
 
-            // since we stopped the tasks that was executing Sleeper.sleep() to emulate long-running
-            // the sleep was interrupted surely, so check for that too
-            verifyLoggedTimes(4,"Error sleeping");
+            Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+                assertThat(testExecutorService.isShutdown()).isTrue();
+                verifyLoggedTimes(4, "Running runnable task in a separate thread"); // assert task is run
+                verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
+                verifyLogged("Executor service shut down!"); // assert it is shut down
+                // since we stopped the tasks that was executing Sleeper.sleep() to emulate long-running
+                // the sleep was interrupted surely, so check for that too
+                verifyLoggedTimes(4,"Error sleeping");
+            });
+
         }
 
 
@@ -87,16 +91,16 @@ class ThreadUtilsTest extends BaseTest {
 
             // shutdown executor service
             ThreadUtils.shutdownExecutorService();
-            Sleeper.sleepSeconds(1); // wait for logger to update its non thread safe internals
-            verifyLoggedTimes(1, "Running runnable task in a separate thread"); // assert first task is run
-            verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
-            verifyLogged("Executor service shut down!"); // assert it is shut down
-            verifyLogged("Queued tasks left: 3"); // we scheduled 4 tasks to a 1 thread pool, so 3 tasks still wait
-            assertThat(testExecutorService.isShutdown()).isTrue();
-
-            // since we stopped the task that was executing Sleeper.sleep() to emulate long-running
-            // the sleep was interrupted surely, so check for that too
-            verifyLoggedTimes(1,"Error sleeping");
+            Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+                assertThat(testExecutorService.isShutdown()).isTrue();
+                verifyLoggedTimes(1, "Running runnable task in a separate thread"); // assert first task is run
+                verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
+                verifyLogged("Executor service shut down!"); // assert it is shut down
+                verifyLogged("Queued tasks left: 3"); // we scheduled 4 tasks to a 1 thread pool, so 3 tasks still wait
+                // since we stopped the task that was executing Sleeper.sleep() to emulate long-running
+                // the sleep was interrupted surely, so check for that too
+                verifyLoggedTimes(1,"Error sleeping");
+            });
 
         }
 
