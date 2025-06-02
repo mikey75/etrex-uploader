@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.strava.client;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
+import net.wirelabs.etrex.uploader.strava.utils.JsonUtil;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +21,8 @@ class StravaConfigUpdaterTest extends BaseTest {
 
     private static final File CONFIG = new File("src/test/resources/config/strava.properties");
     private static final File CONFIG_COPY = new File("src/test/resources/config/strava.properties.copy");
+    private static final File ACCESS_TOKEN = new File("src/test/resources/token/access_token.json");
+    private static final File REFRESH_TOKEN = new File("src/test/resources/token/refresh_token.json");
 
     private StravaConfiguration stravaConfiguration;
     private StravaConfigUpdater configUpdater;
@@ -53,13 +56,15 @@ class StravaConfigUpdaterTest extends BaseTest {
     }
 
     @Test
-    void refreshExpired() {
-        RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
-        refreshTokenResponse.setAccessToken("dddd");
-        refreshTokenResponse.setRefreshToken("zzzzz");
-        refreshTokenResponse.setTokenType("refresh");
-        refreshTokenResponse.setExpiresAt(222222222222L);
-        refreshTokenResponse.setExpiresIn(222L);
+    void refreshExpired() throws IOException {
+        String tokenFile = FileUtils.readFileToString(REFRESH_TOKEN, StandardCharsets.UTF_8);
+        RefreshTokenResponse refreshTokenResponse = JsonUtil.deserialize(tokenFile,RefreshTokenResponse.class);
+
+        assertThat(refreshTokenResponse.getTokenType()).isEqualTo("refresh");
+        assertThat(refreshTokenResponse.getRefreshToken()).isEqualTo("zzzzz");
+        assertThat(refreshTokenResponse.getExpiresAt()).isEqualTo(222222222222L);
+        assertThat(refreshTokenResponse.getAccessToken()).isEqualTo("dddd");
+        assertThat(refreshTokenResponse.getExpiresIn()).isEqualTo(222L);
 
         configUpdater.refreshExpired(refreshTokenResponse);
 
@@ -70,17 +75,20 @@ class StravaConfigUpdaterTest extends BaseTest {
     }
 
     @Test
-    void updateToken() {
+    void updateToken() throws IOException {
+        String tokenFile = FileUtils.readFileToString(ACCESS_TOKEN, StandardCharsets.UTF_8);
+        TokenResponse tokenResponse = JsonUtil.deserialize(tokenFile,TokenResponse.class);
 
-        TokenResponse response = new TokenResponse();
-        response.setTokenType("access");
-        response.setExpiresAt(1111111111L);
-        response.setAccessToken("bbbb");
-        response.setRefreshToken("ccccc");
-        response.setExpiresIn(222L);
+        assertThat(tokenResponse.getTokenType()).isEqualTo("access");
+        assertThat(tokenResponse.getRefreshToken()).isEqualTo("ccccc");
+        assertThat(tokenResponse.getExpiresAt()).isEqualTo(1111111111L);
+        assertThat(tokenResponse.getAccessToken()).isEqualTo("bbbb");
+        assertThat(tokenResponse.getExpiresIn()).isEqualTo(333L);
+        assertThat(tokenResponse.getAthlete()).isNotNull();
+        assertThat(tokenResponse.getAthlete().getId()).isEqualTo(12345678);
 
 
-        configUpdater.updateToken(response);
+        configUpdater.updateToken(tokenResponse);
         assertThat(stravaConfiguration.getStravaAccessToken()).isEqualTo("bbbb");
         assertThat(stravaConfiguration.getStravaRefreshToken()).isEqualTo("ccccc");
         assertThat(stravaConfiguration.getStravaTokenExpires()).isEqualTo(1111111111L);

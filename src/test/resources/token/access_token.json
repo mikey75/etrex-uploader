@@ -1,0 +1,21 @@
+{
+  "token_type": "access",
+  "access_token": "bbbb",
+  "expires_at": 1111111111,
+  "expires_in": 333,
+  "refresh_token": "ccccc",
+  "athlete": {
+    "id": 12345678,
+    "resourceState": 2,
+    "firstname": "Fake",
+    "lastname": "User",
+    "city": "Lublin",
+    "state": "Lubelskie",
+    "country": "Poland",
+    "sex": "M",
+    "premium": false,
+    "summit": false,
+    "createdAt": "2019-08-27T09:18:52Z",
+    "updatedAt": "2023-11-02T20:58:38Z"
+  }
+}

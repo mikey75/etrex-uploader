@@ -4,10 +4,8 @@ package net.wirelabs.etrex.uploader.strava.client.token;
 import com.google.gson.annotations.SerializedName;
 import com.strava.model.SummaryAthlete;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class TokenResponse {
     @SerializedName("token_type")
     String tokenType;
