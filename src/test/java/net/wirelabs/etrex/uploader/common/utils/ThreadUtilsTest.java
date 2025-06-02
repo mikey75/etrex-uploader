@@ -67,7 +67,7 @@ class ThreadUtilsTest extends BaseTest {
     }
 
     @Test
-    void shouldFindUnexecutedTasks() {
+    void shouldFindQueuedTasks() {
         // in this test we really shut down executor service which is static final,
         // so we need to work on non-default ExecutorService so that other tests
         // using ThreadUtils don't run into already shutdown executor service
@@ -91,7 +91,7 @@ class ThreadUtilsTest extends BaseTest {
             verifyLoggedTimes(1, "Running runnable task in a separate thread"); // assert first task is run
             verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
             verifyLogged("Executor service shut down!"); // assert it is shut down
-            verifyLogged("Unstarted tasks: 3"); // we scheduled 4 tasks to a 1 thread pool, so 3 tasks still wait
+            verifyLogged("Queued tasks left: 3"); // we scheduled 4 tasks to a 1 thread pool, so 3 tasks still wait
             assertThat(testExecutorService.isShutdown()).isTrue();
 
             // since we stopped the task that was executing Sleeper.sleep() to emulate long-running

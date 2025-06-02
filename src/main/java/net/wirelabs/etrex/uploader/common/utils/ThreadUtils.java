@@ -36,9 +36,9 @@ public final class ThreadUtils {
      */
     public static void shutdownExecutorService() {
         log.info("Shutting down executor service");
-        List<Runnable> unstartedTasks = getExecutorService().shutdownNow();
-        if (!unstartedTasks.isEmpty()) {
-            log.warn("Unstarted tasks: {}", unstartedTasks.size());
+        List<Runnable> queuedTasks = getExecutorService().shutdownNow();
+        if (!queuedTasks.isEmpty()) {
+            log.warn("Queued tasks left: {}", queuedTasks.size());
         }
         log.info("Executor service shut down!");
 
