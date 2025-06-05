@@ -1,0 +1,269 @@
+{
+  "resource_state": 3,
+  "athlete": {
+    "id": 1234567,
+    "resource_state": 1
+  },
+  "name": "Mikro wersja Mazurskiej Pętli Rowerowej",
+  "distance": 39147.8,
+  "moving_time": 8888,
+  "elapsed_time": 11793,
+  "total_elevation_gain": 260.0,
+  "type": "Ride",
+  "sport_type": "MountainBikeRide",
+  "workout_type": 10,
+  "id": 777111,
+  "start_date": "2024-07-23T10:14:42Z",
+  "start_date_local": "2024-07-23T12:14:42Z",
+  "timezone": "(GMT+01:00) Europe/Warsaw",
+  "utc_offset": 7200.0,
+  "location_city": null,
+  "location_state": null,
+  "location_country": null,
+  "achievement_count": 0,
+  "kudos_count": 32,
+  "comment_count": 0,
+  "athlete_count": 1,
+  "photo_count": 0,
+  "map": {
+    "id": "a11960386607",
+    "polyline": "ieyiIslycCCFHCB@HH@NHPHHAZXt@ARqChGq@`B_BtFU~@{AxE{AxCeAzBEPcFxKeJnRw@`Ci@hCqAhJi@xCa@bDg@pCq@|Aw@rAcA`AkB`AcB`AyAhAoAz@cA^k@Jw@AwBYiAE_AViA~@yBlCy@v@sAfAa@d@WfAIbGElAEFmAZsAVkAL_@G[OIBEFEZBXDHLBd@[\\CpDq@r@GFR?fGEp@Ol@aAbCMNGBI?QCQ@GFCHA^J|@A`@y@jFQtDU|Hc@nIQ~EUx@SpBYzCShEMnA@NHP@RMnB_@`RQlHDzLDbCFl@@\\ApEDnGRpI?xFHlJJpBv@hHpAzJ^jDPhAnAjLLnBAbBe@rIe@zGWzFYtCEfCQ|ACpA@r@Fr@?tCSnDAxBKjE?hAKrA_@pDw@xJyB|VE`B@pBKd@AvAb@hFLlALh@@l@MjAs@zAaBhCk@x@q@x@a@z@o@jA]|@GdBFt@d@xD|BhPFh@B`ALnAh@nDh@lEvArJ~@vHhAtHb@lBh@tA`BpDlBzE~@~Bz@hC|@fDtBtId@hCB\\FxBJjGAjBJhEJpJRlKHt@TtALPL?LGNDXITc@?C@BAC@DAACBSb@ARXpANRb@b@ZLxEGlAGbBUxDo@lA_@~B}@dAWhAB~@JtH`ArC\\pBZpDb@v@LtAXbA\\|Al@rFnC^ZrDjEf@X|@HxBBLA`CTxNbClAL~@KdA_@tDaBhAm@|@q@bAsAt@yBR}AJaDFiGHqAXcA^o@h@c@j@Sf@I@AA?@E@BFCrGK`AL|CrAhBh@xBv@b@JJHD?HE^@XCj@Kn@YbAo@z@o@h@g@BMCa@?@C?HCBJD@^[t@kAzBgE\\g@~@eB~@qAd@o@bAeAlCyB~AeAx@g@rA]x@BvCl@dDjAvA^~EbAnAXbDrA|@b@@HDCAABBBAbClAnB|@`A`@zHbCbElAlDz@`JjBzAPfBPrAr@|@z@dArA|@dBjAxCfApBp@dAbClCbBpC`DzDnAxAxAlArA`AlAd@LCDCDBDLH|AFdFHtBf@vCPl@jLjXlGrOxGxOtCxG^NPO\\}@nC}F`LqUnBiEr@gB\\wA`C{MtG}]j@kB|@_Bj@wA`EoOxA{EtAqDr@oA|S{]rAeDjKc^\\aBV}B~AmT@_@DW?BAI\\kEt@iKd@gFNgAXgA\\eAp^wy@`@s@NINCvA?NETSv@wAfGeMjAyBFGFBFJv@dDnAvDVh@Nn@PjAFlAC~ACFCC@HBECF?B@GA@BA@FABEU?JF@?@EK@HI@H@?GBDADDQBk@CaBKcAMu@}AkEUaAIs@i@iBC_@pA{AVi@HW|@oDj@mAr@{@x@{A^sATuB@yBI}CGeAg@eGiBoS{@aImA}ISmCi@iJYoCi@uA}@oAiAsA}BeBqC}A_DaBMSu@aBi@eBqAsFsDgQO}@_Iq_@kBuJe@qBk@cBq@mB}@kBqBaDmAqAqIsHaA{@_CeBuAmA_AaAWY{@gB}D{KwBuE}DiIy@mB_@wAeD_RI_@Y_DAkCJaFr@ySJcGPcq@AyFDmPDiLByAAeJDsO?sLHwELwB^iCf@iB`EiM~BaH|Mkb@`DiJ~AoFTkB@yBo@kb@?kDTsGGw@i@q@_@]MUa@gBi@sCg@cBc@o@q@WG@@@@E?DCA?BCEBAAKEIkAu@yAy@c@[g@g@i@y@c@m@]Wk@a@aCyAw@a@yEuCkBmAoA}@}BiBgKmHSIkA[}LyBcBOeEBm@DsF`A_CVcF\\}AT_Cd@w@XQb@MbA?EA@AGGGa@Iy@z@qBdCk@h@wErDy@j@o@V_AL_CPi@@e@MUSS[Oa@Sy@Ei@GiDIg@Me@aAwBgKmTgBiDi@u@wCcD}AkBuBuB{FgGmAwAe@s@_@s@mC}F{A}CsBwDiEmHg@m@e@]kA]OMKQGUYyA]}Bg@}H_@sEOwA[_Ba@w@aAeBa@{@QOOCwADgDY_ABu@HiBZoB^eAXq@\\{AbAi@f@u@fAMGc@_@[OCD}AfJ]|AyAtFu@vBs@dB{@`BsE|HEpAObAK`@_AvBkA`DOz@[pAUpAcA`HwDbVYzB}DtVBEEA@@BAAHk@~DmCbPw@hEu@~EgChO{CdRuBzIuCvKKh@iKdb@a@pAaA`CkAvBoPlWeEvI}FdMk@fA]o@C[",
+    "resource_state": 3,
+    "summary_polyline": "ieyiIslycCCFLA^t@AZXt@ARcEjJqEnOqVph@w@`Ci@hCeExXq@|Aw@rAcA`AoEbCiDdCcA^cBHaE_@_AViA~@yBlCoDdDWfAIbGKtAmF`A{@WOJEZBXRLd@[nEu@r@GF`@?xFEp@qApDURm@AKPF~By@jF}Ab`@Ux@SpB{@tLLt@MnBq@n[DzLNnEB`NRpIHfRJpBv@hHrE|_@LnBAbBcBjZYtCEfCQ|ADxD?tCSnDMnK}E|j@CrEKd@AvAb@hFZvB@l@MjAs@zA_E|FqAfC]|@GdBl@nF|BhPXzDtH~i@b@lBxFbNzBhGrD|Nd@hCVbLAjBj@h]^jCLPdAKTg@Y~@XpAr@v@ZLxEGpD]xDo@rGuBhCNlV~CpEdApI|DrEfFf@XfI`@fQpC~@KzFaCfC_BbAsAt@yBR}AJaDFiGHqAXcA^o@h@c@tAe@|GK`ALpLjEtBSrBiAdBwACm@RH^[nGaL~@qAhBuBlCyBxCmBrA]pEp@|FjBnH|A`FvB@HJCtHlD~NpEnOfDbEb@rAr@|@z@dArA|@dBrCjGp@dAbClCbBpCpFtGxAlArA`AlAd@XCNjBPzIx@dEr]xy@tCxG^NPOnQm_@bDqHtLqo@j@kBhBwD`EoOxA{EtAqDr@oA|S{]rAeDjKc^\\aBV}B~Eip@NgAv@mCr_@k{@vBMd@YrK_TNNv@dDvBpGXxCC~AGB@JDBGQFLM@L?Fw@CaBKcAMu@}AkE_@uBi@iBC_@pA{A`@aA|@oDj@mAlBwC^sATuB@yBQcFg@eGoCaZcBmM}@wNYoCi@uAgCcD}BeBqH_EcAuB{ByIoRm_AqAuEoByEqBaDmAqAqIsHaEaDmDiD{@gB}D{KoJmS_@wAeD_Rc@_EAkCJaFr@ySJcG^ozABmh@HwELwB^iCf@iB`]aeA~AoFTkBA{Fk@i^?kDTsGGw@wAeBkA{Fg@cBc@o@y@QG]iEkCuBoCiAy@_O_JuQuM_Dw@aNwBsFHsF`AcJt@}Ez@w@XQb@MbAKSa@IwEjFqG~EoBd@_CPoAKi@o@c@{AMsEWmAiMeXgBiD_HeI_MuMeAgBiF{K}HeNg@m@e@]kA][_@_AmFwAiR[_BeCyEa@S_IOuI~AmC`Bi@f@u@fAq@g@_@I}AfJwBrIiB|EoG~KUtCwCzHaA~EoHjf@eDbSD?AHk@~D_P|`AaTb{@cBrEkAvBoPlWcM|Wk@fA]o@C["
+  },
+  "trainer": false,
+  "commute": false,
+  "manual": false,
+  "private": false,
+  "visibility": "everyone",
+  "flagged": false,
+  "gear_id": "b9165137",
+  "start_latlng": [
+    54.2,
+    21.76
+  ],
+  "end_latlng": [
+    54.2,
+    21.76
+  ],
+  "average_speed": 4.405,
+  "max_speed": 11.866,
+  "average_watts": 116.9,
+  "device_watts": false,
+  "kilojoules": 1038.8,
+  "has_heartrate": false,
+  "heartrate_opt_out": false,
+  "display_hide_heartrate_option": false,
+  "elev_high": 143.9,
+  "elev_low": 114.1,
+  "upload_id": 12751958144,
+  "upload_id_str": "12751958144",
+  "external_id": "stripped_Mikro wersja Mazurskiej P??tli Rowerowej1721742429719.gpx",
+  "from_accepted_tag": false,
+  "pr_count": 0,
+  "total_photo_count": 13,
+  "has_kudoed": false,
+  "description": "Mazury, mazury, jeziora i pagóry. Tak mógłbym scharakteryzować tę jazdkę. :)\nOgólnie to przyjemnie - bo dziś chłodno i padało - więc tak w sam raz :) Widoczki piękne, rower jechał, ludzi prawie brak ;) \nCzego chcieć więcej ;)",
+  "calories": 1158.3,
+  "perceived_exertion": null,
+  "prefer_perceived_exertion": false,
+  "segment_efforts": [
+    {
+      "id": 3250827316161932882,
+      "resource_state": 2,
+      "name": "Od tablicy Węgorzewo do tablicy Trygort",
+      "activity": {
+        "id": 11960386607,
+        "visibility": "everyone",
+        "resource_state": 1
+      },
+      "athlete": {
+        "id": 45835847,
+        "resource_state": 1
+      },
+      "elapsed_time": 417,
+      "moving_time": 417,
+      "start_date": "2024-07-23T10:32:34Z",
+      "start_date_local": "2024-07-23T12:32:34Z",
+      "distance": 1958.9,
+      "start_index": 216,
+      "end_index": 277,
+      "device_watts": false,
+      "segment": {
+        "id": 12817049,
+        "resource_state": 2,
+        "name": "Od tablicy Węgorzewo do tablicy Trygort",
+        "activity_type": "Ride",
+        "distance": 1958.9,
+        "average_grade": 0.3,
+        "maximum_grade": 16.1,
+        "elevation_high": 131.0,
+        "elevation_low": 121.0,
+        "start_latlng": [
+          54.217326,
+          21.712325
+        ],
+        "end_latlng": [
+          54.21776,
+          21.683087
+        ],
+        "elevation_profile": null,
+        "elevation_profiles": null,
+        "climb_category": 0,
+        "city": "Węgorzewo",
+        "state": "warmińsko-mazurskie",
+        "country": "Poland",
+        "private": false,
+        "hazardous": false,
+        "starred": false
+      },
+      "pr_rank": null,
+      "achievements": [],
+      "visibility": "everyone",
+      "hidden": false
+    }
+  ],
+  "splits_metric": [
+    {
+      "distance": 1049.8,
+      "elapsed_time": 342,
+      "elevation_difference": -21.6,
+      "moving_time": 268,
+      "split": 1,
+      "average_speed": 3.92,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    },
+    {
+      "distance": 951.6,
+      "elapsed_time": 186,
+      "elevation_difference": -0.5,
+      "moving_time": 186,
+      "split": 2,
+      "average_speed": 5.12,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    },
+    {
+      "distance": 142.7,
+      "elapsed_time": 62,
+      "elevation_difference": 1.0,
+      "moving_time": 62,
+      "split": 40,
+      "average_speed": 2.3,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    }
+  ],
+  "splits_standard": [
+    {
+      "distance": 1634.2,
+      "elapsed_time": 446,
+      "elevation_difference": -25.9,
+      "moving_time": 372,
+      "split": 1,
+      "average_speed": 4.39,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    },
+    {
+      "distance": 1586.1,
+      "elapsed_time": 337,
+      "elevation_difference": 0.9,
+      "moving_time": 337,
+      "split": 2,
+      "average_speed": 4.71,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    },
+    {
+      "distance": 510.7,
+      "elapsed_time": 169,
+      "elevation_difference": 2.9,
+      "moving_time": 169,
+      "split": 25,
+      "average_speed": 3.02,
+      "average_grade_adjusted_speed": null,
+      "pace_zone": 0
+    }
+  ],
+  "laps": [
+    {
+      "id": 41825792612,
+      "resource_state": 2,
+      "name": "Lap 1",
+      "activity": {
+        "id": 11960386607,
+        "visibility": "everyone",
+        "resource_state": 1
+      },
+      "athlete": {
+        "id": 45835847,
+        "resource_state": 1
+      },
+      "elapsed_time": 11793,
+      "moving_time": 8888,
+      "start_date": "2024-07-23T10:14:42Z",
+      "start_date_local": "2024-07-23T12:14:42Z",
+      "distance": 39147.8,
+      "average_speed": 4.4,
+      "max_speed": 11.866,
+      "lap_index": 1,
+      "split": 1,
+      "start_index": 0,
+      "end_index": 1572,
+      "total_elevation_gain": 264.0,
+      "device_watts": false,
+      "average_watts": 116.9
+    }
+  ],
+  "gear": {
+    "id": "b9165137",
+    "primary": false,
+    "name": "Ameliniowa Furia",
+    "nickname": "Ameliniowa Furia",
+    "resource_state": 2,
+    "retired": false,
+    "distance": 4318770,
+    "converted_distance": 4318.8
+  },
+  "photos": {
+    "primary": {
+      "unique_id": "edcd9c02-8835-44cc-8040-8f944f6ac9fe",
+      "urls": {
+        "600": "https://dgtzuqphqg23d.cloudfront.net/1tY_SzPqsu_wnhBS2k_XH_ufuuLbcN_Fp_Qv6d2y5uo-768x576.jpg",
+        "100": "https://dgtzuqphqg23d.cloudfront.net/1tY_SzPqsu_wnhBS2k_XH_ufuuLbcN_Fp_Qv6d2y5uo-128x96.jpg"
+      },
+      "source": 1,
+      "media_type": 1
+    },
+    "use_primary_photo": false,
+    "count": 13
+  },
+  "stats_visibility": [
+    {
+      "type": "heart_rate",
+      "visibility": "everyone"
+    },
+    {
+      "type": "pace",
+      "visibility": "everyone"
+    },
+    {
+      "type": "power",
+      "visibility": "everyone"
+    },
+    {
+      "type": "speed",
+      "visibility": "everyone"
+    },
+    {
+      "type": "calories",
+      "visibility": "everyone"
+    }
+  ],
+  "hide_from_home": false,
+  "device_name": "Garmin eTrex 32x",
+  "embed_token": "xxx",
+  "available_zones": []
+}

@@ -30,7 +30,6 @@ public class StravaClient implements StravaAPI {
     private String activities;
     private String athlete;
     private String athletes;
-    private String athleteActivities;
     private String uploads;
 
     private SummaryAthlete currentAthlete;
@@ -39,7 +38,6 @@ public class StravaClient implements StravaAPI {
     private final StravaConfiguration stravaConfiguration;
     @Getter
     private final AppConfiguration appConfiguration;
-    @Getter
     private final String baseUrl;
     private final String baseTokenUrl;
 
@@ -56,7 +54,7 @@ public class StravaClient implements StravaAPI {
     public String execute(Request request) throws StravaException {
         Response response;
         try {
-            log.debug("[Strava request] {}", request.url());
+            log.debug("[Strava request: {}] {}", request.method(),request.url());
             response = httpClient.newCall(request).execute();
             try (ResponseBody body = response.body()) {
                 if (!response.isSuccessful()) {
@@ -231,7 +229,7 @@ public class StravaClient implements StravaAPI {
         params.put("page", String.valueOf(page));
         params.put("per_page", String.valueOf(perPage));
 
-        SummaryActivity[] activitiesList = makeGetRequest(athleteActivities,  SummaryActivity[].class, params);
+        SummaryActivity[] activitiesList = makeGetRequest(athlete + "/activities",  SummaryActivity[].class, params);
         return Arrays.asList(activitiesList);
 
     }
@@ -295,7 +293,6 @@ public class StravaClient implements StravaAPI {
         activities = baseUrl + "/activities";
         athlete = baseUrl + "/athlete";
         athletes = baseUrl + "/athletes";
-        athleteActivities = baseUrl + "/athlete/activities";
         uploads = baseUrl + "/uploads";
     }
 }
