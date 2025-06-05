@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.tools;
 
-import com.strava.model.*;
+import com.strava.model.DetailedActivity;
+import com.strava.model.UpdatableActivity;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -28,19 +29,19 @@ public class BasicStravaEmulator {
      * A lightweight HTTP server that emulates key Strava API endpoints for local/offline testing.
      * <p>
      * USAGE:
-     *   - Used automatically by StravaClientTest.java.
-     *   - Serves responses from static JSON files under src/test/resources/strava-emulator/data/.
-     *   - Supports GET, POST, and PUT for athletes, activities, stats, uploads, and token exchange.
-     *   - Handles application/json, form-encoded, and multipart POST bodies.
+     * - Used automatically by StravaClientTest.java.
+     * - Serves responses from static JSON files under src/test/resources/strava-emulator/data/.
+     * - Supports GET, POST, and PUT for athletes, activities, stats, uploads, and token exchange.
+     * - Handles application/json, form-encoded, and multipart POST bodies.
      * <p>
      * TO EXTEND:
-     *   - Add new endpoint handling in the switch statement in handleRequest().
-     *   - Place new JSON response files under the corresponding data directory.
-     *   - Adjust test cases to call your new endpoints as needed.
+     * - Add new endpoint handling in the switch statement in handleRequest().
+     * - Place new JSON response files under the corresponding data directory.
+     * - Adjust test cases to call your new endpoints as needed.
      * <p>
      * LIMITATIONS:
-     *   - Only serves a subset of Strava API endpoints.
-     *   - Does not simulate API rate limiting or advanced error scenarios unless explicitly coded.
+     * - Only serves a subset of Strava API endpoints.
+     * - Does not simulate API rate limiting or advanced error scenarios unless explicitly coded.
      * <p>
      * For more details, see the test README.
      */
@@ -194,7 +195,7 @@ public class BasicStravaEmulator {
         if (f.exists()) {
             return FileUtils.readFileToString(f, StandardCharsets.UTF_8);
         } else {
-           return "";
+            return "";
         }
     }
 
@@ -209,13 +210,11 @@ public class BasicStravaEmulator {
         if (raw == null || raw.isEmpty()) return params;
         for (String pair : raw.split("&")) {
             String[] kv = pair.split("=", 2);
-            try {
-                String k = URLDecoder.decode(kv[0], "UTF-8");
-                String v = kv.length > 1 ? URLDecoder.decode(kv[1], "UTF-8") : "";
-                params.put(k, v);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+
+            String k = URLDecoder.decode(kv[0], StandardCharsets.UTF_8);
+            String v = kv.length > 1 ? URLDecoder.decode(kv[1], StandardCharsets.UTF_8) : "";
+            params.put(k, v);
+
         }
         return params;
     }
