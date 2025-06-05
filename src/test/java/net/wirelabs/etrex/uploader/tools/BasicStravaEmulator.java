@@ -22,10 +22,31 @@ import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.deserialize;
 
 @Slf4j
 public class BasicStravaEmulator {
-
+    /**
+     * BasicStravaEmulator
+     * -------------------
+     * A lightweight HTTP server that emulates key Strava API endpoints for local/offline testing.
+     * <p>
+     * USAGE:
+     *   - Used automatically by StravaClientTest.java.
+     *   - Serves responses from static JSON files under src/test/resources/strava-emulator/data/.
+     *   - Supports GET, POST, and PUT for athletes, activities, stats, uploads, and token exchange.
+     *   - Handles application/json, form-encoded, and multipart POST bodies.
+     * <p>
+     * TO EXTEND:
+     *   - Add new endpoint handling in the switch statement in handleRequest().
+     *   - Place new JSON response files under the corresponding data directory.
+     *   - Adjust test cases to call your new endpoints as needed.
+     * <p>
+     * LIMITATIONS:
+     *   - Only serves a subset of Strava API endpoints.
+     *   - Does not simulate API rate limiting or advanced error scenarios unless explicitly coded.
+     * <p>
+     * For more details, see the test README.
+     */
     private HttpServer server;
     @Getter
-    int port;
+    private int port;
 
     public BasicStravaEmulator() {
         try {
