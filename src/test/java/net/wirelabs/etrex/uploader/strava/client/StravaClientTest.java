@@ -146,7 +146,7 @@ class StravaClientTest extends BaseTest {
 
 
     @Test
-    void uploadActivity() throws StravaException {
+    void uploadActivity()  {
         File gpxFile = new File("src/test/resources/trackfiles/gpx11.gpx");
 
         Awaitility.waitAtMost(Duration.ofSeconds(5)).untilAsserted(() -> {
@@ -154,7 +154,9 @@ class StravaClientTest extends BaseTest {
             assertThat(u).isNotNull();
             assertThat(u.getActivityId()).isEqualTo(11111L);
             assertThat(u.getId()).isEqualTo(999999L);
-            assertThat(u.getExternalId()).isEqualTo("ext_blabla.uploaded_kaka");
+            assertThat(u.getExternalId()).matches("test activity\\d{13}"); // external id is upload $name + System.currentTimeMillis
+            assertThat(u.getError()).isNull();
+            assertThat(u.getStatus()).isNotNull();
         });
 
 

@@ -1,15 +1,11 @@
 package net.wirelabs.etrex.uploader.tools;
 
-import com.strava.model.DetailedActivity;
-import com.strava.model.UpdatableActivity;
-import com.strava.model.Upload;
+import com.strava.model.*;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.utils.JsonUtil;
 import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
@@ -23,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.deserialize;
-import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.serialize;
 
 @Slf4j
 public class BasicStravaEmulator {
@@ -94,24 +89,15 @@ public class BasicStravaEmulator {
         switch (method + " " + path) {
             // get activity by id
             case "GET /activities/777111" -> {
-                File f = new File("src/test/resources/strava-emulator/data/activities/777111/activity.json");
-                if (f.exists()) {
-                    response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                }
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/activities/777111/activity.json");
             }
             // get activity's stats
             case "GET /activities/777111/streams" -> {
-                File f = new File("src/test/resources/strava-emulator/data/activities/777111/activity-stream.json");
-                if (f.exists()) {
-                    response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                }
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/activities/777111/activity-stream.json");
             }
             // get current athlete
             case "GET /athlete" -> {
-                File f = new File("src/test/resources/strava-emulator/data/current_athlete/athlete.json");
-                if (f.exists()) {
-                    response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                }
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/current_athlete/athlete.json");
             }
             // get current athlete's activities
             case "GET /athlete/activities" -> {
@@ -134,33 +120,22 @@ public class BasicStravaEmulator {
             }
             // current athlete stats - current athlete id is 12345678
             case "GET /athletes/12345678/stats" -> {
-                File f = new File("src/test/resources/strava-emulator/data/current_athlete/stats/stats.json");
-                if (f.exists()) {
-                    response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                }
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/current_athlete/stats/stats.json");
             }
             // other athlete stats - other athlete id is 87654321
             case "GET /athletes/87654321/stats" -> {
-                File f = new File("src/test/resources/strava-emulator/data/other_athlete/stats/stats.json");
-                if (f.exists()) {
-                    response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                }
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/other_athlete/stats/stats.json");
             }
             // put on concrete activity -> update activity
             case "PUT /activities/777111" -> {
-                //InputStream body = exchange.getRequestBody();
-                //String json = new BufferedReader(new InputStreamReader(body, StandardCharsets.UTF_8))
-                //       .lines()
-                //      .collect(Collectors.joining("\n"));
 
                 // get updatable activity object from request i.e. what we sent
                 UpdatableActivity activity = JsonUtil.deserialize(rawBody, UpdatableActivity.class);
 
                 // get original activity by id and change it according to put request
-                File f = new File("src/test/resources/strava-emulator/data/activities/777111/activity.json");
-                String s = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+                String activityFile = getSingleFileResponse("src/test/resources/strava-emulator/data/activities/777111/activity.json");
 
-                DetailedActivity updatedOriginalActivity = JsonUtil.deserialize(s, DetailedActivity.class);
+                DetailedActivity updatedOriginalActivity = JsonUtil.deserialize(activityFile, DetailedActivity.class);
                 updatedOriginalActivity.setCommute(activity.isCommute());
                 updatedOriginalActivity.setName(activity.getName());
                 updatedOriginalActivity.setSportType(activity.getSportType());
@@ -170,21 +145,15 @@ public class BasicStravaEmulator {
             // post on uploads -> upload activity
             // get the upload by id returns the posted upload
             case "POST /uploads", "GET /uploads/999999" -> {
-                response = serialize(createUpload());
+                response = getSingleFileResponse("src/test/resources/strava-emulator/data/uploads/upload.json");
             }
             // post to oauth/token means either refresh token or authorize
             case "POST /oauth/token" -> {
                 if (rawBody.contains("grant_type=authorization_code")) {
-                    File f = new File("src/test/resources/token/access_token.json");
-                    if (f.exists()) {
-                        response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                    }
+                    response = getSingleFileResponse("src/test/resources/token/access_token.json");
                 }
                 if (rawBody.contains("grant_type=refresh_token")) {
-                    File f = new File("src/test/resources/token/refresh_token.json");
-                    if (f.exists()) {
-                        response = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-                    }
+                    response = getSingleFileResponse("src/test/resources/token/refresh_token.json");
                 }
             }
             default -> response = "404 Not Found: " + method + " " + path;
@@ -196,6 +165,15 @@ public class BasicStravaEmulator {
         exchange.sendResponseHeaders(response.startsWith("404") ? 404 : 200, responseBytes.length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(responseBytes);
+        }
+    }
+
+    private static String getSingleFileResponse(String pathname) throws IOException {
+        File f = new File(pathname);
+        if (f.exists()) {
+            return FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+        } else {
+           return "";
         }
     }
 
@@ -250,16 +228,6 @@ public class BasicStravaEmulator {
             }
         }
         return form;
-    }
-
-    private static Upload createUpload() {
-        Upload upload = new Upload();
-        upload.setId(999999L);
-        upload.setActivityId(11111L);
-        upload.setExternalId("ext_blabla.uploaded_kaka");
-        upload.setError("blabla");
-        upload.setStatus("blabla");
-        return upload;
     }
 
 }
