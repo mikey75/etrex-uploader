@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui;
 
+import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.components.filetree.UploadDialog;
@@ -13,17 +14,13 @@ import java.io.File;
 public class UploadService {
 
     private final AppConfiguration configuration;
-    private final StravaClient stravaClient;
-    private final FileService fileService;
+    @Getter private final UploadDialog uploadDialog;
 
     public UploadService(StravaClient stravaClient, FileService fileService) {
         this.configuration = stravaClient.getAppConfiguration();
-        this.stravaClient = stravaClient;
-        this.fileService = fileService;
-
+        this.uploadDialog = new UploadDialog(stravaClient,fileService);
     }
     public void uploadFile(File file) {
-        UploadDialog uploadDialog = new UploadDialog(stravaClient,fileService);
         uploadDialog.setTrackFile(file, configuration.getDefaultActivityType());
         uploadDialog.setHostCheckupTimeout(configuration.getStravaCheckTimeout());
         uploadDialog.setVisible(true);

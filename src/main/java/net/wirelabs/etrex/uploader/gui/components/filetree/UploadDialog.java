@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.gui.components.filetree;
 
 import com.strava.model.SportType;
 import com.strava.model.Upload;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
@@ -24,8 +25,7 @@ import java.io.IOException;
 @Slf4j
 public class UploadDialog extends BaseDialog {
 
-
-    private File trackFile;
+    @Getter private File trackFile;
     @Setter private int hostCheckupTimeout;
     private final JTextField activityTitleTextField;
     private final JComboBox<SportType> activityTypeCombo;
