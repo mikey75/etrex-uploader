@@ -23,9 +23,13 @@ public class UploadService {
 
     }
     public void uploadFile(File file) {
-        UploadDialog uploadDialog = new UploadDialog(stravaClient,fileService);
+        UploadDialog uploadDialog = createUploadDialog();
         uploadDialog.setTrackFile(file, configuration.getDefaultActivityType());
         uploadDialog.setHostCheckupTimeout(configuration.getStravaCheckTimeout());
         uploadDialog.setVisible(true);
+    }
+
+    UploadDialog createUploadDialog() {
+        return new UploadDialog(stravaClient, fileService);
     }
 }
