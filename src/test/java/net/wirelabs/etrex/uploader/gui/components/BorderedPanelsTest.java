@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BorderedPanelsTest extends BaseTest {
 
     private static final String TEST_PANEL_TITLE = "test panel";
-    private static final String servicedEventPayload = "123";
-    private static final String unservicedEventPayload = "456";
+    private static final String SERVICED_EVENT_PAYLOAD = "123";
+    private static final String UNSERVICED_EVENT_PAYLOAD = "456";
 
     @Test
     void BorderedPanelTest() {
@@ -41,7 +41,7 @@ class BorderedPanelsTest extends BaseTest {
                 .contains(TestEvent.TEST_EVENT_1);
 
         // publish event
-        Event ev = new Event(TestEvent.TEST_EVENT_1, servicedEventPayload);
+        Event ev = new Event(TestEvent.TEST_EVENT_1, SERVICED_EVENT_PAYLOAD);
         EventBus.publish(ev);
 
         // check if event is serviced
@@ -49,11 +49,11 @@ class BorderedPanelsTest extends BaseTest {
                 .untilAsserted(() -> {
                     verifyLogged("Event TEST_EVENT_1 serviced");
                     // the value should be set to the event payload value
-                    assertThat(testPanel.textField.getText()).isEqualTo(servicedEventPayload);
+                    assertThat(testPanel.textField.getText()).isEqualTo(SERVICED_EVENT_PAYLOAD);
                 });
 
         // publish the event that is unsubscribed and has different payload
-        ev = new Event(TestEvent.TEST_EVENT_2, unservicedEventPayload);
+        ev = new Event(TestEvent.TEST_EVENT_2, UNSERVICED_EVENT_PAYLOAD);
         EventBus.publish(ev);
 
         // check event never serviced
@@ -61,7 +61,7 @@ class BorderedPanelsTest extends BaseTest {
                 .untilAsserted(() -> {
                     verifyNeverLogged("Event TEST_EVENT_2 serviced");
                     // the value changed by previous event service should not be changed
-                    assertThat(testPanel.textField.getText()).isEqualTo(servicedEventPayload);
+                    assertThat(testPanel.textField.getText()).isEqualTo(SERVICED_EVENT_PAYLOAD);
                 });
 
     }

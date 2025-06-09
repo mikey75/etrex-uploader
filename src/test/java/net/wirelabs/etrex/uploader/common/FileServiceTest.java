@@ -34,7 +34,7 @@ class FileServiceTest extends BaseTest {
     private final MockedStatic<LocalDateTime> localDateTimeMock = mockStatic(LocalDateTime.class);
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         localDateTimeMock.close();
     }
 

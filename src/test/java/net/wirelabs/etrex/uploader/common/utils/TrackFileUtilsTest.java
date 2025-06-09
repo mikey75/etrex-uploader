@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TrackFileUtilsTest extends BaseTest {
 
-    private final File NONEXISTENT_FILE = new File("nonexistent.gpx");
+    private static final File NONEXISTENT_FILE = new File("nonexistent.gpx");
 
     @Test
     void shouldDetectGPSFileType() {
