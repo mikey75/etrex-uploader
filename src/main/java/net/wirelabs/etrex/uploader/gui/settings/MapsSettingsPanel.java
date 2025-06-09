@@ -22,8 +22,9 @@ import java.io.File;
 public class MapsSettingsPanel extends BasePanel {
 
     public static final String INFO_MSG = "<html>You can write new home position here,<br>but you can also use the map,<br> and select it with double click</html>";
-    private final AppConfiguration configuration;
-    private final ChooseMapComboBox newMaps = new ChooseMapComboBox();
+
+    final AppConfiguration configuration;
+    final ChooseMapComboBox newMaps = new ChooseMapComboBox();
 
     private final JLabel lblDefaultMap = new JLabel("Default map:");
     private final JLabel lblTilerThreads = new JLabel("Threads:");
@@ -38,8 +39,7 @@ public class MapsSettingsPanel extends BasePanel {
     private final JTextField mapHomeLon = new JTextField();
     @Getter
     private final ColorChooserTextField colorChooserTextField;
-
-    private final JTextField routeLineWidth = new JTextField();
+    final JTextField routeLineWidth = new JTextField();
     private final JLabel lblTrkWidth = new JLabel("Track width:");
 
 

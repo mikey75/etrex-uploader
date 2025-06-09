@@ -11,13 +11,13 @@ import javax.swing.*;
  */
 public class StravaSettingsPanel extends BasePanel {
 
-    private final AppConfiguration configuration;
-    private final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
-    private final JTextField activitiesPerPage = new JTextField();
-    private final JTextField warnQuotaPercent = new JTextField();
-    private final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
-    private final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
-    private final JTextField hostTimeout = new JTextField();
+    final AppConfiguration configuration;
+    final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
+    final JTextField activitiesPerPage = new JTextField();
+    final JTextField warnQuotaPercent = new JTextField();
+    final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
+    final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
+    final JTextField hostTimeout = new JTextField();
 
 
     public StravaSettingsPanel(AppConfiguration configuration) {
