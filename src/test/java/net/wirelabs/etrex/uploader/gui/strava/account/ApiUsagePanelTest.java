@@ -63,6 +63,19 @@ class ApiUsagePanelTest extends BaseTest {
             assertThat(p.getDailyLimits().getText()).isEqualTo("(100/1000)");
             assertThat(p.getQuarterLimits().getText()).isEqualTo("(20/100)");
         });
+
+        // simulate wrong headers
+        Map<String, List<String>> wrongHeaders = new HashMap<>();
+        wrongHeaders.put("x-non-existent-key1", List.of("1,1"));
+        wrongHeaders.put("x-non-existent-key2", List.of("2,1"));
+
+        StravaUtil.sendRateLimitInfo(wrongHeaders);
+
+        // check the limits are not changed
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
+            assertThat(p.getDailyLimits().getText()).isEqualTo("(100/1000)");
+            assertThat(p.getQuarterLimits().getText()).isEqualTo("(20/100)");
+        });
     }
 
 }
