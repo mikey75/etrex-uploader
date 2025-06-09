@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class GarminUtilsTest extends BaseTest {
 
-    private final File GOOD_DRIVE = new File("src/test/resources/garmin");
-    private final File NONEXISTING_DRIVE = new File("src/test/resources/garmin/noexisting");
+    private static final File GOOD_DRIVE = new File("src/test/resources/garmin");
+    private static final File NONEXISTING_DRIVE = new File("src/test/resources/garmin/noexisting");
 
     @Test
     void testReadingOfGoodFile() {

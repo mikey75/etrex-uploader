@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class UploadServiceTest extends BaseTest {
