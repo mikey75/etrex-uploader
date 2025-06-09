@@ -2,7 +2,6 @@ package net.wirelabs.etrex.uploader.common.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
@@ -10,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import javax.swing.*;

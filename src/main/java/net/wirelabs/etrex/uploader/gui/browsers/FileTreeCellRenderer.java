@@ -47,7 +47,7 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                 icon = iconRegularFile;
             }
             result.setIcon(icon);
-            result.setText(userObject.getName().length() > 0 ? userObject.getName() : userObject.getAbsolutePath());
+            result.setText(!userObject.getName().isEmpty() ? userObject.getName() : userObject.getAbsolutePath());
         }
         return result;
     }

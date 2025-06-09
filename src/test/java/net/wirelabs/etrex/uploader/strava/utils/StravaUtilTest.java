@@ -25,8 +25,8 @@ import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 class StravaUtilTest extends BaseTest {
 
-    private final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
-    private final String NONEXISTING_HOST = "www.nonexistent.pl";
+    private static final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
+    private static final String NONEXISTING_HOST = "www.nonexistent.pl";
 
     @ParameterizedTest
     @MethodSource("provideFilenames")
@@ -67,22 +67,22 @@ class StravaUtilTest extends BaseTest {
 
         // hosts will not be accessible -> no http server, no port
         // so setup test with nonexistent, random port
-        int FAKE_HTTP_PORT = NetworkingUtils.getRandomFreeTcpPort();
+        int fakeHttpPort = NetworkingUtils.getRandomFreeTcpPort();
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class,CALLS_REAL_METHODS)) {
 
             stravaUtil.when(() -> {
                 int port = StravaUtil.getStravaPort();
-                assertThat(port).isNotEqualTo(FAKE_HTTP_PORT);
-            }).thenReturn(FAKE_HTTP_PORT);
+                assertThat(port).isNotEqualTo(fakeHttpPort);
+            }).thenReturn(fakeHttpPort);
 
             netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
 
             // should log warning, and return false
             assertThat(StravaUtil.isStravaUp(1000)).isFalse();
             // should log hosts unavailability
-            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + FAKE_HTTP_PORT + " inaccessible, assume uploads might fail"); // msg from StravaUtil
+            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpPort + " is unreachable");    // msg from networkingUtils (no http port)
+            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpPort + " inaccessible, assume uploads might fail"); // msg from StravaUtil
         }
 
     }
