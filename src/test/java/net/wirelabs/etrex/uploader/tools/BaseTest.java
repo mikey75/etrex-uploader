@@ -3,9 +3,14 @@ package net.wirelabs.etrex.uploader.tools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 
 @Slf4j
@@ -35,5 +40,24 @@ public abstract class BaseTest {
     // must be static, since it may be used in @BeforeAll (which must be static)
     protected static void waitUntilAsserted(Duration duration, ThrowingRunnable assertion) {
         Awaitility.await().atMost(duration).untilAsserted(assertion);
+    }
+
+    protected static void preserveFiles(File... files) throws IOException {
+        for (File f: files) {
+            if (f.exists()) {
+                FileUtils.copyFile(f, new File(f.getPath() + ".orig"), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+    }
+
+    protected static void restoreFiles(File... files) throws IOException {
+        for (File f: files) {
+            File copy = new File(f.getPath()+".orig");
+            if (copy.exists()) {
+                FileUtils.copyFile(copy, f, StandardCopyOption.REPLACE_EXISTING);
+                FileUtils.deleteQuietly(copy);
+            }
+        }
+
     }
 }
