@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.gui.components.LaFComboRenderer;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,16 +22,7 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         // set the classnames to model
         Arrays.stream(getInstalledLookAndFeels()).forEach(a -> addItem(a.getClassName()));
         // add renderer to print Laf name instead of classname in the JComboBox
-        setRenderer(new BasicComboBoxRenderer() {
-
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                String classname = (String) value;
-                setText(map.get(classname));
-                return this;
-            }
-        });
+        setRenderer(new LaFComboRenderer(map));
         // add change listener
         addActionListener(event -> setSelectedLookAndFeel());
     }
