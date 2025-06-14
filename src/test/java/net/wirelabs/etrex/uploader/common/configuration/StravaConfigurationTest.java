@@ -1,36 +1,32 @@
 package net.wirelabs.etrex.uploader.common.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.StandardCopyOption;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class StravaConfigurationTest {
+class StravaConfigurationTest extends BaseTest {
 
     private static final File GOOD_STRAVA_CONFIG_FILE = new File("src/test/resources/config/good-strava.properties");
     private static final File BAD_STRAVA_CONFIG_FILE = new File("src/test/resources/config/bad-strava.properties");
-    private static final File BACKUP_FILE = new File("target/backup.properties");
 
     @BeforeEach
     void before() throws IOException {
-        // backup file which we're changing since tests might change test file
-        FileUtils.copyFile(GOOD_STRAVA_CONFIG_FILE, BACKUP_FILE, StandardCopyOption.REPLACE_EXISTING);
+        // preserve files which we're changing since tests might change test file
+        preserveFiles(GOOD_STRAVA_CONFIG_FILE,BAD_STRAVA_CONFIG_FILE);
     }
 
     @AfterEach
     void after() throws IOException {
-        // restore original file
-        FileUtils.copyFile(BACKUP_FILE, GOOD_STRAVA_CONFIG_FILE, StandardCopyOption.REPLACE_EXISTING);
-        FileUtils.deleteQuietly(BACKUP_FILE);
-        assertThat(BACKUP_FILE).doesNotExist();
+        // restore original files
+        restoreFiles(GOOD_STRAVA_CONFIG_FILE,BAD_STRAVA_CONFIG_FILE);
     }
 
     @Test
@@ -62,13 +58,25 @@ class StravaConfigurationTest {
         assertThat(load.getStravaRefreshToken()).isEqualTo("bbb");
         assertThat(load.getStravaTokenExpires()).isEqualTo(1234823L);
         assertThat(load.getStravaClientSecret()).isEqualTo("xxx");
-
+        assertThat(load.hasAllTokensAndCredentials()).isTrue();
     }
 
     @Test
     void shouldReactToIncompleteData() {
         StravaConfiguration s = new StravaConfiguration(BAD_STRAVA_CONFIG_FILE.getPath());
         assertThat(s.hasAllTokensAndCredentials()).isFalse();
+    }
+
+    @Test
+    void shouldTestUtilityMethods() {
+
+        StravaConfiguration s = new StravaConfiguration(GOOD_STRAVA_CONFIG_FILE.getPath());
+        assertThat(s.hasClientSecret()).isTrue();
+        assertThat(s.hasAccessToken()).isTrue();
+        assertThat(s.hasRefreshToken()).isTrue();
+        assertThat(s.hasAppId()).isTrue();
+        assertThat(s.hasAllTokensAndCredentials()).isTrue();
+
     }
 
     private static void assertDefaultValues(StravaConfiguration s) {
