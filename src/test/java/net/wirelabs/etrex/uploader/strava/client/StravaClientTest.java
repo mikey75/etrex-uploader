@@ -55,6 +55,7 @@ class StravaClientTest extends BaseTest {
         assertThat(athlete.getId()).isEqualTo(12345678);
         assertThat(athlete.getFirstname()).isEqualTo("Fake");
         assertThat(athlete.getLastname()).isEqualTo("User");
+        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -65,6 +66,7 @@ class StravaClientTest extends BaseTest {
 
         List<String> names = activities.stream().map(SummaryActivity::getName).toList();
         assertThat(names).containsExactlyInAnyOrder("Spacerniak #3", "Spacerniak #2", "Spacerniak");
+        verifyAuthorizedAndQuery("per_page=10, page=1"); // verify default paging
     }
 
     @Test
@@ -88,6 +90,21 @@ class StravaClientTest extends BaseTest {
         assertThat(ytdTotals.getElapsedTime()).isEqualTo(11235);
         assertThat(ytdTotals.getElevationGain()).isEqualTo(286.7000045776367f);
 
+        verifyAuthorizedAndNonQuery();
+    }
+
+    private void verifyAuthorizedAndNonQuery() {
+        verifyLogged("[Auth] authHeader: Bearer 9321093109301");
+        verifyLogged("[Query] queryParams: {}");
+    }
+
+    private void verifyAuthorizedAndQuery(String params) {
+        verifyLogged("[Auth] authHeader: Bearer 9321093109301");
+        verifyLogged("[Query] queryParams: {" + params + "}");
+    }
+    private void verifyNoAuthHeader() {
+        verifyLogged("[Auth] authHeader: null");
+        verifyLogged("[Query] queryParams: {}");
     }
 
     @Test
@@ -104,7 +121,7 @@ class StravaClientTest extends BaseTest {
         assertThat(recentRideTotals.getAchievementCount()).isEqualTo(9);
         assertThat(recentRideTotals.getElevationGain()).isEqualTo(7.0614014f);
 
-
+        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -128,7 +145,7 @@ class StravaClientTest extends BaseTest {
         // and for sureness check some original fields were not updated
         assertThat(updatedActivity.getId()).isEqualTo(777111L);
         assertThat(updatedActivity.getDeviceName()).isEqualTo("Garmin eTrex 32x");
-
+        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -141,7 +158,7 @@ class StravaClientTest extends BaseTest {
         assertThat(activity.getDescription()).contains("Mazury, mazury, jeziora i pagóry");
         assertThat(activity.getDeviceName()).isEqualTo("Garmin eTrex 32x");
         assertThat(activity.getName()).isEqualTo("Mikro wersja Mazurskiej Pętli Rowerowej");
-
+        verifyAuthorizedAndNonQuery();
     }
 
 
@@ -157,6 +174,7 @@ class StravaClientTest extends BaseTest {
             assertThat(u.getExternalId()).matches("test activity\\d{13}"); // external id is upload $name + System.currentTimeMillis
             assertThat(u.getError()).isNull();
             assertThat(u.getStatus()).isNotNull();
+            verifyAuthorizedAndNonQuery();
         });
 
 
@@ -173,6 +191,7 @@ class StravaClientTest extends BaseTest {
         assertThat(s.getDistance().getResolution()).isEqualTo(DistanceStream.ResolutionEnum.HIGH);
         assertThat(s.getDistance().getSeriesType()).isEqualTo(DistanceStream.SeriesTypeEnum.DISTANCE);
 
+        verifyAuthorizedAndQuery("key_by_type=true, keys=distance");
 
     }
 
@@ -205,9 +224,17 @@ class StravaClientTest extends BaseTest {
         SummaryAthlete athlete = stravaClient.getCurrentAthlete();
 
         verifyLogged("Refreshing token");
+        // at first the auth header will be null, then the auth header should be what was in the token, in this case 'dddd'
+        verifyLogged("[Strava request: POST] http://localhost:" + emulator.getPort()+ "/oauth/token");
+        verifyNoAuthHeader();
+
         // this log is part of config updater but physical save does not take place due to spy doNothing on save
         verifyLogged("[Refresh token] - updated strava config");
         assertThat(athlete).isNotNull();
+        verifyLogged("[Strava request: GET] http://localhost:" + emulator.getPort()+ "/athlete");
+        verifyLogged("[Auth] authHeader: Bearer dddd");
+
+
     }
 
     @Test
@@ -217,7 +244,8 @@ class StravaClientTest extends BaseTest {
         verifyLogged("Got tokens!");
         verifyLogged("[Update token] - updated strava config");
         verifyLogged("[Update credentials] - updated strava config");
-
+        // you don't have the auth header because you don't yet have a token ;)
+        verifyNoAuthHeader();
 
 
     }
