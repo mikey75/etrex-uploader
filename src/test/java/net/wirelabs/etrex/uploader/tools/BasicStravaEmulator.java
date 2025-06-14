@@ -107,7 +107,8 @@ public class BasicStravaEmulator {
         }
 
         String response = "";
-
+        log.info("[Auth] authHeader: {}", authHeader);
+        log.info("[Query] queryParams: {}", queryParams);
         switch (method + " " + path) {
             // get activity by id
             case "GET /activities/777111" -> {
