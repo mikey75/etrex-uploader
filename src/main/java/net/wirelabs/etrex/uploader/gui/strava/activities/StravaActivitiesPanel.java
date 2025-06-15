@@ -42,9 +42,9 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private int page = 1;
 
 
-    public StravaActivitiesPanel(StravaClient stravaClient, AppConfiguration configuration) {
+    public StravaActivitiesPanel(StravaClient stravaClient) {
         super("Strava", "","[grow][]","[grow][grow]");
-        this.configuration = configuration;
+        this.configuration = stravaClient.getAppConfiguration();
         this.stravaClient = stravaClient;
         createVisualComponent();
         updateActivities(page);

@@ -29,8 +29,9 @@ class UserAccountPanelTest extends BaseTest {
     void testUserWithoutProfilePicture() throws StravaException {
         
         doReturn(fakeUser).when(strava).getCurrentAthlete();
+        doReturn(mock(AppConfiguration.class)).when(strava).getAppConfiguration();
 
-        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava);
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
@@ -45,7 +46,7 @@ class UserAccountPanelTest extends BaseTest {
         fakeUser.setProfileMedium("file:///" + profilePictureURL);
         doReturn(fakeUser).when(strava).getCurrentAthlete();
         
-        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava);
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
@@ -60,7 +61,7 @@ class UserAccountPanelTest extends BaseTest {
 
         doThrow(StravaException.class).when(strava).getCurrentAthlete();
         
-        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava);
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertNoAthleteName(uap);
@@ -74,7 +75,7 @@ class UserAccountPanelTest extends BaseTest {
         
         fakeUser.setProfileMedium("file:///"); // <-- this triggers IOException inside
         doReturn(fakeUser).when(strava).getCurrentAthlete();
-        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava);
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> {
                     assertAthleteNamePresent(uap);
@@ -88,7 +89,7 @@ class UserAccountPanelTest extends BaseTest {
 
         doReturn(fakeStats).when(strava).getAthleteStats(any());
         doReturn(fakeUser).when(strava).getCurrentAthlete();
-        UserAccountPanel uap = new UserAccountPanel(strava, mock(AppConfiguration.class));
+        UserAccountPanel uap = new UserAccountPanel(strava);
 
         waitUntilAsserted(Duration.ofSeconds(5), () -> assertCorrectStats(uap)
         );

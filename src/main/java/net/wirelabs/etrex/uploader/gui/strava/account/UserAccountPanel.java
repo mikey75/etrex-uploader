@@ -47,10 +47,10 @@ public class UserAccountPanel extends BasePanel {
     private final ApiUsagePanel apiUsagePanel;
 
 
-    public UserAccountPanel(StravaClient stravaClient, AppConfiguration configuration) {
+    public UserAccountPanel(StravaClient stravaClient) {
         super("My profile","","[grow][]","[][][][][][][][][][][][grow][grow,bottom]");
         this.stravaClient = stravaClient;
-        this.configuration = configuration;
+        this.configuration = stravaClient.getAppConfiguration();
         apiUsagePanel = new ApiUsagePanel(configuration);
         initVisualComponent();
         ThreadUtils.runAsync(() -> {
