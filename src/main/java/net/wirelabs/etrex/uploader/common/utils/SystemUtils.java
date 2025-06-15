@@ -67,6 +67,7 @@ public class SystemUtils {
             int code = process.waitFor();
             log.info("Process finished, exit code:{}", code);
         } catch (InterruptedException e) {
+            log.info("Subprocess interrupted. Exiting current thread!");
             Thread.currentThread().interrupt();
         }
     }
