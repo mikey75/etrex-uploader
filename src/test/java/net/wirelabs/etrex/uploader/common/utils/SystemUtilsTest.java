@@ -1,5 +1,7 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
+import com.sun.net.httpserver.HttpServer;
+import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -8,6 +10,7 @@ import org.mockito.Mockito;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -233,6 +236,26 @@ class SystemUtilsTest extends BaseTest {
             // then
             verifyLogged("Creating new application instance failed! No command line");
         }
+    }
+    @Test
+    void shouldNotForSubprocessWhenInterrupted() throws IOException, InterruptedException {
+        // setup fake http server to ping
+        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", NetworkingUtils.getRandomFreeTcpPort()), 0);
+        // ping localhost continuously
+        ProcessBuilder builder = new ProcessBuilder("ping", "127.0.0.1");
+        Process process = builder.start();
+
+        Thread thread = new Thread(() -> SystemUtils.waitForSubprocess(process));
+
+        thread.start();
+        thread.interrupt();
+        thread.join(3000);
+        process.destroyForcibly();
+
+        // Check that the thread is no longer alive (i.e., it handled the interrupt)
+        assertThat(thread.isAlive()).isFalse();
+        verifyLogged("Subprocess interrupted. Exiting current thread!");
+        server.stop(0);
     }
 
     @Test
