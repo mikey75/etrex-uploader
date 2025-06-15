@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.List;
 
 /**
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -132,18 +133,14 @@ public class SystemUtils {
         return System.getProperty("user.home");
     }
 
-    private static Optional<String> getCommandLine(ProcessHandle processHandle) {
+    static Optional<String> getCommandLine(ProcessHandle processHandle) {
 
-        if (isLinux()) {
-            return processHandle.info().commandLine();
+        if (isLinux() || isOSX()) {
+            return getUnixCommandLine(processHandle);
         }
 
         if (isWindows()) {
             return getWindowsCommandLine(processHandle);
-        }
-
-        if (isOSX()) {
-            return getOSXCommandLine(processHandle);
         }
 
         return Optional.empty();
@@ -151,52 +148,43 @@ public class SystemUtils {
 
     @NotNull
     private static Optional<String> getWindowsCommandLine(ProcessHandle processHandle) {
-        try {
-            // run windows command 'wmic process where ProcessID=pidOfTheApp get commandline /format:list'
-            // which gets all running processes and filters it by ProcessID of the current app, and gets its commandline
-            // so basically get a complete commandline of currently running application
-            Process process = new ProcessBuilder("wmic", "process", "where", "ProcessID=" + processHandle.pid(), "get",
-                    "commandline", "/format:list").
-                    redirectErrorStream(true).
-                    start();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
-                 BufferedReader reader = new BufferedReader(inputStreamReader)) {
-                while (true) {
-                    String line = reader.readLine();
-                    if (line == null) {
-                        return Optional.empty();
-                    }
-                    if (!line.startsWith("CommandLine=")) {
-                        continue;
-                    }
-                    return Optional.of(line.substring("CommandLine=".length()));
-                }
-            }
-        } catch (IOException e) {
-            log.error("Exception while getting current process command line: {}", e.getMessage(), e);
-            return Optional.empty();
-        }
+
+            // on Windows run:
+            // powershell.exe -Command (Get-CimInstance Win32_Process -Filter "ProcessId=$pid").CommandLine
+            List<String> command = List.of(
+                    "powershell.exe",
+                    "-Command",
+                    "(Get-CimInstance Win32_Process -Filter \"ProcessId=" + processHandle.pid() + "\").CommandLine"
+            );
+            return getCommand(command);
+
     }
 
-    private static Optional<String> getOSXCommandLine(ProcessHandle processHandle) {
+    @NotNull
+    static Optional<String> getCommand(List<String> command) {
         try {
-            // run: bash -c "ps -p $pid -o command="
-            String command = "ps -p " + processHandle.pid() + " -o command=";
-            Process process = new ProcessBuilder("bash", "-c", command)
+            Process process = new ProcessBuilder(command)
                     .redirectErrorStream(true)
                     .start();
 
-
-            // Read the output
             try (InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
                  BufferedReader reader = new BufferedReader(inputStreamReader)) {
                 String line = reader.readLine();
                 return (line == null) ? Optional.empty() : Optional.of(line);
             }
         } catch (IOException e) {
-            log.error("Exception while getting current process command line: {}", e.getMessage(), e);
+            log.error("There was an error getting command line");
             return Optional.empty();
         }
+    }
+
+    private static Optional<String> getUnixCommandLine(ProcessHandle processHandle) {
+
+            // run: ps -p $pid -o command=
+            // need to make sure ps is /usr/bin/ps on Mac too - maybe run which before
+            List<String> command = List.of("/usr/bin/ps", "-p", String.valueOf(processHandle.pid()), "-o", "command=");
+            return getCommand(command);
+
     }
 
 }

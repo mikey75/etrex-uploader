@@ -9,12 +9,16 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.io.FileUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+
 
 class SystemUtilsTest extends BaseTest {
 
@@ -65,7 +69,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testLinuxDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Linux");
             assertThat(SystemUtils.isLinux()).isTrue();
         }
@@ -73,7 +77,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testOSXDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Mac OS X Sequoia 15.11");
             assertThat(SystemUtils.isOSX()).isTrue();
         }
@@ -89,9 +93,9 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void testUnknownOSDetection() {
-        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class,CALLS_REAL_METHODS)) {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator 1.0");
-            assertThrows(IllegalStateException.class, SystemUtils::checkOsSupport,"Unsupported OS");
+            assertThrows(IllegalStateException.class, SystemUtils::checkOsSupport, "Unsupported OS");
         }
     }
 
@@ -229,6 +233,21 @@ class SystemUtilsTest extends BaseTest {
             // then
             verifyLogged("Creating new application instance failed! No command line");
         }
+    }
+
+    @Test
+    void shouldGetCommandLine() {
+        // this should test commandline on any system runing tests, just on linux/mac and windows the coverage might vary
+        String cmdline = SystemUtils.getCommandLine(ProcessHandle.current()).orElseThrow(() -> new IllegalStateException("cmdline empty"));
+        assertThat(cmdline).containsAnyOf(File.separator + "bin" + File.separator + "java");
+    }
+
+    @Test
+    void shouldLogAndReturnEmptyOnBadCommand() {
+        List<String> badCommand = List.of("dupa","kaka");
+        Optional<String> command = SystemUtils.getCommand(badCommand);
+        assertThat(command).isNotPresent();
+        verifyLogged("There was an error getting command line");
     }
 
     private void assertSuccessfulLaunch(MockedStatic<SystemUtils> systemUtils) {
