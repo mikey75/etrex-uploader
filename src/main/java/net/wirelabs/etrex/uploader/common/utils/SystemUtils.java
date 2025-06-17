@@ -182,8 +182,8 @@ public class SystemUtils {
     private static Optional<String> getUnixCommandLine(ProcessHandle processHandle) {
 
             // run: ps -p $pid -o command=
-            // need to make sure ps is /usr/bin/ps on Mac too - maybe run which before
-            List<String> command = List.of("/usr/bin/ps", "-p", String.valueOf(processHandle.pid()), "-o", "command=");
+            // /bin/ps should be available both on linux and osx
+            List<String> command = List.of("/bin/ps", "-p", String.valueOf(processHandle.pid()), "-o", "command=");
             return getCommand(command);
 
     }
