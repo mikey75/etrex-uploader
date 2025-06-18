@@ -28,6 +28,7 @@
         <fit.sdk.version>21.120.0</fit.sdk.version>
         <!-- JaCoCo Properties -->
         <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</jacoco.xmlReportPaths>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <distpack.location>${project.basedir}/target/distpack</distpack.location>
     </properties>
@@ -191,6 +192,13 @@
                         <id>jacoco-initialize</id>
                         <goals>
                             <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                     <execution>
