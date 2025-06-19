@@ -235,10 +235,10 @@ public class BasicStravaEmulator {
             String name = null;
             for (String line : headers.split("\r\n")) {
                 if (line.startsWith("Content-Disposition")) {
-                    for (String dispPart : line.split(";")) {
-                        dispPart = dispPart.trim();
-                        if (dispPart.startsWith("name=")) {
-                            name = dispPart.substring(6).replace("\"", "");
+                    for (String element : line.split(";")) {
+                        element = element.trim();
+                        if (element.startsWith("name=")) {
+                            name = element.substring(6).replace("\"", "");
                         }
                     }
                 }

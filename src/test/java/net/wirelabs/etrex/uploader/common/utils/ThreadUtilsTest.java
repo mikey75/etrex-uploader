@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 @Slf4j
+@SuppressWarnings("ResultOfMethodCallIgnored")
 class ThreadUtilsTest extends BaseTest {
 
     @Test

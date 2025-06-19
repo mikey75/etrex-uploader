@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-
+@SuppressWarnings("ResultOfMethodCallIgnored")
 class SystemUtilsTest extends BaseTest {
 
     @Test
@@ -260,7 +260,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void shouldGetCommandLine() {
-        // this should test commandline on any system runing tests, just on linux/mac and windows the coverage might vary
+        // this should test commandline on any system running tests, just on linux/mac and windows the coverage might vary
         String cmdline = SystemUtils.getCommandLine(ProcessHandle.current()).orElseThrow(() -> new IllegalStateException("cmdline empty"));
         assertThat(cmdline).containsAnyOf(File.separator + "bin" + File.separator + "java");
     }
