@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FileTreeTest extends BaseTest {
 
     private FileTree fileTree;
-    File testdrive1 = new File("src/test/resources/fakerootdir/fakedisk1");
-    File testdrive2 = new File("src/test/resources/fakerootdir/fakedisk2");
+    private final File testDrive1 = new File("src/test/resources/fakerootdir/fakedisk1");
+    private final File testDrive2 = new File("src/test/resources/fakerootdir/fakedisk2");
 
     @BeforeEach
     void before() {
@@ -26,18 +26,18 @@ class FileTreeTest extends BaseTest {
     @Test
     void shouldAddAndRemoveDrives() {
         // add two drives - drive 1 and drive 2
-        fileTree.addDrive(testdrive1);
-        fileTree.addDrive(testdrive2);
+        fileTree.addDrive(testDrive1);
+        fileTree.addDrive(testDrive2);
         // check
         assertThat(fileTree.getRootNodes()).hasSize(2);
-        assertThat(fileTree.getRootNodes().get(0)).hasToString(testdrive1.getPath());
-        assertThat(fileTree.getRootNodes().get(1)).hasToString(testdrive2.getPath());
+        assertThat(fileTree.getRootNodes().get(0)).hasToString(testDrive1.getPath());
+        assertThat(fileTree.getRootNodes().get(1)).hasToString(testDrive2.getPath());
 
         // now remove drive 2
-        fileTree.removeDrive(testdrive2);
+        fileTree.removeDrive(testDrive2);
         // check
         assertThat(fileTree.getRootNodes()).hasSize(1);
-        assertThat(fileTree.getRootNodes().get(0)).hasToString(testdrive1.getPath());
+        assertThat(fileTree.getRootNodes().get(0)).hasToString(testDrive1.getPath());
     }
 
 

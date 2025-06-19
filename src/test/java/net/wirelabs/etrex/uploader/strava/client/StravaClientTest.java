@@ -76,12 +76,12 @@ class StravaClientTest extends BaseTest {
         assertThat(stats.getBiggestRideDistance()).isEqualTo(113821.0);
         assertThat(stats.getBiggestClimbElevationGain()).isEqualTo(94.69999999999999);
 
-        ActivityTotal allrideTotals = stats.getAllRideTotals();
-        assertThat(allrideTotals.getCount()).isEqualTo(176);
-        assertThat(allrideTotals.getDistance()).isEqualTo(5349675.564086914f);
-        assertThat(allrideTotals.getMovingTime()).isEqualTo(1356416);
-        assertThat(allrideTotals.getElapsedTime()).isEqualTo(1903942);
-        assertThat(allrideTotals.getElevationGain()).isEqualTo(30607.924300193787f);
+        ActivityTotal allRideTotals = stats.getAllRideTotals();
+        assertThat(allRideTotals.getCount()).isEqualTo(176);
+        assertThat(allRideTotals.getDistance()).isEqualTo(5349675.564086914f);
+        assertThat(allRideTotals.getMovingTime()).isEqualTo(1356416);
+        assertThat(allRideTotals.getElapsedTime()).isEqualTo(1903942);
+        assertThat(allRideTotals.getElevationGain()).isEqualTo(30607.924300193787f);
 
         ActivityTotal ytdTotals = stats.getYtdRideTotals();
         assertThat(ytdTotals.getCount()).isEqualTo(2);
@@ -198,9 +198,7 @@ class StravaClientTest extends BaseTest {
     @Test
     void shouldThrowExceptionsWhenServerNotAvailable() {
         emulator.teardown();
-        Exception e = assertThrows(StravaException.class, () -> {
-            stravaClient.getCurrentAthlete();
-        });
+        Exception e = assertThrows(StravaException.class, () -> stravaClient.getCurrentAthlete());
         assertThat(e.getMessage()).contains("Failed to connect");
 
     }
