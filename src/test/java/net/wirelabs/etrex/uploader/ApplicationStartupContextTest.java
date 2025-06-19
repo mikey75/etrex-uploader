@@ -44,7 +44,7 @@ class ApplicationStartupContextTest extends BaseTest {
         verifyLogged("Loading config.properties");
         verifyLogged("Loading strava.properties");
 
-        // check if fileservice created dirs
+        // check if FileService created dirs
         verifyLogged("Initializing directories");
 
     }

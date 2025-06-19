@@ -80,7 +80,7 @@ class MapsSettingsPanelTest {
         try (MockedStatic<SwingUtils> swingUtils = mockStatic(SwingUtils.class)) {
 
             // when route width > 10 you'll get option to set default 3px (YES)
-            // or ignore and set what was befeore (NO)
+            // or ignore and set what was before (NO)
             mapsSettingsPanel.routeLineWidth.setText(String.valueOf(11));
             when(SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
 
