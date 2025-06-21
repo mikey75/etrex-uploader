@@ -6,7 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.plaf.*;
+import javax.swing.text.*;
 import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.io.IOException;
 import java.util.Enumeration;
 
 /**
@@ -15,6 +19,9 @@ import java.util.Enumeration;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SwingUtils {
+
+    private static KeyEventDispatcher keyEventDispatcher;
+    private static final KeyboardFocusManager keyboardFocusManager  = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 
     public static void centerComponent(Component c) {
         final Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -76,6 +83,49 @@ public class SwingUtils {
                 UIManager.put(key, newFont);
             }
         }
+    }
+
+    /**
+     * Register ctrl+v for all text components with focus
+     * so that ctrl+v works on jtextboxes etc
+     */
+    public static void registerPasteController() {
+
+        keyEventDispatcher = e -> {
+            if (isKeyVPressed(e) && isCtrlOrMetaPressed(e)) {
+                Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if (focusOwner instanceof JTextComponent textComponent) {
+                    try {
+                        return pasted(textComponent);
+                    } catch (UnsupportedFlavorException | IOException ex) {
+                        log.warn("There was an error pasting the content to the text box ");
+                    }
+                }
+            }
+            return false;
+        };
+        keyboardFocusManager.addKeyEventDispatcher(keyEventDispatcher);
+    }
+
+    public static void unregisterPasteController() {
+        keyboardFocusManager.removeKeyEventDispatcher(keyEventDispatcher);
+    }
+
+
+    private static boolean pasted(JTextComponent textComponent) throws UnsupportedFlavorException, IOException {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(null);
+        String text = (String) contents.getTransferData(DataFlavor.stringFlavor);
+        textComponent.replaceSelection(text);
+        return true;
+    }
+
+    private static boolean isKeyVPressed(KeyEvent e) {
+        return e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_V;
+    }
+
+    private static boolean isCtrlOrMetaPressed(KeyEvent e) {
+        return e.isControlDown() || e.isMetaDown();
     }
 
 }

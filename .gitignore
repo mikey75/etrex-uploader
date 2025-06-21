@@ -10,7 +10,7 @@
 /etrex-uploader/logs/*.log
 /etrex-uploader-app/config.properties
 /config.properties
-/strava.properties
+/strava.properties.old/strava.properties
 /logs/
 /jmaps.version
 /etrex-uploader.version

@@ -34,6 +34,7 @@ public class StravaConnector extends BaseDialog {
         super("Connect to strava","","[grow]","[][][][][]");
         authService = new AuthService(client);
 
+        SwingUtils.registerPasteController();
         registerExitOnCloseListener();
         registerActionOnClickConnect();
         createVisualComponent();
@@ -42,6 +43,7 @@ public class StravaConnector extends BaseDialog {
             SwingUtils.errorMsg(getOauthMessage());
             SystemUtils.systemExit(1);
         }
+        SwingUtils.unregisterPasteController(); // unregister past controller
     }
     
 
