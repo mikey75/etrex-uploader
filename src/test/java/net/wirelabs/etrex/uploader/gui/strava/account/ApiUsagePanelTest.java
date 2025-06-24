@@ -23,6 +23,8 @@ class ApiUsagePanelTest extends BaseTest {
     @Test
     void shouldDisplayApiUsage() {
         AppConfiguration configuration = new AppConfiguration("src/test/resources/config/test.properties");
+        assertThat(configuration).isNotNull();
+        assertThat(configuration.getApiUsageWarnPercent()).isEqualTo(85);
         configuration.setApiUsageWarnPercent(50);
         ApiUsagePanel p = new ApiUsagePanel(configuration);
         Map<String, List<String>> headers = new HashMap<>();
