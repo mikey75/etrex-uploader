@@ -22,9 +22,9 @@ class ApiUsagePanelTest extends BaseTest {
 
     @Test
     void shouldDisplayApiUsage() {
-        AppConfiguration configuration = mock(AppConfiguration.class);
-        doReturn(50).when(configuration).getApiUsageWarnPercent();
-        ApiUsagePanel p = spy(new ApiUsagePanel(configuration));
+        AppConfiguration configuration = new AppConfiguration("src/test/resources/config/test.properties");
+        configuration.setApiUsageWarnPercent(50);
+        ApiUsagePanel p = new ApiUsagePanel(configuration);
         Map<String, List<String>> headers = new HashMap<>();
 
         // simulate over the limit
