@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
 
 /**
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -24,13 +22,8 @@ import static org.mockito.Mockito.*;
 class ApiUsagePanelTest extends BaseTest {
 
     @Test
-    @Disabled // disabled because of some not yet known issue with openjdk/java compatibility in test environment on github
     void shouldDisplayApiUsage() {
         AppConfiguration configuration = new AppConfiguration("src/test/resources/config/test.properties");
-        log.info("config = " + configuration);
-        log.info("warn = " + configuration.getApiUsageWarnPercent());
-
-
         configuration.setApiUsageWarnPercent(50);
         ApiUsagePanel p = new ApiUsagePanel(configuration);
         Map<String, List<String>> headers = new HashMap<>();
