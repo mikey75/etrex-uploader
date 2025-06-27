@@ -92,6 +92,32 @@ class TrackParserTest extends BaseTest {
     }
 
     @Test
+    void testParsePolyline() {
+        // this test uses a known polyline from Google polyline dev-docs
+
+        // Example encoded polyline: _p~iF~ps|U_ulLnnqC_mqNvxq`@
+        // This decodes to:
+        // (38.5, -120.2), (40.7, -120.95), (43.252, -126.453)
+
+        String encoded = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+        float precision = 1E5f;
+
+
+        List<Coordinate> coordinates = trackParser.parsePolyline(encoded, precision);
+
+        assertThat(coordinates).hasSize(3);
+
+        assertCoordinate(coordinates.get(0), -120.2, 38.5);
+        assertCoordinate(coordinates.get(1), -120.95, 40.7);
+        assertCoordinate(coordinates.get(2), -126.453, 43.252);
+    }
+
+    private void assertCoordinate(Coordinate actual, double expectedLng, double expectedLat) {
+        assertThat(expectedLat).isEqualTo(actual.getLatitude());
+        assertThat(expectedLng).isEqualTo(actual.getLongitude());
+    }
+
+    @Test
     void shouldBeEmptyOnNonTrackFile() {
 
         List<Coordinate> points = trackParser.parseTrackFile(NOT_TRACK_FILE);

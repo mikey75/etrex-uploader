@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.wirelabs.etrex.uploader.common.utils.TrackFileUtils.*;
 
@@ -39,44 +40,34 @@ public class TrackParser  {
         return Collections.emptyList();
     }
 
-    public List<Coordinate> parsePolyline(String polyLine, Float precision) {
-        ArrayList<Coordinate> coordinates = new ArrayList<>();
+    public List<Coordinate> parsePolyline(String polyLine, float precision) {
+        List<Coordinate> coordinates = new ArrayList<>();
+        AtomicInteger index = new AtomicInteger(0);
 
-        int index = 0;
         int lat = 0;
         int lng = 0;
 
-        while (index < polyLine.length()) {
-
-            int b;
-            int shift = 0;
-            int result = 0;
-
-            do {
-                b = polyLine.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-
-            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
-
-            shift = 0;
-            result = 0;
-
-            do {
-                b = polyLine.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-
-            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lng += dlng;
-
-            Coordinate position = new Coordinate((double) lng / precision, (double) lat / precision);
-            coordinates.add(position);
+        while (index.get() < polyLine.length()) {
+            lat += decodeNextValue(polyLine, index);
+            lng += decodeNextValue(polyLine, index);
+            coordinates.add(new Coordinate((double) lng / precision, (double) lat / precision));
         }
+
         return coordinates;
+    }
+
+    private int decodeNextValue(String polyLine, AtomicInteger index) {
+        int result = 0;
+        int shift = 0;
+
+        while (index.get() < polyLine.length()) {
+            int b = polyLine.charAt(index.getAndIncrement()) - 63;
+            result |= (b & 0x1F) << shift;
+            shift += 5;
+            if (b < 0x20) break;
+        }
+
+        return ((result & 1) != 0) ? ~(result >> 1) : (result >> 1);
     }
 }
 
