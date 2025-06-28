@@ -15,6 +15,7 @@ class ConfigurationPropertyKeys {
     static final String USER_STORAGE_ROOTS              = "system.user.storage.roots";
     static final String LOOK_AND_FEEL_CLASS             = "system.look.and.feel.classname";
     static final String ENABLE_DESKTOP_SLIDERS          = "system.look.sliders";
+    static final String FONT_SIZE                       = "system.font.size";
     // strava
     static final String STRAVA_APP_ID                   = "strava.app.id";
     static final String STRAVA_CLIENT_SECRET            = "strava.client.secret";
