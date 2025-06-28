@@ -112,6 +112,8 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getMapHomeLatitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
         assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
+        assertThat(c.getFontSize()).isEqualTo(Constants.DEFAULT_FONT_SIZE);
+        assertThat(c.getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
     }
 
     @Test
