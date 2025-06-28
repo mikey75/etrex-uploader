@@ -32,7 +32,7 @@ public class EtrexUploaderRunner {
 
             appContext = new ApplicationStartupContext();
             setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
-            setGlobalFontSize(10);
+            setGlobalFontSize(appContext.getAppConfiguration().getFontSize());
 
             if (!appContext.getStravaConfiguration().hasAllTokensAndCredentials()) {
                 log.info("Running strava connector...");

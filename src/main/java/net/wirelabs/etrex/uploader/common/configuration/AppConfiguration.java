@@ -43,6 +43,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private int stravaCheckTimeout;
     private boolean stravaCheckHostBeforeUpload;
     private String lookAndFeelClassName;
+    private int fontSize;
     private Double mapHomeLatitude;
     private Double mapHomeLongitude;
     private boolean enableDesktopSliders;
@@ -73,6 +74,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
         enableDesktopSliders = Boolean.parseBoolean(properties.getProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
         routeLineWidth = Integer.parseInt(properties.getProperty(ROUTE_LINE_WIDTH, String.valueOf(Constants.DEFAULT_ROUTE_LINE_WIDTH)));
+        fontSize = Integer.parseInt(properties.getProperty(FONT_SIZE, String.valueOf(Constants.DEFAULT_FONT_SIZE)));
 
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
@@ -104,6 +106,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(MAP_HOME_LATITUDE, String.valueOf(mapHomeLatitude));
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
+        properties.setProperty(FONT_SIZE, String.valueOf(fontSize));
         storePropertiesToFile();
 
     }
