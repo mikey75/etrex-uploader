@@ -54,7 +54,7 @@ public class Constants {
     public static final int DEFAULT_STRAVA_ACTIVITIES_PER_PAGE = 30;
     public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
-
+    public static final int DEFAULT_FONT_SIZE = 10;
     public static final boolean DEFAULT_USE_SLIDERS = false;
 
     public static final String STRAVA_AUTHORIZATION_OK_MSG =
