@@ -255,7 +255,17 @@
                         <phase>compile</phase>
                         <configuration>
                             <target>
-                                <echo file="${project.basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}</echo>
+                                <!-- get head commit hash effectively adding
+                                    info on what commit the build comes from
+                                    to a version file -->
+                                <exec executable="git" outputproperty="git.version" failonerror="true">
+                                    <arg value="rev-parse"/>
+                                    <arg value="--short"/>
+                                    <arg value="HEAD"/>
+                                </exec>
+
+                                <!-- Output the versions to files -->
+                                <echo file="${project.basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}-${git.version}</echo>
                                 <echo file="${project.basedir}/jmaps.version">${jmaps.version}</echo>
                             </target>
                         </configuration>
