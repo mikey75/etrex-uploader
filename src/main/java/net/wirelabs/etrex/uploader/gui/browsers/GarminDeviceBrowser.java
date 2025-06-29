@@ -128,7 +128,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
     @Override
     protected Collection<IEventType> subscribeEvents() {
-        return Arrays.asList(
+        return List.of(
                 EventType.DEVICE_DRIVE_REGISTERED,
                 EventType.DEVICE_DRIVE_UNREGISTERED,
                 EventType.DEVICE_INFO_AVAILABLE);
