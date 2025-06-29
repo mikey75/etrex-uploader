@@ -158,7 +158,7 @@ public class MapPanel extends BaseEventAwarePanel {
         // track is inside a polyline string
         if (evt.getPayload() instanceof String polyLineStringPayload) {
             SwingUtilities.invokeLater(() -> {
-                List<Coordinate> points = trackParser.parsePolyline(polyLineStringPayload, 1E5F);
+                List<Coordinate> points = trackParser.parsePolyline(polyLineStringPayload);
                 paintTrack(points);
             });
         }

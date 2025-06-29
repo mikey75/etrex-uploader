@@ -56,6 +56,11 @@ public class Constants {
     public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
     public static final int DEFAULT_FONT_SIZE = 10;
     public static final boolean DEFAULT_USE_SLIDERS = false;
+    // 1e5 = 100000.0 - why? -> https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+    // since we use Google encoded polylines, and strava uses the 1e5 as Google doc says
+    // we make it a constant - perhaps in the future - when we want to parse with different precisions
+    // we'll make it configurable in app configuration - until then it's a constant. and a good one :)
+    public static final float DEFAULT_POLYLINE_PRECISION = 1e5f;
 
     public static final String STRAVA_AUTHORIZATION_OK_MSG =
             "<center>" +
