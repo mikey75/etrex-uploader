@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.common.parsers;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import java.io.File;
@@ -38,6 +39,10 @@ public class TrackParser  {
         }
         log.warn("Unsupported track file: {}", file.getName());
         return Collections.emptyList();
+    }
+
+    public List<Coordinate> parsePolyline(String polyLine) {
+        return parsePolyline(polyLine, Constants.DEFAULT_POLYLINE_PRECISION);
     }
 
     public List<Coordinate> parsePolyline(String polyLine, float precision) {
