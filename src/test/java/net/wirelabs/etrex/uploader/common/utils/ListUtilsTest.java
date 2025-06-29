@@ -22,22 +22,10 @@ class ListUtilsTest {
         assertThat(s).containsExactlyElementsOf(elements);
 
         // test if list is returned unchanged
-        Collection<String> list = ListUtils.listOf("ala","ma","kota");
+        Collection<String> list = List.of("ala","ma","kota");
         List<String> ss = ListUtils.iterableToList(list);
         assertThat(ss).isSameAs(list);
 
-    }
-
-    @Test
-    void shouldProduceList() {
-        String[] elements = {"Ala","Ania","Kasia"};
-        Collection<String> result = ListUtils.listOf(elements);
-        Collection<String> result2 = ListUtils.listOf(elements);
-        assertThat(result).containsOnly("Ala","Ania","Kasia");
-        assertThat(result2).containsOnly("Ala","Ania","Kasia");
-        assertThat(result).isNotSameAs(result2); // check if two different objects were created
-        Collection<String> result3 = ListUtils.listOf();
-        assertThat(result3).isNotNull().isEmpty();
     }
 
     @Test

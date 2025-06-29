@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.parsers.TrackParser;
-import net.wirelabs.etrex.uploader.common.utils.ListUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.components.BaseEventAwarePanel;
@@ -136,7 +135,7 @@ public class MapPanel extends BaseEventAwarePanel {
 
     @Override
     protected Collection<IEventType> subscribeEvents() {
-        return ListUtils.listOf(
+        return List.of(
                 EventType.TRACK_COLOR_CHANGED,
                 EventType.MAP_DISPLAY_TRACK,
                 EventType.MAP_RESET,
