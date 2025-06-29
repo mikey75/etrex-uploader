@@ -30,18 +30,6 @@ public class ListUtils {
         return l;
     }
 
-    /**
-     * Create ArrayList of elements
-     *
-     * @param elements elements
-     * @param <T>      type of element
-     * @return list of elements
-     */
-    @SafeVarargs
-    public static <T> Collection<T> listOf(T... elements) {
-        return new ArrayList<>(Arrays.asList(elements));
-    }
-
 
     /**
      * Given two lists/iterables finds and returns elements of listA not present in listB
