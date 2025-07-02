@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardCopyOption;
@@ -19,7 +21,15 @@ public abstract class BaseTest {
 
     // Base test for all tests with some common test features
     private final LogVerifier logVerifier = new LogVerifier();
-
+    @AfterEach
+    void after() {
+        if (!GraphicsEnvironment.isHeadless()) {
+            // close any lingering windows
+            for (Window w : Window.getWindows()) {
+                w.dispose();
+            }
+        }
+    }
     @BeforeEach
     void beforeEach() {
        logVerifier.clearLogs();

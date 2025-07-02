@@ -110,7 +110,7 @@ public class SystemUtils {
 
 
     public static void systemExit(int status) {
-        ApplicationStartupContext ctx = EtrexUploaderRunner.getAppContext();
+        ApplicationStartupContext ctx = EtrexUploaderRunner.getSetupManager().getAppContext();
         // close garmin service
         if (ctx !=null && ctx.getGarminDeviceService() != null) {
             ctx.getGarminDeviceService().stop();
