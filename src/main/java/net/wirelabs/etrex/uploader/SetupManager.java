@@ -1,0 +1,61 @@
+package net.wirelabs.etrex.uploader;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.utils.LoggingConfigurator;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.gui.strava.auth.StravaConnector;
+
+import javax.swing.*;
+import java.io.IOException;
+@Slf4j
+@NoArgsConstructor
+public class SetupManager {
+
+    @Getter
+    private ApplicationStartupContext appContext;
+
+    public void initialize() throws IllegalStateException {
+
+        try {
+            checkSystem();
+            configureLogger();
+            initializeContext();
+            setFontAndLookAndFeel();
+            runStravaConnectorIfNecessary();
+        } catch (Exception e) {
+            throw new IllegalStateException("Setup Manager failed to initialize: " + e.getMessage());
+        }
+    }
+
+    void checkSystem() {
+        SystemUtils.checkGraphicsEnvironmentPresent();
+        SystemUtils.checkOsSupport();
+    }
+    void configureLogger() {
+        LoggingConfigurator.configureLogger();
+    }
+
+    void initializeContext() throws IOException {
+        log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
+        appContext = new ApplicationStartupContext();
+    }
+
+    void setFontAndLookAndFeel() throws UnsupportedLookAndFeelException, ReflectiveOperationException {
+        SwingUtils.setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
+        SwingUtils.setGlobalFontSize(appContext.getAppConfiguration().getFontSize());
+    }
+
+    void runStravaConnectorIfNecessary() {
+        if (!getAppContext().getStravaConfiguration().hasAllTokensAndCredentials()) {
+            log.info("Running strava connector...");
+            runStravaConnector();
+        }
+    }
+
+    void runStravaConnector() {
+        new StravaConnector(appContext.getStravaClient());
+    }
+}
