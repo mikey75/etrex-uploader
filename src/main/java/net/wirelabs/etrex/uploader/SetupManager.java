@@ -17,7 +17,7 @@ public class SetupManager {
     @Getter
     private ApplicationStartupContext appContext;
 
-    public void initialize() {
+    public void initialize() throws IllegalStateException {
 
         try {
             checkSystem();
@@ -26,8 +26,7 @@ public class SetupManager {
             setFontAndLookAndFeel();
             runStravaConnectorIfNecessary();
         } catch (Exception e) {
-            log.error("Fatal exception during application setup, exiting: {}", e.getMessage(), e);
-            SystemUtils.systemExit(1);
+            throw new IllegalStateException("Setup Manager failed to initialize: " + e.getMessage());
         }
     }
 

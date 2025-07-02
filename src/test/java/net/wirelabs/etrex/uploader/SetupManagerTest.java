@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class SetupManagerTest extends BaseTest {
@@ -21,44 +22,28 @@ class SetupManagerTest extends BaseTest {
     @BeforeEach
     void before() {
         manager = spy(new SetupManager());
+        doNothing().when(manager).runStravaConnector(); // don't display - it's a modal dialog and will halt the test
     }
 
     @Test
     void shouldCallAllInitMethods() throws IOException, UnsupportedLookAndFeelException, ReflectiveOperationException {
-
-        doNothing().when(manager).runStravaConnector(); // don't display - it's a modal dialog and will halt the test
 
         manager.initialize();
 
         verify(manager).checkSystem();
         verify(manager).configureLogger();
         verify(manager).initializeContext();
-
-        assertNotNullAppContext();
-
         verify(manager).setFontAndLookAndFeel();
         verify(manager).runStravaConnectorIfNecessary();
 
-    }
+        assertNotNullAppContext();
 
-    private void assertNotNullAppContext() {
-        assertThat(manager.getAppContext()).isNotNull();
-        assertThat(manager.getAppContext().getAppConfiguration()).isNotNull();
-        assertThat(manager.getAppContext().getStravaConfiguration()).isNotNull();
-        assertThat(manager.getAppContext().getUploadService()).isNotNull();
-        assertThat(manager.getAppContext().getFileService()).isNotNull();
-        assertThat(manager.getAppContext().getGarminDeviceService()).isNotNull();
     }
 
     @Test
     void shouldInvokeStravaConnector() {
 
-        doNothing().when(manager).runStravaConnector(); // don't display - it's a modal dialog and will halt the test
-
-        // mock some basic config to get nonexistent strava configuration - this triggers the strava connector
-        ApplicationStartupContext mockAppContext = mock(ApplicationStartupContext.class);
-        when(mockAppContext.getStravaConfiguration()).thenReturn(new StravaConfiguration("/target/nonexistent-strava-config-file"));
-        when(manager.getAppContext()).thenReturn(mockAppContext);
+        mockNonexistentStravaConfig();
 
         manager.initialize();
 
@@ -69,21 +54,41 @@ class SetupManagerTest extends BaseTest {
 
     @Test
     void shouldServiceException() {
-        // emulate unknown os so that the checkSystem() throws
+        // emulate unknown OS so that the checkSystem() throws
         try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            systemUtils.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer(inv -> null);
-            systemUtils.when(SystemUtils::getWorkDir).thenCallRealMethod();
-            systemUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
-            systemUtils.when(SystemUtils::checkOsSupport).thenCallRealMethod();
-            systemUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator 1.0");
+
+            mockUnknownOS(systemUtils);
+
             doCallRealMethod().when(manager).checkSystem();
 
-            manager.initialize();
-
-            verifyLogged("Fatal exception during application setup, exiting: Unsupported OS");
-
+            assertThatThrownBy(() -> manager.initialize())
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("Setup Manager failed to initialize: Unsupported OS");
         }
 
     }
 
+    private void mockUnknownOS(MockedStatic<SystemUtils> systemUtils) {
+        systemUtils.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer(inv -> null);
+        systemUtils.when(SystemUtils::getWorkDir).thenCallRealMethod();
+        systemUtils.when(SystemUtils::getHomeDir).thenCallRealMethod();
+        systemUtils.when(SystemUtils::checkOsSupport).thenCallRealMethod();
+        systemUtils.when(SystemUtils::getOsName).thenReturn("Bulbulator 1.0");
+    }
+
+    private void mockNonexistentStravaConfig() {
+        // mock some basic config to get nonexistent strava configuration - this triggers the strava connector
+        ApplicationStartupContext mockAppContext = mock(ApplicationStartupContext.class);
+        when(mockAppContext.getStravaConfiguration()).thenReturn(new StravaConfiguration("/target/nonexistent-strava-config-file"));
+        when(manager.getAppContext()).thenReturn(mockAppContext);
+    }
+
+    private void assertNotNullAppContext() {
+        assertThat(manager.getAppContext()).isNotNull();
+        assertThat(manager.getAppContext().getAppConfiguration()).isNotNull();
+        assertThat(manager.getAppContext().getStravaConfiguration()).isNotNull();
+        assertThat(manager.getAppContext().getUploadService()).isNotNull();
+        assertThat(manager.getAppContext().getFileService()).isNotNull();
+        assertThat(manager.getAppContext().getGarminDeviceService()).isNotNull();
+    }
 }
