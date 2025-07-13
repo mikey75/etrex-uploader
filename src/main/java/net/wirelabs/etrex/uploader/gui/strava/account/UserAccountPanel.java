@@ -38,11 +38,11 @@ public class UserAccountPanel extends BasePanel {
     private final JButton btnSettings = new JButton("Settings");
     private final AppConfiguration configuration;
     private final JLabel lblYtdRides = new JLabel("YTD rides:");
-    private final JLabel lblYtdDist = new JLabel("YTD distance:");
-    private final JLabel lblYtdTime = new JLabel("YTD time:");
+    private final JLabel lblYtdDist = new JLabel("YTD distance (km):");
+    private final JLabel lblYtdTime = new JLabel("YTD time (hrs):");
     private final JLabel lblTotalRides = new JLabel("Total rides:");
-    private final JLabel lblTotalDist = new JLabel("Total distance:");
-    private final JLabel lblTotalTime = new JLabel("Total time:");
+    private final JLabel lblTotalDist = new JLabel("Total distance (km):");
+    private final JLabel lblTotalTime = new JLabel("Total time (hrs):");
     private final JLabel lblStatistics = new JLabel("Statistics");
     private final ApiUsagePanel apiUsagePanel;
 
@@ -66,18 +66,18 @@ public class UserAccountPanel extends BasePanel {
         add(lblStatistics, "cell 0 2 2 1");
         add(new JSeparator(), "cell 0 3 2 1,growx");
         add(lblYtdRides, "cell 0 4");
-        add(ytdRides, "cell 1 4");
+        add(ytdRides, "cell 1 4, alignx right");
         add(lblYtdDist, "cell 0 5");
-        add(ytdDist, "cell 1 5");
+        add(ytdDist, "cell 1 5, alignx right");
         add(lblYtdTime, "cell 0 6");
-        add(ytdTime, "cell 1 6");
+        add(ytdTime, "cell 1 6, alignx right");
         add(new JSeparator(), "cell 0 7 2 1,growx");
         add(lblTotalRides, "cell 0 8");
-        add(totalRides, "cell 1 8");
+        add(totalRides, "cell 1 8 ,alignx right");
         add(lblTotalDist, "cell 0 9");
-        add(totalDist, "cell 1 9");
+        add(totalDist, "cell 1 9, alignx right");
         add(lblTotalTime, "cell 0 10");
-        add(totalTime, "cell 1 10");
+        add(totalTime, "cell 1 10, alignx right");
 
         add(apiUsagePanel, "cell 0 11 2 1,grow");
         add(btnSettings, "cell 0 12 2 1,growx");
@@ -113,13 +113,13 @@ public class UserAccountPanel extends BasePanel {
             SummaryAthlete athlete = stravaClient.getCurrentAthlete();
             ActivityStats stats = stravaClient.getAthleteStats(athlete.getId());
 
-            ytdDist.setText(Math.round(stats.getYtdRideTotals().getDistance() / 1000F) + " km");
+            ytdDist.setText(String.valueOf(Math.round(stats.getYtdRideTotals().getDistance() / 1000F)));
             ytdRides.setText(String.valueOf(stats.getYtdRideTotals().getCount()));
-            ytdTime.setText(DateAndUnitConversionUtil.secondsToHoursAsString(stats.getYtdRideTotals().getElapsedTime()) + " hours");
+            ytdTime.setText(DateAndUnitConversionUtil.secondsToHoursAsString(stats.getYtdRideTotals().getElapsedTime()));
 
-            totalDist.setText(Math.round(stats.getAllRideTotals().getDistance() / 1000F) + " km");
+            totalDist.setText(String.valueOf(Math.round(stats.getAllRideTotals().getDistance() / 1000F)));
             totalRides.setText(String.valueOf(stats.getAllRideTotals().getCount()));
-            totalTime.setText(DateAndUnitConversionUtil.secondsToHoursAsString(stats.getAllRideTotals().getElapsedTime()) + " hours");
+            totalTime.setText(DateAndUnitConversionUtil.secondsToHoursAsString(stats.getAllRideTotals().getElapsedTime()));
         } catch (StravaException e) {
             log.error("Error getting user stats {}", e.getMessage(), e);
         }
