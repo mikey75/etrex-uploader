@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.strava.utils;
 
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.tools.FakeHttpServer;
+import net.wirelabs.etrex.uploader.tools.TestHttpServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -107,8 +107,8 @@ class StravaUtilTest extends BaseTest {
         // because 80 is root/admin only - so we set up fake server on random port
         // and force StravaUtil to use that port
 
-        FakeHttpServer fakeHttpServer = new FakeHttpServer();
-        verifyLogged("Fake http server started on port "+ fakeHttpServer.getListeningPort());
+        TestHttpServer fakeHttpServer = new TestHttpServer();
+        fakeHttpServer.start();
 
         try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
              MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class, CALLS_REAL_METHODS)) {
@@ -126,7 +126,7 @@ class StravaUtilTest extends BaseTest {
             verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " is unreachable");    // msg from networkingUtils (no http port)
             verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " inaccessible, assume uploads might fail"); // msg from StravaUtil
         } finally {
-            fakeHttpServer.terminate();
+            fakeHttpServer.stop();
         }
     }
 

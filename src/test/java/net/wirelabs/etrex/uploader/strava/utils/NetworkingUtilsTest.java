@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.tools.FakeHttpServer;
+import net.wirelabs.etrex.uploader.tools.TestHttpServer;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -29,10 +29,10 @@ class NetworkingUtilsTest extends BaseTest {
 
     @Test
     void httpReachable() throws IOException {
-        FakeHttpServer fakeHttpServer = new FakeHttpServer();
+        TestHttpServer fakeHttpServer = new TestHttpServer();
         boolean isPortReachable = isHostTcpPortReachable("localhost", fakeHttpServer.getListeningPort(), 1000);
         assertThat(isPortReachable).isTrue();
-        fakeHttpServer.terminate();
+        fakeHttpServer.stop();
     }
 
     @Test
