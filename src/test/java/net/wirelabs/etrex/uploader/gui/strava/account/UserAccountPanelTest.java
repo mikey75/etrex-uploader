@@ -96,12 +96,12 @@ class UserAccountPanelTest extends BaseTest {
     }
 
     private static void assertCorrectStats(UserAccountPanel uap) {
-        assertThat(uap.totalDist.getText()).isEqualTo("1 km");
+        assertThat(uap.totalDist.getText()).isEqualTo("1");
         assertThat(uap.totalRides.getText()).isEqualTo("1");
-        assertThat(uap.totalTime.getText()).isEqualTo("01 hours");
-        assertThat(uap.ytdDist.getText()).isEqualTo("1 km");
+        assertThat(uap.totalTime.getText()).isEqualTo("01");
+        assertThat(uap.ytdDist.getText()).isEqualTo("1");
         assertThat(uap.ytdRides.getText()).isEqualTo("1");
-        assertThat(uap.ytdTime.getText()).isEqualTo("01 hours");
+        assertThat(uap.ytdTime.getText()).isEqualTo("01");
     }
 
     private static void assertNoAthleteName(UserAccountPanel uap) {
