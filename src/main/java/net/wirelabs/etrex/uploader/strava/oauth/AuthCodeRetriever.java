@@ -24,12 +24,12 @@ class AuthCodeRetriever implements Serializable {
     private final int port;
 
     public AuthCodeRetriever() throws IOException {
-        port = getRandomFreeTcpPort();
-        interceptorServer = new AuthCodeInterceptor(port);
+        interceptorServer = new AuthCodeInterceptor();
+        port = interceptorServer.getListeningPort();
+        interceptorServer.start();
     }
 
     public void shutdown() {
-        interceptorServer.closeAllConnections();
         interceptorServer.stop();
         log.info("auth code interceptor shut down");
     }

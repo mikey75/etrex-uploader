@@ -4,13 +4,19 @@ package net.wirelabs.etrex.uploader.strava.oauth;
  * Created 12/14/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 
-import fi.iki.elonen.NanoHTTPD;
+import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.strava.utils.HttpUtils;
+import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
 import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
 import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
 
@@ -19,15 +25,13 @@ import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_
  * Listens on random port, when it gets code it's done!
  */
 @Slf4j
-class AuthCodeInterceptor extends NanoHTTPD {
+class AuthCodeInterceptor extends LocalWebServer {
 
     private final AtomicReference<String> authCode = new AtomicReference<>(Constants.EMPTY_STRING);
     private final AtomicReference<String> scope = new AtomicReference<>(Constants.EMPTY_STRING);
     private final AtomicBoolean authCodeReady = new AtomicBoolean(false);
 
-    public AuthCodeInterceptor(int port) throws IOException {
-        super("127.0.0.1", port);
-        start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
+    public AuthCodeInterceptor() throws IOException {
         log.info("Started auth code interceptor http server on port {}", getListeningPort());
     }
 
@@ -37,25 +41,27 @@ class AuthCodeInterceptor extends NanoHTTPD {
      * of the user authorization
      */
     @Override
-    public Response serve(IHTTPSession session) {
-        if (containsAuthCodeAndScopes(session)) {
-            String incomingCode = session.getParameters().get("code").get(0);
-            String incomingScope = session.getParameters().get("scope").get(0);
+    protected void handleRequest(HttpExchange exchange) throws IOException {
+        Map<String,String> params = HttpUtils.parseQueryParams(exchange.getRequestURI().getQuery());
+
+        if (containsAuthCodeAndScopes(params)) {
+            String incomingCode = params.get("code");
+            String incomingScope = params.get("scope");
             if (isNotNullOrEmpty(incomingCode) && isNotNullOrEmpty(incomingScope)) {
                 authCode.set(incomingCode);
                 scope.set(incomingScope);
                 authCodeReady.set(true);
             }
         }
-        return statusResponse();
+        sendResponse(exchange);
     }
 
     private static boolean isNotNullOrEmpty(String incomingCode) {
         return incomingCode != null && !incomingCode.isEmpty();
     }
 
-    private static boolean containsAuthCodeAndScopes(IHTTPSession session) {
-        return session.getParameters().containsKey("code") && session.getParameters().containsKey("scope");
+    private static boolean containsAuthCodeAndScopes(Map<String,String> params) {
+        return params.containsKey("code") && params.containsKey("scope");
     }
 
     boolean scopeOK() {
@@ -68,13 +74,21 @@ class AuthCodeInterceptor extends NanoHTTPD {
         return true;
     }
 
-    private Response statusResponse() {
-        Response response = newFixedLengthResponse((isAuthCodeReady() && scopeOK()) ? STRAVA_AUTHORIZATION_OK_MSG : STRAVA_AUTHORIZATION_FAIL_MSG);
-        response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.addHeader("Pragma", "no-cache");
-        response.addHeader("Expires", "0");
-        return response;
+    private void sendResponse(HttpExchange exchange) throws IOException {
+        String response = (isAuthCodeReady() && scopeOK()) ? STRAVA_AUTHORIZATION_OK_MSG : STRAVA_AUTHORIZATION_FAIL_MSG;
+
+        byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().add("Content-Type","text/html");
+        exchange.getResponseHeaders().add("Cache-Control", "no-cache, no-store, must-revalidate");
+        exchange.getResponseHeaders().add("Pragma", "no-cache");
+        exchange.getResponseHeaders().add("Expires", "0");
+        exchange.sendResponseHeaders(200, responseBytes.length);
+
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(responseBytes);
+        }
     }
+
 
     public String getAuthCode() {
         return authCode.get();
