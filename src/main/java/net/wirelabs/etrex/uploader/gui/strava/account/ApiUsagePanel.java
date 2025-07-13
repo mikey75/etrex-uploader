@@ -43,12 +43,13 @@ public class ApiUsagePanel extends BaseEventAwarePanel {
         add(dailyLabel, "cell 0 2,alignx left");
 
         dailyLimits = new JLabel("$daily");
-        add(dailyLimits, "cell 1 2");
+        add(dailyLimits, "cell 1 2, alignx right");
+
         JLabel quarterLabel = new JLabel("15min:");
         add(quarterLabel, "cell 0 3,alignx left");
 
         quarterLimits = new JLabel("$15min");
-        add(quarterLimits, "cell 1 3");
+        add(quarterLimits, "cell 1 3, alignx right");
     }
 
     @Override
