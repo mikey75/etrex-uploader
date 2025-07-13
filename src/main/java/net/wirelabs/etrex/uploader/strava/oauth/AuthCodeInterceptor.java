@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.strava.utils.HttpUtils;
+import net.wirelabs.etrex.uploader.strava.utils.HttpUtils.ContentTypes;
 import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 
 import java.io.IOException;
@@ -78,7 +79,7 @@ class AuthCodeInterceptor extends LocalWebServer {
         String response = (isAuthCodeReady() && scopeOK()) ? STRAVA_AUTHORIZATION_OK_MSG : STRAVA_AUTHORIZATION_FAIL_MSG;
 
         byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().add("Content-Type","text/html");
+        exchange.getResponseHeaders().add("Content-Type", ContentTypes.HTML);
         exchange.getResponseHeaders().add("Cache-Control", "no-cache, no-store, must-revalidate");
         exchange.getResponseHeaders().add("Pragma", "no-cache");
         exchange.getResponseHeaders().add("Expires", "0");

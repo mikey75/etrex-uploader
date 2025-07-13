@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.tools;
 
 import com.sun.net.httpserver.HttpExchange;
 import lombok.Getter;
+import net.wirelabs.etrex.uploader.strava.utils.HttpUtils.ContentTypes;
 import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class TestHttpServer extends LocalWebServer {
 
         if ("/testfile.html".equals(path)) {
             response = Files.readString(Path.of("src/test/resources/httpserver/testfile.html"));
-            exchange.getResponseHeaders().add("Content-type","text/html");
+            exchange.getResponseHeaders().add("Content-type", ContentTypes.HTML);
         } else if ("/error".equals(path)) {
             response = "Internal Server Error";
             status = 500;
