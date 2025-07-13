@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -30,13 +31,13 @@ class StravaClientTest extends BaseTest {
     private final StravaConfiguration stravaConfiguration = spy(new StravaConfiguration("src/test/resources/strava-emulator/strava-emulator-config.properties"));
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
 
         emulator = new BasicStravaEmulator();
         // make sure nothing saves the test configurations
         doNothing().when(stravaConfiguration).save();
         doNothing().when(appConfiguration).save();
-        String stravaUrl = "http://localhost:" + emulator.getPort();
+        String stravaUrl = "http://localhost:" + emulator.getListeningPort();
         String tokenUrl = stravaUrl + "/oauth/token";
         // redirect strava client/strava service calls to mocked strava server
         stravaClient = new StravaClient(stravaConfiguration, appConfiguration, stravaUrl, tokenUrl);
@@ -45,7 +46,7 @@ class StravaClientTest extends BaseTest {
 
     @AfterEach
     void teardown() {
-        emulator.teardown();
+        emulator.stop();
     }
 
     @Test
@@ -197,7 +198,7 @@ class StravaClientTest extends BaseTest {
 
     @Test
     void shouldThrowExceptionsWhenServerNotAvailable() {
-        emulator.teardown();
+        emulator.stop();
         Exception e = assertThrows(StravaException.class, () -> stravaClient.getCurrentAthlete());
         assertThat(e.getMessage()).contains("Failed to connect");
 
@@ -223,13 +224,13 @@ class StravaClientTest extends BaseTest {
 
         verifyLogged("Refreshing token");
         // at first the auth header will be null, then the auth header should be what was in the token, in this case 'dddd'
-        verifyLogged("[Strava request: POST] http://localhost:" + emulator.getPort()+ "/oauth/token");
+        verifyLogged("[Strava request: POST] http://localhost:" + emulator.getListeningPort() + "/oauth/token");
         verifyNoAuthHeader();
 
         // this log is part of config updater but physical save does not take place due to spy doNothing on save
         verifyLogged("[Refresh token] - updated strava config");
         assertThat(athlete).isNotNull();
-        verifyLogged("[Strava request: GET] http://localhost:" + emulator.getPort()+ "/athlete");
+        verifyLogged("[Strava request: GET] http://localhost:" + emulator.getListeningPort() + "/athlete");
         verifyLogged("[Auth] authHeader: Bearer dddd");
 
 

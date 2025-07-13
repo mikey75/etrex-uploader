@@ -4,25 +4,23 @@ import com.strava.model.DetailedActivity;
 import com.strava.model.UpdatableActivity;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.utils.JsonUtil;
-import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
+import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static net.wirelabs.etrex.uploader.strava.utils.HttpUtils.parseMultipartFormData;
+import static net.wirelabs.etrex.uploader.strava.utils.HttpUtils.parseQueryParams;
 import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.deserialize;
 
 @Slf4j
-public class BasicStravaEmulator {
+public class BasicStravaEmulator extends LocalWebServer {
     /**
      * BasicStravaEmulator
      * -------------------
@@ -45,35 +43,13 @@ public class BasicStravaEmulator {
      * <p>
      * For more details, see the test README.
      */
-    private HttpServer server;
-    @Getter
-    private int port;
 
-    public BasicStravaEmulator() {
-        try {
-            port = NetworkingUtils.getRandomFreeTcpPort();
-            server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
-            server.createContext("/", BasicStravaEmulator::handleRequest);
-            server.setExecutor(null);
-            log.info("Server running at http://localhost:" + port);
-        } catch (IOException e) {
-            log.info("Strava emulator could not be run: {}", e.getMessage(), e);
-            SystemUtils.systemExit(1);
-        }
+    public  BasicStravaEmulator() throws IOException {
+        log.info("Started Strava emulator");
     }
 
-    public void start() {
-        server.start();
-        log.info("Server started at {}:{}", server.getAddress().getHostName(), port);
-    }
-
-    public void teardown() {
-        server.stop(0);
-        log.info("Server stopped");
-    }
-
-
-    private static void handleRequest(HttpExchange exchange) throws IOException {
+    @Override
+    protected void handleRequest(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         URI uri = exchange.getRequestURI();
         String path = uri.getPath();
@@ -204,51 +180,6 @@ public class BasicStravaEmulator {
         try (InputStream is = exchange.getRequestBody()) {
             return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
-    }
-
-    private static Map<String, String> parseQueryParams(String raw) {
-        Map<String, String> params = new HashMap<>();
-        if (raw == null || raw.isEmpty()) return params;
-        for (String pair : raw.split("&")) {
-            String[] kv = pair.split("=", 2);
-
-            String k = URLDecoder.decode(kv[0], StandardCharsets.UTF_8);
-            String v = kv.length > 1 ? URLDecoder.decode(kv[1], StandardCharsets.UTF_8) : "";
-            params.put(k, v);
-
-        }
-        return params;
-    }
-
-    private static Map<String, String> parseMultipartFormData(String contentType, String body) {
-        Map<String, String> form = new HashMap<>();
-        String boundary = contentType.split("boundary=")[1];
-        String[] parts = body.split("--" + boundary);
-        for (String part : parts) {
-            if (part.trim().isEmpty() || part.equals("--")) continue;
-            String[] sections = part.split("\r\n\r\n", 2);
-            if (sections.length < 2) continue;
-
-            String headers = sections[0];
-            String content = sections[1].trim();
-
-            String name = null;
-            for (String line : headers.split("\r\n")) {
-                if (line.startsWith("Content-Disposition")) {
-                    for (String element : line.split(";")) {
-                        element = element.trim();
-                        if (element.startsWith("name=")) {
-                            name = element.substring(6).replace("\"", "");
-                        }
-                    }
-                }
-            }
-
-            if (name != null) {
-                form.put(name, content);
-            }
-        }
-        return form;
     }
 
 }
