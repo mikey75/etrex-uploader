@@ -21,7 +21,6 @@
         <junit.version>5.8.2</junit.version>
         <assertj.version>3.23.1</assertj.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <nanohttpd.version>2.3.1</nanohttpd.version>
         <xmlbeans.version>5.2.1</xmlbeans.version>
         <swagger.annotations.version>1.5.24</swagger.annotations.version>
         <swagger.codegen.plugin.version>2.3.1</swagger.codegen.plugin.version>
@@ -72,11 +71,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.nanohttpd</groupId>
-            <artifactId>nanohttpd</artifactId>
-            <version>${nanohttpd.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
