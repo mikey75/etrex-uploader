@@ -59,12 +59,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>2.7.5</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${swagger.annotations.version}</version>

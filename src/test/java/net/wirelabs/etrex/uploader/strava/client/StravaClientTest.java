@@ -238,7 +238,6 @@ class StravaClientTest extends BaseTest {
 
     @Test
     void shouldGetAuthToken() throws StravaException {
-
         stravaClient.exchangeAuthCodeForAccessToken("1234", "bbbb", "kaka");
         verifyLogged("Got tokens!");
         verifyLogged("[Update token] - updated strava config");
