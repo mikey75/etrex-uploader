@@ -1,16 +1,19 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
-import com.squareup.okhttp.Request;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
-import okio.Buffer;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.http.HttpRequest;
+import java.nio.ByteBuffer;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Flow;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TokenRequestTest {
+class TokenRequestTest extends BaseTest {
 
     private static final String TOKEN_URL = "https://localhost:8080/oauth/token";
     private static final String BASE_URL = "https://localhost:8080/strava";
@@ -22,32 +25,63 @@ class TokenRequestTest {
     private static final StravaClient client = new StravaClient(config, appConfig, BASE_URL, TOKEN_URL);
 
     @Test
-    void getToken() throws IOException {
-        Request r = client.createTokenRequest("kaka", "secret", "xxx");
+    void getToken() throws IOException,  InterruptedException {
+        HttpRequest r = client.createTokenRequest("kaka", "secret", "xxx");
         verifyRequest(r, "client_id=kaka&client_secret=secret&code=xxx&grant_type=authorization_code");
 
     }
 
     @Test
-    void refreshToken() throws IOException {
-        Request r = client.createRefreshTokenRequest("kaka", "secret", "xxx");
+    void refreshToken() throws IOException, InterruptedException {
+        HttpRequest r = client.createRefreshTokenRequest("kaka", "secret", "xxx");
         verifyRequest(r, "client_id=kaka&client_secret=secret&grant_type=refresh_token&refresh_token=xxx");
     }
 
-    private static void verifyRequest(Request request, String expectedBody) throws IOException {
+    private  void verifyRequest(HttpRequest request, String expectedBody) throws IOException, InterruptedException {
         assertThat(request).isNotNull();
         assertThat(request.method()).isEqualTo("POST");
-        assertThat(request.url().getProtocol()).isEqualTo("https");
-        assertThat(request.url()).hasToString("https://localhost:8080/oauth/token");
+        assertThat(request.uri().toURL().getProtocol()).isEqualTo("https");
+        assertThat(request.uri().toURL()).hasToString("https://localhost:8080/oauth/token");
 
-        assertThat(request.body()).isNotNull();
-        assertThat(request.body().contentType()).hasToString("application/x-www-form-urlencoded");
+        assertThat(request.bodyPublisher()).isPresent();
+        assertThat(request.headers().map().get("Content-type")).contains("application/x-www-form-urlencoded");
+        assertThat(request.bodyPublisher()).isPresent();
 
-        Buffer buffer = new Buffer();
-        request.body().writeTo(buffer);
-        String bodyAsString = buffer.readUtf8();
-        assertThat(bodyAsString).isEqualTo(expectedBody);
-
+        String body = readBody(request.bodyPublisher().orElseThrow());
+        assertThat(body).isEqualTo(expectedBody);
 
     }
+    public  String readBody(HttpRequest.BodyPublisher bodyPublisher) throws InterruptedException {
+        StringBuilder result = new StringBuilder();
+        CountDownLatch done = new CountDownLatch(1);
+
+        bodyPublisher.subscribe(new Flow.Subscriber<>() {
+            @Override
+            public void onSubscribe(Flow.Subscription subscription) {
+                subscription.request(1);
+            }
+
+            @Override
+            public void onNext(ByteBuffer item) {
+                byte[] bytes = new byte[item.remaining()];
+                item.get(bytes);
+                result.append(new String(bytes)); // Default charset; use UTF-8 explicitly if needed
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                done.countDown();
+            }
+
+            @Override
+            public void onComplete() {
+                done.countDown();
+            }
+        });
+
+        done.await(); // Wait until onComplete is called
+        return result.toString();
+    }
+
+
 }
