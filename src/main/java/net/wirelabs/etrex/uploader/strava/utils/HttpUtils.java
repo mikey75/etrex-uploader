@@ -10,6 +10,9 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpUtils {
 
+    public static final String FORM_SEPARATOR = "--";
+    public static final String LINEFEED = "\r\n";
+
     public static Map<String, String> parseQueryParams(String input) {
         Map<String, String> result = new HashMap<>();
         if (input == null || input.isEmpty()) return result;
@@ -36,7 +39,7 @@ public class HttpUtils {
         Map<String, String> form = new HashMap<>();
         for (String part : validParts) {
 
-            String[] sections = part.split("\r\n\r\n", 2);
+            String[] sections = part.split(LINEFEED + LINEFEED, 2);
             if (sections.length < 2) continue;
 
             String name = getName(sections[0]);
@@ -52,7 +55,7 @@ public class HttpUtils {
     private static String getName(String section) {
 
         String name = null;
-        for (String line : section.split("\r\n")) {
+        for (String line : section.split(LINEFEED)) {
             if (line.startsWith("Content-Disposition")) {
                 for (String element : line.split(";")) {
                     element = element.trim();
@@ -67,7 +70,15 @@ public class HttpUtils {
 
     private static String[] getParts(String contentType, String body) {
         String boundary = contentType.split("boundary=")[1];
-        return body.split("--" + boundary);
+        return body.split(FORM_SEPARATOR + boundary);
+    }
+
+    public static  String decorateUrlWithParams(String endpointUrl, Map<String, String> parameters) {
+        UrlBuilder urlBuilder = UrlBuilder.create().parse(endpointUrl);
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            urlBuilder.addQueryParam(entry.getKey(), entry.getValue());
+        }
+        return urlBuilder.build();
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

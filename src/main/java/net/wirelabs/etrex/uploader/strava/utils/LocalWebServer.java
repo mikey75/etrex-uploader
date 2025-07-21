@@ -4,9 +4,11 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.ThreadUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.time.Duration;
 import java.util.concurrent.Executor;
 
 @Slf4j
@@ -41,9 +43,11 @@ public abstract class LocalWebServer {
         log.info("Local http server started on port {}", listeningPort);
     }
 
-    public synchronized void stop() {
-        serverInstance.stop(0);
-        log.info("Local http server terminated!");
+    public synchronized void stop()  {
+        if (serverInstance!=null) {
+            serverInstance.stop(0);
+            log.info("Local http server terminated!");
+        }
     }
 
     // default request handler does nothing
