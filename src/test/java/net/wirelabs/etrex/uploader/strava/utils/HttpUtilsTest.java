@@ -3,8 +3,10 @@ package net.wirelabs.etrex.uploader.strava.utils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import static net.wirelabs.etrex.uploader.strava.utils.HttpUtils.decorateUrlWithParams;
 import static net.wirelabs.etrex.uploader.strava.utils.HttpUtils.parseMultipartFormData;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,6 +56,21 @@ class HttpUtilsTest extends BaseTest {
                 .containsEntry("email","user@example.com");
 
 
+
+    }
+
+    @Test
+    void shouldDecorateUrl() {
+        String url = "http://www.kaka.pl";
+
+        Map<String,String> params = new HashMap<>();
+        params.put("k1","v1");
+        params.put("k2","v2");
+        params.put("k3","v3");
+
+        String finalUrl = decorateUrlWithParams(url,params);
+
+        assertThat(finalUrl).isEqualTo(url+"?k1=v1&k2=v2&k3=v3");
 
     }
 }
