@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
 import java.util.concurrent.*;
 
 import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpPortReachable;
@@ -48,7 +44,7 @@ class LocalWebServerTest extends BaseTest {
     }
 
     @Test
-    // this test uses custom server, so we create it explicitely
+    // this test uses custom server, so we create it explicitly
     // and don't use the one created in beforeEach method
     void shouldStartCustomServer() throws IOException {
         Executor executor = Executors.newSingleThreadExecutor();
@@ -66,7 +62,7 @@ class LocalWebServerTest extends BaseTest {
     }
 
     @Test
-    // this test uses custom server, so we create it explicitely
+    // this test uses custom server, so we create it explicitly
     // and don't use the one created in beforeEach method
     void shouldStartServerOnCustomPort() throws IOException {
 
