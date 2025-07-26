@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CHANGED;
+import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.*;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -80,10 +81,7 @@ public class ApplicationSettingsPanel extends BasePanel {
         // if YES -> update config and reboot app
         if (dialogResponse == JOptionPane.YES_OPTION) {
             updateConfiguration();
-            configuration.save();
-            log.info("Restarting application");
-            SystemUtils.createNewInstance();
-            SystemUtils.systemExit(0);
+            saveConfigAndReboot(configuration);
         } else {
             // if NO -> restore UI status with current config and continue normally
             enableDesktopSlidersCheckBox.setSelected(configuration.isEnableDesktopSliders());

@@ -37,5 +37,6 @@ class ConfigurationPropertyKeys {
     static final String MAP_HOME_LATITUDE               = "map.home.latitude";
     static final String MAP_HOME_LONGITUDE              = "map.home.longitude";
     static final String ROUTE_LINE_WIDTH                = "map.route.line.width";
+    static final String TILE_CACHE_TYPE                 = "map.tile.cache.type";
 
 }

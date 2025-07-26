@@ -114,6 +114,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);
         assertThat(c.getFontSize()).isEqualTo(Constants.DEFAULT_FONT_SIZE);
         assertThat(c.getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
+        assertThat(c.getCacheType()).isEqualTo(Constants.DEFAULT_TILE_CACHE_TYPE);
     }
 
     @Test

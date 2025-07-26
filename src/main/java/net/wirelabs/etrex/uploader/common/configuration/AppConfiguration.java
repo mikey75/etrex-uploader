@@ -48,6 +48,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private Double mapHomeLongitude;
     private boolean enableDesktopSliders;
     private int routeLineWidth;
+    private String cacheType;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -75,7 +76,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         enableDesktopSliders = Boolean.parseBoolean(properties.getProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
         routeLineWidth = Integer.parseInt(properties.getProperty(ROUTE_LINE_WIDTH, String.valueOf(Constants.DEFAULT_ROUTE_LINE_WIDTH)));
         fontSize = Integer.parseInt(properties.getProperty(FONT_SIZE, String.valueOf(Constants.DEFAULT_FONT_SIZE)));
-
+        cacheType = properties.getProperty(TILE_CACHE_TYPE, Constants.DEFAULT_TILE_CACHE_TYPE);
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
             save();
@@ -107,6 +108,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(enableDesktopSliders));
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
         properties.setProperty(FONT_SIZE, String.valueOf(fontSize));
+        properties.setProperty(TILE_CACHE_TYPE, cacheType);
         storePropertiesToFile();
 
     }
