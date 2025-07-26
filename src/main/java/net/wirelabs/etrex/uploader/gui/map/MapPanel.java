@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.map;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.parsers.TrackParser;
@@ -12,6 +13,7 @@ import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboB
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 import net.wirelabs.jmaps.map.MapViewer;
+import net.wirelabs.jmaps.map.cache.DBCache;
 import net.wirelabs.jmaps.map.cache.DirectoryBasedCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;
@@ -53,7 +55,7 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.setZoom(DEFAULT_MAP_START_ZOOM);
         mapViewer.setHome(mapHome);
         mapViewer.setImageCacheSize(32000);
-        mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
+        setSecondaryTileCache(configuration.getCacheType());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
         mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
@@ -61,6 +63,21 @@ public class MapPanel extends BaseEventAwarePanel {
         add(mapViewer, "cell 0 0,grow");
         configureMapSelector();
 
+    }
+
+    private void setSecondaryTileCache(String cacheType) {
+        if (cacheType.equals("Files")) {
+            mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
+            return;
+        }
+        if (cacheType.equals("Database")) {
+            mapViewer.setSecondaryTileCache(new DBCache());
+            return;
+        }
+        log.info("Tile cache badly configured: setting default - {}", Constants.DEFAULT_TILE_CACHE_TYPE);
+        mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
+        configuration.setCacheType(Constants.DEFAULT_TILE_CACHE_TYPE);
+        configuration.save();
     }
 
     private void configureMapSelector() {

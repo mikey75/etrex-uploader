@@ -83,6 +83,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
         // set yes answer on dialog
         swingUtilsMock.when(() -> SwingUtils.yesNoCancelMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
         // don't do anything on system exit and create new instance
+        systemUtilsMock.when(() -> SystemUtils.saveConfigAndReboot(any())).thenCallRealMethod();
         systemUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer((Answer<Void>) invocation -> null);
         systemUtilsMock.when(SystemUtils::createNewInstance).thenAnswer((Answer<Void>) invocation -> null);
         // don't do anything on updateConfiguration and save
@@ -94,6 +95,7 @@ class ApplicationSettingsPanelTest extends BaseTest {
         // verify reboot dialog was shown and accepted
         swingUtilsMock.verify(() -> SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?"));
         verifyLogged("Restarting application");
+        verifyNeverLogged("Saving configuration"); // ensure save() did nothing as requested
 
 
     }
