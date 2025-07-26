@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
+import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -188,4 +189,10 @@ public class SystemUtils {
 
     }
 
+    public static void saveConfigAndReboot(AppConfiguration configuration) {
+        configuration.save();
+        log.info("Restarting application");
+        createNewInstance();
+        systemExit(0);
+    }
 }

@@ -2,10 +2,12 @@ package net.wirelabs.etrex.uploader.gui.settings;
 
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
@@ -16,9 +18,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.*;
+
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+@Slf4j
 public class MapsSettingsPanel extends BasePanel {
 
     public static final String INFO_MSG = "<html>You can write new home position here,<br>but you can also use the map,<br> and select it with double click</html>";
@@ -71,7 +76,21 @@ public class MapsSettingsPanel extends BasePanel {
         mapHomeLon.setToolTipText(INFO_MSG);
         mapHomeLat.setToolTipText(INFO_MSG);
         loadConfiguration();
+        cacheCombo.addActionListener(e -> showRebootNeededMsgDialog(configuration));
     }
+
+    private void showRebootNeededMsgDialog(AppConfiguration configuration) {
+        int dialogResponse = SwingUtils.yesNoCancelMsg("This change will need restarting the application. Do you want that?");
+        // if YES -> update config and reboot app
+        if (dialogResponse == JOptionPane.YES_OPTION) {
+            updateConfiguration();
+            saveConfigAndReboot(configuration);
+        } else {
+            // if NO -> restore UI status with current config and continue normally
+            cacheCombo.setSelectedItem(configuration.getCacheType());
+        }
+    }
+
 
     private void loadConfiguration() {
 
