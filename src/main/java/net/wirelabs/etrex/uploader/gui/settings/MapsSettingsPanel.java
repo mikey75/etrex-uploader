@@ -25,12 +25,13 @@ public class MapsSettingsPanel extends BasePanel {
 
     final AppConfiguration configuration;
     final ChooseMapComboBox newMaps = new ChooseMapComboBox();
-
+    private final JComboBox<String> cacheCombo = new JComboBox<>(new String[]{"Files","Database"});
     private final JLabel lblDefaultMap = new JLabel("Default map:");
     private final JLabel lblTilerThreads = new JLabel("Threads:");
     private final JLabel lblColor = new JLabel("Track color:");
     private final JLabel lblMapHomeLat = new JLabel("Map home latitude:");
     private final JLabel lblMapHomeLon = new JLabel("Map home longitude:");
+    private final JLabel lblTileCacheType = new JLabel("Tile cache type:");
 
     private final JTextField threads = new JTextField();
     @Getter
@@ -65,6 +66,8 @@ public class MapsSettingsPanel extends BasePanel {
         add(lblMapHomeLat, "cell 0 4, alignx trailing");
         add(mapHomeLat, "cell 1 4, growx");
 
+        add(lblTileCacheType, "cell 0 5, alignx trailing");
+        add(cacheCombo, "cell 1 5, growx");
         mapHomeLon.setToolTipText(INFO_MSG);
         mapHomeLat.setToolTipText(INFO_MSG);
         loadConfiguration();
@@ -79,10 +82,12 @@ public class MapsSettingsPanel extends BasePanel {
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
         mapHomeLat.setText(String.valueOf(configuration.getMapHomeLatitude()));
         routeLineWidth.setText(String.valueOf(configuration.getRouteLineWidth()));
+        cacheCombo.setSelectedItem(String.valueOf(configuration.getCacheType()));
     }
 
     public void updateConfiguration() {
         configuration.setTilerThreads(Integer.parseInt(threads.getText()));
+        configuration.setCacheType(String.valueOf(cacheCombo.getSelectedItem()));
         // emit events if track color/width, map home, and default map changed
         updateTrackColor(); // emit events for updated track color
         updateTrackWidth(); // emit events for updated track width

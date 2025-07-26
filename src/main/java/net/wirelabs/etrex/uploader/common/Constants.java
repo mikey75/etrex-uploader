@@ -74,4 +74,6 @@ public class Constants {
                 "<h1>Allowing etrex-uploader access to your Strava account failed</h1>" +
                 "<h2>You can close your browser now and investigate logs</h2>" +
             "</center>";
+
+    public static final String DEFAULT_TILE_CACHE_TYPE = "Files";
 }
