@@ -33,14 +33,13 @@ public class MapPanel extends BaseEventAwarePanel {
 
 
     private final AppConfiguration configuration;
-    private final MapViewer mapViewer = new MapViewer();
 
-    private final transient RoutePainter routePainter;
+    final MapViewer mapViewer = new MapViewer();
+    final transient RoutePainter routePainter;
     private final OverlayEnabler overlayEnabler;
-    private transient Coordinate mapHome;
+    transient Coordinate mapHome;
     private final transient TrackParser trackParser;
-
-    private final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
+    final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
 
     public MapPanel(AppConfiguration configuration) {
         super("Map");
