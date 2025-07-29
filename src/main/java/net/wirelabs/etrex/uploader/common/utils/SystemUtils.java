@@ -124,6 +124,10 @@ public class SystemUtils {
         if (ThreadUtils.getExecutorService() != null && !ThreadUtils.getExecutorService().isShutdown()) {
             ThreadUtils.shutdownExecutorService();
         }
+        doExit(status);
+    }
+
+    static void doExit(int status) {
         System.exit(status);
     }
 
