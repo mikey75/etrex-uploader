@@ -21,10 +21,11 @@ import java.util.Objects;
 @Slf4j
 public class RoutePainter extends Painter<MapViewer> {
 
-    private Color routeColor = Color.RED;
+    Color routeColor = Color.RED;
     private BufferedImage startFlagIcon;
     private BufferedImage endFlagIcon;
-    private int routeLineWidth;
+
+    int routeLineWidth;
 
     public void setLineWidth(int width) {
         routeLineWidth = width;

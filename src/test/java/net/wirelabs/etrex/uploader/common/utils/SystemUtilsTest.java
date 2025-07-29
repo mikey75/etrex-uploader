@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.common.utils;
 import com.sun.net.httpserver.HttpServer;
 import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import net.wirelabs.eventbus.EventBus;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -263,6 +264,22 @@ class SystemUtilsTest extends BaseTest {
         // this should test commandline on any system running tests, just on linux/mac and windows the coverage might vary
         String cmdline = SystemUtils.getCommandLine(ProcessHandle.current()).orElseThrow(() -> new IllegalStateException("cmdline empty"));
         assertThat(cmdline).containsAnyOf(File.separator + "bin" + File.separator + "java");
+
+        // make a case for windows if not run on Windows machine to keep coverage
+        // this is the most probable case - GitHub and Ci work on unix and mac/linux is unix so
+        // need to add this for coverage - of course if you run on real Windows machine the first part above
+        // will test real Windows commandline, so treat it as addition
+        if (SystemUtils.isLinux() || SystemUtils.isOSX()) {
+            try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class, CALLS_REAL_METHODS)) {
+                sysUtils.when(SystemUtils::getOsName).thenReturn("Windows");
+                sysUtils.when(() -> SystemUtils.getCommand(anyList())).thenReturn(Optional.of("windows-command-line"));
+                // when
+                Optional<String> cmd = SystemUtils.getCommandLine(ProcessHandle.current());
+                // then
+                assertThat(cmd).isPresent();
+                assertThat(cmd).contains("windows-command-line");
+            }
+        }
     }
 
     @Test
@@ -271,6 +288,25 @@ class SystemUtilsTest extends BaseTest {
         Optional<String> command = SystemUtils.getCommand(badCommand);
         assertThat(command).isNotPresent();
         verifyLogged("There was an error getting command line");
+    }
+
+    @Test
+    void shouldExit() {
+        try (MockedStatic<SystemUtils> sysUtils = Mockito.mockStatic(SystemUtils.class);
+             MockedStatic<ThreadUtils> threadUtils = Mockito.mockStatic(ThreadUtils.class);
+             MockedStatic<EventBus> evbus = Mockito.mockStatic(EventBus.class)) {
+            sysUtils.when(() -> SystemUtils.doExit(anyInt())).thenAnswer(invocation -> null);
+            threadUtils.when(ThreadUtils::shutdownExecutorService).thenAnswer(invocation -> null);
+            evbus.when(EventBus::shutdown).thenAnswer(invocation -> null);
+
+            sysUtils.when(() -> SystemUtils.systemExit(anyInt())).thenCallRealMethod();
+            // when
+            SystemUtils.systemExit(1);
+
+            // then - verify that doExit was called with 1
+            sysUtils.verify(() -> SystemUtils.doExit(1));
+
+        }
     }
 
     private void assertSuccessfulLaunch(MockedStatic<SystemUtils> systemUtils) {
