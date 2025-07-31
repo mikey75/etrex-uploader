@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.gui.map.RoutePainter;
 import net.wirelabs.jmaps.map.MapViewer;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class OverlayEnabler extends BasePanel  {
 
@@ -12,6 +13,7 @@ public class OverlayEnabler extends BasePanel  {
     private final JCheckBox showOverlaysCheckbox = new JCheckBox("Show user overlays", true);
 
     public OverlayEnabler(MapViewer mapViewer, RoutePainter routePainter) {
+        showOverlaysCheckbox.setForeground(Color.BLACK);
         showOverlaysCheckbox.addActionListener(a -> {
             boolean selected = showOverlaysCheckbox.isSelected();
             if (!selected) {
