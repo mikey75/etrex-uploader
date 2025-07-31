@@ -1,11 +1,13 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.BaseDialog;
 import net.wirelabs.etrex.uploader.gui.components.LogViewerDialog;
 
 import javax.swing.*;
-
+@Slf4j
 public class SettingsDialog extends BaseDialog {
 
 
@@ -41,7 +43,7 @@ public class SettingsDialog extends BaseDialog {
 		add(saveBtn, "cell 0 3, alignx right");
 		add(cancelBtn, "cell 0 3,alignx right");
 
-		cancelBtn.addActionListener(e -> dispose());
+		cancelBtn.addActionListener(e -> cancelDialog());
 		saveBtn.addActionListener(e -> saveConfigAndClose());
 		viewLogs.addActionListener(e -> showLogWindow());
 		pack();
@@ -56,8 +58,28 @@ public class SettingsDialog extends BaseDialog {
 	}
 
 	private void showLogWindow() {
-		dispose();
+		cancelDialog();
 		logViewerDialog.open();
 	}
 
+	private void cancelDialog() {
+		// on cancel button click -> check if look and feel was changed
+		// if true -> reset to default and dispose dialog/window
+		try {
+			String currentLaf = String.valueOf(applicationSettingsPanel.getLookAndFeelSelector().getSelectedItem());
+			String defaultLaf = configuration.getLookAndFeelClassName();
+
+			if (!currentLaf.equals(defaultLaf)) {
+				SwingUtils.setSystemLookAndFeel(configuration.getLookAndFeelClassName());
+				SwingUtils.updateComponentsUIState();
+			}
+
+		} catch (UnsupportedLookAndFeelException | ReflectiveOperationException e) {
+			SwingUtils.errorMsg("Error restoring UI state. Close the app and restart");
+
+		} finally {
+			dispose();
+		}
+
+	}
 }

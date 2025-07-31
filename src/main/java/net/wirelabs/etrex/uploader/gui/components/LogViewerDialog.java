@@ -4,6 +4,7 @@ import net.wirelabs.etrex.uploader.common.utils.GzipUtils;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -14,7 +15,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class LogViewerDialog extends BaseDialog {
 
     public static final String LOG_VIEWER_WINDOW_TITLE = "Application Log viewer";
-
+    private static final Dimension windowSize = new Dimension(800,600);
     private final JButton closeBtn = new JButton("Close");
     private final JLabel lblLogfiles = new JLabel("Logfile:");
     private final JScrollPane scrollPane = new JScrollPane();
@@ -24,7 +25,7 @@ public class LogViewerDialog extends BaseDialog {
 
     public LogViewerDialog() {
         super(LOG_VIEWER_WINDOW_TITLE,"","[grow]","[][grow][]");
-        setSize(800, 600);
+        setSize(windowSize);
 
         add(lblLogfiles, "flowx,cell 0 0");
         add(scrollPane, "cell 0 1,grow");
@@ -41,6 +42,7 @@ public class LogViewerDialog extends BaseDialog {
 
     public void open() {
         setVisible(true);
+        setSize(windowSize);
         populateCombo();
     }
 
