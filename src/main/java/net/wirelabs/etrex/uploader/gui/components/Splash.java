@@ -39,6 +39,7 @@ public class Splash extends JFrame {
                 setLayout(null); // x,y absolute layout
 
                 textArea.setFont(new Font("Arial", Font.BOLD, 11));
+                textArea.setForeground(Color.BLACK);
                 textArea.setBounds(24, 150, 350, 140);
                 textArea.setOpaque(false);
                 add(textArea);
