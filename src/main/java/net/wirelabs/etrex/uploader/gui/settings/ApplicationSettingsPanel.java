@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
 import net.wirelabs.eventbus.EventBus;
@@ -35,6 +34,7 @@ public class ApplicationSettingsPanel extends BasePanel {
     private final JCheckBox archiveAfterUpload = new JCheckBox("Archive");
     @Getter
     private final JCheckBox enableDesktopSlidersCheckBox = new JCheckBox("Enable desktop sliders");
+    @Getter
     private final LookAndFeelComboBox lookAndFeelSelector = new LookAndFeelComboBox();
 
 
@@ -73,7 +73,6 @@ public class ApplicationSettingsPanel extends BasePanel {
         loadConfiguration();
 
         enableDesktopSlidersCheckBox.addActionListener(e -> showRebootNeededMsgDialog(configuration));
-
     }
 
     private void showRebootNeededMsgDialog(AppConfiguration configuration) {

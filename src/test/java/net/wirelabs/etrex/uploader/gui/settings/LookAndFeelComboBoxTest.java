@@ -27,9 +27,9 @@ class LookAndFeelComboBoxTest extends BaseTest {
         assertThat(selected).isZero();
 
         // it should contain all required look and feels
-        LookAndFeelInfo[] info = getInstalledLookAndFeels();
+        List<LookAndFeelInfo> info = lafCombo.getLookAndFeelInfos();
         assertThat(info).hasSize(count);
-        List<String> classNames = Arrays.stream(info).map(LookAndFeelInfo::getClassName).toList();
+        List<String> classNames = info.stream().map(LookAndFeelInfo::getClassName).toList();
         List<String> modelClassItems = IntStream.range(0, lafCombo.getItemCount()).mapToObj(lafCombo::getItemAt).toList();
         assertThat(modelClassItems).containsExactlyInAnyOrderElementsOf(classNames);
 

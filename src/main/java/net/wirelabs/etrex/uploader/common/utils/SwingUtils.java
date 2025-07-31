@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import javax.swing.plaf.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Enumeration;
 
 /**
@@ -76,6 +77,15 @@ public class SwingUtils {
                 UIManager.put(key, newFont);
             }
         }
+    }
+
+    public static void updateComponentsUIState() {
+        Arrays.stream(Window.getWindows()).forEach(window -> {
+            SwingUtilities.updateComponentTreeUI(window);
+            window.setMinimumSize(window.getMinimumSize());
+            window.repaint();
+            window.pack();
+        });
     }
 
 }

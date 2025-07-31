@@ -53,7 +53,7 @@ public class ActivitiesTable extends JTable {
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 
-        final Color shadeColor = new Color(240, 240, 240);
+        final Color shadeColor = getShadeColor();
 
         Component comp = super.prepareRenderer(renderer, row, column);
 
@@ -71,5 +71,12 @@ public class ActivitiesTable extends JTable {
     @Override
     public boolean editCellAt(int row, int column, EventObject e) {
         return false;
+    }
+
+        private Color getShadeColor() {
+        float[] hsb = Color.RGBtoHSB(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), null);
+        float reducedBrightness = hsb[2] * 0.88f;
+        reducedBrightness = Math.max(0f, Math.min(1f, reducedBrightness));
+        return Color.getHSBColor(hsb[0], hsb[1], reducedBrightness);
     }
 }
