@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.browsers;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
@@ -19,7 +20,10 @@ import java.util.List;
 @Slf4j
 public class LocalStorageBrowser extends BaseEventAwarePanel {
 
+    @Getter
     private final FileTree fileTree;
+    @Getter
+    private final transient TrackSelectedListener trackSelectedListener = new TrackSelectedListener();
     private final AppConfiguration appConfiguration;
 
     LocalStorageBrowser(AppConfiguration appConfiguration) {
@@ -31,7 +35,7 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
 
         fileTree = new FileTree();
         fileTree.setCellRenderer(new FileTreeCellRenderer());
-        fileTree.addTreeSelectionListener(new TrackSelectedListener());
+        fileTree.addTreeSelectionListener(trackSelectedListener);
         fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree));
         
         setupRoots();
