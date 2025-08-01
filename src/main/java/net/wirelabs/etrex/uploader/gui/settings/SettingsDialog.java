@@ -72,6 +72,7 @@ public class SettingsDialog extends BaseDialog {
 			if (!currentLaf.equals(defaultLaf)) {
 				SwingUtils.setSystemLookAndFeel(configuration.getLookAndFeelClassName());
 				SwingUtils.updateComponentsUIState();
+				SwingUtils.setGlobalFontSize(configuration.getFontSize());
 			}
 
 		} catch (UnsupportedLookAndFeelException | ReflectiveOperationException e) {
