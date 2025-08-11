@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.tools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ThrowingRunnable;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -69,5 +72,16 @@ public abstract class BaseTest {
             }
         }
 
+    }
+
+    protected static void eventBusReset() {
+        EventBus.getUniqueClients().clear();
+        EventBus.getDeadEvents().clear();
+        EventBus.getSubscribersByEventType().clear();
+        Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+            assertThat(EventBus.getDeadEvents()).isEmpty();
+            assertThat(EventBus.getUniqueClients()).isEmpty();
+            assertThat(EventBus.getSubscribersByEventType()).isEmpty();
+        });
     }
 }
