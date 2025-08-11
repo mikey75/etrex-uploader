@@ -32,6 +32,10 @@ class LocalStorageBrowserTest extends BaseTest {
 
     @BeforeEach
     void before() {
+        // after adding MapSettingsPanelTest, MAP_DISPLAY_TRACK which is used here, is already subscribed in map panel,
+        // so because EventBus is still static - we need to clear the state of the bus here
+        eventBusReset();
+
         appConfiguration = new AppConfiguration("src/test/resources/config/test.properties");
         localStorageBrowser = new LocalStorageBrowser(appConfiguration);
     }
