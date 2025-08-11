@@ -45,7 +45,10 @@ public class SetupManager {
 
     void setFontAndLookAndFeel() throws UnsupportedLookAndFeelException, ReflectiveOperationException {
         SwingUtils.setSystemLookAndFeel(appContext.getAppConfiguration().getLookAndFeelClassName());
-        SwingUtils.setGlobalFontSize(appContext.getAppConfiguration().getFontSize());
+
+        if (!appContext.getAppConfiguration().getLookAndFeelClassName().toLowerCase().contains("flatlaf")) {
+            SwingUtils.setGlobalFontSize(appContext.getAppConfiguration().getFontSize());
+        }
     }
 
     void runStravaConnectorIfNecessary() {
