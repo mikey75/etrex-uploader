@@ -75,5 +75,7 @@ public class Constants {
                 "<h2>You can close your browser now and investigate logs</h2>" +
             "</center>";
 
-    public static final String DEFAULT_TILE_CACHE_TYPE = "Files";
+    public static final String DIR_BASED_CACHE_TYPE = "Files";
+    public static final String DB_BASED_CACHE_TYPE = "Database";
+    public static final String DEFAULT_TILE_CACHE_TYPE = DIR_BASED_CACHE_TYPE;
 }

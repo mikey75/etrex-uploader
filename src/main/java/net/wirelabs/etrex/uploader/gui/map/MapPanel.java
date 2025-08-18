@@ -65,11 +65,11 @@ public class MapPanel extends BaseEventAwarePanel {
     }
 
     private void setSecondaryTileCache(String cacheType) {
-        if (cacheType.equals("Files")) {
+        if (cacheType.equals(Constants.DIR_BASED_CACHE_TYPE)) {
             mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
             return;
         }
-        if (cacheType.equals("Database")) {
+        if (cacheType.equals(Constants.DB_BASED_CACHE_TYPE)) {
             mapViewer.setSecondaryTileCache(new DBCache());
             return;
         }
