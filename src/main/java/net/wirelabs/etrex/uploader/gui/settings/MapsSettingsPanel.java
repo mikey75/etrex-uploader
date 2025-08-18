@@ -29,7 +29,7 @@ public class MapsSettingsPanel extends BasePanel {
 
     final AppConfiguration configuration;
     final ChooseMapComboBox newMaps = new ChooseMapComboBox();
-    private final JComboBox<String> cacheCombo = new JComboBox<>(new String[]{"Files","Database"});
+    private final JComboBox<String> cacheCombo = new JComboBox<>(new String[]{Constants.DIR_BASED_CACHE_TYPE,Constants.DB_BASED_CACHE_TYPE});
     private final JLabel lblDefaultMap = new JLabel("Default map:");
     private final JLabel lblTilerThreads = new JLabel("Threads:");
     private final JLabel lblColor = new JLabel("Track color:");
