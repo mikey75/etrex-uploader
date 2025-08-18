@@ -210,7 +210,7 @@ class MapPanelTest extends BaseTest {
             assertThat(mp.mapViewer.getSecondaryTileCache()).isInstanceOf(DBCache.class);
 
             // set dir based cache
-            appConfiguration.setCacheType("Files");
+            appConfiguration.setCacheType(Constants.DIR_BASED_CACHE_TYPE);
             mp = new MapPanel(appConfiguration);
 
             assertThat(mp.mapViewer.getSecondaryTileCache()).isInstanceOf(DirectoryBasedCache.class);
@@ -219,7 +219,7 @@ class MapPanelTest extends BaseTest {
             appConfiguration.setCacheType("zzz");
             mp = new MapPanel(appConfiguration);
 
-            assertThat(appConfiguration.getCacheType()).isEqualTo("Files");
+            assertThat(appConfiguration.getCacheType()).isEqualTo(Constants.DEFAULT_TILE_CACHE_TYPE);
             assertThat(mp.mapViewer.getSecondaryTileCache()).isInstanceOf(DirectoryBasedCache.class);
             verifyLogged("Tile cache badly configured: setting default - " + Constants.DEFAULT_TILE_CACHE_TYPE);
         }
