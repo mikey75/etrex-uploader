@@ -4,6 +4,7 @@ import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.junit.jupiter.api.AfterEach;
@@ -71,7 +72,7 @@ class MapsSettingsPanelTest {
         mapsSettingsPanel.routeLineWidth.setText("5");
         mapsSettingsPanel.updateConfiguration();
 
-        assertThat(mapsSettingsPanel.configuration.getRouteLineWidth()).isEqualTo(5);
+        assertThat(mapsSettingsPanel.getConfiguration().getRouteLineWidth()).isEqualTo(5);
         eventBusMock.verify(() -> EventBus.publish(eq(EventType.ROUTE_LINE_WIDTH_CHANGED), eq(5)));
     }
 
@@ -82,10 +83,11 @@ class MapsSettingsPanelTest {
             // when route width > 10 you'll get option to set default 3px (YES)
             // or ignore and set what was before (NO)
             mapsSettingsPanel.routeLineWidth.setText(String.valueOf(11));
-            when(SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
+            swingUtils.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
+            //when(SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
 
             mapsSettingsPanel.updateConfiguration();
-            assertThat(mapsSettingsPanel.configuration.getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
+            assertThat(mapsSettingsPanel.getConfiguration().getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
 
         }
     }
@@ -94,12 +96,45 @@ class MapsSettingsPanelTest {
     void shouldChangeMap() {
         File newMap = new File("src/test/resources/config/maps/goodMapDef.xml");
 
-        mapsSettingsPanel.newMaps.getChooseMapComboBoxModel().addElement(newMap);
-        mapsSettingsPanel.newMaps.setSelectedItem(newMap);
+        mapsSettingsPanel.getMapsCombo().getChooseMapComboBoxModel().addElement(newMap);
+        mapsSettingsPanel.getMapsCombo().setSelectedItem(newMap);
 
         mapsSettingsPanel.updateConfiguration();
 
         eventBusMock.verify(() -> EventBus.publish(eq(EventType.MAP_CHANGED), eq(newMap)));
+
+    }
+
+    @Test
+    void shouldPresentCacheTypeComboWithConfiguredCache() {
+        assertThat(mapsSettingsPanel.getCacheCombo().getItemCount()).isEqualTo(2);
+        assertThat(mapsSettingsPanel.getCacheCombo().getModel().getElementAt(0)).isEqualTo(Constants.DIR_BASED_CACHE_TYPE);
+        assertThat(mapsSettingsPanel.getCacheCombo().getModel().getElementAt(1)).isEqualTo(Constants.DB_BASED_CACHE_TYPE);
+    }
+
+    @Test
+    void checkSettingCacheFromCombo() {
+        try (MockedStatic<SwingUtils> swingUtils = mockStatic(SwingUtils.class);
+            MockedStatic<SystemUtils> systemUtils = mockStatic(SystemUtils.class)) {
+
+            // do nothing on saveandreboot
+            systemUtils.when(() -> SystemUtils.saveConfigAndReboot(any())).thenAnswer(inv -> null);
+
+            // make sure dir based is selected
+            assertThat(mapsSettingsPanel.getCacheCombo().getSelectedItem()).isEqualTo(Constants.DIR_BASED_CACHE_TYPE);
+
+            // no on confirmation dialog - cache should stay at DIR_BASED
+            swingUtils.when(() -> SwingUtils.yesNoCancelMsg(anyString())).thenReturn(JOptionPane.NO_OPTION);
+            mapsSettingsPanel.getCacheCombo().setSelectedItem(Constants.DB_BASED_CACHE_TYPE);
+            assertThat(mapsSettingsPanel.getConfiguration().getCacheType()).isEqualTo(Constants.DIR_BASED_CACHE_TYPE);
+
+            // yes on confirmation dialog - cache should be set to selected item (DB_BASED)
+            swingUtils.when(() -> SwingUtils.yesNoCancelMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
+            mapsSettingsPanel.getCacheCombo().setSelectedItem(Constants.DB_BASED_CACHE_TYPE);
+            assertThat(mapsSettingsPanel.getConfiguration().getCacheType()).isEqualTo(Constants.DB_BASED_CACHE_TYPE);
+
+
+        }
 
     }
 
