@@ -33,8 +33,6 @@ public class DesktopPanel extends BasePanel {
 
     static final int DEFAULT_HORIZONTAL_SLIDER_WIDTH = 5;
     static final int DEFAULT_VERTICAL_SLIDER_WIDTH = 5;
-    static final int DEFAULT_HORIZONTAL_SLIDER_LOCATION = 500;
-    static final int DEFAULT_VERTICAL_SLIDER_LOCATION = 100;
 
     private final JSplitPane rightContainerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     private final JSplitPane leftContainerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -86,17 +84,13 @@ public class DesktopPanel extends BasePanel {
         // connect two JSplitPanes creating the final component -> left container is now the root of the layout,
         leftContainerPane.setRightComponent(rightContainerPane);
         setPanes(leftPane, topRightPane, bottomRightPane);
-        setDefaultSlidersParameters();
+        // set positions and widths
+        setVerticalSliderWidth(DEFAULT_VERTICAL_SLIDER_WIDTH);
+        setHorizontalSliderWidth(DEFAULT_HORIZONTAL_SLIDER_WIDTH);
+        setVerticalSliderLocation(leftPane.getWidth());
+        setHorizontalSliderLocation(topRightPane.getHeight());
         // put the container on the panel
         add(leftContainerPane, ONE_CELL_ONLY);
-    }
-
-    private void setDefaultSlidersParameters() {
-        // defaults - changeable by setters
-        setHorizontalSliderWidth(DEFAULT_HORIZONTAL_SLIDER_WIDTH);
-        setVerticalSliderWidth(DEFAULT_VERTICAL_SLIDER_WIDTH);
-        setHorizontalSliderLocation(DEFAULT_HORIZONTAL_SLIDER_LOCATION);
-        setVerticalSliderLocation(DEFAULT_VERTICAL_SLIDER_LOCATION);
     }
 
     private void setPanes(JComponent leftPane, JComponent topRightPane, JComponent bottomRightPane) {
