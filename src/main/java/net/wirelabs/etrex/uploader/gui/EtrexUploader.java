@@ -67,16 +67,7 @@ public class EtrexUploader extends JFrame {
 
             splash.update("Laying out main window");
 
-            final boolean slidersEnabled = ctx.getAppConfiguration().isEnableDesktopSliders();
-            desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, slidersEnabled);
-
-            // if sliders enabled - set default slider sizes and locations
-            if (slidersEnabled) {
-                desktopPanel.setSlidersWidth(5);
-                desktopPanel.setVerticalSliderLocation(garminAndStoragePanel.getSize().width);
-                desktopPanel.setHorizontalSliderLocation(stravaPanel.getSize().height);
-            }
-
+            desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, ctx.getAppConfiguration().isEnableDesktopSliders());
             add(desktopPanel);
 
             splash.update("Done");

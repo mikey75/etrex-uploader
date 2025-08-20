@@ -42,8 +42,8 @@ class DesktopPanelTest {
         // sliding panel has default sliders - check if they're initialized to defaults
         assertThat(container.getHorizontalSliderWidth()).isEqualTo(DesktopPanel.DEFAULT_HORIZONTAL_SLIDER_WIDTH);
         assertThat(container.getVerticalSliderWidth()).isEqualTo(DesktopPanel.DEFAULT_VERTICAL_SLIDER_WIDTH);
-        assertThat(container.getHorizontalSliderLocation()).isEqualTo(DesktopPanel.DEFAULT_HORIZONTAL_SLIDER_LOCATION);
-        assertThat(container.getVerticalSliderLocation()).isEqualTo(DesktopPanel.DEFAULT_VERTICAL_SLIDER_LOCATION);
+        assertThat(container.getHorizontalSliderLocation()).isEqualTo(container.getTopRightPane().getHeight());
+        assertThat(container.getVerticalSliderLocation()).isEqualTo(container.getLeftPane().getWidth());
     }
 
     @Test
