@@ -9,6 +9,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.ColorChooserTextField;
+import net.wirelabs.etrex.uploader.gui.components.choosecachecombo.ChooseCacheComboBox;
 import net.wirelabs.etrex.uploader.gui.components.choosemapcombo.ChooseMapComboBox;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.jmaps.map.geo.Coordinate;
@@ -26,10 +27,12 @@ import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.*;
 public class MapsSettingsPanel extends BasePanel {
 
     public static final String INFO_MSG = "<html>You can write new home position here,<br>but you can also use the map,<br> and select it with double click</html>";
-
-    final AppConfiguration configuration;
-    final ChooseMapComboBox newMaps = new ChooseMapComboBox();
-    private final JComboBox<String> cacheCombo = new JComboBox<>(new String[]{Constants.DIR_BASED_CACHE_TYPE,Constants.DB_BASED_CACHE_TYPE});
+    @Getter
+    private final AppConfiguration configuration;
+    @Getter
+    private final ChooseMapComboBox mapsCombo = new ChooseMapComboBox();
+    @Getter
+    private final ChooseCacheComboBox cacheCombo = new ChooseCacheComboBox();
     private final JLabel lblDefaultMap = new JLabel("Default map:");
     private final JLabel lblTilerThreads = new JLabel("Threads:");
     private final JLabel lblColor = new JLabel("Track color:");
@@ -54,7 +57,7 @@ public class MapsSettingsPanel extends BasePanel {
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
 
         add(lblDefaultMap, "cell 0 0,alignx trailing");
-        add(newMaps, "cell 1 0, growx");
+        add(mapsCombo, "cell 1 0, growx");
         add(lblTilerThreads, "cell 2 0,alignx trailing");
         add(threads, "cell 3 0,growx");
 
@@ -95,7 +98,7 @@ public class MapsSettingsPanel extends BasePanel {
 
 
         // set values from gui
-        newMaps.setSelectedItem(configuration.getMapFile().toFile());
+        mapsCombo.setSelectedItem(configuration.getMapFile().toFile());
         threads.setText(String.valueOf(configuration.getTilerThreads()));
         mapHomeLon.setText(String.valueOf(configuration.getMapHomeLongitude()));
         mapHomeLat.setText(String.valueOf(configuration.getMapHomeLatitude()));
@@ -116,9 +119,9 @@ public class MapsSettingsPanel extends BasePanel {
 
     private void updateDefaultMap() {
 
-        if (newMaps.getSelectedItem() != null && !configuration.getMapFile().toString().equals(newMaps.getSelectedItem().toString())) {
-            configuration.setMapFile(((File) newMaps.getSelectedItem()).toPath());
-            EventBus.publish(EventType.MAP_CHANGED,newMaps.getSelectedItem());
+        if (mapsCombo.getSelectedItem() != null && !configuration.getMapFile().toString().equals(mapsCombo.getSelectedItem().toString())) {
+            configuration.setMapFile(((File) mapsCombo.getSelectedItem()).toPath());
+            EventBus.publish(EventType.MAP_CHANGED, mapsCombo.getSelectedItem());
         }
     }
 
