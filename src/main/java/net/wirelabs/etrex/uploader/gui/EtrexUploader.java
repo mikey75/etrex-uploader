@@ -72,7 +72,7 @@ public class EtrexUploader extends JFrame {
 
             splash.update("Done");
             setExtendedState(Frame.MAXIMIZED_BOTH);
-            splash.close();
+            splash.dispose();
             setMinimumSize(new Dimension(800, 600));
             setVisible(true);
             log.info("Application initialization finished.");
