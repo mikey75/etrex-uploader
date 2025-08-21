@@ -61,11 +61,9 @@ public class Splash extends JFrame {
 
     public void update(String message) {
         splashContentPanel.appendLine(message);
+        repaint();
         Sleeper.sleepMillis(100);
     }
 
 
-    public void close() {
-        dispose();
-    }
 }
