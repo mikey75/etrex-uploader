@@ -6,6 +6,7 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.components.BasePanel;
 import net.wirelabs.etrex.uploader.gui.components.FileChooserTextField;
+import net.wirelabs.etrex.uploader.gui.components.lookandfeelcombo.LookAndFeelComboBox;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.components;
+package net.wirelabs.etrex.uploader.gui.components.lookandfeelcombo;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.*;
@@ -6,11 +6,11 @@ import java.awt.*;
 
 import java.util.Map;
 
-public class LaFComboRenderer extends BasicComboBoxRenderer {
+public class LookAndFeelComboRenderer extends BasicComboBoxRenderer {
 
     private final Map<String, String> names;
 
-    public LaFComboRenderer(Map<String,String> names) {
+    public LookAndFeelComboRenderer(Map<String,String> names) {
         this.names = names;
     }
 
