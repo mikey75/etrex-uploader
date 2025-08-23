@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.settings;
+package net.wirelabs.etrex.uploader.gui.components.lookandfeelcombo;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -8,7 +8,6 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.gui.components.LaFComboRenderer;
 
 import javax.swing.*;
 import java.util.*;
@@ -36,7 +35,7 @@ public class LookAndFeelComboBox extends JComboBox<String> {
         });
 
 
-        setRenderer(new LaFComboRenderer(map));
+        setRenderer(new LookAndFeelComboRenderer(map));
         // add change listener
         addActionListener(event -> setSelectedLookAndFeel());
     }

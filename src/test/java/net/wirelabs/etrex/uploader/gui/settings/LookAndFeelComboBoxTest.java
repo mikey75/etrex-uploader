@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.settings;
 
+import net.wirelabs.etrex.uploader.gui.components.lookandfeelcombo.LookAndFeelComboBox;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
