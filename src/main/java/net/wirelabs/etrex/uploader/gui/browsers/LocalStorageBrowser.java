@@ -21,7 +21,7 @@ import java.util.List;
 public class LocalStorageBrowser extends BaseEventAwarePanel {
 
     @Getter
-    private final FileTree fileTree;
+    private final FileTree fileTree = new FileTree();
     @Getter
     private final transient TrackSelectedListener trackSelectedListener = new TrackSelectedListener();
     private final AppConfiguration appConfiguration;
@@ -33,8 +33,6 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 
-        fileTree = new FileTree();
-        fileTree.setCellRenderer(new FileTreeCellRenderer());
         fileTree.addTreeSelectionListener(trackSelectedListener);
         fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree));
         
