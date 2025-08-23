@@ -43,7 +43,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
     private final JLabel lblSoftwareVersion = new JLabel("Software version:");
     private final JLabel lblStatus = new JLabel("Status:");
     private final JScrollPane scrollPane = new JScrollPane();
-    private final FileTree tree;
+    private final FileTree tree = new FileTree();
 
 
     GarminDeviceBrowser(UploadService uploadService) {
@@ -61,9 +61,6 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
         add(scrollPane, "cell 0 5,grow");
 
-        tree = new FileTree(); 
-        
-        tree.setCellRenderer(new FileTreeCellRenderer());
         tree.addTreeSelectionListener(new TrackSelectedListener());
         tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadService));
         scrollPane.setViewportView(tree);

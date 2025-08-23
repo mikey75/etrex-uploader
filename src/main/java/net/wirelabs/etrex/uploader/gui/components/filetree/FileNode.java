@@ -19,10 +19,6 @@ public class FileNode extends DefaultMutableTreeNode {
     private boolean isSystemRoot;
     private boolean isGarminSystemDrive;
 
-    FileNode(Object a) {
-        super(a);
-    }
-
     FileNode(File file) {
         super(file);
         this.file = file;
