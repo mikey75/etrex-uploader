@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.utils.Sleeper;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
+import net.wirelabs.etrex.uploader.common.utils.UrlBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;

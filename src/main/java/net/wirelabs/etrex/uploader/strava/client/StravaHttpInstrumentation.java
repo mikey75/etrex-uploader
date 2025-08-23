@@ -10,7 +10,7 @@ import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
-import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
+import net.wirelabs.etrex.uploader.common.utils.UrlBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-import static net.wirelabs.etrex.uploader.strava.utils.HttpUtils.*;
-import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.deserialize;
-import static net.wirelabs.etrex.uploader.strava.utils.JsonUtil.serialize;
+import static net.wirelabs.etrex.uploader.common.utils.HttpUtils.*;
+import static net.wirelabs.etrex.uploader.common.utils.JsonUtil.deserialize;
+import static net.wirelabs.etrex.uploader.common.utils.JsonUtil.serialize;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

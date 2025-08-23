@@ -7,11 +7,10 @@ import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.utils.FileUtils;
 import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
-import net.wirelabs.etrex.uploader.gui.browsers.GarminAndStoragePanel;
-import net.wirelabs.etrex.uploader.gui.components.Splash;
-import net.wirelabs.etrex.uploader.gui.components.desktop.DesktopPanel;
-import net.wirelabs.etrex.uploader.gui.map.MapPanel;
-import net.wirelabs.etrex.uploader.gui.strava.StravaPanel;
+import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.GarminAndStoragePanel;
+import net.wirelabs.etrex.uploader.gui.desktop.DesktopPanel;
+import net.wirelabs.etrex.uploader.gui.desktop.mappanel.MapPanel;
+import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.StravaPanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import javax.swing.*;

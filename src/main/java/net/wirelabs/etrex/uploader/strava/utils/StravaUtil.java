@@ -13,8 +13,8 @@ import java.net.InetAddress;
 import java.net.URLConnection;
 import java.util.*;
 
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.getAllIpsForHost;
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpPortReachable;
+import static net.wirelabs.etrex.uploader.common.utils.NetworkingUtils.getAllIpsForHost;
+import static net.wirelabs.etrex.uploader.common.utils.NetworkingUtils.isHostTcpPortReachable;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -28,8 +28,8 @@ public class StravaUtil {
     public static final String CURRENT_DAILY = "currentDaily";
     public static final String CURRENT_15MINS = "current15mins";
 
-    static final String STRAVA_HOST_NAME = "www.strava.com";
-    static final int STRAVA_HTTP_PORT = 80;
+    public static final String STRAVA_HOST_NAME = "www.strava.com";
+    public static final int STRAVA_HTTP_PORT = 80;
 
     public static String guessUploadFileFormat(File file) throws StravaException {
 
@@ -99,11 +99,11 @@ public class StravaUtil {
         }
     }
 
-    static int getStravaPort() {
+    public static int getStravaPort() {
         return STRAVA_HTTP_PORT;
     }
 
-    static String getStravaHostName() {
+    public static String getStravaHostName() {
         return STRAVA_HOST_NAME;
     }
 }

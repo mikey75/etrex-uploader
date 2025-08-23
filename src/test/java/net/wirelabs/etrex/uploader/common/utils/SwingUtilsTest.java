@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
-import net.wirelabs.etrex.uploader.gui.components.BasePanel;
+import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

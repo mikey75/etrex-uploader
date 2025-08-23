@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
-import net.wirelabs.etrex.uploader.gui.UploadService;
+import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 import java.io.IOException;

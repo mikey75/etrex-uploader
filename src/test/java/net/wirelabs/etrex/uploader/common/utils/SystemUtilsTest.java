@@ -1,7 +1,6 @@
 package net.wirelabs.etrex.uploader.common.utils;
 
 import com.sun.net.httpserver.HttpServer;
-import net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.EventBus;
 import org.junit.jupiter.api.Test;

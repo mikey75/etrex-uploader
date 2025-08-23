@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
-import static net.wirelabs.etrex.uploader.strava.utils.NetworkingUtils.isHostTcpPortReachable;
+import static net.wirelabs.etrex.uploader.common.utils.NetworkingUtils.isHostTcpPortReachable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
