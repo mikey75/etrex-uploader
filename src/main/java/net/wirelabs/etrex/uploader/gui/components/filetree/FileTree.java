@@ -15,9 +15,10 @@ import java.util.*;
 @Slf4j
 public class FileTree extends JTree {
 
+    private final FileTreeCellRenderer renderer = new FileTreeCellRenderer();
     private final FileNode treeTop  = new FileNode();
     private final DefaultTreeModel model= new DefaultTreeModel(treeTop);
-    
+
     public FileTree() {
         setModel(model);
         addTreeExpansionListener(new DirExpansionListener()); // this is responsible for 'interacting with file tree' 
@@ -25,6 +26,7 @@ public class FileTree extends JTree {
         setRootVisible(false);
         setShowsRootHandles(false);
         setEditable(false);
+        setCellRenderer(renderer);
 
     }
 
@@ -90,7 +92,7 @@ public class FileTree extends JTree {
             FileNode fileNode = new FileNode(f);
             nodeToExpand.add(fileNode);
             if (nodeHasContent(fileNode)){
-                fileNode.add(new FileNode(Boolean.TRUE));
+                fileNode.add(new FileNode());
             } 
         }
 

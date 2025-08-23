@@ -1,6 +1,5 @@
-package net.wirelabs.etrex.uploader.gui.browsers;
+package net.wirelabs.etrex.uploader.gui.components.filetree;
 
-import net.wirelabs.etrex.uploader.gui.components.filetree.FileNode;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -27,11 +26,6 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
                 node, sel, expanded, leaf, row, hasFocus);
 
         result.setIcon(iconDir); // default icon
-
-        if (node.getUserObject() instanceof Boolean) {
-            setText("Retrieving data...");
-            result.setIcon(iconRegularFile);
-        }
 
         if (node.getFile() != null) {
 
