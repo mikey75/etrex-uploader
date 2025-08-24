@@ -1,7 +1,7 @@
 
 package net.wirelabs.etrex.uploader.device;
 
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;

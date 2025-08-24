@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.desktop.devicepanel;
 
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.LocalStorageBrowser;
 import net.wirelabs.etrex.uploader.tools.BaseTest;

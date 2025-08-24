@@ -6,7 +6,7 @@ import com.strava.model.UpdatableActivity;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.utils.JsonUtil;
+import net.wirelabs.etrex.uploader.utils.JsonUtil;
 import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 import org.apache.commons.io.FileUtils;
 
@@ -15,8 +15,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static net.wirelabs.etrex.uploader.common.utils.HttpUtils.*;
-import static net.wirelabs.etrex.uploader.common.utils.JsonUtil.deserialize;
+import static net.wirelabs.etrex.uploader.utils.HttpUtils.*;
+import static net.wirelabs.etrex.uploader.utils.JsonUtil.deserialize;
 
 @Slf4j
 public class BasicStravaEmulator extends LocalWebServer {

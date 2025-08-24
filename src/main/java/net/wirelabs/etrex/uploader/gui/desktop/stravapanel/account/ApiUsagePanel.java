@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 
 import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.Event;

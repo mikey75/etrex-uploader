@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.activitiestable;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;

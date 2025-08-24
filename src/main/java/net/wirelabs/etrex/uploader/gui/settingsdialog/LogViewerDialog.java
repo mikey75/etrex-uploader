@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog;
 
-import net.wirelabs.etrex.uploader.common.utils.GzipUtils;
+import net.wirelabs.etrex.uploader.utils.GzipUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import org.apache.commons.io.FileUtils;
 

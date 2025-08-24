@@ -5,7 +5,7 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.utils.GarminUtils;
+import net.wirelabs.etrex.uploader.utils.GarminUtils;
 import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;

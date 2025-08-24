@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.gui.common.components.ChooseMapComboBox;
 import net.wirelabs.eventbus.EventBus;
@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-import static net.wirelabs.etrex.uploader.common.utils.SystemUtils.*;
+import static net.wirelabs.etrex.uploader.utils.SystemUtils.*;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)

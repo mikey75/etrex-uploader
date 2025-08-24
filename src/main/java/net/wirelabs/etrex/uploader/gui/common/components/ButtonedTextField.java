@@ -2,7 +2,6 @@ package net.wirelabs.etrex.uploader.gui.common.components;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,11 +38,11 @@ public abstract class ButtonedTextField extends BasePanel {
 
     private void setupComponent(String text, String buttonText, Icon buttonIcon) {
 
-        if (!StringUtils.isBlank(text)) {
+        if (!text.isBlank()) {
             setText(text);
         }
 
-        if (!StringUtils.isBlank(buttonText)) {
+        if (!buttonText.isBlank()) {
             setButtonText(buttonText);
         }
 

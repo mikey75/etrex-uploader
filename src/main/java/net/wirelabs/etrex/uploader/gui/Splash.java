@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui;
 
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
+import net.wirelabs.etrex.uploader.utils.Sleeper;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;

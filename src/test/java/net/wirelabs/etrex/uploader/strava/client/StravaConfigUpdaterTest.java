@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
-import net.wirelabs.etrex.uploader.common.utils.JsonUtil;
+import net.wirelabs.etrex.uploader.utils.JsonUtil;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;

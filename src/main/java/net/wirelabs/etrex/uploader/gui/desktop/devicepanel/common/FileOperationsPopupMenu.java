@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileTree;

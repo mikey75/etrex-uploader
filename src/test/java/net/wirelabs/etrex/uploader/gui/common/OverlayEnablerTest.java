@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.common;
 
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.mappanel.common.OverlayEnabler;
 import net.wirelabs.etrex.uploader.gui.desktop.mappanel.common.RoutePainter;
 import net.wirelabs.jmaps.map.MapViewer;

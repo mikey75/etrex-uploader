@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common;
 
-import net.wirelabs.etrex.uploader.common.utils.TrackFileUtils;
+import net.wirelabs.etrex.uploader.utils.TrackFileUtils;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;
 import net.wirelabs.eventbus.EventBus;
 

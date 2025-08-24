@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog.stravasettings;
 
 import com.strava.model.SportType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;

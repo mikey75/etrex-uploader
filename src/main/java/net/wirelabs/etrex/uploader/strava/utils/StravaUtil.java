@@ -13,8 +13,8 @@ import java.net.InetAddress;
 import java.net.URLConnection;
 import java.util.*;
 
-import static net.wirelabs.etrex.uploader.common.utils.NetworkingUtils.getAllIpsForHost;
-import static net.wirelabs.etrex.uploader.common.utils.NetworkingUtils.isHostTcpPortReachable;
+import static net.wirelabs.etrex.uploader.utils.NetworkingUtils.getAllIpsForHost;
+import static net.wirelabs.etrex.uploader.utils.NetworkingUtils.isHostTcpPortReachable;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)

@@ -7,7 +7,7 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 
 import javax.swing.*;
 import java.util.*;

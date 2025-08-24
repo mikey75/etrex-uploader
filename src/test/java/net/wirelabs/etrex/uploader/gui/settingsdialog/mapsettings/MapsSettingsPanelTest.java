@@ -2,9 +2,9 @@ package net.wirelabs.etrex.uploader.gui.settingsdialog.mapsettings;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.junit.jupiter.api.AfterEach;

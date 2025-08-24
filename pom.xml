@@ -26,6 +26,8 @@
         <swagger.codegen.plugin.version>2.3.1</swagger.codegen.plugin.version>
         <fit.sdk.version>21.120.0</fit.sdk.version>
         <flatlaf.version>3.5.1</flatlaf.version>
+        <eventbus.version>1.2.3</eventbus.version>
+        <miglayout.version>5.3</miglayout.version>
         <!-- JaCoCo Properties -->
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</jacoco.xmlReportPaths>
@@ -42,21 +44,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>net.wirelabs</groupId>
             <artifactId>eventbus</artifactId>
-            <version>1.2.3</version>
+            <version>${eventbus.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-swing</artifactId>
-            <version>5.3</version>
+            <version>${miglayout.version}</version>
         </dependency>
 
         <dependency>

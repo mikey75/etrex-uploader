@@ -1,6 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog.appsettings;
 
-import net.wirelabs.etrex.uploader.common.utils.ListUtils;
+import net.wirelabs.etrex.uploader.utils.ListUtils;
 import net.wirelabs.etrex.uploader.gui.common.components.ButtonedTextField;
 
 import javax.swing.*;

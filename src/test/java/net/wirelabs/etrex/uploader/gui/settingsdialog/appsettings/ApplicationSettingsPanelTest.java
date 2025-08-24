@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog.appsettings;
 
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.EventBus;
 import org.junit.jupiter.api.AfterEach;

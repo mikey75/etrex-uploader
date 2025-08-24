@@ -1,10 +1,9 @@
 package net.wirelabs.etrex.uploader.strava;
 
 import net.wirelabs.etrex.uploader.common.FileService;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.UploadDialog;
-import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.awaitility.Awaitility;

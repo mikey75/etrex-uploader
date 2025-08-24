@@ -7,8 +7,8 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.HttpUtils;
-import net.wirelabs.etrex.uploader.common.utils.HttpUtils.ContentTypes;
+import net.wirelabs.etrex.uploader.utils.HttpUtils;
+import net.wirelabs.etrex.uploader.utils.HttpUtils.ContentTypes;
 import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 
 import java.io.IOException;

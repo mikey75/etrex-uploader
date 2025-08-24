@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 import com.strava.model.ActivityStats;
 import com.strava.model.ActivityTotal;
 import com.strava.model.SummaryAthlete;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.tools.BaseTest;

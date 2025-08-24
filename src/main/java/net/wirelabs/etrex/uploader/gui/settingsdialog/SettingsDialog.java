@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import net.wirelabs.etrex.uploader.gui.settingsdialog.appsettings.ApplicationSettingsPanel;
 import net.wirelabs.etrex.uploader.gui.settingsdialog.mapsettings.MapsSettingsPanel;

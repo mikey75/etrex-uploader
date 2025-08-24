@@ -6,10 +6,10 @@ import com.strava.model.SummaryAthlete;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.DateAndUnitConversionUtil;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.ThreadUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.DateAndUnitConversionUtil;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.gui.settingsdialog.SettingsDialog;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 

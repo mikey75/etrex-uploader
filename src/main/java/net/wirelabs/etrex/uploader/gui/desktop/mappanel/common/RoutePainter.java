@@ -3,7 +3,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.mappanel.common;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.jmaps.map.MapViewer;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;

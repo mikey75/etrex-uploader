@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.stravaconnector;
 
 import lombok.Getter;
-import net.wirelabs.etrex.uploader.common.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
