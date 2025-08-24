@@ -1,8 +1,8 @@
-package net.wirelabs.etrex.uploader;
+package net.wirelabs.etrex.uploader.common;
 
 import java.io.File;
 
-public class TestConstants {
+public class TestTrackFiles {
 
     // legal gps track files
     public static final File GPX_FILE_VER_1_0 = new File("src/test/resources/trackfiles/gpx10.gpx");

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.TestConstants.*;
+import static net.wirelabs.etrex.uploader.common.TestTrackFiles.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j

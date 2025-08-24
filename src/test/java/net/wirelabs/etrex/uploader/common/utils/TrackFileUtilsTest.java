@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static net.wirelabs.etrex.uploader.TestConstants.*;
+import static net.wirelabs.etrex.uploader.common.TestTrackFiles.*;
 import static net.wirelabs.etrex.uploader.common.utils.TrackFileUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
