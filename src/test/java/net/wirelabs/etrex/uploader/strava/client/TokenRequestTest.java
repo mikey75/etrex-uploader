@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 

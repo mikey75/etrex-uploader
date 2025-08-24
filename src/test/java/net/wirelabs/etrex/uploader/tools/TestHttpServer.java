@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.tools;
 
 import com.sun.net.httpserver.HttpExchange;
 import lombok.Getter;
-import net.wirelabs.etrex.uploader.strava.utils.HttpUtils.ContentTypes;
+import net.wirelabs.etrex.uploader.utils.HttpUtils.ContentTypes;
 import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 
 import java.io.IOException;

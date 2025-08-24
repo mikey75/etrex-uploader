@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.common;
 
 
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.FileUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;

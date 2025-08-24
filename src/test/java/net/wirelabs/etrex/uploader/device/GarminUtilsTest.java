@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.device;
 
+import net.wirelabs.etrex.uploader.utils.GarminUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 

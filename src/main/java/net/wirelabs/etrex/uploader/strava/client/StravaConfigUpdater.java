@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
 

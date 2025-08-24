@@ -3,10 +3,10 @@ package net.wirelabs.etrex.uploader;
 import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.FileService;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
-import net.wirelabs.etrex.uploader.gui.UploadService;
+import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 import java.io.IOException;

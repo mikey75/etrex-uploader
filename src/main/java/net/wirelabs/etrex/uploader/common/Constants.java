@@ -4,7 +4,7 @@ package net.wirelabs.etrex.uploader.common;
 import com.strava.model.SportType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import java.nio.file.Paths;
