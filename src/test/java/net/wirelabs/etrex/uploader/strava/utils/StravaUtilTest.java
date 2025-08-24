@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
+import net.wirelabs.etrex.uploader.utils.NetworkingUtils;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.TestHttpServer;

@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.device;
 
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
 import com.strava.model.*;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.BasicStravaEmulator;

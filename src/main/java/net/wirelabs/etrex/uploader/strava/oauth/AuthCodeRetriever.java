@@ -3,10 +3,10 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
-import net.wirelabs.etrex.uploader.common.utils.Sleeper;
-import net.wirelabs.etrex.uploader.common.utils.SystemUtils;
+import net.wirelabs.etrex.uploader.utils.Sleeper;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.strava.utils.UrlBuilder;
+import net.wirelabs.etrex.uploader.utils.UrlBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;

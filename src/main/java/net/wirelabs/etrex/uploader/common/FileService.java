@@ -1,8 +1,8 @@
 package net.wirelabs.etrex.uploader.common;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.common.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.common.utils.FileUtils;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
