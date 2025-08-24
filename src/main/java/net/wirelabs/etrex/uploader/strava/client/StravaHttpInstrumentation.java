@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.strava.client;
 
+import com.strava.model.PhotosSummaryPrimary;
 import com.strava.model.SportType;
 import com.strava.model.Upload;
 import lombok.AccessLevel;
@@ -20,9 +21,7 @@ import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Duration;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static net.wirelabs.etrex.uploader.utils.HttpUtils.*;
@@ -283,5 +282,11 @@ public abstract class StravaHttpInstrumentation {
         athleteUrl = baseUrl + "/athlete";
         athletesUrl = baseUrl + "/athletes";
         uploadsUrl = baseUrl + "/uploads";
+    }
+
+    public List<PhotosSummaryPrimary> getPhotos(long activityId, String size) throws StravaException {
+        String url = activitiesUrl + "/" + activityId +"/photos" + "?size=" + size;
+        PhotosSummaryPrimary[] result = makeGetRequest(url,PhotosSummaryPrimary[].class, null);
+        return Arrays.stream(result).toList();
     }
 }

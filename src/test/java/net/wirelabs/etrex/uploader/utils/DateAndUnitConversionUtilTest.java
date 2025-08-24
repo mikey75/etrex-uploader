@@ -33,7 +33,7 @@ class DateAndUnitConversionUtilTest {
     @Test
     void getDateTimeFromZoneDateTime() {
         OffsetDateTime testDate = OffsetDateTime.parse("2022-07-03T11:37:26Z");
-        String s = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(testDate);
+        String s = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(testDate, false);
         assertThat(s).isEqualTo("2022-07-03 11:37");
     }
 
