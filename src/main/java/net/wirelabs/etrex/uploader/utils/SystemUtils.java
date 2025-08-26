@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
-import net.wirelabs.etrex.uploader.EtrexUploaderRunner;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +111,7 @@ public class SystemUtils {
 
 
     public static void systemExit(int status) {
-        ApplicationStartupContext ctx = EtrexUploaderRunner.getSetupManager().getAppContext();
+        ApplicationStartupContext ctx = EtrexUploader.getSetupManager().getAppContext();
         // close garmin service
         if (ctx !=null && ctx.getGarminDeviceService() != null) {
             ctx.getGarminDeviceService().stop();

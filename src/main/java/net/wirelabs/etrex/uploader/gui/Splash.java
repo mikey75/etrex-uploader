@@ -22,8 +22,10 @@ public class Splash extends JFrame {
         }
         setLocationRelativeTo(null);
         setContentPane(splashContentPanel);
-        setVisible(true);
 
+    }
+    public void invoke() {
+        setVisible(true);
     }
 
 
