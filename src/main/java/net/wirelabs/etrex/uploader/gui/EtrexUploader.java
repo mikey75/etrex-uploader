@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.gui;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
+import net.wirelabs.etrex.uploader.SetupManager;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.utils.FileUtils;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
@@ -24,61 +25,66 @@ import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFIC
 
 
 @Slf4j
-public class EtrexUploader extends JFrame {
 
+public class EtrexUploader extends JFrame {
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
-    private DesktopPanel desktopPanel;
-    private GarminAndStoragePanel garminAndStoragePanel;
-    private StravaPanel stravaPanel;
-    private MapPanel mapPanel;
+    @Getter
+    private static final SetupManager setupManager = new SetupManager();
+    private final Splash splash = new Splash();
 
+    public EtrexUploader() {
+        super(APPLICATION_IDENTIFICATION);
 
-    public EtrexUploader(ApplicationStartupContext ctx) {
+        setupManager.initialize();
+        splash.invoke();
 
-        Splash splash = new Splash();
+        ApplicationStartupContext ctx = setupManager.getAppContext();
+
+        splash.update("Application initialization started ....");
+
         splash.update("Checking strava status");
         checkStravaIsUp(ctx.getAppConfiguration());
+
         splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());
 
         if (ctx.getStravaConfiguration().hasAllTokensAndCredentials()) {
 
-            setTitle(APPLICATION_IDENTIFICATION);
-
             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
             registerWindowCloseListener(ctx);
+            createApplicationDesktop(ctx);
 
-            splash.update("Initializing Strava GUI components");
-
-            splash.update("Initializing browsers");
-            garminAndStoragePanel = new GarminAndStoragePanel(ctx.getUploadService(), ctx.getAppConfiguration());
-
-            splash.update("Initializing Strava component");
-            stravaPanel = new StravaPanel(ctx.getStravaClient());
-
-            splash.update("Initializing maps component");
-            mapPanel = new MapPanel(ctx.getAppConfiguration());
-
-            splash.update("Starting Garmin drive observer service");
-            ctx.getGarminDeviceService().start();
-
-            splash.update("Laying out main window");
-
-            desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, ctx.getAppConfiguration().isEnableDesktopSliders());
-            add(desktopPanel);
-
-            splash.update("Done");
-            setExtendedState(Frame.MAXIMIZED_BOTH);
-            splash.dispose();
-            setMinimumSize(new Dimension(800, 600));
-            setVisible(true);
             log.info("Application initialization finished.");
         } else {
             SwingUtils.errorMsg("You are not authorized");
             SystemUtils.systemExit(1);
         }
+    }
+
+    private void createApplicationDesktop(ApplicationStartupContext ctx) {
+
+        splash.update("Initializing browsers");
+        GarminAndStoragePanel garminAndStoragePanel = new GarminAndStoragePanel(ctx.getUploadService(), ctx.getAppConfiguration());
+
+        splash.update("Initializing Strava component");
+        StravaPanel stravaPanel = new StravaPanel(ctx.getStravaClient());
+
+        splash.update("Initializing maps component");
+        MapPanel mapPanel = new MapPanel(ctx.getAppConfiguration());
+
+        splash.update("Starting Garmin drive observer service");
+        ctx.getGarminDeviceService().start();
+
+        splash.update("Laying out main window");
+        DesktopPanel desktopPanel = new DesktopPanel(garminAndStoragePanel, stravaPanel, mapPanel, ctx.getAppConfiguration().isEnableDesktopSliders());
+        add(desktopPanel);
+
+        splash.update("Done");
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        splash.dispose();
+        setMinimumSize(new Dimension(800, 600));
+        setVisible(true);
     }
 
     private void checkStravaIsUp(AppConfiguration cfg) {

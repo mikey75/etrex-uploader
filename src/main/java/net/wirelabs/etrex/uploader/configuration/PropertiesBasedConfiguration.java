@@ -22,7 +22,7 @@ public abstract class PropertiesBasedConfiguration implements Serializable {
     private final String configFileName;
 
 
-    PropertiesBasedConfiguration(String configFileName) {
+    protected PropertiesBasedConfiguration(String configFileName) {
         this.configFileName = configFileName;
         loadConfigFile(configFileName);
     }
@@ -43,7 +43,7 @@ public abstract class PropertiesBasedConfiguration implements Serializable {
 
     }
 
-    void storePropertiesToFile() {
+    protected void storePropertiesToFile() {
         log.info("Saving configuration {}" , configFileName);
         try (OutputStream os = Files.newOutputStream(Paths.get(SystemUtils.getWorkDir(),configFileName))) {
             properties.store(os, "");
