@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.thread;
+package net.wirelabs.etrex.uploader.common;
 
 import net.wirelabs.etrex.uploader.utils.ThreadUtils;
 
