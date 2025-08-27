@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.thread.BaseStoppableRunnable;
+import net.wirelabs.etrex.uploader.common.BaseStoppableRunnable;
 import net.wirelabs.etrex.uploader.utils.*;
 import net.wirelabs.eventbus.EventBus;
 import org.apache.xmlbeans.XmlException;
