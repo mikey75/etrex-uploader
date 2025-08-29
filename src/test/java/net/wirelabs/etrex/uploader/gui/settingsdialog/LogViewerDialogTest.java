@@ -1,10 +1,15 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
+import net.wirelabs.etrex.uploader.utils.FileUtils;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +20,15 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 
+@Slf4j
 class LogViewerDialogTest extends BaseTest {
+
+    @BeforeAll
+    static void setup() throws IOException {
+        // since in tests we cannot assure the application logger is already configured,
+        // so the 'log' dir might not have been created - so create it if it does not exist
+        FileUtils.createDirIfDoesNotExist(new File(SystemUtils.getWorkDir() + "/logs"));
+    }
 
     @Test
     void testLogViewerDialog() throws IOException {
