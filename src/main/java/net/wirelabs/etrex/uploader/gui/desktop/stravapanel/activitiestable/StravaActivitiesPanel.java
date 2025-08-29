@@ -44,6 +44,8 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private static final Map<Long, DetailedActivity> detailedActivityCache = new HashMap<>();
     @Getter
     private static final Map<String, BufferedImage> photoCache = new HashMap<>();
+    @Getter
+    private static final Map<Long,List<PhotosSummaryPrimary>> photoUrlsCache = new HashMap<>();
 
 
     public StravaActivitiesPanel(StravaClient stravaClient) {

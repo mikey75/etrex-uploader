@@ -38,7 +38,7 @@ public class PhotosPanel extends BasePanel {
         SwingUtilities.invokeLater(() -> {
             try {
 
-                List<PhotosSummaryPrimary> photos = stravaClient.getPhotos(id, String.valueOf(size));
+                List<PhotosSummaryPrimary> photos = getAndCachePhotoSummary(stravaClient, id, size);
 
                 if (photos.isEmpty()) {
                     statusLabel.setText("No photos");
@@ -67,6 +67,16 @@ public class PhotosPanel extends BasePanel {
             }
 
         });
+    }
+
+    private List<PhotosSummaryPrimary> getAndCachePhotoSummary(StravaClient stravaClient, long id, int size) throws StravaException {
+        if (StravaActivitiesPanel.getPhotoUrlsCache().get(id) == null) {
+
+            List<PhotosSummaryPrimary> list = stravaClient.getPhotos(id, String.valueOf(size));
+            StravaActivitiesPanel.getPhotoUrlsCache().put(id,list);
+            return list;
+        }
+        return StravaActivitiesPanel.getPhotoUrlsCache().get(id);
     }
 
     private static BufferedImage getImageFromUrl(String url) throws IOException {
