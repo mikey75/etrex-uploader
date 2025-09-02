@@ -44,9 +44,11 @@ public class StravaActivityIconClickListener extends MouseAdapter implements Mou
             }
         }
         else if (mouseOverDetailsIcon(e.getPoint())) {
-            SummaryActivity selectedActivity = table.getActivityAtRow(table.getSelectedRow());
-            ActivityDetailsDialog d = new ActivityDetailsDialog(selectedActivity, stravaClient);
-            d.populate();
+            SwingUtilities.invokeLater(() -> {
+                SummaryActivity selectedActivity = table.getActivityAtRow(table.getSelectedRow());
+                ActivityDetailsDialog d = new ActivityDetailsDialog(selectedActivity, stravaClient);
+                d.populate();
+            });
         }
     }
 
