@@ -18,6 +18,7 @@ import net.wirelabs.eventbus.IEventType;
 import net.wirelabs.jmaps.map.MapViewer;
 import net.wirelabs.jmaps.map.cache.db.DBCache;
 import net.wirelabs.jmaps.map.cache.files.DirectoryBasedCache;
+import net.wirelabs.jmaps.map.cache.redis.RedisCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;
 
@@ -25,6 +26,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,6 +77,10 @@ public class MapPanel extends BaseEventAwarePanel {
         }
         if (cacheType.equals(Constants.DB_BASED_CACHE_TYPE)) {
             mapViewer.setSecondaryTileCache(new DBCache());
+            return;
+        }
+        if (cacheType.equals(Constants.REDIS_CACHE)) {
+            mapViewer.setSecondaryTileCache(new RedisCache(configuration.getRedisHost(), configuration.getRedisPort(), Duration.ofDays(30),100));
             return;
         }
         log.info("Tile cache badly configured: setting default - {}", Constants.DEFAULT_TILE_CACHE_TYPE);
