@@ -38,5 +38,9 @@ class ConfigurationPropertyKeys {
     static final String MAP_HOME_LONGITUDE              = "map.home.longitude";
     static final String ROUTE_LINE_WIDTH                = "map.route.line.width";
     static final String TILE_CACHE_TYPE                 = "map.tile.cache.type";
+    // redis
+    static final String REDIS_HOST                      = "redis.host";
+    static final String REDIS_PORT                      = "redis.port";
+    static final String REDIS_POOL_SIZE                 = "redis.poolsize";
 
 }

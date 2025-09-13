@@ -117,6 +117,9 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getFontSize()).isEqualTo(Constants.DEFAULT_FONT_SIZE);
         assertThat(c.getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
         assertThat(c.getCacheType()).isEqualTo(Constants.DEFAULT_TILE_CACHE_TYPE);
+        assertThat(c.getRedisHost()).isEqualTo(Constants.DEFAULT_REDIS_HOST);
+        assertThat(c.getRedisPort()).isEqualTo(Constants.DEFAULT_REDIS_PORT);
+        assertThat(c.getRedisPoolSize()).isEqualTo(Constants.DEFAULT_REDIS_POOLSIZE);
     }
 
     @Test

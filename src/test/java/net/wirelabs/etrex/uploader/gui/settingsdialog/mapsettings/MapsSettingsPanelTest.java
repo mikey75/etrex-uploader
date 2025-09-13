@@ -107,9 +107,10 @@ class MapsSettingsPanelTest {
 
     @Test
     void shouldPresentCacheTypeComboWithConfiguredCache() {
-        assertThat(mapsSettingsPanel.getCacheCombo().getItemCount()).isEqualTo(2);
+        assertThat(mapsSettingsPanel.getCacheCombo().getItemCount()).isEqualTo(3);
         assertThat(mapsSettingsPanel.getCacheCombo().getModel().getElementAt(0)).isEqualTo(Constants.DIR_BASED_CACHE_TYPE);
         assertThat(mapsSettingsPanel.getCacheCombo().getModel().getElementAt(1)).isEqualTo(Constants.DB_BASED_CACHE_TYPE);
+        assertThat(mapsSettingsPanel.getCacheCombo().getModel().getElementAt(2)).isEqualTo(Constants.REDIS_CACHE);
     }
 
     @Test
