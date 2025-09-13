@@ -49,6 +49,9 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private boolean enableDesktopSliders;
     private int routeLineWidth;
     private String cacheType;
+    private String redisHost;
+    private int redisPort;
+    private int redisPoolSize;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -77,6 +80,10 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         routeLineWidth = Integer.parseInt(properties.getProperty(ROUTE_LINE_WIDTH, String.valueOf(Constants.DEFAULT_ROUTE_LINE_WIDTH)));
         fontSize = Integer.parseInt(properties.getProperty(FONT_SIZE, String.valueOf(Constants.DEFAULT_FONT_SIZE)));
         cacheType = properties.getProperty(TILE_CACHE_TYPE, Constants.DEFAULT_TILE_CACHE_TYPE);
+        redisHost = properties.getProperty(REDIS_HOST, Constants.DEFAULT_REDIS_HOST);
+        redisPort = Integer.parseInt(properties.getProperty(REDIS_PORT, String.valueOf(Constants.DEFAULT_REDIS_PORT)));
+        redisPoolSize = Integer.parseInt(properties.getProperty(REDIS_POOL_SIZE, String.valueOf(Constants.DEFAULT_REDIS_POOLSIZE)));
+
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
             save();
@@ -109,6 +116,9 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(ROUTE_LINE_WIDTH, String.valueOf(routeLineWidth));
         properties.setProperty(FONT_SIZE, String.valueOf(fontSize));
         properties.setProperty(TILE_CACHE_TYPE, cacheType);
+        properties.setProperty(REDIS_HOST, redisHost);
+        properties.setProperty(REDIS_PORT, String.valueOf(redisPort));
+        properties.setProperty(REDIS_POOL_SIZE, String.valueOf(redisPoolSize));
         storePropertiesToFile();
 
     }

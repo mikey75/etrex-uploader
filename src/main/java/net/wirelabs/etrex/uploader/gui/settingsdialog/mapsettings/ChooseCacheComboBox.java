@@ -10,7 +10,8 @@ public class ChooseCacheComboBox extends JComboBox<String> {
 
     private final String[] configuredCacheTypes = new String[]{
             Constants.DIR_BASED_CACHE_TYPE,
-            Constants.DB_BASED_CACHE_TYPE
+            Constants.DB_BASED_CACHE_TYPE,
+            Constants.REDIS_CACHE
     };
     private final DefaultComboBoxModel<String> chooseCacheComboBoxModel = new DefaultComboBoxModel<>(configuredCacheTypes);
 

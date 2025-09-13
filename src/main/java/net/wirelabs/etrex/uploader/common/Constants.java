@@ -78,4 +78,8 @@ public class Constants {
     public static final String DIR_BASED_CACHE_TYPE = "Files";
     public static final String DB_BASED_CACHE_TYPE = "Database";
     public static final String DEFAULT_TILE_CACHE_TYPE = DIR_BASED_CACHE_TYPE;
+    public static final String REDIS_CACHE = "Redis";
+    public static final String DEFAULT_REDIS_HOST = "localhost";
+    public static final int DEFAULT_REDIS_PORT = 6379;
+    public static final int DEFAULT_REDIS_POOLSIZE = 100;
 }
