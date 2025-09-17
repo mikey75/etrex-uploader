@@ -16,8 +16,8 @@ import net.wirelabs.etrex.uploader.gui.desktop.mappanel.common.SelectHomeLocatio
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 import net.wirelabs.jmaps.map.MapViewer;
-import net.wirelabs.jmaps.map.cache.DBCache;
-import net.wirelabs.jmaps.map.cache.DirectoryBasedCache;
+import net.wirelabs.jmaps.map.cache.db.DBCache;
+import net.wirelabs.jmaps.map.cache.files.DirectoryBasedCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;
 
