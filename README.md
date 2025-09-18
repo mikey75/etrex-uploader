@@ -9,7 +9,7 @@ If you want to actively develop this project - use standard github way - i.e. fo
 - if you want to fix some bug or issue - name branch with fix or issue i.e. fix/dir-not-loading or issue/map-too-big<br>
 
 Always add issue number (if exists for your stuff) in commit message like [Issue #123] your commit description<br>
-<b>These rules will apply when project goes public, for now it is only a suggestion for developers.</b>
+
 
 ABOUT
 =
