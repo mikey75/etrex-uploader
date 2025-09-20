@@ -41,6 +41,7 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String TRUE = Boolean.TRUE.toString();
     public static final String LINUX_USB_MOUNT_DIR = "/media";
+    public static final String LINUX_ALT_USB_MOUNT_DIR = "/run/media";
     public static final String OSX_USB_MOUNT_DIR = "/Volumes";
     public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     public static final String DEFAULT_TRACK_COLOR = "#ff0000";
