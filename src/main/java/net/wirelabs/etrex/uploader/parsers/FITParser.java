@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.parsers;
 import com.garmin.fit.*;
 import com.garmin.fit.util.SemicirclesConverter;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.utils.TrackFileUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 
 import java.io.File;
@@ -39,6 +40,11 @@ class FITParser implements TrackToCoordsParser {
                     return new Coordinate(longitude, latitude, altitude);
                 })
                 .toList();
+    }
+
+    @Override
+    public boolean isSupported(File file) {
+        return TrackFileUtils.isFitFile(file);
     }
 
 }
