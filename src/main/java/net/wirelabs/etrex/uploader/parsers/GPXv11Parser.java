@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.parsers;
 
 import com.topografix.gpx.x1.x1.*;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.utils.TrackFileUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 
@@ -28,6 +29,11 @@ class GPXv11Parser implements TrackToCoordsParser {
                     .map(GPSCoordinate::create)
                     .toList();
 
+    }
+
+    @Override
+    public boolean isSupported(File file) {
+        return TrackFileUtils.isGpx11File(file);
     }
 
     /**

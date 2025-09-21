@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TrackToCoordsParser {
     List<Coordinate> parseToGeoPosition(File file);
+    boolean isSupported(File file);
 }
