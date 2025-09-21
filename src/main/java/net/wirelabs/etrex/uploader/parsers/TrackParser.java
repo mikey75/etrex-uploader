@@ -10,35 +10,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.wirelabs.etrex.uploader.utils.TrackFileUtils.*;
-
 /*
  * Created 12/21/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
 public class TrackParser  {
 
-    private final TrackToCoordsParser fitParser = new FITParser();
-    private final TrackToCoordsParser gpxV11Parser = new GPXv11Parser();
-    private final TrackToCoordsParser gpxV10Parser = new GPXv10Parser();
-    private final TrackToCoordsParser tcxParser = new TCXParser();
+    private final List<TrackToCoordsParser> parsers = List.of(
+            new FITParser(),
+            new GPXv10Parser(),
+            new GPXv11Parser(),
+            new TCXParser()
+    );
 
     public List<Coordinate> parseTrackFile(File file) {
-
-        if (isGpx10File(file)) {
-            return gpxV10Parser.parseToGeoPosition(file);
-        }
-        if (isGpx11File(file)) {
-            return gpxV11Parser.parseToGeoPosition(file);
-        }
-        if (isFitFile(file)) {
-            return fitParser.parseToGeoPosition(file);
-        }
-        if (isTcxFile(file)) {
-            return tcxParser.parseToGeoPosition(file);
-        }
-        log.warn("Unsupported track file: {}", file.getName());
-        return Collections.emptyList();
+        return parsers.stream()
+                .filter(p -> p.isSupported(file))
+                .findFirst()
+                .map(p -> p.parseToGeoPosition(file))
+                .orElseGet(() -> {
+                    log.warn("Unsupported track file: {}", file.getName());
+                    return Collections.emptyList();
+                });
     }
 
     public List<Coordinate> parsePolyline(String polyLine) {

@@ -5,6 +5,7 @@ import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk;
 import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg;
 import com.topografix.gpx.x1.x0.GpxDocument.Gpx.Trk.Trkseg.Trkpt;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.utils.TrackFileUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 
@@ -31,6 +32,11 @@ class GPXv10Parser implements TrackToCoordsParser {
                     .map(GPSCoordinate::create)
                     .toList();
 
+    }
+
+    @Override
+    public boolean isSupported(File file) {
+        return TrackFileUtils.isGpx10File(file);
     }
 
     /**

@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.parsers;
 
 import com.garmin.xmlschemas.trainingCenterDatabase.v2.*;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.utils.TrackFileUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.apache.xmlbeans.XmlException;
 
@@ -26,6 +27,11 @@ public class TCXParser implements TrackToCoordsParser {
                     .map(GPSCoordinate::create)
                     .toList();
 
+    }
+
+    @Override
+    public boolean isSupported(File file) {
+        return TrackFileUtils.isTcxFile(file);
     }
 
     /**
