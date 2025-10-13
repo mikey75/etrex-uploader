@@ -5,6 +5,7 @@ import com.garmin.xmlschemas.garminDevice.v2.ModelT;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
+import net.wirelabs.etrex.uploader.gui.desktop.GarminLogo;
 import net.wirelabs.etrex.uploader.utils.GarminUtils;
 import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
@@ -17,6 +18,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -43,29 +45,31 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
     private final JLabel lblStatus = new JLabel("Status:");
     private final JScrollPane scrollPane = new JScrollPane();
     private final FileTree tree = new FileTree();
+    private final GarminLogo garminLogo = new GarminLogo();
 
 
     public GarminDeviceBrowser(UploadService uploadService) {
-        super("Garmin device","","[grow]","[][][][][][grow]");
-        add(lblModelDescription, "flowx,cell 0 0,alignx left");
-        add(lblModelDescriptionValue, "cell 0 0,alignx left");
-        add(lblSerialNo, "flowx,cell 0 1,alignx left");
-        add(lblSerialNoValue, "cell 0 1,alignx left");
-        add(lblPartNo, "flowx,cell 0 2,alignx left");
-        add(lblPartNoValue, "cell 0 2,alignx left");
-        add(lblSoftwareVersion, "flowx,cell 0 3,alignx left");
-        add(lblSoftwareVerValue, "cell 0 3,alignx left");
-        add(lblStatus, "flowx,cell 0 4");
-        add(lblStatusValue, "cell 0 4");
+        super("Garmin device","","[grow]","[][][][][][][grow]");
+        add(garminLogo, "cell 0 0, alignx center");
+        add(lblModelDescription, "flowx,cell 0 1,alignx left");
+        add(lblModelDescriptionValue, "cell 0 1,alignx left");
+        add(lblSerialNo, "flowx,cell 0 2,alignx left");
+        add(lblSerialNoValue, "cell 0 2,alignx left");
+        add(lblPartNo, "flowx,cell 0 3,alignx left");
+        add(lblPartNoValue, "cell 0 3,alignx left");
+        add(lblSoftwareVersion, "flowx,cell 0 4,alignx left");
+        add(lblSoftwareVerValue, "cell 0 4,alignx left");
+        add(lblStatus, "flowx,cell 0 5");
+        add(lblStatusValue, "cell 0 5");
 
-        add(scrollPane, "cell 0 5,grow");
+        add(scrollPane, "cell 0 6,grow");
 
         tree.addTreeSelectionListener(new TrackSelectedListener());
         tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadService));
         scrollPane.setViewportView(tree);
         
     }
-    
+
     @Override
     protected void onEvent(Event evt) {
 

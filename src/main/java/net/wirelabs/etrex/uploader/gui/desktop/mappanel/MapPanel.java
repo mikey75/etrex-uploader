@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.gui.desktop.GarminLogo;
 import net.wirelabs.etrex.uploader.parsers.TrackParser;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
@@ -43,6 +44,7 @@ public class MapPanel extends BaseEventAwarePanel {
     @Getter
     private final transient RoutePainter routePainter;
     private final OverlayEnabler overlayEnabler;
+    private final GarminLogo garminLogo = new GarminLogo();
     transient Coordinate mapHome;
     private final transient TrackParser trackParser;
     final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
@@ -65,6 +67,7 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
         mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
+        mapViewer.add(garminLogo,"cell 0 1");
         add(mapViewer, "cell 0 0,grow");
         configureMapSelector();
 
