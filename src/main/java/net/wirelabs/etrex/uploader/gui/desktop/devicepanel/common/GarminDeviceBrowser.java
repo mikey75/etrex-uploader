@@ -91,7 +91,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
         garminDrives.add(driveOnEvent);
         tree.addDrive(driveOnEvent);
 
-        if (driveHasDeviceXml(driveOnEvent)){
+        if (isGarminSystemDrive(driveOnEvent)){
             findAndMarkFileNodeAsSystemDrive(driveOnEvent);
         }
 
@@ -130,7 +130,11 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
                 EventType.DEVICE_INFO_AVAILABLE);
     }
 
-    public boolean driveHasDeviceXml(File drive) {
+    /**
+     * Checks whether the given drive contains a Garmin device descriptor (device.xml),
+     * which indicates it is a Garmin system drive.
+     */
+    private boolean isGarminSystemDrive(File drive) {
         return GarminUtils.getGarminDeviceXmlFile(drive).isPresent();
     }
 

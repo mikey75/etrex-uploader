@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Base implementation of StoppableRunnable - to be used when no other classes need to be extended.
  * In case when a class already extends some other class - use StoppableRunnable interface instead.
+ * This code and StoppableRunnable interface is courtesy of Staszek Ruchlicki
  */
 public abstract class BaseStoppableRunnable implements StoppableRunnable {
 
