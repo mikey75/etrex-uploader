@@ -158,8 +158,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
         if (fileExistsAndReadable(drive)) {
             List<File> files = FileUtils.listDirectory(drive);
-            return files.stream()
-                    .anyMatch(this::isGarminDir);
+            return files.stream().anyMatch(this::isGarminDir);
         }
         return false;
     }

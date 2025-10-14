@@ -28,6 +28,18 @@ class NetworkingUtilsTest extends BaseTest {
     }
 
     @Test
+    void shouldReactToHostNullOrEmpty() throws UnknownHostException {
+        assertThat(getAllIpsForHost("")).isEmpty();
+        verifyLogged("Host cannot be null or empty");
+    }
+
+    @Test
+    void shouldThrowOnIllegalPort() {
+        assertThat(isHostTcpPortReachable("localhost",99999,500)).isFalse();
+        verifyLogged("Port number illegal. Must be between 1 and 65535. Was: 99999");
+    }
+
+    @Test
     void httpReachable() throws IOException {
         TestHttpServer fakeHttpServer = new TestHttpServer();
         boolean isPortReachable = isHostTcpPortReachable("localhost", fakeHttpServer.getListeningPort(), 1000);
