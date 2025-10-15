@@ -34,7 +34,7 @@ class NetworkingUtilsTest extends BaseTest {
     }
 
     @Test
-    void shouldThrowOnIllegalPort() {
+    void shouldReactToIllegalPort() {
         assertThat(isHostTcpPortReachable("localhost",99999,500)).isFalse();
         verifyLogged("Port number illegal. Must be between 1 and 65535. Was: 99999");
     }
