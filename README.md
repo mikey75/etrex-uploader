@@ -17,9 +17,15 @@ Etrex-uploader is a software for directly uploading your gps tracks from usb-cab
 It is also a swift Strava activities viewer, which allows you to view your strava activities and gps tracks on selected maps.
 The application comes with OpenStreetMap support only, but you can place other map-definition files in the maps directory, 
 to use whatever you like best. Application is mostly fully configurable. You need to have a Strava account, obviously ;)
+
 Here's a simple screenshot of the application's main window. 
 
 ![](src/main/resources/etrex-uploader.png)
+
+Here's the simple screenshot of configuration options for the user
+
+<img width="471" height="663" alt="image" src="https://github.com/user-attachments/assets/28af2083-751d-44c6-a048-d66f2cd30795" />
+
 
 This software needs configuring your Strava account for API usage. It is not normally used but if you want to use Strava
 remotely via the API (like this application does) you need to setup your own API application.
