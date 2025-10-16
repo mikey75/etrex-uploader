@@ -6,6 +6,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileTree;
+import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.IEventType;
 
@@ -26,7 +27,7 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
     private final transient TrackSelectedListener trackSelectedListener = new TrackSelectedListener();
     private final AppConfiguration appConfiguration;
 
-    public LocalStorageBrowser(AppConfiguration appConfiguration) {
+    public LocalStorageBrowser(AppConfiguration appConfiguration, UploadService uploadService) {
         
         super("Local repository");
         this.appConfiguration = appConfiguration;
@@ -34,7 +35,7 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
         add(scrollPane, "cell 0 0,grow");
 
         fileTree.addTreeSelectionListener(trackSelectedListener);
-        fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree));
+        fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree, uploadService));
         
         setupRoots();
         scrollPane.setViewportView(fileTree);

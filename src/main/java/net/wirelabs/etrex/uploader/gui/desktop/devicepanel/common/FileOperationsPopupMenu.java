@@ -22,13 +22,6 @@ public class FileOperationsPopupMenu extends JPopupMenu {
     private final JMenuItem menuItemDelete;
     private final JMenuItem menuitemUploadToDevice;
 
-    // this constructor is called from local storage browser (no upload to strava disabled)
-    public FileOperationsPopupMenu(FileTree tree) {
-        this(tree, null);
-    }
-    // this constructor is called from garmin browser (upload to strava enabled)
-    // todo: maybe use only this constructor and enable uploading to strava from local storage too?
-    //  need to find way to easily recognize which browser calls
     public FileOperationsPopupMenu(FileTree tree, UploadService uploadService) {
 
         menuItemUpload = new JMenuItem("Upload to Strava");
