@@ -4,6 +4,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.LocalStorageBrowser;
+import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
@@ -29,7 +30,7 @@ class LocalStorageBrowserTest extends BaseTest {
 
     private LocalStorageBrowser localStorageBrowser;
     private AppConfiguration appConfiguration;
-
+    private final UploadService uploadService = mock(UploadService.class);
 
     @BeforeEach
     void before() {
@@ -38,7 +39,7 @@ class LocalStorageBrowserTest extends BaseTest {
         eventBusReset();
 
         appConfiguration = new AppConfiguration("src/test/resources/config/test.properties");
-        localStorageBrowser = new LocalStorageBrowser(appConfiguration);
+        localStorageBrowser = new LocalStorageBrowser(appConfiguration, uploadService);
     }
 
     @Test
