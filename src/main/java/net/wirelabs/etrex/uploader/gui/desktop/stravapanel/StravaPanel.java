@@ -8,6 +8,8 @@ import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
 import java.awt.*;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+
 @Getter
 public class StravaPanel extends BasePanel {
 
@@ -20,8 +22,8 @@ public class StravaPanel extends BasePanel {
         activitiesPanel = new StravaActivitiesPanel(stravaClient);
         userAccountPanel = new UserAccountPanel(stravaClient);
 
-        add(activitiesPanel, "cell 0 0,grow");
-        add(userAccountPanel, "cell 1 0,grow");
+        add(activitiesPanel, cell(0,0).grow());
+        add(userAccountPanel, cell(1,0).grow());
 
         setSize(new Dimension(800, 350));
     }

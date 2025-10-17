@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog;
 
-import net.wirelabs.etrex.uploader.utils.GzipUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
+import net.wirelabs.etrex.uploader.utils.GzipUtils;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
+
 
 public class LogViewerDialog extends BaseDialog {
 
@@ -28,10 +30,10 @@ public class LogViewerDialog extends BaseDialog {
         super(LOG_VIEWER_WINDOW_TITLE,"","[grow]","[][grow][]");
         setSize(windowSize);
 
-        add(lblLogfiles, "flowx,cell 0 0");
-        add(scrollPane, "cell 0 1,grow");
-        add(comboBox, "cell 0 0,growx");
-        add(closeBtn, "cell 0 2,alignx right");
+        add(lblLogfiles, cell(0,0).flowX());
+        add(scrollPane, cell(0,1).grow());
+        add(comboBox, cell(0,0).growX());
+        add(closeBtn, cell(0,2).alignX("right"));
 
         textArea.setEditable(false);
         scrollPane.setViewportView(textArea);
