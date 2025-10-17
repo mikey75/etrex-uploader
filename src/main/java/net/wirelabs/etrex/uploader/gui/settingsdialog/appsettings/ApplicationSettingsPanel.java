@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CHANGED;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
 import static net.wirelabs.etrex.uploader.utils.SystemUtils.*;
 
 /*
@@ -43,33 +44,33 @@ public class ApplicationSettingsPanel extends BasePanel {
         this.configuration = configuration;
 
         JLabel storageRootLabel = new JLabel("Storage root:");
-        add(storageRootLabel, "cell 0 0,alignx trailing");
-        add(storageRoot, "cell 1 0,growx");
+        add(storageRootLabel, cc().cell(0,0).alignX("trailing"));
+        add(storageRoot, cc().cell(1,0).growX());
 
         JLabel userRootsLabel = new JLabel("User storage roots:");
-        add(userRootsLabel, "cell 0 1,alignx trailing");
-        add(userRootsFileChooser, "cell 1 1,growx");
+        add(userRootsLabel, cc().cell(0,1).alignX("trailing"));
+        add(userRootsFileChooser, cc().cell(1,1).growX());
 
         JLabel mapDefinitionsDirLabel = new JLabel("Map definitions dir:");
-        add(mapDefinitionsDirLabel, "cell 0 2,alignx trailing");
-        add(mapDefinitionsDir, "cell 1 2,growx");
+        add(mapDefinitionsDirLabel, cc().cell(0,2).alignX("trailing"));
+        add(mapDefinitionsDir, cc().cell(1,2).growX());
 
         JLabel discoveryDelayLabel = new JLabel("Garmin discovery delay:");
-        add(discoveryDelayLabel, "cell 0 3,alignx trailing");
-        add(discoveryDelay, "cell 1 3,growx");
+        add(discoveryDelayLabel, cc().cell(0,3).alignX("trailing"));
+        add(discoveryDelay, cc().cell(1,3).growX());
 
 
         JLabel waitDriveTimeoutLabel = new JLabel("Garmin discovery timeout:");
-        add(waitDriveTimeoutLabel, "cell 0 4,alignx trailing");
-        add(waitDriveTimeout, "cell 1 4,growx");
+        add(waitDriveTimeoutLabel, cc().cell(0,4).alignX("trailing"));
+        add(waitDriveTimeout, cc().cell(1,4).growX());
 
         JLabel lafLabel = new JLabel("GUI Look and Feel");
-        add(lafLabel, "cell 0 5, alignx trailing");
-        add(lookAndFeelSelector, "cell 1 5, growx");
+        add(lafLabel, cc().cell(0,5).alignX("trailing"));
+        add(lookAndFeelSelector, cc().cell(1,5).growX());
 
-        add(deleteAfterUpl, "cell 0 6");
-        add(archiveAfterUpload, "cell 1 6");
-        add(enableDesktopSlidersCheckBox, "cell 0 7");
+        add(deleteAfterUpl, cc().cell(0,6));
+        add(archiveAfterUpload, cc().cell(1,6));
+        add(enableDesktopSlidersCheckBox, cc().cell(0,7));
         loadConfiguration();
 
         enableDesktopSlidersCheckBox.addActionListener(e -> showRebootNeededMsgDialog(configuration));

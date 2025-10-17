@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
+
 
 /**
  * Created 9/8/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -50,19 +52,19 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
     public GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device","","[grow]","[][][][][][][grow]");
-        add(garminLogo, "cell 0 0, alignx center");
-        add(lblModelDescription, "flowx,cell 0 1,alignx left");
-        add(lblModelDescriptionValue, "cell 0 1,alignx left");
-        add(lblSerialNo, "flowx,cell 0 2,alignx left");
-        add(lblSerialNoValue, "cell 0 2,alignx left");
-        add(lblPartNo, "flowx,cell 0 3,alignx left");
-        add(lblPartNoValue, "cell 0 3,alignx left");
-        add(lblSoftwareVersion, "flowx,cell 0 4,alignx left");
-        add(lblSoftwareVerValue, "cell 0 4,alignx left");
-        add(lblStatus, "flowx,cell 0 5");
-        add(lblStatusValue, "cell 0 5");
+        add(garminLogo, cc().cell(0,0).alignX("center"));
+        add(lblModelDescription, cc().cell(0,1).alignX("left").flowX());
+        add(lblModelDescriptionValue, cc().cell(0,1).alignX("left"));
+        add(lblSerialNo, cc().cell(0,2).alignX("left").flowX());
+        add(lblSerialNoValue, cc().cell(0,2).alignX("left"));
+        add(lblPartNo, cc().cell(0,3).alignX("left").flowX());
+        add(lblPartNoValue, cc().cell(0,3).alignX("left"));
+        add(lblSoftwareVersion, cc().cell(0,4).alignX("left").flowX());
+        add(lblSoftwareVerValue, cc().cell(0,4).alignX("left"));
+        add(lblStatus, cc().cell(0,5).flowX());
+        add(lblStatusValue, cc().cell(0,5));
 
-        add(scrollPane, "cell 0 6,grow");
+        add(scrollPane, cc().cell(0,6).grow());
 
         tree.addTreeSelectionListener(new TrackSelectedListener());
         tree.addPopupMenu(new FileOperationsPopupMenu(tree, uploadService));

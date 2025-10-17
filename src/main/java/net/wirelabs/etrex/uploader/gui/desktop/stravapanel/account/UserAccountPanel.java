@@ -19,6 +19,8 @@ import java.awt.image.*;
 import java.io.IOException;
 import java.net.URI;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
+
 /**
  * Created 9/12/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
@@ -61,26 +63,26 @@ public class UserAccountPanel extends BasePanel {
     }
 
     private void initVisualComponent() {
-        add(athleteName, "cell 0 1 2 1,alignx center");
-        add(athletePicture, "cell 0 0 2 1,alignx center");
-        add(lblStatistics, "cell 0 2 2 1");
-        add(new JSeparator(), "cell 0 3 2 1,growx");
-        add(lblYtdRides, "cell 0 4");
-        add(ytdRides, "cell 1 4, alignx right");
-        add(lblYtdDist, "cell 0 5");
-        add(ytdDist, "cell 1 5, alignx right");
-        add(lblYtdTime, "cell 0 6");
-        add(ytdTime, "cell 1 6, alignx right");
-        add(new JSeparator(), "cell 0 7 2 1,growx");
-        add(lblTotalRides, "cell 0 8");
-        add(totalRides, "cell 1 8 ,alignx right");
-        add(lblTotalDist, "cell 0 9");
-        add(totalDist, "cell 1 9, alignx right");
-        add(lblTotalTime, "cell 0 10");
-        add(totalTime, "cell 1 10, alignx right");
+        add(athleteName, cc().cell(0,1,2,1).alignX("center"));
+        add(athletePicture, cc().cell(0,0,2,1).alignX("center"));
+        add(lblStatistics, cc().cell(0,2,2,1));
+        add(new JSeparator(), cc().cell(0,3,2,1).growX());
+        add(lblYtdRides, cc().cell(0,4));
+        add(ytdRides, cc().cell(1,4).alignX("right"));
+        add(lblYtdDist, cc().cell(0,5));
+        add(ytdDist, cc().cell(1,5).alignX("right"));
+        add(lblYtdTime, cc().cell(0,6));
+        add(ytdTime, cc().cell(1,6).alignX("right"));
+        add(new JSeparator(), cc().cell(0,7,2,1).grow());
+        add(lblTotalRides, cc().cell(0,8));
+        add(totalRides, cc().cell(1,8).alignX("right"));
+        add(lblTotalDist, cc().cell(0,9));
+        add(totalDist, cc().cell(1,9).alignX("right"));
+        add(lblTotalTime, cc().cell(0,10));
+        add(totalTime, cc().cell(1,10).alignX("right"));
 
-        add(apiUsagePanel, "cell 0 11 2 1,grow");
-        add(btnSettings, "cell 0 12 2 1,growx");
+        add(apiUsagePanel, cc().cell(0,11,2,1).grow());
+        add(btnSettings, cc().cell(0,12,2,1).growX());
 
         btnSettings.addActionListener(e -> {
             SettingsDialog d = new SettingsDialog(configuration);
