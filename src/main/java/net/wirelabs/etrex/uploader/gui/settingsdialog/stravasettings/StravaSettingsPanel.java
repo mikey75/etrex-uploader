@@ -6,6 +6,8 @@ import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
+
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
@@ -31,20 +33,20 @@ public class StravaSettingsPanel extends BasePanel {
 
         this.configuration = configuration;
 
-        add(activityTypeLabel, "cell 0 0,alignx trailing");
+        add(activityTypeLabel, cc().cell(0,0).alignX("trailing"));
         activityTypeCombo.setModel(new DefaultComboBoxModel<>(SportType.values()));
-        add(activityTypeCombo, "cell 1 0,growx");
+        add(activityTypeCombo, cc().cell(1,0).growX());
 
-        add(lblActivitiesPerPage, "cell 0 1,alignx trailing");
-        add(activitiesPerPage, "cell 1 1,growx");
+        add(lblActivitiesPerPage, cc().cell(0,1).alignX("trailing"));
+        add(activitiesPerPage, cc().cell(1,1).growX());
 
-        add(lblWarnQuotaPercent, "cell 0 2,alignx trailing");
-        add(warnQuotaPercent, "cell 1 2,growx");
-        add(usePolylines, "cell 1 3");
+        add(lblWarnQuotaPercent, cc().cell(0,2).alignX("trailing"));
+        add(warnQuotaPercent, cc().cell(1,2).growX());
+        add(usePolylines, cc().cell(1,3));
 
-        add(checkHostBeforeUpload, "cell 1 4, alignx trailing");
-        add(lblHostTimeout,"cell 1 5, alignx trailing ");
-        add(hostTimeout, "cell 1 5, growx");
+        add(checkHostBeforeUpload, cc().cell(1,4).alignX("trailing"));
+        add(lblHostTimeout, cc().cell(1,5).alignX("trailing"));
+        add(hostTimeout, cc().cell(1,5).growX());
 
         loadConfiguration();
     }

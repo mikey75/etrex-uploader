@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
+
 /**
  * Common 'TextField with button' component
  */
@@ -30,8 +32,8 @@ public abstract class ButtonedTextField extends BasePanel {
         button.setMinimumSize(new Dimension(18, 18));
         button.setMaximumSize(new Dimension(18, 18));
 
-        add(textField, "cell 0 0,grow");
-        add(button, "cell 1 0");
+        add(textField, cc().cell(0,0).grow());
+        add(button, cc().cell(1,0));
 
         setupComponent(text, buttonText, buttonIcon);
     }

@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
+
 
 @Slf4j
 public class LocalStorageBrowser extends BaseEventAwarePanel {
@@ -32,7 +34,7 @@ public class LocalStorageBrowser extends BaseEventAwarePanel {
         super("Local repository");
         this.appConfiguration = appConfiguration;
         JScrollPane scrollPane = new JScrollPane();
-        add(scrollPane, "cell 0 0,grow");
+        add(scrollPane, cc().cell(0,0).grow());
 
         fileTree.addTreeSelectionListener(trackSelectedListener);
         fileTree.addPopupMenu(new FileOperationsPopupMenu(fileTree, uploadService));

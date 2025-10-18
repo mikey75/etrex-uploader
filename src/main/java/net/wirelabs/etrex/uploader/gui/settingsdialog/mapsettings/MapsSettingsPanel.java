@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cc;
 import static net.wirelabs.etrex.uploader.utils.SystemUtils.*;
 
 /*
@@ -54,25 +55,25 @@ public class MapsSettingsPanel extends BasePanel {
         this.configuration = configuration;
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
 
-        add(lblDefaultMap, "cell 0 0,alignx trailing");
-        add(mapsCombo, "cell 1 0, growx");
-        add(lblTilerThreads, "cell 2 0,alignx trailing");
-        add(threads, "cell 3 0,growx");
+        add(lblDefaultMap, cc().cell(0,0).alignX("trailing"));
+        add(mapsCombo, cc().cell(1,0).growX());
+        add(lblTilerThreads, cc().cell(2,0).alignX("trailing"));
+        add(threads, cc().cell(3,0).growX());
 
-        add(lblColor, "cell 0 1, alignx trailing");
-        add(colorChooserTextField, "cell 1 1, growx");
+        add(lblColor, cc().cell(0,1).alignX("trailing"));
+        add(colorChooserTextField, cc().cell(1,1).growX());
 
-        add(lblTrkWidth, "cell 0 2, alignx trailing");
-        add(routeLineWidth, "cell 1 2, growx");
+        add(lblTrkWidth, cc().cell(0,2).alignX("trailing"));
+        add(routeLineWidth, cc().cell(1,2).growX());
 
-        add(lblMapHomeLon, "cell 0 3, alignx trailing");
-        add(mapHomeLon, "cell 1 3, growx");
+        add(lblMapHomeLon, cc().cell(0,3).alignX("trailing"));
+        add(mapHomeLon, cc().cell(1,3).growX());
 
-        add(lblMapHomeLat, "cell 0 4, alignx trailing");
-        add(mapHomeLat, "cell 1 4, growx");
+        add(lblMapHomeLat, cc().cell(0,4).alignX("trailing"));
+        add(mapHomeLat, cc().cell(1,4).growX());
 
-        add(lblTileCacheType, "cell 0 5, alignx trailing");
-        add(cacheCombo, "cell 1 5, growx");
+        add(lblTileCacheType, cc().cell(0,5).alignX("trailing"));
+        add(cacheCombo, cc().cell(1,5).growX());
         mapHomeLon.setToolTipText(INFO_MSG);
         mapHomeLat.setToolTipText(INFO_MSG);
         loadConfiguration();
