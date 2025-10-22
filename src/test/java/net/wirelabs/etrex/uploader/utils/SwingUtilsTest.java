@@ -1,8 +1,9 @@
 package net.wirelabs.etrex.uploader.utils;
 
+import net.miginfocom.layout.CC;
+import net.miginfocom.layout.ConstraintParser;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -116,6 +117,21 @@ class SwingUtilsTest extends BaseTest {
         assertThat(fonts)
                 .extracting(FontUIResource::getSize)
                 .containsOnly(changedFontSize);
+
+    }
+
+    @Test
+    void shouldCreateMigConstraint() {
+        CC binaryRepresentation = MigComponentConstraintsWrapper.cell(0,0).flowX().grow().alignX("center");
+        CC stringRepresentation = ConstraintParser.parseComponentConstraint("cell 0 0, flowx, grow, alignx center");
+
+        assertThat(binaryRepresentation.getCellX()).isZero().isEqualTo(stringRepresentation.getCellX());
+        assertThat(binaryRepresentation.getCellY()).isZero().isEqualTo(stringRepresentation.getCellY());
+        assertThat(binaryRepresentation.getFlowX()).isTrue().isEqualTo(stringRepresentation.getFlowX());
+
+        assertThat(binaryRepresentation.getHorizontal().getGrow()).isEqualTo(100).isEqualTo(stringRepresentation.getHorizontal().getGrow()); //  grow() means grow 100% vertical and 100% horizontal
+        assertThat(binaryRepresentation.getVertical().getGrow()).isEqualTo(100).isEqualTo(stringRepresentation.getVertical().getGrow());
+        assertThat(binaryRepresentation.getHorizontal().getAlign().getValue()).isEqualTo(50L).isEqualTo(stringRepresentation.getHorizontal().getAlign().getValue()); // center is 50
 
     }
 
