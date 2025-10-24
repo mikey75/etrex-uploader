@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 @Slf4j
 public class MapPanel extends BaseEventAwarePanel {
@@ -66,9 +67,9 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.setTilerThreads(configuration.getTilerThreads());
         mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
-        mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), "cell 0 0");
-        mapViewer.add(garminLogo,"cell 0 1");
-        add(mapViewer, "cell 0 0,grow");
+        mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), cell(0,0));
+        mapViewer.add(garminLogo,cell(0,1));
+        add(mapViewer, cell(0,0).grow());
         configureMapSelector();
 
     }
@@ -102,7 +103,7 @@ public class MapPanel extends BaseEventAwarePanel {
                     changeMap((File) e.getItem());
                 }
             });
-            mapViewer.add(mapSelector, "cell 1 0, grow");
+            mapViewer.add(mapSelector, cell(1,0).grow());
 
             // if configured file does not exist - setup first item (which is default OSM.xml)
             File mapFile = configuration.getMapFile().toFile();

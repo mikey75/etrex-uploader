@@ -5,6 +5,8 @@ import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+
 /**
  * Component to create application's main desktop panel with optionally resizable components
  * If classicLook is true - the  container does not contain the vertical and horizontal sliders
@@ -103,7 +105,7 @@ public class DesktopPanel extends BasePanel {
         if (isSlidersEnabled()) {
             leftContainerPane.setLeftComponent(component);
         } else {
-            add(component, "cell 0 0 1 3,grow");
+            add(component, cell(0,0,1,3).grow());
         }
         leftPane = component;
     }
@@ -112,7 +114,7 @@ public class DesktopPanel extends BasePanel {
         if (isSlidersEnabled()) {
             rightContainerPane.setTopComponent(component);
         } else {
-            add(component, "cell 1 0, grow");
+            add(component, cell(1,0).grow());
         }
         topRightPane = component;
     }
@@ -121,7 +123,7 @@ public class DesktopPanel extends BasePanel {
         if (isSlidersEnabled()) {
             rightContainerPane.setBottomComponent(component);
         } else {
-            add(component, "cell 1 1 2 2,grow");
+            add(component, cell(1,1,2,2).grow());
         }
         bottomRightPane = component;
     }
