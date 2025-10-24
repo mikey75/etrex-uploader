@@ -28,6 +28,7 @@ import java.util.Objects;
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 @Slf4j
 public class StravaActivitiesPanel extends BaseEventAwarePanel {
@@ -51,9 +52,9 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     }
 
     private void createVisualComponent() {
-        add(scrollPane, "cell 0 0 2 1,grow");
-        add(btnPrevPage, "flowx,cell 0 1");
-        add(btnNextPage, "cell 0 1");
+        add(scrollPane, cell(0,0,2,1).grow());
+        add(btnPrevPage, cell(0,1).flowX());
+        add(btnNextPage, cell(0,1));
 
 
         scrollPane.setViewportView(activitiesTable);
@@ -74,7 +75,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private void setPoweredByLogo() {
         ImageIcon poweredBy = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/pwrdBystrava.png")));
         poweredByImageLabel.setIcon(poweredBy);
-        add(poweredByImageLabel, "cell 1 1,aligny center");
+        add(poweredByImageLabel, cell(1,1).alignY("center"));
     }
 
     private void applyMouseListenerToActivityTitleColumn() {

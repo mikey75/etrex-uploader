@@ -9,6 +9,9 @@ import net.wirelabs.etrex.uploader.gui.settingsdialog.mapsettings.MapsSettingsPa
 import net.wirelabs.etrex.uploader.gui.settingsdialog.stravasettings.StravaSettingsPanel;
 
 import javax.swing.*;
+
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+
 @Slf4j
 public class SettingsDialog extends BaseDialog {
 
@@ -36,14 +39,14 @@ public class SettingsDialog extends BaseDialog {
 		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
 		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
-		add(applicationSettingsPanel, "cell 0 0,grow");
-		add(stravaSettingsPanel, "cell 0 1,grow");
-		add(mapsSettingsPanel, "cell 0 2,grow");
+		add(applicationSettingsPanel, cell(0,0).grow());
+		add(stravaSettingsPanel, cell(0,1).grow());
+		add(mapsSettingsPanel, cell(0,2).grow());
 
 
-		add(viewLogs, "flowx,cell 0 3,alignx right");
-		add(saveBtn, "cell 0 3, alignx right");
-		add(cancelBtn, "cell 0 3,alignx right");
+		add(viewLogs, cell(0,3).alignX("right").flowX());
+		add(saveBtn, cell(0,3).alignX("right"));
+		add(cancelBtn, cell(0,3).alignX("right"));
 
 		cancelBtn.addActionListener(e -> cancelDialog());
 		saveBtn.addActionListener(e -> saveConfigAndClose());

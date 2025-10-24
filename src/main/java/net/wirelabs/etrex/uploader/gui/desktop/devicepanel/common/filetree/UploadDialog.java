@@ -18,7 +18,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 
 @Slf4j
@@ -69,19 +69,19 @@ public class UploadDialog extends BaseDialog {
         setSize(600, 300);
         SwingUtils.centerComponent(this);
 
-        add(lblActivityName, "cell 0 0");
-        add(activityTitleTextField, "cell 0 1,grow");
+        add(lblActivityName, cell(0,0));
+        add(activityTitleTextField, cell(0,1).grow());
 
-        add(lblActivityType, "cell 0 2");
+        add(lblActivityType, cell(0,2));
 
-        add(activityTypeCombo, "cell 0 3,grow");
-        add(lblActivityDescription, "cell 0 4");
-        add(scrollPane, "cell 0 5,grow");
-        add(commute, "cell 0 6");
-        add(virtual, "cell 0 6");
+        add(activityTypeCombo, cell(0,3).grow());
+        add(lblActivityDescription, cell(0,4));
+        add(scrollPane, cell(0,5).grow());
+        add(commute, cell(0,6));
+        add(virtual, cell(0,6));
         //  container.add(statusLabel, "cell 0 6"); <-- here, it is now possible to add a progressbar
-        add(btnOk, "flowx,cell 0 7");
-        add(btnCancel, "cell 0 7");
+        add(btnOk, cell(0,7).flowX());
+        add(btnCancel, cell(0,7));
 
         activityTitleTextField.setColumns(10);
         scrollPane.setViewportView(activityDescriptionArea);
