@@ -136,6 +136,20 @@ class TrackParserTest extends BaseTest {
 
     }
 
+    @Test
+    void shouldCorrectlyParseBothTypesOfTCX() {
+        // route file
+        List<Coordinate> coords = trackParser.parseTrackFile(TCX_COURSE_FILE);
+        verifyLogged("TCX file is a course/route");
+        assertThat(coords).isNotEmpty().hasSize(263);
+
+        // activity file
+        coords = trackParser.parseTrackFile(TCX_ACTIVITY_FILE);
+        verifyLogged("TCX file is a recorded activity");
+        assertThat(coords).isNotEmpty().hasSize(10);
+
+    }
+
     private static void assertZeroElevationInResultingCoordinates(List<Coordinate> coords) {
 
         assertThat(coords).isNotEmpty()

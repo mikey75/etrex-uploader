@@ -23,4 +23,9 @@ public class TestTrackFiles {
     public static final File NO_ELEVATION_TCX_FILE = new File("src/test/resources/trackfiles/tcx-noElevation.tcx");
     public static final File NO_ELEVATION_FIT_FILE = new File("src/test/resources/trackfiles/fit-noElevation.fit");
 
+    // tcx route/course vs tcx activity tracks
+    public static final File TCX_COURSE_FILE = TCX_FILE;
+    public static final File TCX_ACTIVITY_FILE = new File("src/test/resources/trackfiles/tcx-activity.tcx");
+
+
 }
