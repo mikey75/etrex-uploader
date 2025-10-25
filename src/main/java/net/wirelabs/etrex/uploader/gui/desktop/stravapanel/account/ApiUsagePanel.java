@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 
 /**
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -36,22 +36,22 @@ public class ApiUsagePanel extends BaseEventAwarePanel {
         this.configuration = configuration;
 
         JLabel header = new JLabel("API usage:");
-        add(header, cell(0,1,2,1).growX().alignY("center"));
+        add(header, cell(0,1,2,1).growX().alignY(CENTER));
 
         JSeparator separator = new JSeparator();
         add(separator, cell(0,0,2,1).grow());
 
         JLabel dailyLabel = new JLabel("Daily:");
-        add(dailyLabel, cell(0,2).alignX("left"));
+        add(dailyLabel, cell(0,2).alignX(LEFT));
 
         dailyLimits = new JLabel("$daily");
-        add(dailyLimits, cell(1,2).alignX("right"));
+        add(dailyLimits, cell(1,2).alignX(RIGHT));
 
         JLabel quarterLabel = new JLabel("15min:");
-        add(quarterLabel, cell(0,3).alignX("left"));
+        add(quarterLabel, cell(0,3).alignX(LEFT));
 
         quarterLimits = new JLabel("$15min");
-        add(quarterLimits, cell(1,3).alignX("right"));
+        add(quarterLimits, cell(1,3).alignX(RIGHT));
     }
 
     @Override

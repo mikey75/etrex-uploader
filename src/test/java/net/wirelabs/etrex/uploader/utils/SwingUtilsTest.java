@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Enumeration;
 
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SwingUtilsTest extends BaseTest {
@@ -122,7 +123,7 @@ class SwingUtilsTest extends BaseTest {
 
     @Test
     void shouldCreateMigConstraint() {
-        CC binaryRepresentation = MigComponentConstraintsWrapper.cell(0,0).flowX().grow().alignX("center");
+        CC binaryRepresentation = MigComponentConstraintsWrapper.cell(0,0).flowX().grow().alignX(CENTER);
         CC stringRepresentation = ConstraintParser.parseComponentConstraint("cell 0 0, flowx, grow, alignx center");
 
         assertThat(binaryRepresentation.getCellX()).isZero().isEqualTo(stringRepresentation.getCellX());

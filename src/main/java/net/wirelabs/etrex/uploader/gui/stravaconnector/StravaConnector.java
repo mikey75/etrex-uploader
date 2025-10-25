@@ -13,7 +13,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 
 
 /**
@@ -64,11 +64,11 @@ public class StravaConnector extends BaseDialog {
 
     private void createVisualComponent() {
 
-        add(lblApplicationId, cell(0,0).alignX("center").alignY("center"));
+        add(lblApplicationId, cell(0,0).alignX(CENTER).alignY(CENTER));
         add(appIdInput, cell(0,1).grow());
-        add(lblClientSecret, cell(0,2).alignX("center").alignY("center"));
+        add(lblClientSecret, cell(0,2).alignX(CENTER).alignY(CENTER));
         add(appSecretInput, cell(0,3).grow());
-        add(connectBtn, cell(0,4).growX().alignY("center"));
+        add(connectBtn, cell(0,4).growX().alignY(CENTER));
 
         setBounds(100, 100, 320, 210);
         setModal(true);

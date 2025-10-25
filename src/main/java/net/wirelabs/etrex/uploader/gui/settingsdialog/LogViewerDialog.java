@@ -33,7 +33,7 @@ public class LogViewerDialog extends BaseDialog {
         add(lblLogfiles, cell(0,0).flowX());
         add(scrollPane, cell(0,1).grow());
         add(comboBox, cell(0,0).growX());
-        add(closeBtn, cell(0,2).alignX("right"));
+        add(closeBtn, cell(0,2).alignX(RIGHT));
 
         textArea.setEditable(false);
         scrollPane.setViewportView(textArea);
