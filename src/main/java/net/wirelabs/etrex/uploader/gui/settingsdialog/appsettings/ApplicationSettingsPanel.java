@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.EventType.USER_STORAGE_ROOTS_CHANGED;
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 import static net.wirelabs.etrex.uploader.utils.SystemUtils.*;
 
 /*
@@ -44,28 +44,28 @@ public class ApplicationSettingsPanel extends BasePanel {
         this.configuration = configuration;
 
         JLabel storageRootLabel = new JLabel("Storage root:");
-        add(storageRootLabel, cell(0,0).alignX("trailing"));
+        add(storageRootLabel, cell(0,0).alignX(TRAILING));
         add(storageRoot, cell(1,0).growX());
 
         JLabel userRootsLabel = new JLabel("User storage roots:");
-        add(userRootsLabel, cell(0,1).alignX("trailing"));
+        add(userRootsLabel, cell(0,1).alignX(TRAILING));
         add(userRootsFileChooser, cell(1,1).growX());
 
         JLabel mapDefinitionsDirLabel = new JLabel("Map definitions dir:");
-        add(mapDefinitionsDirLabel, cell(0,2).alignX("trailing"));
+        add(mapDefinitionsDirLabel, cell(0,2).alignX(TRAILING));
         add(mapDefinitionsDir, cell(1,2).growX());
 
         JLabel discoveryDelayLabel = new JLabel("Garmin discovery delay:");
-        add(discoveryDelayLabel, cell(0,3).alignX("trailing"));
+        add(discoveryDelayLabel, cell(0,3).alignX(TRAILING));
         add(discoveryDelay, cell(1,3).growX());
 
 
         JLabel waitDriveTimeoutLabel = new JLabel("Garmin discovery timeout:");
-        add(waitDriveTimeoutLabel, cell(0,4).alignX("trailing"));
+        add(waitDriveTimeoutLabel, cell(0,4).alignX(TRAILING));
         add(waitDriveTimeout, cell(1,4).growX());
 
         JLabel lafLabel = new JLabel("GUI Look and Feel");
-        add(lafLabel, cell(0,5).alignX("trailing"));
+        add(lafLabel, cell(0,5).alignX(TRAILING));
         add(lookAndFeelSelector, cell(1,5).growX());
 
         add(deleteAfterUpl, cell(0,6));

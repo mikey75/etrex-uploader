@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 import static net.wirelabs.etrex.uploader.utils.SystemUtils.*;
 
 /*
@@ -55,24 +55,24 @@ public class MapsSettingsPanel extends BasePanel {
         this.configuration = configuration;
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
 
-        add(lblDefaultMap, cell(0,0).alignX("trailing"));
+        add(lblDefaultMap, cell(0,0).alignX(TRAILING));
         add(mapsCombo, cell(1,0).growX());
-        add(lblTilerThreads, cell(2,0).alignX("trailing"));
+        add(lblTilerThreads, cell(2,0).alignX(TRAILING));
         add(threads, cell(3,0).growX());
 
-        add(lblColor, cell(0,1).alignX("trailing"));
+        add(lblColor, cell(0,1).alignX(TRAILING));
         add(colorChooserTextField, cell(1,1).growX());
 
-        add(lblTrkWidth, cell(0,2).alignX("trailing"));
+        add(lblTrkWidth, cell(0,2).alignX(TRAILING));
         add(routeLineWidth, cell(1,2).growX());
 
-        add(lblMapHomeLon, cell(0,3).alignX("trailing"));
+        add(lblMapHomeLon, cell(0,3).alignX(TRAILING));
         add(mapHomeLon, cell(1,3).growX());
 
-        add(lblMapHomeLat, cell(0,4).alignX("trailing"));
+        add(lblMapHomeLat, cell(0,4).alignX(TRAILING));
         add(mapHomeLat, cell(1,4).growX());
 
-        add(lblTileCacheType, cell(0,5).alignX("trailing"));
+        add(lblTileCacheType, cell(0,5).alignX(TRAILING));
         add(cacheCombo, cell(1,5).growX());
         mapHomeLon.setToolTipText(INFO_MSG);
         mapHomeLat.setToolTipText(INFO_MSG);

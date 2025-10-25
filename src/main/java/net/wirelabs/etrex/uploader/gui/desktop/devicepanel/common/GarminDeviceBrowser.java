@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 
 
 /**
@@ -52,15 +52,15 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
 
     public GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device","","[grow]","[][][][][][][grow]");
-        add(garminLogo, cell(0,0).alignX("center"));
-        add(lblModelDescription, cell(0,1).alignX("left").flowX());
-        add(lblModelDescriptionValue, cell(0,1).alignX("left"));
-        add(lblSerialNo, cell(0,2).alignX("left").flowX());
-        add(lblSerialNoValue, cell(0,2).alignX("left"));
-        add(lblPartNo, cell(0,3).alignX("left").flowX());
-        add(lblPartNoValue, cell(0,3).alignX("left"));
-        add(lblSoftwareVersion, cell(0,4).alignX("left").flowX());
-        add(lblSoftwareVerValue, cell(0,4).alignX("left"));
+        add(garminLogo, cell(0,0).alignX(CENTER));
+        add(lblModelDescription, cell(0,1).alignX(LEFT).flowX());
+        add(lblModelDescriptionValue, cell(0,1).alignX(LEFT));
+        add(lblSerialNo, cell(0,2).alignX(LEFT).flowX());
+        add(lblSerialNoValue, cell(0,2).alignX(LEFT));
+        add(lblPartNo, cell(0,3).alignX(LEFT).flowX());
+        add(lblPartNoValue, cell(0,3).alignX(LEFT));
+        add(lblSoftwareVersion, cell(0,4).alignX(LEFT).flowX());
+        add(lblSoftwareVerValue, cell(0,4).alignX(LEFT));
         add(lblStatus, cell(0,5).flowX());
         add(lblStatusValue, cell(0,5));
 
