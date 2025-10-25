@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;
 
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 
 /*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -33,19 +33,19 @@ public class StravaSettingsPanel extends BasePanel {
 
         this.configuration = configuration;
 
-        add(activityTypeLabel, cell(0,0).alignX("trailing"));
+        add(activityTypeLabel, cell(0,0).alignX(TRAILING));
         activityTypeCombo.setModel(new DefaultComboBoxModel<>(SportType.values()));
         add(activityTypeCombo, cell(1,0).growX());
 
-        add(lblActivitiesPerPage, cell(0,1).alignX("trailing"));
+        add(lblActivitiesPerPage, cell(0,1).alignX(TRAILING));
         add(activitiesPerPage, cell(1,1).growX());
 
-        add(lblWarnQuotaPercent, cell(0,2).alignX("trailing"));
+        add(lblWarnQuotaPercent, cell(0,2).alignX(TRAILING));
         add(warnQuotaPercent, cell(1,2).growX());
         add(usePolylines, cell(1,3));
 
-        add(checkHostBeforeUpload, cell(1,4).alignX("trailing"));
-        add(lblHostTimeout, cell(1,5).alignX("trailing"));
+        add(checkHostBeforeUpload, cell(1,4).alignX(TRAILING));
+        add(lblHostTimeout, cell(1,5).alignX(TRAILING));
         add(hostTimeout, cell(1,5).growX());
 
         loadConfiguration();
