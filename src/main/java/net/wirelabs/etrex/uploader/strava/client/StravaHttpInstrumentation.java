@@ -233,7 +233,7 @@ public abstract class StravaHttpInstrumentation {
         addFormField.accept("name", name);
         addFormField.accept("sport_type", sportType.getValue());
         addFormField.accept("description", description);
-        addFormField.accept("external_id", name + System.currentTimeMillis());
+        addFormField.accept("external_id", System.currentTimeMillis() + "_" + file.getName());
         addFormField.accept("commute", String.valueOf(commute));
         addFormField.accept("trainer", String.valueOf(virtual));
 
