@@ -4,9 +4,7 @@ import com.strava.model.SummaryActivity;
 import net.wirelabs.etrex.uploader.utils.DateAndUnitConversionUtil;
 
 import javax.swing.table.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created 9/9/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -63,7 +61,7 @@ public class ActivitiesTableModel extends AbstractTableModel {
             data[rowIdx][4] = act.getDistance() / 1000;
             data[rowIdx][5] = act.getTotalElevationGain();
             data[rowIdx][6] = DateAndUnitConversionUtil.metersPerSecToKilometersPerHourAsString(act.getAverageSpeed());
-            data[rowIdx][7] = act.getDeviceName();
+            data[rowIdx][7] = Optional.ofNullable(act.getDeviceName()).orElse("Unknown");
             data[rowIdx][8] = act.getAchievementCount();
             rowIdx++;
         }
