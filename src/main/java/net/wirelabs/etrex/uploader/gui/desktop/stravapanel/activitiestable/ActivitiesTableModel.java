@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ActivitiesTableModel extends AbstractTableModel {
 
-    private final String[] columnNames = {"Title", "Date", "Sport","Time","Distance","Elevation","Speed avg", "Achievements"};
+    private final String[] columnNames = {"Title", "Date", "Sport","Time","Distance","Elevation","Speed avg","Device", "Achievements"};
 
     private transient Object[][] data = new Object[][]{};
     private transient List<SummaryActivity> activitiesList = new ArrayList<>();
@@ -63,7 +63,8 @@ public class ActivitiesTableModel extends AbstractTableModel {
             data[rowIdx][4] = act.getDistance() / 1000;
             data[rowIdx][5] = act.getTotalElevationGain();
             data[rowIdx][6] = DateAndUnitConversionUtil.metersPerSecToKilometersPerHourAsString(act.getAverageSpeed());
-            data[rowIdx][7] = act.getAchievementCount();
+            data[rowIdx][7] = act.getDeviceName();
+            data[rowIdx][8] = act.getAchievementCount();
             rowIdx++;
         }
     }
