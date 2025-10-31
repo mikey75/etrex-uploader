@@ -19,6 +19,10 @@ import java.util.Enumeration;
 
 import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 class SwingUtilsTest extends BaseTest {
 
@@ -134,6 +138,28 @@ class SwingUtilsTest extends BaseTest {
         assertThat(binaryRepresentation.getVertical().getGrow()).isEqualTo(100).isEqualTo(stringRepresentation.getVertical().getGrow());
         assertThat(binaryRepresentation.getHorizontal().getAlign().getValue()).isEqualTo(50L).isEqualTo(stringRepresentation.getHorizontal().getAlign().getValue()); // center is 50
 
+    }
+
+    @Test
+    void shouldGetCrossPlatformLaf() {
+        assertThat(SwingUtils.getCrossPlatformLookAndFeelClassName()).isEqualTo("javax.swing.plaf.metal.MetalLookAndFeel");
+    }
+
+    @Test
+    void shouldIssueExitConfirmationAndTestExitAndNonExitResponse() {
+        try (MockedStatic<SystemUtils> sysUtilsMock = Mockito.mockStatic(SystemUtils.class);
+             MockedStatic<SwingUtils> swingUtilsMock = Mockito.mockStatic(SwingUtils.class)) {
+            sysUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer(inv -> null);
+            swingUtilsMock.when(() -> SwingUtils.issueConfirmationWithExitDialog(anyString())).thenCallRealMethod();
+
+            swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION); // yes means continue - no exit
+            SwingUtils.issueConfirmationWithExitDialog("hi");
+            sysUtilsMock.verify(() -> SystemUtils.systemExit(anyInt()), never());
+
+            swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.NO_OPTION); // no means do not continue - exit
+            SwingUtils.issueConfirmationWithExitDialog("hi");
+            sysUtilsMock.verify(() -> SystemUtils.systemExit(anyInt()), times(1));
+        }
     }
 
 }

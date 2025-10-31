@@ -88,4 +88,14 @@ public class SwingUtils {
         });
     }
 
+    public static String getCrossPlatformLookAndFeelClassName() {
+        return UIManager.getCrossPlatformLookAndFeelClassName();
+    }
+
+    public static void issueConfirmationWithExitDialog(String message) {
+        int result = SwingUtils.yesNoMsg(message);
+        if (result != JOptionPane.YES_OPTION) {
+            SystemUtils.systemExit(1);
+        }
+    }
 }
