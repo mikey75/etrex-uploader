@@ -6,8 +6,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.utils.ListUtils;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,7 +73,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         usePolyLines = Boolean.parseBoolean(properties.getProperty(USE_POLYLINES, Constants.TRUE));
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT)));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(CHECK_HOSTS_BEFORE_UPLOAD,Constants.TRUE));
-        lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, UIManager.getCrossPlatformLookAndFeelClassName()));
+        lookAndFeelClassName = String.valueOf(properties.getProperty(LOOK_AND_FEEL_CLASS, SwingUtils.getCrossPlatformLookAndFeelClassName()));
         mapHomeLatitude = Double.valueOf(properties.getProperty(MAP_HOME_LATITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude())));
         mapHomeLongitude = Double.valueOf(properties.getProperty(MAP_HOME_LONGITUDE, String.valueOf(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude())));
         enableDesktopSliders = Boolean.parseBoolean(properties.getProperty(ENABLE_DESKTOP_SLIDERS, String.valueOf(Constants.DEFAULT_USE_SLIDERS)));
