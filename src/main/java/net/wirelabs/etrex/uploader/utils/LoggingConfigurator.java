@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ public class LoggingConfigurator {
     public static void configureLogger() {
 
         if (!LOGBACK_CONFIG_XML.toFile().exists()) {
-            issueConfirmationDialog("Can't find logging config file:");
+            SwingUtils.issueConfirmationWithExitDialog("Can't find logging config file: " + LOGBACK_CONFIG_XML + "" +"\nDo you want to run the app without logging?");
         } else {
 
             try (InputStream configStream = Files.newInputStream(LOGBACK_CONFIG_XML)) {
@@ -32,16 +31,8 @@ public class LoggingConfigurator {
                 configurator.setContext(loggerContext);
                 configurator.doConfigure(configStream); // loads logback file
             } catch (Exception e) {
-                issueConfirmationDialog("Can't load logging config file:" + e.getMessage());
+                SwingUtils.issueConfirmationWithExitDialog("Can't load logging config file: " + LOGBACK_CONFIG_XML + "\nException: " +e.getMessage() + "\nDo you want to run the app without logging?");
             }
-        }
-    }
-
-    public static void issueConfirmationDialog(String cause) {
-        String message = String.format("%s (%s) %nDo you want to run the app without logging?", cause, LOGBACK_CONFIG_XML);
-        int result = SwingUtils.yesNoMsg(message);
-        if (result != JOptionPane.YES_OPTION) {
-            SystemUtils.systemExit(1);
         }
     }
 

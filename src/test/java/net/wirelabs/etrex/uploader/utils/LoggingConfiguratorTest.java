@@ -1,14 +1,8 @@
 package net.wirelabs.etrex.uploader.utils;
 
-import net.wirelabs.etrex.uploader.utils.LoggingConfigurator;
-import net.wirelabs.etrex.uploader.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
-
-import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.*;
 
@@ -22,9 +16,6 @@ class LoggingConfiguratorTest {
     private static final Path MINIMAL_EXISTING_LOGBACK_XML_PATH = Paths.get("src/test/resources/logback/minimalLogback.xml");
 
     private static MockedStatic<SwingUtils> swingUtilsMock;
-    private static MockedStatic<LoggingConfigurator> logConf;
-    private static MockedStatic<SystemUtils> sysUtilsMock;
-
     @BeforeAll
     static void beforeAll() throws IOException {
         // move existing logback.xml to safe place
@@ -41,55 +32,24 @@ class LoggingConfiguratorTest {
     @BeforeEach
     void beforeEach() {
         swingUtilsMock = Mockito.mockStatic(SwingUtils.class);
-        logConf = Mockito.mockStatic(LoggingConfigurator.class,CALLS_REAL_METHODS);
-        sysUtilsMock = Mockito.mockStatic(SystemUtils.class);
     }
 
     @AfterEach
     void afterEach() {
         swingUtilsMock.close();
-        logConf.close();
-        sysUtilsMock.close();
     }
 
     @Test
     void shouldIssueAConfirmationDialogWhenNoConfigXMLFound() throws IOException {
         Files.deleteIfExists(Paths.get("logback.xml"));
-
-
         // when
         LoggingConfigurator.configureLogger();
         // verify confirmation dialog shown
-        logConf.verify(() -> LoggingConfigurator.issueConfirmationDialog(any()), times(1));
+        swingUtilsMock.verify(() -> SwingUtils.issueConfirmationWithExitDialog(any()), times(1));
 
 
     }
 
-    @Test
-    void shouldIssueConfirmationDialogAndAccept() {
-        // setup YES as yesNoMsg dialog response
-        swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
-        // do not really exit() during test on exit
-        sysUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer((Answer<Void>) invocation -> null);
-
-        // when
-        LoggingConfigurator.issueConfirmationDialog("dupa");
-        // user clicked yes - no exit
-        sysUtilsMock.verify(() -> SystemUtils.systemExit(anyInt()), never());
-
-    }
-
-    @Test
-    void shouldIssueConfirmationDialogAndNotAccept() {
-        // setup NO as yesNoMsg dialog response
-        swingUtilsMock.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.NO_OPTION);
-        // do not really exit() during test on exit
-        sysUtilsMock.when(() -> SystemUtils.systemExit(anyInt())).thenAnswer((Answer<Void>) invocation -> null);
-
-        LoggingConfigurator.issueConfirmationDialog("dupa");
-        // user clicked no - exit will be executed
-        sysUtilsMock.verify(() -> SystemUtils.systemExit(anyInt()), times(1));
-    }
 
     @Test
     void shouldIssueDialogFromJoranExceptionToo() throws IOException {
@@ -97,7 +57,7 @@ class LoggingConfiguratorTest {
         Files.createFile(ORIGINAL_LOGBACK_XML_PATH);
 
         LoggingConfigurator.configureLogger();
-        logConf.verify(() -> LoggingConfigurator.issueConfirmationDialog(contains("Problem parsing XML document")), times(1));
+        swingUtilsMock.verify(() -> SwingUtils.issueConfirmationWithExitDialog(contains("Problem parsing XML document")), times(1));
 
     }
 
@@ -109,7 +69,7 @@ class LoggingConfiguratorTest {
 
         LoggingConfigurator.configureLogger();
         // then
-        logConf.verify(() -> LoggingConfigurator.issueConfirmationDialog(any()), never());
+        swingUtilsMock.verify(() -> SwingUtils.issueConfirmationWithExitDialog(any()), never());
 
     }
 }
