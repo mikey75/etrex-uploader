@@ -16,11 +16,14 @@ import java.nio.file.Paths;
 public class LoggingConfigurator {
 
     private static final Path LOGBACK_CONFIG_XML = Paths.get(SystemUtils.getWorkDir(), "logback.xml");
+    private static final String MESSAGE = "Can't find logging config file: " + LOGBACK_CONFIG_XML;
+    private static final String EXCEPTION = "Exception while loading config file: " + LOGBACK_CONFIG_XML;
+    private static final String QUESTION = "Do you want to run the app without logging?";
 
     public static void configureLogger() {
 
         if (!LOGBACK_CONFIG_XML.toFile().exists()) {
-            SwingUtils.issueConfirmationWithExitDialog("Can't find logging config file: " + LOGBACK_CONFIG_XML + "" +"\nDo you want to run the app without logging?");
+            SwingUtils.issueConfirmationWithExitDialog(MESSAGE + "\n" + QUESTION);
         } else {
 
             try (InputStream configStream = Files.newInputStream(LOGBACK_CONFIG_XML)) {
@@ -31,7 +34,7 @@ public class LoggingConfigurator {
                 configurator.setContext(loggerContext);
                 configurator.doConfigure(configStream); // loads logback file
             } catch (Exception e) {
-                SwingUtils.issueConfirmationWithExitDialog("Can't load logging config file: " + LOGBACK_CONFIG_XML + "\nException: " +e.getMessage() + "\nDo you want to run the app without logging?");
+                SwingUtils.issueConfirmationWithExitDialog(EXCEPTION + "\n" + "Exception message: " + e.getMessage() + "\n" + QUESTION);
             }
         }
     }
