@@ -1,10 +1,10 @@
 package net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileNode;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.FileTree;
+import net.wirelabs.etrex.uploader.strava.UploadService;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -34,18 +34,13 @@ public class FileOperationsPopupMenu extends JPopupMenu {
 
         // delete is always enabled
         enableMenuItem(menuItemDelete);
-        menuItemDelete.addActionListener(e -> deleteSelectedFileAndCorrespondingTreeNode(tree));
+        enableMenuItem(menuItemUpload);
+        enableMenuItem(menuitemUploadToDevice);
 
-        // upload to strava/device is dependent on how it is called
-        if (uploadService == null) {
-            enableMenuItem(menuItemUpload);
-            enableMenuItem(menuitemUploadToDevice);
-            menuitemUploadToDevice.addActionListener(e -> uploadSelectedToDevice(tree));
-        } else {
-            enableMenuItem(menuItemUpload);
-            disableMenuItem(menuitemUploadToDevice);
-            menuItemUpload.addActionListener(e -> uploadSelectedToStrava(tree, uploadService));
-        }
+        menuItemDelete.addActionListener(e -> deleteSelectedFileAndCorrespondingTreeNode(tree));
+        menuItemUpload.addActionListener(e -> uploadSelectedToStrava(tree, uploadService));
+        menuitemUploadToDevice.addActionListener(e -> uploadSelectedToDevice(tree));
+
         // enable file operations/uploads only if a file is selected
         addPropertyChangeListener("visible", evt -> {
             FileNode node = (FileNode) tree.getLastSelectedPathComponent();
