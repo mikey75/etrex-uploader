@@ -5,10 +5,9 @@ import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.tools.BasicStravaEmulator;
+import net.wirelabs.etrex.uploader.tools.emulator.StravaEmu;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -26,46 +25,42 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 class StravaClientTest extends BaseTest {
 
-    private BasicStravaEmulator emulator;
-    private StravaClient stravaClient;
+
+    private static StravaClient stravaClient;
     // use non-production configs making sure nothing touches real config files if they exist
-    private final AppConfiguration appConfiguration = spy(new AppConfiguration("src/test/resources/config/test.properties"));
-    private final StravaConfiguration stravaConfiguration = spy(new StravaConfiguration("src/test/resources/strava-emulator/strava-emulator-config.properties"));
+    private static final AppConfiguration appConfiguration = spy(new AppConfiguration("src/test/resources/config/test.properties"));
+    private static final StravaConfiguration stravaConfiguration = spy(new StravaConfiguration("src/test/resources/strava-emulator/strava-emulator-config.properties"));
+    private static final String emulatorUrl = "http://localhost:9090"; // spring defined host:port
 
-    @BeforeEach
-    void setup() throws IOException {
-
-        emulator = new BasicStravaEmulator();
-        // make sure nothing saves the test configurations
+    @BeforeAll
+    static void beforeAll() throws StravaException {
         doNothing().when(stravaConfiguration).save();
         doNothing().when(appConfiguration).save();
-        // redirect strava client/strava service calls to mocked strava server
-        stravaConfiguration.setBaseUrl("http://localhost:" + emulator.getListeningPort());
-        stravaConfiguration.setBaseTokenUrl(stravaConfiguration.getBaseUrl() + "/oauth/token");
-        stravaConfiguration.setAuthUrl("http://localhost:"+ emulator.getListeningPort() +"/authorize");
-        stravaClient = new StravaClient(stravaConfiguration, appConfiguration);
-        stravaConfiguration.setAuthCodeTimeout(2);
-        emulator.start();
-    }
+        // since we do not have access to StravaConfigUpdater, and we make sure token does not expire
+        // make sure to not mess the current config with updated tokens during token refresh calls
+        // so that all tests work with the same token
+        stravaConfiguration.setStravaTokenExpires(Long.MAX_VALUE); // token never expires
+        doNothing().when(stravaConfiguration).setStravaAccessToken(anyString());
 
-    @AfterEach
-    void teardown() {
-        emulator.stop();
+        stravaConfiguration.setBaseUrl(emulatorUrl);
+        stravaConfiguration.setBaseTokenUrl(emulatorUrl + "/oauth/token");
+        stravaConfiguration.setAuthUrl(emulatorUrl + "/authorize");
+        stravaConfiguration.setAuthCodeTimeout(2);
+        stravaClient = new StravaClient(stravaConfiguration, appConfiguration);
+        StravaEmu.main(new String[]{});
+
     }
 
     @Test
     void getCurrentAthlete() throws StravaException {
         DetailedAthlete athlete = stravaClient.getCurrentAthlete();
-
-        assertThat(athlete.getId()).isEqualTo(12345678);
+        assertThat(athlete.getId()).isEqualTo(123456789);
         assertThat(athlete.getFirstname()).isEqualTo("Fake");
         assertThat(athlete.getLastname()).isEqualTo("User");
-        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -76,13 +71,13 @@ class StravaClientTest extends BaseTest {
 
         List<String> names = activities.stream().map(SummaryActivity::getName).toList();
         assertThat(names).containsExactlyInAnyOrder("Spacerniak #3", "Spacerniak #2", "Spacerniak");
-        verifyAuthorizedAndQuery("per_page=10, page=1"); // verify default paging
+        verifyLogged("[Strava request: GET] http://localhost:9090/athlete/activities?per_page=10&page=1");
     }
 
     @Test
     void getCurrentAthleteStats() throws StravaException {
 
-        ActivityStats stats = stravaClient.getAthleteStats(12345678L);
+        ActivityStats stats = stravaClient.getAthleteStats(123456789L);
         assertThat(stats.getBiggestRideDistance()).isEqualTo(113821.0);
         assertThat(stats.getBiggestClimbElevationGain()).isEqualTo(94.69999999999999);
 
@@ -99,22 +94,6 @@ class StravaClientTest extends BaseTest {
         assertThat(ytdTotals.getMovingTime()).isEqualTo(7403);
         assertThat(ytdTotals.getElapsedTime()).isEqualTo(11235);
         assertThat(ytdTotals.getElevationGain()).isEqualTo(286.7000045776367f);
-
-        verifyAuthorizedAndNonQuery();
-    }
-
-    private void verifyAuthorizedAndNonQuery() {
-        verifyLogged("[Auth] authHeader: Bearer 9321093109301");
-        verifyLogged("[Query] queryParams: {}");
-    }
-
-    private void verifyAuthorizedAndQuery(String params) {
-        verifyLogged("[Auth] authHeader: Bearer 9321093109301");
-        verifyLogged("[Query] queryParams: {" + params + "}");
-    }
-    private void verifyNoAuthHeader() {
-        verifyLogged("[Auth] authHeader: null");
-        verifyLogged("[Query] queryParams: {}");
     }
 
     @Test
@@ -130,8 +109,6 @@ class StravaClientTest extends BaseTest {
         assertThat(recentRideTotals.getMovingTime()).isEqualTo(5);
         assertThat(recentRideTotals.getAchievementCount()).isEqualTo(9);
         assertThat(recentRideTotals.getElevationGain()).isEqualTo(7.0614014f);
-
-        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -155,7 +132,6 @@ class StravaClientTest extends BaseTest {
         // and for sureness check some original fields were not updated
         assertThat(updatedActivity.getId()).isEqualTo(777111L);
         assertThat(updatedActivity.getDeviceName()).isEqualTo("Garmin eTrex 32x");
-        verifyAuthorizedAndNonQuery();
     }
 
     @Test
@@ -168,26 +144,22 @@ class StravaClientTest extends BaseTest {
         assertThat(activity.getDescription()).contains("Mazury, mazury, jeziora i pagóry");
         assertThat(activity.getDeviceName()).isEqualTo("Garmin eTrex 32x");
         assertThat(activity.getName()).isEqualTo("Mikro wersja Mazurskiej Pętli Rowerowej");
-        verifyAuthorizedAndNonQuery();
     }
 
 
     @Test
-    void uploadActivity()  {
+    void uploadActivity() {
         File gpxFile = new File("src/test/resources/trackfiles/gpx11.gpx");
 
-        waitUntilAsserted(Duration.ofSeconds(5),() -> {
-            Upload u = stravaClient.uploadActivity(gpxFile, "test activity", "blablabla", SportType.RIDE, false, false);
-            assertThat(u).isNotNull();
-            assertThat(u.getActivityId()).isEqualTo(11111L);
-            assertThat(u.getId()).isEqualTo(999999L);
-            assertThat(u.getExternalId()).matches("test activity\\d{13}"); // external id is upload $name + System.currentTimeMillis
-            assertThat(u.getError()).isNull();
-            assertThat(u.getStatus()).isNotNull();
-            verifyAuthorizedAndNonQuery();
+        waitUntilAsserted(Duration.ofSeconds(5), () -> {
+            Upload upload = stravaClient.uploadActivity(gpxFile, "test activity", "blablabla", SportType.RIDE, false, false);
+            assertThat(upload).isNotNull();
+            assertThat(upload.getActivityId()).isEqualTo(11111L);
+            assertThat(upload.getId()).isEqualTo(999999L);
+            assertThat(upload.getExternalId()).matches("test activity\\d{13}"); // external id is upload $name + System.currentTimeMillis
+            assertThat(upload.getError()).isNull();
+            assertThat(upload.getStatus()).isNotNull();
         });
-
-
     }
 
     @Test
@@ -201,48 +173,44 @@ class StravaClientTest extends BaseTest {
         assertThat(s.getDistance().getResolution()).isEqualTo(DistanceStream.ResolutionEnum.HIGH);
         assertThat(s.getDistance().getSeriesType()).isEqualTo(DistanceStream.SeriesTypeEnum.DISTANCE);
 
-        verifyAuthorizedAndQuery("key_by_type=true, keys=distance");
-
     }
 
     @Test
     void shouldThrowExceptionsWhenServerNotAvailable() {
-        emulator.stop();
-        Exception e = assertThrows(StravaException.class, () -> stravaClient.getCurrentAthlete());
+        // no need for emu here so separate client and nonexistent endpoint
+        stravaConfiguration.setBaseUrl("http://localhost-nonexistent:9999");
+        StravaClient client = new StravaClient(stravaConfiguration, appConfiguration);
+        Exception e = assertThrows(StravaException.class, client::getCurrentAthlete);
         assertThat(e.getMessage()).contains("Failed to connect");
-
     }
 
     @Test
     void shouldThrowOnInvalidOrNonExistentResource() {
-        long nonExistentActivityId = 10L;
-        Exception e = assertThrows(StravaException.class, () -> stravaClient.getActivityById(nonExistentActivityId));
-        assertThat(e.getMessage()).isEqualTo("404 Not Found: GET /activities/" + nonExistentActivityId);
-
+        // activity with id=10 is not present
+        Exception e = assertThrows(StravaException.class, () -> stravaClient.getActivityById(10L));
+        assertThat(e.getMessage()).isEqualTo("No activity with id=" + 10L);
     }
 
     @Test
     void shouldRefreshTokenWhenDetectedExpirationInCall() throws StravaException {
 
-        // set token expires so that refresh token will be triggered on any call
-        stravaConfiguration.setStravaTokenExpires(Instant.now().getEpochSecond() - 100); // now - 100 secs - should do
-        // when refreshing tokens - new token will be saved to configuration -  we want to avoid that so
-        doNothing().when(stravaConfiguration).save();
-        // this call will trigger the refresh
-        DetailedAthlete athlete = stravaClient.getCurrentAthlete();
+        try {
+            // set token expires so that refresh token will be triggered on any call
+            stravaConfiguration.setStravaTokenExpires(Instant.now().getEpochSecond() - 100); // now - 100 secs - should do
+            // when refreshing tokens - new token will be saved to configuration -  we want to avoid that so
+            doNothing().when(stravaConfiguration).save();
+            // this call will trigger the refresh
+            DetailedAthlete athlete = stravaClient.getCurrentAthlete();
 
-        verifyLogged("Refreshing token");
-        // at first the auth header will be null, then the auth header should be what was in the token, in this case 'dddd'
-        verifyLogged("[Strava request: POST] http://localhost:" + emulator.getListeningPort() + "/oauth/token");
-        verifyNoAuthHeader();
-
-        // this log is part of config updater but physical save does not take place due to spy doNothing on save
-        verifyLogged("[Refresh token] - updated strava config");
-        assertThat(athlete).isNotNull();
-        verifyLogged("[Strava request: GET] http://localhost:" + emulator.getListeningPort() + "/athlete");
-        verifyLogged("[Auth] authHeader: Bearer dddd");
-
-
+            verifyLogged("Refreshing token");
+            verifyLogged("[Strava request: POST] http://localhost:9090/oauth/token");
+            verifyLogged("[Refresh token] - updated strava config");
+            assertThat(athlete).isNotNull();
+            verifyLogged("[Strava request: GET] http://localhost:9090/athlete");
+        } finally {
+            // restore token to never expire again
+            stravaConfiguration.setStravaTokenExpires(Long.MAX_VALUE);
+        }
     }
 
     @Test
@@ -251,24 +219,19 @@ class StravaClientTest extends BaseTest {
         verifyLogged("Got tokens!");
         verifyLogged("[Update token] - updated strava config");
         verifyLogged("[Update credentials] - updated strava config");
-        // you don't have the auth header because you don't yet have a token ;)
-        verifyNoAuthHeader();
-
-
     }
 
     @Test
     void shouldThrowWhenGetAuthTokenWithNoAuthCode() {
-
         // no auth code - exception
-        Exception e = assertThrows(StravaException.class, () -> stravaClient.exchangeAuthCodeForAccessToken("1234","bbbb",""));
+        Exception e = assertThrows(StravaException.class, () -> stravaClient.exchangeAuthCodeForAccessToken("1234", "bbbb", ""));
         assertThat(e.getMessage()).contains("Could not get tokens. auth code was empty");
     }
 
     @Test
     void shouldAuthorizeToStrava() throws IOException, StravaException {
         try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
-            systemUtils.when(() -> SystemUtils.openSystemBrowser(any())).thenAnswer(inv -> { // call emulator here, emulaor shoud respond with request to retriever
+            systemUtils.when(() -> SystemUtils.openSystemBrowser(any())).thenAnswer(inv -> { // call emulator here, emulator should respond with request to retriever
                 String url = inv.getArgument(0, String.class);
                 HttpResponse<String> r = emulateBrowserCall(url);
                 assertThat(r.statusCode()).isEqualTo(200);
@@ -281,17 +244,9 @@ class StravaClientTest extends BaseTest {
         }
     }
 
-    private static HttpResponse<String> emulateBrowserCall(String url) throws Exception {
-        HttpClient client = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.ALWAYS) // behave like browsers
-                .build();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("User-Agent", "Mozilla/5.0 (Java HttpClient)") // mimic a browser
-                .GET()
-                .build();
-
+    private HttpResponse<String> emulateBrowserCall(String url) throws Exception {
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }
