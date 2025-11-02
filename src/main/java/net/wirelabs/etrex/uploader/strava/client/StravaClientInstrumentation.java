@@ -59,7 +59,7 @@ public abstract class StravaClientInstrumentation {
 
     public String executeRequest(HttpRequest request) throws StravaException {
         try {
-            log.debug("[Strava request: {}] {}", request.method(), request.uri());
+            log.info("[Strava request: {}] {}", request.method(), request.uri());
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
