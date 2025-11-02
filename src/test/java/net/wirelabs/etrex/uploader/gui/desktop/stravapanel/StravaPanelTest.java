@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.desktop.stravapanel;
 
 import net.miginfocom.swing.MigLayout;
+import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account.UserAccountPanel;
 import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.activitiestable.StravaActivitiesPanel;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
@@ -15,6 +16,7 @@ class StravaPanelTest extends BaseTest {
     @Test
     void shouldInitializeStravaPanel() {
         StravaClient client = mock(StravaClient.class);
+        when(client.getAppConfiguration()).thenReturn(new AppConfiguration("target/nonexistent")); // return default config
         StravaPanel panel = new StravaPanel(client);
 
         assertThat(panel.getActivitiesPanel()).isNotNull().isInstanceOf(StravaActivitiesPanel.class);
