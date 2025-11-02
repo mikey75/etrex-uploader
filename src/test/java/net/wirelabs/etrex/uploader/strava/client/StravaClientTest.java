@@ -37,10 +37,10 @@ class StravaClientTest extends BaseTest {
         // make sure nothing saves the test configurations
         doNothing().when(stravaConfiguration).save();
         doNothing().when(appConfiguration).save();
-        String stravaUrl = "http://localhost:" + emulator.getListeningPort();
-        String tokenUrl = stravaUrl + "/oauth/token";
         // redirect strava client/strava service calls to mocked strava server
-        stravaClient = new StravaClient(stravaConfiguration, appConfiguration, stravaUrl, tokenUrl);
+        stravaConfiguration.setBaseUrl("http://localhost:" + emulator.getListeningPort());
+        stravaConfiguration.setBaseTokenUrl(stravaConfiguration.getBaseUrl() + "/oauth/token");
+        stravaClient = new StravaClient(stravaConfiguration, appConfiguration);
         emulator.start();
     }
 

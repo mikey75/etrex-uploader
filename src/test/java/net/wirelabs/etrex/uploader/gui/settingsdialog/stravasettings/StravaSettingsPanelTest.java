@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog.stravasettings;
 
 import com.strava.model.SportType;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -16,15 +16,15 @@ class StravaSettingsPanelTest {
 
     @Test
     void l() {
-        AppConfiguration appConfiguration = spy(new AppConfiguration("src/test/resources/config/test.properties"));
-        doNothing().when(appConfiguration).save(); // make sure nothing rewrites config file
-        StravaSettingsPanel panel = new StravaSettingsPanel(appConfiguration);
+        StravaConfiguration stravaConfiguration = spy(new StravaConfiguration("src/test/resources/config/test.properties"));
+        doNothing().when(stravaConfiguration).save(); // make sure nothing rewrites config file
+        StravaSettingsPanel panel = new StravaSettingsPanel(stravaConfiguration);
 
-        assertThat(panel.activitiesPerPage.getText()).isEqualTo(String.valueOf(appConfiguration.getPerPage()));
-        assertThat(panel.warnQuotaPercent.getText()).isEqualTo(String.valueOf(appConfiguration.getApiUsageWarnPercent()));
-        assertThat(panel.usePolylines.isSelected()).isEqualTo(appConfiguration.isUsePolyLines());
-        assertThat(panel.checkHostBeforeUpload.isSelected()).isEqualTo(appConfiguration.isStravaCheckHostBeforeUpload());
-        assertThat(panel.hostTimeout.getText()).isEqualTo(String.valueOf(appConfiguration.getStravaCheckTimeout()));
+        assertThat(panel.activitiesPerPage.getText()).isEqualTo(String.valueOf(stravaConfiguration.getPerPage()));
+        assertThat(panel.warnQuotaPercent.getText()).isEqualTo(String.valueOf(stravaConfiguration.getApiUsageWarnPercent()));
+        assertThat(panel.usePolylines.isSelected()).isEqualTo(stravaConfiguration.isUsePolyLines());
+        assertThat(panel.checkHostBeforeUpload.isSelected()).isEqualTo(stravaConfiguration.isStravaCheckHostBeforeUpload());
+        assertThat(panel.hostTimeout.getText()).isEqualTo(String.valueOf(stravaConfiguration.getStravaCheckTimeout()));
 
 
         ComboBoxModel<SportType> model = panel.activityTypeCombo.getModel();
@@ -37,8 +37,8 @@ class StravaSettingsPanelTest {
         panel.activitiesPerPage.setText("100");
         panel.usePolylines.setSelected(false);
         panel.updateConfiguration();
-        assertThat(appConfiguration.isUsePolyLines()).isFalse();
-        assertThat(appConfiguration.getPerPage()).isEqualTo(100);
+        assertThat(stravaConfiguration.isUsePolyLines()).isFalse();
+        assertThat(stravaConfiguration.getPerPage()).isEqualTo(100);
 
 
     }

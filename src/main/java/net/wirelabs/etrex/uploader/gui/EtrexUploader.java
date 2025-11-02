@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.SetupManager;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.utils.FileUtils;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
@@ -44,7 +45,7 @@ public class EtrexUploader extends JFrame {
         splash.update("Application initialization started ....");
 
         splash.update("Checking strava status");
-        checkStravaIsUp(ctx.getAppConfiguration());
+        checkStravaIsUp(ctx.getStravaConfiguration());
 
         splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());
@@ -87,7 +88,7 @@ public class EtrexUploader extends JFrame {
         setVisible(true);
     }
 
-    private void checkStravaIsUp(AppConfiguration cfg) {
+    private void checkStravaIsUp(StravaConfiguration cfg) {
         log.info("Starting Strava status check");
         if (StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
             log.info("Strava is up and running!");

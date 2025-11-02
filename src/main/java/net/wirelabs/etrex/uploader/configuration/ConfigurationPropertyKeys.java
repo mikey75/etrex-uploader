@@ -29,6 +29,9 @@ class ConfigurationPropertyKeys {
     static final String USE_POLYLINES                   = "strava.use.polylines"; // use polylines instead of real track data
     static final String CHECK_HOSTS_BEFORE_UPLOAD       = "strava.check.host.before.upload"; // whether to check strava status before update
     static final String STRAVA_CHECK_HOST_TIMEOUT       = "strava.check.host.timeout";       // time to wait for strava host to be http available
+    static final String STRAVA_BASE_TOKEN_URL           = "strava.base.token.url";
+    static final String STRAVA_BASE_URL                 = "strava.base.url";
+    static final String STRAVA_AUTH_URL                 = "strava.auth.url";
     // map
     static final String MAP_FILE                        = "map.file";
     static final String MAP_TILER_THREAD_COUNT          = "map.tiler.threads";

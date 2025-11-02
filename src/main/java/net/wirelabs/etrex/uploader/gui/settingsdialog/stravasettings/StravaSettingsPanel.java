@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.settingsdialog.stravasettings;
 
 import com.strava.model.SportType;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*
  */
 public class StravaSettingsPanel extends BasePanel {
 
-    final AppConfiguration configuration;
+    final StravaConfiguration configuration;
     final JComboBox<SportType> activityTypeCombo = new JComboBox<>();
     final JTextField activitiesPerPage = new JTextField();
     final JTextField warnQuotaPercent = new JTextField();
@@ -22,7 +22,7 @@ public class StravaSettingsPanel extends BasePanel {
     final JTextField hostTimeout = new JTextField();
 
 
-    public StravaSettingsPanel(AppConfiguration configuration) {
+    public StravaSettingsPanel(StravaConfiguration configuration) {
 
         super("Strava","","[][grow]","[][][]");
 

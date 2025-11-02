@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +30,7 @@ class AuthCodeInterceptorTest extends BaseTest {
 
     @BeforeEach
     void before() throws IOException {
-        authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
+        authCodeRetriever = Mockito.spy(new AuthCodeRetriever(new StravaConfiguration("/target/nonexistent-strava-config")));
         doNothing().when(authCodeRetriever).openSystemBrowser(any());
         verifyLogged("Started auth code interceptor http server on port " + authCodeRetriever.getPort());
         doReturn(2).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
@@ -44,7 +45,7 @@ class AuthCodeInterceptorTest extends BaseTest {
     @Test
     void testIfCorrectOAuthUrlIsPassed() throws IOException {
 
-        String expectedUrl = Constants.STRAVA_AUTHORIZATION_URL +
+        String expectedUrl = authCodeRetriever.getStravaConfiguration().getAuthUrl() +
                 "?client_id=fakeAppId" +
                 "&redirect_uri=http://127.0.0.1:" + authCodeRetriever.getPort() +
                 "&response_type=code" +

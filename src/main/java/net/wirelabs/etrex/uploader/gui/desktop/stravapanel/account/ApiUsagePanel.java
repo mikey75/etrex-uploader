@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 
 import lombok.Getter;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.Event;
@@ -20,7 +20,7 @@ import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*
  * Created 12/16/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 public class ApiUsagePanel extends BaseEventAwarePanel {
-    private final AppConfiguration configuration;
+    private final StravaConfiguration configuration;
     @Getter
     private final JLabel dailyLimits;
     @Getter
@@ -31,7 +31,7 @@ public class ApiUsagePanel extends BaseEventAwarePanel {
     private Integer allowed15min;
 
 
-    public ApiUsagePanel(AppConfiguration configuration) {
+    public ApiUsagePanel(StravaConfiguration configuration) {
         super("insets 0","[grow][grow]","[][center][][]");
         this.configuration = configuration;
 
