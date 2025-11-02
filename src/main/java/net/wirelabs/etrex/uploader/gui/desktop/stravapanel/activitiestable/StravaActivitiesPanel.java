@@ -10,7 +10,6 @@ import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
-import net.wirelabs.etrex.uploader.utils.ThreadUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
@@ -28,7 +27,8 @@ import java.util.Objects;
 import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
-import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.CENTER;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 @Slf4j
 public class StravaActivitiesPanel extends BaseEventAwarePanel {
@@ -103,19 +103,29 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
 
     private void updateActivities(int page) {
 
-        ThreadUtils.runAsync(() -> {
+        SwingUtilities.invokeLater(() -> {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             try {
                 List<SummaryActivity> activities = stravaClient.getCurrentAthleteActivities(page, configuration.getPerPage());
                 activitiesTable.setData(activities);
                 // always select first activity on a page
-                activitiesTable.requestFocus();
-                activitiesTable.changeSelection(0, 0, false, false);
+                selectFirstActivityOnPage();
             } catch (StravaException e) {
                 SwingUtils.errorMsg(e.getMessage());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                SwingUtils.infoMsg("No more activities, use [<] button to return");
             }
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            // ensure the panel is finally redrawn (some os gfx drivers make it weirdly flicker or mess up)
+            repaint();
         });
+    }
+
+    private void selectFirstActivityOnPage() {
+        activitiesTable.requestFocus();
+        if (activitiesTable.getModel().getValueAt(0,0) != null) {
+            activitiesTable.changeSelection(0, 0, false, false);
+        }
     }
 
     /**
