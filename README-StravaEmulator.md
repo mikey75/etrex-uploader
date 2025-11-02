@@ -1,25 +1,24 @@
 # Strava Client Test Suite & Emulator
-
-This directory contains integration and unit tests for the `StravaClient`, using a custom Strava API emulator to ensure reliable, deterministic, and offline test runs.
+To fully, reliably and offline test `StravaClient` we provide a custom Strava API emulator (not all endpoints from API, only those used by `etrex-uploader`)
 
 ## Structure
 
 - **StravaClientTest.java**  
-  Main test class covering all Strava client functionality (fetching, updating, uploading activities, token logic, error handling, etc).
+  Main test class covering all Strava client functionality used by the app (fetching, updating, uploading activities, token logic, error handling, etc).
 
-- **BasicStravaEmulator.java**  
-  Lightweight HTTP server that mimics the Strava API, serving responses from static JSON files in `strava-emulator/data/`.
+- **StravaEmu.java**  
+  SpringBoot test-scoped web api application that mimics the Strava API, serving responses from static JSON files being the representation of real strava data.
 
-- **strava-emulator/data/**  
+- **src/test/resources/strava-emulator/**  
   Test resource directory with realistic Strava API responses, organized by resource type.
 
 No external credentials or API keys are required; the emulator is used automatically, and the real keys/credentials 
-if you happen to have them inside work dir are not touched in the tests/emulator.
+if you happen to have them inside work dir are not touched in the tests/emulator. No real strava API calls to real endpoints.
 
 ## Extending the Emulator & Tests
 
-- To add a new test scenario, place the required JSON response in the appropriate subfolder of `strava-emulator/data/`.
-- Update or extend `BasicStravaEmulator.java` to serve new endpoints or handle new edge cases.
+- To add a new test scenario, place the required JSON response in the appropriate subfolder of `src/test/resources/strava-emulator`.
+- Update, extend, or add new Spring controller to serve new endpoints or handle new edge cases.
 - Add or modify test methods in `StravaClientTest.java` as needed.
 
 ## Keeping Up-to-Date with Strava API Changes
@@ -31,7 +30,7 @@ if you happen to have them inside work dir are not touched in the tests/emulator
 ## Troubleshooting
 
 - If tests fail with file-not-found or port-in-use errors, ensure you have a clean checkout and no other test runs are active.
-- The emulator will print startup/shutdown logs to the test output.
+- The emulator will print classic springboot logs to the test output.
 
 ---
 
