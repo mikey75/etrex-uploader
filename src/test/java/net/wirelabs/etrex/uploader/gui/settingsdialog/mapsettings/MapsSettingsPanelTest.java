@@ -84,7 +84,6 @@ class MapsSettingsPanelTest {
             // or ignore and set what was before (NO)
             mapsSettingsPanel.routeLineWidth.setText(String.valueOf(11));
             swingUtils.when(() -> SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
-            //when(SwingUtils.yesNoMsg(anyString())).thenReturn(JOptionPane.YES_OPTION);
 
             mapsSettingsPanel.updateConfiguration();
             assertThat(mapsSettingsPanel.getConfiguration().getRouteLineWidth()).isEqualTo(Constants.DEFAULT_ROUTE_LINE_WIDTH);
