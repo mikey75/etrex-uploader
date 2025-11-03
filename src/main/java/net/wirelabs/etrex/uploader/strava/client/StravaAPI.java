@@ -10,9 +10,19 @@ import java.util.List;
 /*
  * Created 11/4/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
+
+/**
+ * This is Strava API implementation interface
+ * <p>
+ * It is not a complete API (as in swagger.json), and does not contain all endpoints from there.
+ * Only the ones used by the etrex-uploader app.
+ * <p>
+ * It might get enhanced in the future, if the need arises.
+ * For what the app is now (track uploader and activity viewer) this is more than enough.
+ */
 interface StravaAPI extends Serializable {
     
-    SummaryAthlete getCurrentAthlete() throws StravaException;
+    DetailedAthlete getCurrentAthlete() throws StravaException;
     ActivityStats getAthleteStats(Long id) throws StravaException;
 
     List<SummaryActivity> getCurrentAthleteActivities(int page, int perPage) throws StravaException;

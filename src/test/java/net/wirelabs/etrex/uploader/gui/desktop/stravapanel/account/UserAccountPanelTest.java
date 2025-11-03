@@ -1,8 +1,6 @@
 package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 
-import com.strava.model.ActivityStats;
-import com.strava.model.ActivityTotal;
-import com.strava.model.SummaryAthlete;
+import com.strava.model.*;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
@@ -19,7 +17,7 @@ class UserAccountPanelTest extends BaseTest {
 
     private final File fakePhoto = new File("src/test/resources/gui/fakeUserPhoto.png");
     private final StravaClient strava = mock(StravaClient.class);
-    private final SummaryAthlete fakeUser = new SummaryAthlete().firstname("Fake").lastname("User");
+    private final DetailedAthlete fakeUser = new DetailedAthlete().firstname("Fake").lastname("User");
     private final ActivityTotal total = new ActivityTotal().count(1).distance(1000F).elapsedTime(3600);
     private final ActivityStats fakeStats = new ActivityStats().allRideTotals(total).ytdRideTotals(total);
     private final String profilePictureURL = fakePhoto.getAbsolutePath().replace("\\", "/");

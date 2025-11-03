@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 
 
 import com.strava.model.ActivityStats;
-import com.strava.model.SummaryAthlete;
+import com.strava.model.DetailedAthlete;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
@@ -93,7 +93,7 @@ public class UserAccountPanel extends BasePanel {
     }
 
     private void getUserAccountData() {
-        SummaryAthlete athlete = null;
+        DetailedAthlete athlete = null;
         BufferedImage img = null;
 
         try {
@@ -113,7 +113,7 @@ public class UserAccountPanel extends BasePanel {
 
     private void updateAthleteStats() {
         try {
-            SummaryAthlete athlete = stravaClient.getCurrentAthlete();
+            DetailedAthlete athlete = stravaClient.getCurrentAthlete();
             ActivityStats stats = stravaClient.getAthleteStats(athlete.getId());
 
             ytdDist.setText(String.valueOf(Math.round(stats.getYtdRideTotals().getDistance() / 1000F)));
@@ -136,7 +136,7 @@ public class UserAccountPanel extends BasePanel {
         }
     }
 
-    private void setAthleteFullName(SummaryAthlete athlete) {
+    private void setAthleteFullName(DetailedAthlete athlete) {
         if (athlete == null) {
             SwingUtilities.invokeLater(() -> athleteName.setText("Couldn't get athlete name"));
         } else {
