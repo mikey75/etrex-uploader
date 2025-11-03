@@ -101,11 +101,6 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         }
     }
 
-    private void disableMenuItem(JMenuItem menuItem) {
-        menuItem.setEnabled(false);
-        menuItem.setVisible(false);
-    }
-
     private void enableMenuItem(JMenuItem menuItem) {
         menuItem.setVisible(true);
         menuItem.setEnabled(true);
