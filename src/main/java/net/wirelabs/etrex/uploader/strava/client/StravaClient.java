@@ -19,7 +19,7 @@ public class StravaClient extends StravaHttpInstrumentation implements StravaAPI
 
     @Getter
     private final AppConfiguration appConfiguration;
-    private SummaryAthlete currentAthlete;
+    private DetailedAthlete currentAthlete;
 
     public StravaClient(StravaConfiguration stravaConfiguration, AppConfiguration appConfiguration, String baseUrl, String baseTokenUrl) {
         super(stravaConfiguration, baseUrl, baseTokenUrl);
@@ -27,8 +27,8 @@ public class StravaClient extends StravaHttpInstrumentation implements StravaAPI
     }
 
     @Override
-    public SummaryAthlete getCurrentAthlete() throws StravaException {
-        currentAthlete = (currentAthlete == null) ? makeGetRequest(athleteUrl, SummaryAthlete.class, null) : currentAthlete;
+    public DetailedAthlete getCurrentAthlete() throws StravaException {
+        currentAthlete = (currentAthlete == null) ? makeGetRequest(athleteUrl, DetailedAthlete.class, null) : currentAthlete;
         return currentAthlete;
     }
 
