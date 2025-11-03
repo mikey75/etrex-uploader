@@ -51,7 +51,7 @@ class StravaClientTest extends BaseTest {
 
     @Test
     void getCurrentAthlete() throws StravaException {
-        SummaryAthlete athlete = stravaClient.getCurrentAthlete();
+        DetailedAthlete athlete = stravaClient.getCurrentAthlete();
 
         assertThat(athlete.getId()).isEqualTo(12345678);
         assertThat(athlete.getFirstname()).isEqualTo("Fake");
@@ -220,7 +220,7 @@ class StravaClientTest extends BaseTest {
         // when refreshing tokens - new token will be saved to configuration -  we want to avoid that so
         doNothing().when(stravaConfiguration).save();
         // this call will trigger the refresh
-        SummaryAthlete athlete = stravaClient.getCurrentAthlete();
+        DetailedAthlete athlete = stravaClient.getCurrentAthlete();
 
         verifyLogged("Refreshing token");
         // at first the auth header will be null, then the auth header should be what was in the token, in this case 'dddd'
