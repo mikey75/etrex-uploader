@@ -64,7 +64,7 @@ class MapPanelTest extends BaseTest {
         assertThat(mp.mapHome.getLongitude()).isEqualTo(appConfiguration.getMapHomeLongitude());
 
         assertThat(mp.mapViewer.getUserOverlays()).isNotEmpty();
-        assertThat(mp.mapViewer.getUserOverlays().stream().findFirst().orElseThrow()).isInstanceOf(RoutePainter.class); //PrimaryTileCache().size()).isEqualTo(32000);
+        assertThat(mp.mapViewer.getUserOverlays().stream().findFirst().orElseThrow()).isInstanceOf(RoutePainter.class);
         assertThat(mp.mapViewer.getTilerThreads()).isEqualTo(appConfiguration.getTilerThreads());
 
     }
@@ -229,11 +229,11 @@ class MapPanelTest extends BaseTest {
     @Test
     void TestMapSelector() {
 
-        File[] maps = mp.mapSelector.getConfiguredMapFiles();
+        File[] mapFiles = mp.mapSelector.getConfiguredMapFiles();
         // default map file in test config is null so it should set first map from the list
         // which is osm cycle. but the selector should contain declared maps
 
-        assertThat(Arrays.stream(maps).toList()).containsExactlyInAnyOrder(map1, map2);
+        assertThat(Arrays.stream(mapFiles).toList()).containsExactlyInAnyOrder(map1, map2);
         verifyLogged("Creating map: [OSM Cycle]");
         verifyLogged("Added layer CyclOSM Map, CRS:EPSG:3857, TileSize:256");
 
