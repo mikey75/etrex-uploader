@@ -32,11 +32,6 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         add(menuitemUploadToDevice);
         add(menuItemDelete);
 
-        // delete is always enabled
-        enableMenuItem(menuItemDelete);
-        enableMenuItem(menuItemUpload);
-        enableMenuItem(menuitemUploadToDevice);
-
         menuItemDelete.addActionListener(e -> deleteSelectedFileAndCorrespondingTreeNode(tree));
         menuItemUpload.addActionListener(e -> uploadSelectedToStrava(tree, uploadService));
         menuitemUploadToDevice.addActionListener(e -> uploadSelectedToDevice(tree));
@@ -101,9 +96,5 @@ public class FileOperationsPopupMenu extends JPopupMenu {
         }
     }
 
-    private void enableMenuItem(JMenuItem menuItem) {
-        menuItem.setVisible(true);
-        menuItem.setEnabled(true);
-    }
 
 }
