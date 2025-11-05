@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StravaConfigurationTest extends BaseTest {
 
     private static final File GOOD_STRAVA_CONFIG_FILE = new File("src/test/resources/config/good-strava.properties");
-    private static final File MISSING_AUTH_CONFIG_FILE = new File("src/test/resources/config/bad-strava.properties");
+    private static final File MISSING_AUTH_CONFIG_FILE = new File("src/test/resources/config/missing-auth-strava.properties");
     private static final File NON_EXISTING_CONFIG_FILE = new File("target/nonexistent-strava-config");
 
     @BeforeEach
@@ -46,7 +46,7 @@ class StravaConfigurationTest extends BaseTest {
         assertThat(s.getStravaAppId()).isEqualTo("10101020");
         assertThat(s.getPerPage()).isEqualTo(45);
         assertThat(s.getApiUsageWarnPercent()).isEqualTo(50);
-        assertThat(s.getBaseUrl()).isEqualTo(Constants.DEFAULT_STRAVA_BASE_URL);
+        assertThat(s.getBaseUrl()).isEqualTo(Constants.DEFAULT_STRAVA_API_BASE_URL);
         assertThat(s.getBaseTokenUrl()).isEqualTo(Constants.DEFAULT_STRAVA_TOKEN_URL);
         assertThat(s.getAuthUrl()).isEqualTo(Constants.DEFAULT_STRAVA_AUTHORIZATION_URL);
         assertThat(s.getStravaCheckTimeout()).isEqualTo(100);
@@ -121,7 +121,7 @@ class StravaConfigurationTest extends BaseTest {
         assertThat(defaultStravaConfig.getStravaRefreshToken()).isEmpty();
         assertThat(defaultStravaConfig.getPerPage()).isEqualTo(Constants.DEFAULT_STRAVA_ACTIVITIES_PER_PAGE);
         assertThat(defaultStravaConfig.getApiUsageWarnPercent()).isEqualTo(Constants.DEFAULT_API_USAGE_WARN_PERCENT);
-        assertThat(defaultStravaConfig.getBaseUrl()).isEqualTo(Constants.DEFAULT_STRAVA_BASE_URL);
+        assertThat(defaultStravaConfig.getBaseUrl()).isEqualTo(Constants.DEFAULT_STRAVA_API_BASE_URL);
         assertThat(defaultStravaConfig.getBaseTokenUrl()).isEqualTo(Constants.DEFAULT_STRAVA_TOKEN_URL);
         assertThat(defaultStravaConfig.getAuthUrl()).isEqualTo(Constants.DEFAULT_STRAVA_AUTHORIZATION_URL);
         assertThat(defaultStravaConfig.getStravaCheckTimeout()).isEqualTo(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT);

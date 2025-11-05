@@ -18,9 +18,9 @@ import static org.mockito.Mockito.*;
 class StravaPanelTest extends BaseTest {
 
     private final StravaClient client = mock(StravaClient.class);
-    private final File CONFIG = new File("target/nonexistent");
-    private final AppConfiguration appConfiguration = new AppConfiguration(CONFIG.getPath());
-    private final StravaConfiguration stravaConfiguration = new StravaConfiguration(CONFIG.getPath());
+    private final File configFile = new File("target/nonexistent");
+    private final AppConfiguration appConfiguration = new AppConfiguration(configFile.getPath());
+    private final StravaConfiguration stravaConfiguration = new StravaConfiguration(configFile.getPath());
 
     @Test
     void shouldInitializeStravaPanel() {
@@ -39,7 +39,7 @@ class StravaPanelTest extends BaseTest {
         assertThat(panel.getLayout()).isInstanceOf(MigLayout.class);
 
         // clean up
-        FileUtils.deleteQuietly(CONFIG);
+        FileUtils.deleteQuietly(configFile);
 
     }
 }

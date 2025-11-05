@@ -46,7 +46,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         stravaRefreshToken = properties.getProperty(STRAVA_REFRESH_TOKEN, Constants.EMPTY_STRING);
         stravaTokenExpires = Long.valueOf(properties.getProperty(STRAVA_ACCESS_TOKEN_EXPIRES_AT, "0"));
         baseTokenUrl = properties.getProperty(STRAVA_BASE_TOKEN_URL, Constants.DEFAULT_STRAVA_TOKEN_URL);
-        baseUrl = properties.getProperty(STRAVA_BASE_URL, Constants.DEFAULT_STRAVA_BASE_URL);
+        baseUrl = properties.getProperty(STRAVA_BASE_URL, Constants.DEFAULT_STRAVA_API_BASE_URL);
         authUrl = properties.getProperty(STRAVA_AUTH_URL, Constants.DEFAULT_STRAVA_AUTHORIZATION_URL);
         defaultActivityType = SportType.valueOf(properties.getProperty(STRAVA_DEFAULT_ACTIVITY_TYPE, Constants.DEFAULT_SPORT.name()));
         stravaCheckTimeout = Integer.parseInt(properties.getProperty(STRAVA_CHECK_HOST_TIMEOUT, String.valueOf(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT)));

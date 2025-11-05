@@ -26,7 +26,7 @@ public class Constants {
     public static final String STRAVA_DEFAULT_APP_ACCESS_SCOPE = "activity:read,activity:write,read_all";
     public static final String DEFAULT_STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize";
     public static final String DEFAULT_STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
-    public static final String DEFAULT_STRAVA_BASE_URL = "https://www.strava.com/api/v3";
+    public static final String DEFAULT_STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     public static final String STRAVA_ACTIVITY_URL = "https://www.strava.com/activities";
     public static final String DEFAULT_MAP = "defaultMap.xml";
     public static final String GARMIN_DEVICE_XML = "GarminDevice.xml";
