@@ -15,8 +15,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -67,7 +65,7 @@ class AuthCodeInterceptorTest extends BaseTest {
 
 
         HttpResponse<String> response = client.send(requestWithoutCode, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -91,7 +89,7 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .build();
 
         HttpResponse<String> response = client.send(requestWithCodeAndIncorrectScope, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("You must approve all requested authorization scopes", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("You must approve all requested authorization scopes", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -103,7 +101,7 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .build();
 
         HttpResponse<String> response = client.send(requestWithEmptyCode, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -124,6 +122,6 @@ class AuthCodeInterceptorTest extends BaseTest {
         assertThat(code).isEqualTo(AUTH_CODE);
         verifyLogged("Starting Strava OAuth process");
         verifyLogged("Redirecting user to strava app authorization page");
-        assertThat(responseBody).isEqualTo(STRAVA_AUTHORIZATION_OK_MSG);
+        assertThat(responseBody).isEqualTo(Constants.STRAVA_AUTHORIZATION_OK_MSG);
     }
 }

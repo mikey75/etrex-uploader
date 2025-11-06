@@ -18,9 +18,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
-
 /**
  * A tiny webserver for interception of auth code in Strava OAuth process
  * Listens on random port, when it gets code it's done!
@@ -76,7 +73,7 @@ class AuthCodeInterceptor extends LocalWebServer {
     }
 
     private void sendResponse(HttpExchange exchange) throws IOException {
-        String response = (isAuthCodeReady() && scopeOK()) ? STRAVA_AUTHORIZATION_OK_MSG : STRAVA_AUTHORIZATION_FAIL_MSG;
+        String response = (isAuthCodeReady() && scopeOK()) ? Constants.STRAVA_AUTHORIZATION_OK_MSG : Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
 
         byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", ContentTypes.HTML);

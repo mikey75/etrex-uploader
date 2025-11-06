@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.SetupManager;
+import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.utils.FileUtils;
@@ -22,11 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.common.Constants.APPLICATION_IDENTIFICATION;
-
-
 @Slf4j
-
 public class EtrexUploader extends JFrame {
     @Getter
     private static final List<File> configuredMaps = new ArrayList<>();
@@ -35,7 +32,7 @@ public class EtrexUploader extends JFrame {
     private final Splash splash = new Splash();
 
     public EtrexUploader() {
-        super(APPLICATION_IDENTIFICATION);
+        super(Constants.APPLICATION_IDENTIFICATION);
 
         setupManager.initialize();
         splash.invoke();

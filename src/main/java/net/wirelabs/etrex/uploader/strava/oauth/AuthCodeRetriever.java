@@ -94,7 +94,7 @@ public class AuthCodeRetriever implements Serializable {
 
 
     int getAuthCodeTimeoutSeconds() {
-        return Constants.DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;
+        return Constants.AUTH_CODE_TIMEOUT_SECONDS;
     }
 
     /**

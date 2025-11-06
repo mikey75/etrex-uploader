@@ -31,13 +31,10 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
 import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 @Slf4j
 public class MapPanel extends BaseEventAwarePanel {
-
-
 
     private final AppConfiguration configuration;
 
@@ -60,7 +57,7 @@ public class MapPanel extends BaseEventAwarePanel {
 
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);
-        mapViewer.setZoom(DEFAULT_MAP_START_ZOOM);
+        mapViewer.setZoom(Constants.DEFAULT_MAP_START_ZOOM);
         mapViewer.setHome(mapHome);
         mapViewer.setImageCacheSize(32000);
         setSecondaryTileCache(configuration.getCacheType());
@@ -142,7 +139,7 @@ public class MapPanel extends BaseEventAwarePanel {
                 painter.getObjects().clear();
             }
             // reset map to default start position, and current zoom
-            mapViewer.setPositionAndZoom(mapHome, DEFAULT_MAP_START_ZOOM);
+            mapViewer.setPositionAndZoom(mapHome, Constants.DEFAULT_MAP_START_ZOOM);
             mapViewer.repaint();
 
         }
