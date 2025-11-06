@@ -2,7 +2,7 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 
 
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ApiUsagePanelTest extends BaseTest {
 
     @Test
     void shouldDisplayApiUsage() {
-        AppConfiguration configuration = new AppConfiguration("src/test/resources/config/test.properties");
+        StravaConfiguration configuration = new StravaConfiguration("src/test/resources/config/test.properties");
         configuration.setApiUsageWarnPercent(50);
         ApiUsagePanel p = new ApiUsagePanel(configuration);
         Map<String, List<String>> headers = new HashMap<>();

@@ -3,12 +3,14 @@ package net.wirelabs.etrex.uploader.strava.client;
 import com.strava.model.SportType;
 import com.strava.model.Upload;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.etrex.uploader.utils.UrlBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +33,11 @@ import static net.wirelabs.etrex.uploader.utils.JsonUtil.serialize;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class StravaHttpInstrumentation {
+public abstract class StravaClientInstrumentation {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
-    private StravaConfiguration stravaConfiguration;
+    @Getter
+    protected StravaConfiguration stravaConfiguration;
     private StravaConfigUpdater stravaUpdater;
 
     protected String activitiesUrl;
@@ -47,9 +50,9 @@ public abstract class StravaHttpInstrumentation {
 
 
 
-    protected StravaHttpInstrumentation(StravaConfiguration stravaConfiguration, String baseUrl, String baseTokenUrl) {
-        setupUrls(baseUrl);
-        this.baseTokenUrl = baseTokenUrl;
+    protected StravaClientInstrumentation(StravaConfiguration stravaConfiguration) {
+        setupUrls(stravaConfiguration.getBaseUrl());
+        this.baseTokenUrl = stravaConfiguration.getBaseTokenUrl();
         this.stravaUpdater = new StravaConfigUpdater(stravaConfiguration);
         this.stravaConfiguration = stravaConfiguration;
     }
@@ -283,5 +286,12 @@ public abstract class StravaHttpInstrumentation {
         athleteUrl = baseUrl + "/athlete";
         athletesUrl = baseUrl + "/athletes";
         uploadsUrl = baseUrl + "/uploads";
+    }
+
+    public void authorizeToStrava(String appId, String clientSecret) throws IOException, StravaException {
+        AuthCodeRetriever authCodeRetriever = new AuthCodeRetriever(stravaConfiguration);
+        String code = authCodeRetriever.getAuthCode(appId);
+        exchangeAuthCodeForAccessToken(appId, clientSecret, code);
+        authCodeRetriever.shutdown();
     }
 }

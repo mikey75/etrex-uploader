@@ -30,7 +30,7 @@ public class StravaActivityIconClickListener extends MouseAdapter implements Mou
 
         if (mouseOverIcon(e.getPoint())) {
             String activityId = String.valueOf(table.getModel().getActivityAtRow(table.getSelectedRow()).getId());
-            String url = Constants.STRAVA_ACTIVITY_URL+ "/" + activityId;
+            String url = Constants.STRAVA_ACTIVITIES_WEB_URL + "/" + activityId;
 
             try {
                 SystemUtils.openSystemBrowser(url);

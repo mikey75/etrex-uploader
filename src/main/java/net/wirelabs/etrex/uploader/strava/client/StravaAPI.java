@@ -4,6 +4,7 @@ import com.strava.model.*;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 

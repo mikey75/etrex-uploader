@@ -6,7 +6,6 @@ import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.oauth.AuthService;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -26,15 +25,15 @@ public class StravaConnector extends BaseDialog {
     private final JTextField appIdInput = new JTextField();
     private final JTextField appSecretInput = new JTextField();
     private final JButton connectBtn = new StravaButton();
-    private final AuthService authService;
     @Getter
     private final AtomicBoolean oauthStatus = new AtomicBoolean(false);
+    private final StravaClient client;
     @Getter
     private String oauthMessage;
 
     public StravaConnector(StravaClient client)  {
         super("Connect to strava","","[grow]","[][][][][]");
-        authService = new AuthService(client);
+        this.client = client;
 
         registerExitOnCloseListener();
         registerActionOnClickConnect();
@@ -87,7 +86,7 @@ public class StravaConnector extends BaseDialog {
 
         try {
             if (!appId.isBlank() && !clientSecret.isBlank()) {
-                authService.getToken(appId,clientSecret);
+                client.authorizeToStrava(appId,clientSecret);
                 oauthStatus.set(true);
             } else {
                 oauthStatus.set(false);

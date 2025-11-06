@@ -22,7 +22,13 @@ class TokenRequestTest extends BaseTest {
 
     private static final StravaConfiguration config = new StravaConfiguration(STRAVA_CONFIG);
     private static final AppConfiguration appConfig = new AppConfiguration(APP_CONFIG);
-    private static final StravaClient client = new StravaClient(config, appConfig, BASE_URL, TOKEN_URL);
+    private static final StravaClient client = new StravaClient(updateConfig(), appConfig);
+
+    private static StravaConfiguration updateConfig() {
+        config.setBaseTokenUrl(TOKEN_URL);
+        config.setBaseUrl(BASE_URL);
+        return config;
+    }
 
     @Test
     void getToken() throws IOException,  InterruptedException {

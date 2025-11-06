@@ -1,6 +1,7 @@
 package net.wirelabs.etrex.uploader.strava.oauth;
 
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.AfterEach;
@@ -14,8 +15,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_FAIL_MSG;
-import static net.wirelabs.etrex.uploader.common.Constants.STRAVA_AUTHORIZATION_OK_MSG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -29,7 +28,7 @@ class AuthCodeInterceptorTest extends BaseTest {
 
     @BeforeEach
     void before() throws IOException {
-        authCodeRetriever = Mockito.spy(new AuthCodeRetriever());
+        authCodeRetriever = Mockito.spy(new AuthCodeRetriever(new StravaConfiguration("/target/nonexistent-strava-config")));
         doNothing().when(authCodeRetriever).openSystemBrowser(any());
         verifyLogged("Started auth code interceptor http server on port " + authCodeRetriever.getPort());
         doReturn(2).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
@@ -44,7 +43,7 @@ class AuthCodeInterceptorTest extends BaseTest {
     @Test
     void testIfCorrectOAuthUrlIsPassed() throws IOException {
 
-        String expectedUrl = Constants.STRAVA_AUTHORIZATION_URL +
+        String expectedUrl = authCodeRetriever.getStravaConfiguration().getAuthUrl() +
                 "?client_id=fakeAppId" +
                 "&redirect_uri=http://127.0.0.1:" + authCodeRetriever.getPort() +
                 "&response_type=code" +
@@ -66,7 +65,7 @@ class AuthCodeInterceptorTest extends BaseTest {
 
 
         HttpResponse<String> response = client.send(requestWithoutCode, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -90,7 +89,7 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .build();
 
         HttpResponse<String> response = client.send(requestWithCodeAndIncorrectScope, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("You must approve all requested authorization scopes", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("You must approve all requested authorization scopes", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -102,7 +101,7 @@ class AuthCodeInterceptorTest extends BaseTest {
                 .build();
 
         HttpResponse<String> response = client.send(requestWithEmptyCode, HttpResponse.BodyHandlers.ofString());
-        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), STRAVA_AUTHORIZATION_FAIL_MSG);
+        runGetAuthAndAssertMessage("Timed out waiting for code", response.body(), Constants.STRAVA_AUTHORIZATION_FAIL_MSG);
     }
 
     @Test
@@ -123,6 +122,6 @@ class AuthCodeInterceptorTest extends BaseTest {
         assertThat(code).isEqualTo(AUTH_CODE);
         verifyLogged("Starting Strava OAuth process");
         verifyLogged("Redirecting user to strava app authorization page");
-        assertThat(responseBody).isEqualTo(STRAVA_AUTHORIZATION_OK_MSG);
+        assertThat(responseBody).isEqualTo(Constants.STRAVA_AUTHORIZATION_OK_MSG);
     }
 }
