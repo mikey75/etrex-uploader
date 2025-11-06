@@ -254,15 +254,16 @@
                                     (e.g. while building outside git repo or  from a source package)
                                     set the commit info to "UNKNOWN" -->
 
-                                <exec executable="git" outputproperty="git.version" failonerror="false">
+                                <exec executable="git" outputproperty="git.version.tmp" failonerror="false">
                                     <arg value="rev-parse"/>
                                     <arg value="--short"/>
                                     <arg value="HEAD"/>
                                 </exec>
 
                                 <condition property="git.version" value="UNKNOWN">
-                                    <not><isset property="git.version"/></not>
+                                    <not><matches string="${git.version.tmp}" pattern="^[0-9a-fA-F]+$"/></not>
                                 </condition>
+                                <property name="git.version" value="${git.version.tmp}"/>
 
                                 <!-- Output the versions to files -->
                                 <echo file="${project.basedir}/etrex-uploader.version">${project.version}-${maven.build.timestamp}-${git.version}</echo>
