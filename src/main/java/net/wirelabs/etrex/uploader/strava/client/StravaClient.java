@@ -5,24 +5,26 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import net.wirelabs.etrex.uploader.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /*
  * Created 12/17/22 by Michał Szwaczko (mikey@wirelabs.net)
  */
 @Slf4j
-public class StravaClient extends StravaHttpInstrumentation implements StravaAPI {
+public class StravaClient extends StravaClientInstrumentation implements StravaAPI {
 
     @Getter
     private final AppConfiguration appConfiguration;
     private DetailedAthlete currentAthlete;
 
-    public StravaClient(StravaConfiguration stravaConfiguration, AppConfiguration appConfiguration, String baseUrl, String baseTokenUrl) {
-        super(stravaConfiguration, baseUrl, baseTokenUrl);
+    public StravaClient(StravaConfiguration stravaConfiguration, AppConfiguration appConfiguration) {
+        super(stravaConfiguration);
         this.appConfiguration = appConfiguration;
     }
 
@@ -61,13 +63,13 @@ public class StravaClient extends StravaHttpInstrumentation implements StravaAPI
 
     @Override
     public List<SummaryActivity> getCurrentAthleteActivities() throws StravaException {
-        return getCurrentAthleteActivities(1, appConfiguration.getPerPage());
+        return getCurrentAthleteActivities(1, stravaConfiguration.getPerPage());
     }
 
     @Override
     public Upload uploadActivity(File file, String name, String desc, SportType sportType, boolean virtual, boolean commute) throws StravaException {
 
-        int uploadWaitTimeSeconds = appConfiguration.getUploadStatusWaitSeconds();
+        int uploadWaitTimeSeconds = stravaConfiguration.getUploadStatusWaitSeconds();
         long uploadStatusTimeout = System.currentTimeMillis() + uploadWaitTimeSeconds * 1000L;
 
         // make upload request
@@ -91,6 +93,5 @@ public class StravaClient extends StravaHttpInstrumentation implements StravaAPI
         params.put("key_by_type", String.valueOf(keyByType));
         return makeGetRequest(activitiesUrl + "/" + activityId + "/streams", StreamSet.class, params);
     }
-
 
 }

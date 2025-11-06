@@ -5,10 +5,11 @@ import com.strava.model.LatLng;
 import com.strava.model.StreamSet;
 import com.strava.model.SummaryActivity;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.eventbus.Event;
@@ -24,7 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
 import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.CENTER;
@@ -39,13 +39,13 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private final JButton btnPrevPage = new JButton("<");
     private final JButton btnNextPage = new JButton(">");
     private final StravaClient stravaClient;
-    private final AppConfiguration configuration;
+    private final StravaConfiguration configuration;
     private int page = 1;
 
 
     public StravaActivitiesPanel(StravaClient stravaClient) {
         super("Strava", "","[grow][]","[grow][grow]");
-        this.configuration = stravaClient.getAppConfiguration();
+        this.configuration = stravaClient.getStravaConfiguration();
         this.stravaClient = stravaClient;
         createVisualComponent();
         updateActivities(page);
@@ -148,7 +148,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
 
     private void warnAndResetMap() {
         SwingUtils.infoMsg("This activity does not contain a track/route\nWill reset map to default!");
-        EventBus.publish(MAP_RESET, DEFAULT_MAP_HOME_LOCATION);
+        EventBus.publish(MAP_RESET, Constants.DEFAULT_MAP_HOME_LOCATION);
     }
 
     /**

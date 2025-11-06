@@ -99,18 +99,11 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getWaitDriveTimeout()).isEqualTo(Constants.DEFAULT_WAIT_DRIVE_TIMEOUT);
         assertThat(c.isDeleteAfterUpload()).isTrue();
         assertThat(c.isArchiveAfterUpload()).isTrue();
-        assertThat(c.getDefaultActivityType()).isEqualTo(Constants.DEFAULT_SPORT);
         assertThat(c.getTilerThreads()).isEqualTo(Constants.DEFAULT_TILER_THREAD_COUNT);
-        assertThat(c.getPerPage()).isEqualTo(Constants.DEFAULT_STRAVA_ACTIVITIES_PER_PAGE);
-        assertThat(c.getApiUsageWarnPercent()).isEqualTo(Constants.DEFAULT_API_USAGE_WARN_PERCENT);
-        assertThat(c.getUploadStatusWaitSeconds()).isEqualTo(Constants.DEFAULT_UPLOAD_STATUS_WAIT_SECONDS);
         assertThat(c.getMapTrackColor()).isEqualTo(Constants.DEFAULT_TRACK_COLOR);
         assertThat(c.getUserMapDefinitionsDir()).hasToString(Constants.DEFAULT_USER_MAP_DIR);
         assertThat(c.getMapFile()).hasToString(c.getUserMapDefinitionsDir().toString() + File.separator + Constants.DEFAULT_MAP);
-        assertThat(c.isUsePolyLines()).isTrue();
         assertThat(c.getLookAndFeelClassName()).isEqualTo(UIManager.getCrossPlatformLookAndFeelClassName());
-        assertThat(c.getStravaCheckTimeout()).isEqualTo(Constants.DEFAULT_STRAVA_CHECK_TIMEOUT);
-        assertThat(c.isStravaCheckHostBeforeUpload()).isTrue();
         assertThat(c.getMapHomeLatitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         assertThat(c.getMapHomeLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
         assertThat(c.isEnableDesktopSliders()).isEqualTo(Constants.DEFAULT_USE_SLIDERS);

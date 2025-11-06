@@ -2,6 +2,7 @@ package net.wirelabs.etrex.uploader.gui.settingsdialog;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import net.wirelabs.etrex.uploader.gui.settingsdialog.appsettings.ApplicationSettingsPanel;
@@ -19,7 +20,8 @@ public class SettingsDialog extends BaseDialog {
 	private final ApplicationSettingsPanel applicationSettingsPanel;
 	private final StravaSettingsPanel stravaSettingsPanel;
 	private final MapsSettingsPanel mapsSettingsPanel;
-	private final AppConfiguration configuration;
+	private final AppConfiguration appConfiguration;
+	private final StravaConfiguration stravaConfiguration;
 	private final LogViewerDialog logViewerDialog = new LogViewerDialog();
 	private final JButton viewLogs = new JButton("View logs");
 	private final JButton cancelBtn = new JButton("Cancel");
@@ -29,15 +31,16 @@ public class SettingsDialog extends BaseDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public SettingsDialog(AppConfiguration appConfiguration) {
+	public SettingsDialog(StravaConfiguration stravaConfiguration, AppConfiguration appConfiguration) {
 		super("Settings","","[grow]","[grow][grow][grow][]");
-		this.configuration = appConfiguration;
+		this.appConfiguration = appConfiguration;
+		this.stravaConfiguration = stravaConfiguration;
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 
 		applicationSettingsPanel = new ApplicationSettingsPanel(appConfiguration);
-		stravaSettingsPanel = new StravaSettingsPanel(appConfiguration);
+		stravaSettingsPanel = new StravaSettingsPanel(stravaConfiguration);
 		mapsSettingsPanel = new MapsSettingsPanel(appConfiguration);
 		add(applicationSettingsPanel, cell(0,0).grow());
 		add(stravaSettingsPanel, cell(0,1).grow());
@@ -58,7 +61,8 @@ public class SettingsDialog extends BaseDialog {
 		applicationSettingsPanel.updateConfiguration();
 		stravaSettingsPanel.updateConfiguration();
 		mapsSettingsPanel.updateConfiguration();
-		configuration.save();
+		appConfiguration.save();
+		stravaConfiguration.save();
 		dispose();
 	}
 
@@ -72,12 +76,12 @@ public class SettingsDialog extends BaseDialog {
 		// if true -> reset to default and dispose dialog/window
 		try {
 			String currentLaf = String.valueOf(applicationSettingsPanel.getLookAndFeelSelector().getSelectedItem());
-			String defaultLaf = configuration.getLookAndFeelClassName();
+			String defaultLaf = appConfiguration.getLookAndFeelClassName();
 
 			if (!currentLaf.equals(defaultLaf)) {
-				SwingUtils.setSystemLookAndFeel(configuration.getLookAndFeelClassName());
+				SwingUtils.setSystemLookAndFeel(appConfiguration.getLookAndFeelClassName());
 				SwingUtils.updateComponentsUIState();
-				SwingUtils.setGlobalFontSize(configuration.getFontSize());
+				SwingUtils.setGlobalFontSize(appConfiguration.getFontSize());
 			}
 
 		} catch (UnsupportedLookAndFeelException | ReflectiveOperationException e) {

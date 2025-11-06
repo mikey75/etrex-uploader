@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader.strava.oauth;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.utils.Sleeper;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.strava.StravaException;
@@ -14,14 +15,17 @@ import java.time.Duration;
 
 
 @Slf4j
-class AuthCodeRetriever implements Serializable {
+public class AuthCodeRetriever implements Serializable {
 
     private final transient AuthCodeInterceptor interceptorServer;
+    @Getter
+    private final StravaConfiguration stravaConfiguration;
 
     @Getter
     private final int port;
 
-    public AuthCodeRetriever() throws IOException {
+    public AuthCodeRetriever(StravaConfiguration stravaConfiguration) throws IOException {
+        this.stravaConfiguration = stravaConfiguration;
         interceptorServer = new AuthCodeInterceptor();
         port = interceptorServer.getListeningPort();
         interceptorServer.start();
@@ -90,7 +94,7 @@ class AuthCodeRetriever implements Serializable {
 
 
     int getAuthCodeTimeoutSeconds() {
-        return Constants.DEFAULT_AUTH_CODE_TIMEOUT_SECONDS;
+        return Constants.AUTH_CODE_TIMEOUT_SECONDS;
     }
 
     /**
@@ -104,7 +108,7 @@ class AuthCodeRetriever implements Serializable {
      * @return request that will be issued to Strava
      */
     private String buildAuthRequestUrl(String redirectURL, String applicationId) {
-        return UrlBuilder.create().doNotEncodeParams().parse(Constants.STRAVA_AUTHORIZATION_URL)
+        return UrlBuilder.create().doNotEncodeParams().parse(stravaConfiguration.getAuthUrl())
                 .addQueryParam("client_id", applicationId)
                 .addQueryParam("redirect_uri", redirectURL)
                 .addQueryParam("response_type", "code")

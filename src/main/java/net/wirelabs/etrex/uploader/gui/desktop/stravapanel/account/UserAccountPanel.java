@@ -4,9 +4,9 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 import com.strava.model.ActivityStats;
 import com.strava.model.DetailedAthlete;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.utils.DateAndUnitConversionUtil;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.ThreadUtils;
@@ -39,7 +39,7 @@ public class UserAccountPanel extends BasePanel {
 
     private final StravaClient stravaClient;
     private final JButton btnSettings = new JButton("Settings");
-    private final AppConfiguration configuration;
+    private final StravaConfiguration configuration;
     private final JLabel lblYtdRides = new JLabel("YTD rides:");
     private final JLabel lblYtdDist = new JLabel("YTD distance (km):");
     private final JLabel lblYtdTime = new JLabel("YTD time (hrs):");
@@ -53,7 +53,7 @@ public class UserAccountPanel extends BasePanel {
     public UserAccountPanel(StravaClient stravaClient) {
         super("My profile","","[grow][]","[][][][][][][][][][][][grow][grow,bottom]");
         this.stravaClient = stravaClient;
-        this.configuration = stravaClient.getAppConfiguration();
+        this.configuration = stravaClient.getStravaConfiguration();
         apiUsagePanel = new ApiUsagePanel(configuration);
         initVisualComponent();
         ThreadUtils.runAsync(() -> {
@@ -86,7 +86,7 @@ public class UserAccountPanel extends BasePanel {
         add(btnSettings, cell(0,12,2,1).growX());
 
         btnSettings.addActionListener(e -> {
-            SettingsDialog d = new SettingsDialog(configuration);
+            SettingsDialog d = new SettingsDialog(stravaClient.getStravaConfiguration(),stravaClient.getAppConfiguration());
             SwingUtils.centerComponent(d);
             d.setVisible(true);
         });

@@ -23,13 +23,21 @@ public class Constants {
             SystemUtils.getAppVersion(),
             SystemUtils.getJmapsVersion()
     );
+    // strava stuff
     public static final String STRAVA_DEFAULT_APP_ACCESS_SCOPE = "activity:read,activity:write,read_all";
-    public static final String STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize";
+    public static final String STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
     public static final String STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
-    public static final String STRAVA_BASE_URL = "https://www.strava.com/api/v3";
-    public static final String STRAVA_ACTIVITY_URL = "https://www.strava.com/activities";
+    public static final String STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
+    public static final String STRAVA_ACTIVITIES_WEB_URL = "https://www.strava.com/activities"; // this is a web (non-api) address, for use with 'view activity on Strava button' only
+    public static final int STRAVA_CHECK_TIMEOUT = 500;
+    public static final int STRAVA_ACTIVITIES_PER_PAGE = 30;
+    public static final int STRAVA_API_USAGE_WARN_PERCENT = 85;
+    public static final int UPLOAD_STATUS_WAIT_SECONDS = 60;
+    public static final int AUTH_CODE_TIMEOUT_SECONDS = 60;
+
     public static final String DEFAULT_MAP = "defaultMap.xml";
     public static final String GARMIN_DEVICE_XML = "GarminDevice.xml";
+
     // these are home dir based
     public static final String DEFAULT_LOCAL_STORE = String.valueOf(Paths.get(SystemUtils.getHomeDir(), "etrex-uploader-store"));
     public static final String DEFAULT_USER_MAP_DIR = String.valueOf(Paths.get(SystemUtils.getHomeDir(), "etrex-uploader-maps"));
@@ -43,7 +51,6 @@ public class Constants {
     public static final String LINUX_USB_MOUNT_DIR = "/media";
     public static final String LINUX_ALT_USB_MOUNT_DIR = "/run/media";
     public static final String OSX_USB_MOUNT_DIR = "/Volumes";
-    public static final int DEFAULT_AUTH_CODE_TIMEOUT_SECONDS = 60;
     public static final String DEFAULT_TRACK_COLOR = "#ff0000";
     public static final SportType DEFAULT_SPORT = SportType.RIDE;
     public static final int DEFAULT_ROUTE_LINE_WIDTH = 3;
@@ -51,10 +58,6 @@ public class Constants {
     public static final long DEFAULT_DRIVE_OBSERVER_DELAY = 500;
     public static final long DEFAULT_WAIT_DRIVE_TIMEOUT = 15000;
     public static final int DEFAULT_TILER_THREAD_COUNT = 8;
-    public static final int DEFAULT_STRAVA_CHECK_TIMEOUT = 500;
-    public static final int DEFAULT_STRAVA_ACTIVITIES_PER_PAGE = 30;
-    public static final int DEFAULT_API_USAGE_WARN_PERCENT = 85;
-    public static final int DEFAULT_UPLOAD_STATUS_WAIT_SECONDS = 60;
     public static final int DEFAULT_FONT_SIZE = 10;
     public static final boolean DEFAULT_USE_SLIDERS = false;
     // 1e5 = 100000.0 - why? -> https://developers.google.com/maps/documentation/utilities/polylinealgorithm

@@ -26,8 +26,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.*;
 
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_HOME_LOCATION;
-import static net.wirelabs.etrex.uploader.common.Constants.DEFAULT_MAP_START_ZOOM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -59,7 +57,7 @@ class MapPanelTest extends BaseTest {
 
         assertThat(mp.mapViewer.isShowCoordinates()).isTrue();
         assertThat(mp.mapViewer.isShowAttribution()).isTrue();
-        assertThat(mp.mapViewer.getZoom()).isEqualTo(DEFAULT_MAP_START_ZOOM);
+        assertThat(mp.mapViewer.getZoom()).isEqualTo(Constants.DEFAULT_MAP_START_ZOOM);
         assertThat(mp.mapHome.getLatitude()).isEqualTo(appConfiguration.getMapHomeLatitude());
         assertThat(mp.mapHome.getLongitude()).isEqualTo(appConfiguration.getMapHomeLongitude());
 
@@ -168,15 +166,15 @@ class MapPanelTest extends BaseTest {
         Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> assertThat(mp.getRoutePainter().getObjects()).isNotEmpty());
 
         // now reset map, this should clear all painters
-        EventBus.publish(EventType.MAP_RESET, DEFAULT_MAP_HOME_LOCATION);
+        EventBus.publish(EventType.MAP_RESET, Constants.DEFAULT_MAP_HOME_LOCATION);
 
         Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> {
             for (Painter<MapViewer> p : mp.mapViewer.getUserOverlays()) {
                 assertThat(p.getObjects()).isEmpty();
             }
-            assertThat(mp.mapViewer.getZoom()).isEqualTo(DEFAULT_MAP_START_ZOOM);
-            assertThat(mp.mapHome.getLongitude()).isEqualTo(DEFAULT_MAP_HOME_LOCATION.getLongitude());
-            assertThat(mp.mapHome.getLatitude()).isEqualTo(DEFAULT_MAP_HOME_LOCATION.getLatitude());
+            assertThat(mp.mapViewer.getZoom()).isEqualTo(Constants.DEFAULT_MAP_START_ZOOM);
+            assertThat(mp.mapHome.getLongitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLongitude());
+            assertThat(mp.mapHome.getLatitude()).isEqualTo(Constants.DEFAULT_MAP_HOME_LOCATION.getLatitude());
         });
     }
 
