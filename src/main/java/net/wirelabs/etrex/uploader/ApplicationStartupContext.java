@@ -6,6 +6,7 @@ import net.wirelabs.etrex.uploader.common.FileService;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.device.GarminDeviceService;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 
@@ -24,6 +25,7 @@ public class ApplicationStartupContext {
     private final FileService fileService;
     private final GarminDeviceService garminDeviceService;
     private final StravaClient stravaClient;
+    private final StravaConnectionChecker stravaConnectionChecker;
 
     public ApplicationStartupContext() throws IOException {
         // load config files
@@ -34,6 +36,7 @@ public class ApplicationStartupContext {
         this.garminDeviceService = new GarminDeviceService(appConfiguration);
         this.stravaClient = new StravaClient(stravaConfiguration, appConfiguration);
         this.uploadService = new UploadService(stravaClient, fileService);
+        this.stravaConnectionChecker = new StravaConnectionChecker(stravaConfiguration);
     }
 
 
