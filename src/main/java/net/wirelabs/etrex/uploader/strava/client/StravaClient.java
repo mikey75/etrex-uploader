@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
-import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import net.wirelabs.etrex.uploader.utils.Sleeper;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /*

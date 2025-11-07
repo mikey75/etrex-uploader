@@ -6,15 +6,14 @@ import net.wirelabs.etrex.uploader.ApplicationStartupContext;
 import net.wirelabs.etrex.uploader.SetupManager;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
+import net.wirelabs.etrex.uploader.gui.desktop.DesktopPanel;
+import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.GarminAndStoragePanel;
+import net.wirelabs.etrex.uploader.gui.desktop.mappanel.MapPanel;
+import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.StravaPanel;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.utils.FileUtils;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
-import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.GarminAndStoragePanel;
-import net.wirelabs.etrex.uploader.gui.desktop.DesktopPanel;
-import net.wirelabs.etrex.uploader.gui.desktop.mappanel.MapPanel;
-import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.StravaPanel;
-import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,11 +37,12 @@ public class EtrexUploader extends JFrame {
         splash.invoke();
 
         ApplicationStartupContext ctx = setupManager.getAppContext();
+        StravaConnectionChecker connectionChecker = ctx.getStravaConnectionChecker();
 
         splash.update("Application initialization started ....");
 
         splash.update("Checking strava status");
-        checkStravaIsUp(ctx.getStravaConfiguration());
+        connectionChecker.checkStravaIsUp();
 
         splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());
@@ -85,16 +85,6 @@ public class EtrexUploader extends JFrame {
         setVisible(true);
     }
 
-    private void checkStravaIsUp(StravaConfiguration cfg) {
-        log.info("Starting Strava status check");
-        if (StravaUtil.isStravaUp(cfg.getStravaCheckTimeout())) {
-            log.info("Strava is up and running!");
-        } else {
-            SwingUtils.errorMsg("Strava seems to be down! Exiting!");
-            log.warn("Strava seems to be down. Exiting!");
-            SystemUtils.systemExit(1);
-        }
-    }
 
     private void getMapDefinitionFiles(AppConfiguration configuration) {
 
