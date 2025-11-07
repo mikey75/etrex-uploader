@@ -28,10 +28,11 @@ class AuthCodeInterceptorTest extends BaseTest {
 
     @BeforeEach
     void before() throws IOException {
-        authCodeRetriever = Mockito.spy(new AuthCodeRetriever(new StravaConfiguration("/target/nonexistent-strava-config")));
+        StravaConfiguration configuration = new StravaConfiguration("/target/nonexistent-strava-config");
+        configuration.setAuthCodeTimeout(2);
+        authCodeRetriever = Mockito.spy(new AuthCodeRetriever(configuration));
         doNothing().when(authCodeRetriever).openSystemBrowser(any());
         verifyLogged("Started auth code interceptor http server on port " + authCodeRetriever.getPort());
-        doReturn(2).when(authCodeRetriever).getAuthCodeTimeoutSeconds();
     }
 
     @AfterEach

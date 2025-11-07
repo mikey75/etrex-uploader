@@ -32,6 +32,7 @@ class ConfigurationPropertyKeys {
     static final String STRAVA_TOKEN_URL                  = "strava.base.token.url";
     static final String STRAVA_API_BASE_URL               = "strava.base.url";
     static final String STRAVA_AUTH_URL                   = "strava.auth.url";
+    static final String AUTH_CODE_TIMEOUT_SECONDS         = "strava.auth.code.timeout";
     // map
     static final String MAP_FILE                          = "map.file";
     static final String MAP_TILER_THREAD_COUNT            = "map.tiler.threads";
