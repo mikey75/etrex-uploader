@@ -81,7 +81,7 @@ public class AuthCodeRetriever implements Serializable {
     }
 
     private boolean waitForCode() {
-        long timeOut = System.currentTimeMillis() + Duration.ofSeconds(getAuthCodeTimeoutSeconds()).toMillis();
+        long timeOut = System.currentTimeMillis() + Duration.ofSeconds(stravaConfiguration.getAuthCodeTimeout()).toMillis();
         while (System.currentTimeMillis() < timeOut) {
             if (interceptorServer.isAuthCodeReady()) {
                 log.info("Got auth code");
@@ -90,11 +90,6 @@ public class AuthCodeRetriever implements Serializable {
             Sleeper.sleepMillis(200);
         }
         return false;
-    }
-
-
-    int getAuthCodeTimeoutSeconds() {
-        return Constants.AUTH_CODE_TIMEOUT_SECONDS;
     }
 
     /**

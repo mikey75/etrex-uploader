@@ -17,8 +17,11 @@ import static net.wirelabs.etrex.uploader.configuration.ConfigurationPropertyKey
 @Setter
 @Slf4j
 public class StravaConfiguration extends PropertiesBasedConfiguration {
-
+    // timeouts
     private int stravaCheckTimeout;
+    private int authCodeTimeout;
+
+    // auth/security
     private String stravaAppId;
     private String stravaClientSecret;
     private String stravaAccessToken;
@@ -55,7 +58,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(Constants.STRAVA_API_USAGE_WARN_PERCENT)));
         stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(STRAVA_CHECK_HOST_BEFORE_UPLOAD,Constants.TRUE));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(STRAVA_UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(Constants.UPLOAD_STATUS_WAIT_SECONDS)));
-
+        authCodeTimeout = Integer.parseInt(properties.getProperty(AUTH_CODE_TIMEOUT_SECONDS, String.valueOf(Constants.AUTH_CODE_TIMEOUT_SECONDS)));
         if (!configFileExists()) {
             log.info("Saving new strava config file with default values");
             save();
@@ -79,6 +82,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
         properties.setProperty(STRAVA_CHECK_HOST_BEFORE_UPLOAD, String.valueOf(stravaCheckHostBeforeUpload));
         properties.setProperty(STRAVA_UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
+        properties.setProperty(AUTH_CODE_TIMEOUT_SECONDS, String.valueOf(authCodeTimeout));
         storePropertiesToFile();
     }
 

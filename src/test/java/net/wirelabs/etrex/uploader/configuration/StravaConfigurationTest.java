@@ -49,6 +49,7 @@ class StravaConfigurationTest extends BaseTest {
         assertThat(s.getBaseUrl()).isEqualTo(Constants.STRAVA_API_BASE_URL);
         assertThat(s.getBaseTokenUrl()).isEqualTo(Constants.STRAVA_TOKEN_URL);
         assertThat(s.getAuthUrl()).isEqualTo(Constants.STRAVA_AUTH_URL);
+        assertThat(s.getAuthCodeTimeout()).isEqualTo(Constants.AUTH_CODE_TIMEOUT_SECONDS);
         assertThat(s.getStravaCheckTimeout()).isEqualTo(100);
         assertThat(s.isStravaCheckHostBeforeUpload()).isFalse();
         assertThat(s.getDefaultActivityType()).isEqualTo(SportType.WALK);
@@ -125,6 +126,7 @@ class StravaConfigurationTest extends BaseTest {
         assertThat(defaultStravaConfig.getBaseTokenUrl()).isEqualTo(Constants.STRAVA_TOKEN_URL);
         assertThat(defaultStravaConfig.getAuthUrl()).isEqualTo(Constants.STRAVA_AUTH_URL);
         assertThat(defaultStravaConfig.getStravaCheckTimeout()).isEqualTo(Constants.STRAVA_CHECK_TIMEOUT);
+        assertThat(defaultStravaConfig.getAuthCodeTimeout()).isEqualTo(Constants.AUTH_CODE_TIMEOUT_SECONDS);
         assertThat(defaultStravaConfig.isStravaCheckHostBeforeUpload()).isTrue();
         assertThat(defaultStravaConfig.getDefaultActivityType()).isEqualTo(SportType.RIDE);
         assertThat(defaultStravaConfig.getUploadStatusWaitSeconds()).isEqualTo(Constants.UPLOAD_STATUS_WAIT_SECONDS);
