@@ -3,6 +3,7 @@ package net.wirelabs.etrex.uploader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.utils.LoggingConfigurator;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
@@ -16,6 +17,7 @@ public class SetupManager {
 
     @Getter
     private ApplicationStartupContext appContext;
+    private StravaConnectionChecker connectionChecker;
 
     public void initialize() throws IllegalStateException {
 
@@ -41,6 +43,7 @@ public class SetupManager {
     void initializeContext() throws IOException {
         log.info("Etrex Uploader ver {} starting up....", SystemUtils.getAppVersion());
         appContext = new ApplicationStartupContext();
+        connectionChecker = appContext.getStravaConnectionChecker();
     }
 
     void setFontAndLookAndFeel() throws UnsupportedLookAndFeelException, ReflectiveOperationException {
@@ -59,6 +62,7 @@ public class SetupManager {
     }
 
     void runStravaConnector() {
+        connectionChecker.checkStravaIsUp();
         new StravaConnector(appContext.getStravaClient());
     }
 }
