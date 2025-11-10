@@ -93,7 +93,7 @@ public class BasicStravaEmulator extends LocalWebServer {
             case "GET /authorize" -> {
                 // need to get redirect uri and make a connection to autorizer (like strava would do)
                 String url = queryParams.get("redirect_uri");
-                response = String.valueOf(callAuthCodeInterceptor(url + "?code=dupa&scope=activity:read,activity:write,read_all"));
+                response = String.valueOf(callAuthCodeInterceptor(url + "?code=supersecret&scope=activity:read,activity:write,read_all"));
                 }
             // default response if none of the above is met
             default -> response = "404 Not Found: " + method + " " + path;
@@ -105,7 +105,7 @@ public class BasicStravaEmulator extends LocalWebServer {
     private HttpResponse<String> callAuthCodeInterceptor(String url) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url + "?" + "code=dupa&scope=activity:read,activity:write,read_all"))
+                .uri(URI.create(url + "?" + "code=supersecret&scope=activity:read,activity:write,read_all"))
                 .GET()
                 .build();
         try {
