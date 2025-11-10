@@ -31,12 +31,12 @@ class JsonUtilTest {
     void shouldSerializeObject() {
         String json = """
                 {
-                    "name":"Kaka",
+                    "name":"Alex",
                     "age":40,
                     "car":"Volvo"
                 }""";
 
-        Person person = new Person("Kaka", 40, "Volvo");
+        Person person = new Person("Alex", 40, "Volvo");
 
         String p2Serialized = JsonUtil.serialize(person);
         assertThat(p2Serialized).isEqualToIgnoringWhitespace(json);
