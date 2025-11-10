@@ -14,7 +14,7 @@ class OverlayEnablerTest {
     @Test
     void shouldDisableAndEnableOverlays() {
         // init
-        AppConfiguration appConfiguration = Mockito.spy(new AppConfiguration("target/kaka"));
+        AppConfiguration appConfiguration = Mockito.spy(new AppConfiguration("target/ghost-config")); // default nonnull config
         MapViewer mapViewer = Mockito.spy(new MapViewer());
         RoutePainter routePainter = Mockito.spy(new RoutePainter(appConfiguration));
         OverlayEnabler overlayEnabler = Mockito.spy(new OverlayEnabler(mapViewer,routePainter));

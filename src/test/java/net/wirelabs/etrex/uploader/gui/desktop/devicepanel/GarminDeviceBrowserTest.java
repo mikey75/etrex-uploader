@@ -46,7 +46,7 @@ class GarminDeviceBrowserTest {
     @Test
     void shouldEmptyLabelsWhenDriveUnregisteredEventIssued() {
         GarminDeviceBrowser gbrowser = new GarminDeviceBrowser(uploadService);
-        EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, new File("kaka")); // this can be any File() in this test
+        EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, new File("fakefile")); // this can be any File() in this test
         assertDeviceFieldsEmpty(gbrowser);
     }
 
@@ -54,7 +54,7 @@ class GarminDeviceBrowserTest {
     void shouldNotFillLabelsWhenIssuingDriveRegisterEventWithNonExistingOrIncorrectGarminDrive() {
         // create file directory structure for fake drive
         GarminDeviceBrowser gbrowser = new GarminDeviceBrowser(uploadService);
-        EventBus.publish(EventType.DEVICE_DRIVE_REGISTERED, new File("kaka")); // this can be any File() in this test
+        EventBus.publish(EventType.DEVICE_DRIVE_REGISTERED, new File("fakefile")); // this can be any File() in this test
         assertDeviceFieldsEmpty(gbrowser);
     }
 

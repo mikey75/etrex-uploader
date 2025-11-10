@@ -83,7 +83,7 @@ class FileUtilsTest {
         List<File> sorted = listDirectorySorted(LISTER_DIR);
         assertThat(sorted).isNotEmpty()
                 .extracting(File::getName)
-                .containsExactly("Ala.txt", "KaKZ.txt", "Kaka.txt", "Zosia.txt", "kaks.txt");
+                .containsExactly("Ala.txt", "KaKZ.txt", "Paka.txt", "Zosia.txt", "kaks.txt");
     }
 
     @Test
@@ -91,6 +91,6 @@ class FileUtilsTest {
         List<File> unsorted = listDirectory(LISTER_DIR);
         assertThat(unsorted).isNotEmpty()
                 .extracting(File::getName)
-                .containsExactlyInAnyOrder("Zosia.txt", "Ala.txt", "Kaka.txt", "KaKZ.txt", "kaks.txt");
+                .containsExactlyInAnyOrder("Zosia.txt", "Ala.txt", "Paka.txt", "KaKZ.txt", "kaks.txt");
     }
 }
