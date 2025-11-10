@@ -25,7 +25,7 @@ class DeviceStatusLabelTest {
 
     @Test
     void deviceLabelShouldNotWaitAndFlashWhenAnyFilesGiven() {
-        List<File> list = List.of(new File("dupa"), new File("dupa2"));
+        List<File> list = List.of(new File("fakefile1"), new File("fakefile2"));
 
         // if given a list, at once it should be empty
         DeviceStatusLabel l = new DeviceStatusLabel(list);

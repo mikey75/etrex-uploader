@@ -51,8 +51,8 @@ class BasePanelsTest {
 
     @Test
     void shouldInitializeBaseTitledDialog() {
-        BaseDialog d = new BaseDialog("kaka");
-        assertThat(d.getTitle()).isEqualTo("kaka");
+        BaseDialog d = new BaseDialog("Bulbulator dialog");
+        assertThat(d.getTitle()).isEqualTo("Bulbulator dialog");
         assertDefaultLayout(d.layout);
     }
 

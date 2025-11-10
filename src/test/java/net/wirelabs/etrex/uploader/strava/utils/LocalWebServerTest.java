@@ -49,14 +49,14 @@ class LocalWebServerTest extends BaseTest {
     void shouldStartCustomServer() throws IOException {
         Executor executor = Executors.newSingleThreadExecutor();
 
-        TestHttpServer customServer = new TestHttpServer(9999, "/kaka", executor);
+        TestHttpServer customServer = new TestHttpServer(9999, "/rootOfAllEvil", executor);
         customServer.start();
         assertThat(customServer.getServerInstance()).isNotNull();
         assertThat(customServer.getListeningPort()).isEqualTo(9999);
         assertThat(isHostTcpPortReachable("localhost", customServer.getListeningPort(), 1000)).isTrue();
 
         verifyLogged("Local http server started on port 9999");
-        verifyLogged("Document root: /kaka");
+        verifyLogged("Document root: /rootOfAllEvil");
         customServer.stop();
 
     }

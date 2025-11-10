@@ -248,7 +248,7 @@ class StravaClientTest extends BaseTest {
 
     @Test
     void shouldGetAuthToken() throws StravaException {
-        stravaClient.exchangeAuthCodeForAccessToken("1234", "bbbb", "kaka");
+        stravaClient.exchangeAuthCodeForAccessToken("1234", "bbbb", "supersecretcode");
         verifyLogged("Got tokens!");
         verifyLogged("[Update token] - updated strava config");
         verifyLogged("[Update credentials] - updated strava config");
@@ -275,7 +275,7 @@ class StravaClientTest extends BaseTest {
                 assertThat(r.statusCode()).isEqualTo(200);
                 return null;
             });
-            stravaClient.authorizeToStrava("kaka", "1234");
+            stravaClient.authorizeToStrava("supersecret", "1234");
             verifyLogged("Starting Strava OAuth process");
             verifyLogged("Got tokens");
 

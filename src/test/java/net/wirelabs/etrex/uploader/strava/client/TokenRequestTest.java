@@ -32,15 +32,15 @@ class TokenRequestTest extends BaseTest {
 
     @Test
     void getToken() throws IOException,  InterruptedException {
-        HttpRequest r = client.createTokenRequest("kaka", "secret", "xxx");
-        verifyRequest(r, "client_id=kaka&client_secret=secret&code=xxx&grant_type=authorization_code");
+        HttpRequest r = client.createTokenRequest("12345", "secret", "xxx");
+        verifyRequest(r, "client_id=12345&client_secret=secret&code=xxx&grant_type=authorization_code");
 
     }
 
     @Test
     void refreshToken() throws IOException, InterruptedException {
-        HttpRequest r = client.createRefreshTokenRequest("kaka", "secret", "xxx");
-        verifyRequest(r, "client_id=kaka&client_secret=secret&grant_type=refresh_token&refresh_token=xxx");
+        HttpRequest r = client.createRefreshTokenRequest("12345", "secret", "xxx");
+        verifyRequest(r, "client_id=12345&client_secret=secret&grant_type=refresh_token&refresh_token=xxx");
     }
 
     private  void verifyRequest(HttpRequest request, String expectedBody) throws IOException, InterruptedException {

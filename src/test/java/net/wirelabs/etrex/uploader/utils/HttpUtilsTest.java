@@ -1,6 +1,5 @@
 package net.wirelabs.etrex.uploader.utils;
 
-import net.wirelabs.etrex.uploader.utils.HttpUtils;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +15,14 @@ class HttpUtilsTest extends BaseTest {
     @Test
     void testQueryParsing() {
 
-        String query = "p1=kaka&p2=lipa&p3=k";
+        String query = "p1=param1&p2=param2&p3=param3";
 
         Map<String, String> result = HttpUtils.parseQueryParams(query);
 
         assertThat(result)
-                .containsEntry("p1", "kaka")
-                .containsEntry("p2", "lipa")
-                .containsEntry("p3", "k");
+                .containsEntry("p1", "param1")
+                .containsEntry("p2", "param2")
+                .containsEntry("p3", "param3");
 
 
     }
@@ -31,7 +30,7 @@ class HttpUtilsTest extends BaseTest {
     @Test
     void testIllegalKVQueryParse() {
         // when key value pair has more than two elements (split on '='), the method returns empty map
-        String query = "p1=kaka=kipa";
+        String query = "p1=p2=p3";
         Map<String, String> result = HttpUtils.parseQueryParams(query);
         assertThat(result).isEmpty();
     }
@@ -39,7 +38,7 @@ class HttpUtilsTest extends BaseTest {
     @Test
     void testMultipartFormParsing() {
 
-        String boundary = "dupa";
+        String boundary = "test_boundary";
         String contentType = "multipart/form-data; boundary=" + boundary;
 
         String body = "--" + boundary + "\r\n" +
@@ -62,7 +61,7 @@ class HttpUtilsTest extends BaseTest {
 
     @Test
     void shouldDecorateUrl() {
-        String url = "http://www.kaka.pl";
+        String url = "http://www.321nonexistent123.pl";
 
         Map<String,String> params = new HashMap<>();
         params.put("k1","v1");

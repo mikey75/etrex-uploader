@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class SystemUtilsTest extends BaseTest {
 
+    private final String TEST_URL = "http://123nonexistent321.pl";
+
     @Test
     void getJmapsVersionTest() throws IOException {
 
@@ -135,9 +137,10 @@ class SystemUtilsTest extends BaseTest {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Linux");
             assertThat(SystemUtils.isLinux()).isTrue();
 
-            SystemUtils.openSystemBrowser("http://kaka.pl");
 
-            systemUtils.verify(() -> SystemUtils.launchProcess("xdg-open http://kaka.pl"));
+            SystemUtils.openSystemBrowser(TEST_URL);
+
+            systemUtils.verify(() -> SystemUtils.launchProcess("xdg-open "+ TEST_URL));
             assertSuccessfulLaunch(systemUtils);
         }
     }
@@ -154,9 +157,9 @@ class SystemUtilsTest extends BaseTest {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Mac OS X");
             assertThat(SystemUtils.isOSX()).isTrue();
 
-            SystemUtils.openSystemBrowser("http://kaka.pl");
+            SystemUtils.openSystemBrowser(TEST_URL);
 
-            systemUtils.verify(() -> SystemUtils.launchProcess("open http://kaka.pl"));
+            systemUtils.verify(() -> SystemUtils.launchProcess("open "+ TEST_URL));
             assertSuccessfulLaunch(systemUtils);
         }
     }
@@ -174,9 +177,9 @@ class SystemUtilsTest extends BaseTest {
             systemUtils.when(SystemUtils::getOsName).thenReturn("Windows NT");
             assertThat(SystemUtils.isWindows()).isTrue();
 
-            SystemUtils.openSystemBrowser("http://kaka.pl");
+            SystemUtils.openSystemBrowser(TEST_URL);
 
-            systemUtils.verify(() -> SystemUtils.launchProcess("rundll32 url.dll,FileProtocolHandler http://kaka.pl"));
+            systemUtils.verify(() -> SystemUtils.launchProcess("rundll32 url.dll,FileProtocolHandler " + TEST_URL));
             assertSuccessfulLaunch(systemUtils);
 
         }
@@ -286,7 +289,7 @@ class SystemUtilsTest extends BaseTest {
 
     @Test
     void shouldLogAndReturnEmptyOnBadCommand() {
-        List<String> badCommand = List.of("dupa","kaka");
+        List<String> badCommand = List.of("badcom1","badcom2");
         Optional<String> command = SystemUtils.getCommand(badCommand);
         assertThat(command).isNotPresent();
         verifyLogged("There was an error getting command line");
