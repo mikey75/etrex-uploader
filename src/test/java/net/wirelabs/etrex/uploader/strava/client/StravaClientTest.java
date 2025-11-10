@@ -6,19 +6,27 @@ import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.BasicStravaEmulator;
+import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 
@@ -40,7 +48,9 @@ class StravaClientTest extends BaseTest {
         // redirect strava client/strava service calls to mocked strava server
         stravaConfiguration.setBaseUrl("http://localhost:" + emulator.getListeningPort());
         stravaConfiguration.setBaseTokenUrl(stravaConfiguration.getBaseUrl() + "/oauth/token");
+        stravaConfiguration.setAuthUrl("http://localhost:"+ emulator.getListeningPort() +"/authorize");
         stravaClient = new StravaClient(stravaConfiguration, appConfiguration);
+        stravaConfiguration.setAuthCodeTimeout(2);
         emulator.start();
     }
 
@@ -254,5 +264,35 @@ class StravaClientTest extends BaseTest {
         // no auth code - exception
         Exception e = assertThrows(StravaException.class, () -> stravaClient.exchangeAuthCodeForAccessToken("1234","bbbb",""));
         assertThat(e.getMessage()).contains("Could not get tokens. auth code was empty");
+    }
+
+    @Test
+    void shouldAuthorizeToStrava() throws IOException, StravaException {
+        try (MockedStatic<SystemUtils> systemUtils = Mockito.mockStatic(SystemUtils.class)) {
+            systemUtils.when(() -> SystemUtils.openSystemBrowser(any())).thenAnswer(inv -> { // call emulator here, emulaor shoud respond with request to retriever
+                String url = inv.getArgument(0, String.class);
+                HttpResponse<String> r = emulateBrowserCall(url);
+                assertThat(r.statusCode()).isEqualTo(200);
+                return null;
+            });
+            stravaClient.authorizeToStrava("kaka", "1234");
+            verifyLogged("Starting Strava OAuth process");
+            verifyLogged("Got tokens");
+
+        }
+    }
+
+    private static HttpResponse<String> emulateBrowserCall(String url) throws Exception {
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS) // behave like browsers
+                .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("User-Agent", "Mozilla/5.0 (Java HttpClient)") // mimic a browser
+                .GET()
+                .build();
+
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }

@@ -12,6 +12,9 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -86,12 +89,30 @@ public class BasicStravaEmulator extends LocalWebServer {
             case "POST /uploads", "GET /uploads/999999" -> response = getSingleFileResponse("src/test/resources/strava-emulator/data/uploads/upload.json");
             // post to oauth/token means either refresh token or authorize
             case "POST /oauth/token" -> response = getToken(rawBody);
-
+            // get the autorization details from the local auth interceptor
+            case "GET /authorize" -> {
+                // need to get redirect uri and make a connection to autorizer (like strava would do)
+                String url = queryParams.get("redirect_uri");
+                response = String.valueOf(callAuthCodeInterceptor(url + "?code=supersecret&scope=activity:read,activity:write,read_all"));
+                }
             // default response if none of the above is met
             default -> response = "404 Not Found: " + method + " " + path;
         }
 
         sendResponse(exchange, response);
+    }
+
+    private HttpResponse<String> callAuthCodeInterceptor(String url) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + "?" + "code=supersecret&scope=activity:read,activity:write,read_all"))
+                .GET()
+                .build();
+        try {
+            return client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            throw new IllegalStateException("Exception");
+        }
     }
 
     private static Map<String, Object> getBodyData(String contentType, String rawBody) {
