@@ -78,7 +78,7 @@ public abstract class BaseTest {
         EventBus.getUniqueClients().clear();
         EventBus.getDeadEvents().clear();
         EventBus.getSubscribersByEventType().clear();
-        Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2),() -> {
             assertThat(EventBus.getDeadEvents()).isEmpty();
             assertThat(EventBus.getUniqueClients()).isEmpty();
             assertThat(EventBus.getSubscribersByEventType()).isEmpty();
