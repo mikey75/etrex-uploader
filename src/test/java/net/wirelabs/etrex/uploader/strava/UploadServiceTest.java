@@ -6,7 +6,6 @@ import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree.UploadDialog;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +53,7 @@ class UploadServiceTest extends BaseTest {
 
         uploadService.uploadFile(uploadFile);
 
-        Awaitility.waitAtMost(Duration.ofMillis(500)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofMillis(500), () -> {
             verify(fakeUplDlg).setTrackFile(uploadFile, stravaConfiguration.getDefaultActivityType());
             verify(fakeUplDlg).setHostCheckupTimeout(stravaConfiguration.getStravaCheckTimeout());
         });

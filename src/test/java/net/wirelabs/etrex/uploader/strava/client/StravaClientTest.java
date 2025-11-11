@@ -7,7 +7,6 @@ import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.BasicStravaEmulator;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -177,7 +176,7 @@ class StravaClientTest extends BaseTest {
     void uploadActivity()  {
         File gpxFile = new File("src/test/resources/trackfiles/gpx11.gpx");
 
-        Awaitility.waitAtMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(5),() -> {
             Upload u = stravaClient.uploadActivity(gpxFile, "test activity", "blablabla", SportType.RIDE, false, false);
             assertThat(u).isNotNull();
             assertThat(u.getActivityId()).isEqualTo(11111L);

@@ -1,8 +1,6 @@
 package net.wirelabs.etrex.uploader.utils;
 
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.utils.Sleeper;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -31,17 +29,17 @@ class SleeperTest extends BaseTest {
     @Test
     void testSleepInterruptionSignaling() {
         // test sleep interruption exception
-        Thread t = new Thread(() -> Sleeper.sleepSeconds(2));
-        t.start();
+        Thread thread = new Thread(() -> Sleeper.sleepSeconds(2));
+        thread.start();
 
         // wait for start
-        Awaitility.waitAtMost(Duration.ofSeconds(1)).until(t::isAlive);
+        waitUntilAsserted(Duration.ofSeconds(1), thread::isAlive);
 
         // interrupt
-        t.interrupt();
+        thread.interrupt();
 
         // wait for interruption
-        Awaitility.waitAtMost(Duration.ofSeconds(1)).until(t::isInterrupted);
+        waitUntilAsserted(Duration.ofSeconds(1), thread::isInterrupted);
 
         // assert log
         verifyLogged("Error sleeping");

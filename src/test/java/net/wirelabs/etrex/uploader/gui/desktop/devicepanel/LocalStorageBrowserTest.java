@@ -8,7 +8,6 @@ import net.wirelabs.etrex.uploader.strava.UploadService;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +59,7 @@ class LocalStorageBrowserTest extends BaseTest {
         EventBus.publish(EventType.USER_STORAGE_ROOTS_CHANGED, new ArrayList<>()); // empty list, no user roots
 
         // we removed all user roots so the tree should contain only system root
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(3), () -> {
             verifyLogged("Roots changed, modifying tree");
             assertThat(getFilesOnTree()).hasSize(1).contains(appConfiguration.getStorageRoot());
         });
@@ -73,7 +72,7 @@ class LocalStorageBrowserTest extends BaseTest {
         EventBus.publish(EventType.USER_STORAGE_ROOTS_CHANGED, List.of(newRoot));
 
         // we added one user root so there should be a system root plus one new user root
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(3), () -> {
             verifyLogged("Roots changed, modifying tree");
             assertThat(getFilesOnTree()).hasSize(2).contains(newRoot);
         });
@@ -93,7 +92,7 @@ class LocalStorageBrowserTest extends BaseTest {
         localStorageBrowser.getTrackSelectedListener().valueChanged(event);
 
         // since nothing expects this event (no map active) - check if it is emitted and landed in dead-events
-        Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(1), () -> {
             for (Event ev: EventBus.getDeadEvents()) {
                 exists.set(ev.getEventType().equals(MAP_DISPLAY_TRACK) && ev.getPayload().equals(file));
             }

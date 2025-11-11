@@ -10,9 +10,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static net.wirelabs.etrex.uploader.tools.BaseTest.waitUntilAsserted;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.waitAtMost;
-
 
 public class LogVerifier {
 
@@ -23,7 +22,7 @@ public class LogVerifier {
     public LogVerifier() {
         loggingEventListAppender.start();
         logger.addAppender(loggingEventListAppender);
-        waitAtMost(Duration.ofSeconds(1)).untilAsserted(loggingEventListAppender::isStarted);
+        waitUntilAsserted(Duration.ofSeconds(1) , loggingEventListAppender::isStarted);
     }
 
     public void verifyNeverLogged(String message) {

@@ -1,12 +1,9 @@
 package net.wirelabs.etrex.uploader.gui.common.base;
 
 import net.wirelabs.etrex.uploader.gui.common.TestEvent;
-import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
-import net.wirelabs.etrex.uploader.gui.common.base.TestEventAwarePanel;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -48,8 +45,7 @@ class BorderedPanelsTest extends BaseTest {
         EventBus.publish(ev);
 
         // check if event is serviced
-        Awaitility.waitAtMost(Duration.ofSeconds(2))
-                .untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
                     verifyLogged("Event TEST_EVENT_1 serviced");
                     // the value should be set to the event payload value
                     assertThat(testPanel.textField.getText()).isEqualTo(SERVICED_EVENT_PAYLOAD);
@@ -60,8 +56,7 @@ class BorderedPanelsTest extends BaseTest {
         EventBus.publish(ev);
 
         // check event never serviced
-        Awaitility.waitAtMost(Duration.ofSeconds(1))
-                .untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(1), () -> {
                     verifyNeverLogged("Event TEST_EVENT_2 serviced");
                     // the value changed by previous event service should not be changed
                     assertThat(testPanel.textField.getText()).isEqualTo(SERVICED_EVENT_PAYLOAD);

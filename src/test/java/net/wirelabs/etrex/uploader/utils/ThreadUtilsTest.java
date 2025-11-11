@@ -2,9 +2,6 @@ package net.wirelabs.etrex.uploader.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.utils.Sleeper;
-import net.wirelabs.etrex.uploader.utils.ThreadUtils;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -58,7 +55,7 @@ class ThreadUtilsTest extends BaseTest {
             // shutdown executor service
             ThreadUtils.shutdownExecutorService();
 
-            Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+            waitUntilAsserted(Duration.ofSeconds(1), () -> {
                 assertThat(testExecutorService.isShutdown()).isTrue();
                 verifyLoggedTimes(4, "Running runnable task in a separate thread"); // assert task is run
                 verifyLogged("Shutting down executor service"); // assert executor is going to be shut down
@@ -94,7 +91,7 @@ class ThreadUtilsTest extends BaseTest {
 
             // shutdown executor service
             ThreadUtils.shutdownExecutorService();
-            Awaitility.waitAtMost(Duration.ofSeconds(1)).untilAsserted(() -> {
+            waitUntilAsserted(Duration.ofSeconds(1), () -> {
                 assertThat(testExecutorService.isShutdown()).isTrue();
                 verifyLoggedTimes(1, "Running runnable task in a separate thread"); // assert first task is run
                 verifyLogged("Shutting down executor service"); // assert executor is going to be shut down

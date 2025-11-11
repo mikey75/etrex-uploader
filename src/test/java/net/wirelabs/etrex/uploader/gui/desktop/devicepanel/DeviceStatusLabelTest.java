@@ -1,7 +1,7 @@
 package net.wirelabs.etrex.uploader.gui.desktop.devicepanel;
 
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.DeviceStatusLabel;
-import org.awaitility.Awaitility;
+import net.wirelabs.etrex.uploader.tools.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -11,16 +11,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DeviceStatusLabelTest {
+class DeviceStatusLabelTest extends BaseTest {
 
     @Test
     void deviceLabelShouldShowWaiting() {
 
         DeviceStatusLabel l = new DeviceStatusLabel(Collections.emptyList());
         // max 4 dots, wait 3 seconds because every dot is printed in 500 ms intervals
-        Awaitility.await().atMost(Duration.ofSeconds(3)).untilAsserted(() -> assertThat(l.getText()).isEqualTo("waiting...."));
+        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(l.getText()).isEqualTo("waiting...."));
         // check if it resets (after 4 dots already printed it should be max 1 sec
-        Awaitility.await().atMost(Duration.ofSeconds(1)).untilAsserted(() -> assertThat(l.getText()).isEqualTo("waiting."));
+        waitUntilAsserted(Duration.ofSeconds(1), () -> assertThat(l.getText()).isEqualTo("waiting."));
     }
 
     @Test
