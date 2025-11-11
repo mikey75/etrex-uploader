@@ -86,4 +86,10 @@ public class Constants {
     public static final String DEFAULT_REDIS_HOST = "localhost";
     public static final int DEFAULT_REDIS_PORT = 6379;
     public static final int DEFAULT_REDIS_POOLSIZE = 100;
+    // garmin labels
+    public static final String GARMIN_MODEL = "Model: ";
+    public static final String GARMIN_SERIAL_NUMBER = "Serial number: ";
+    public static final String GARMIN_PART_NUMBER = "Part number: ";
+    public static final String GARMIN_SOFTWARE_VERSION = "Software version: ";
+    public static final String GARMIN_STATUS = "Status: ";
 }

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 
+import static net.wirelabs.etrex.uploader.common.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -25,20 +26,20 @@ class GarminDeviceBrowserTest extends BaseTest {
 
         // given
         File garminXMLFile = new File("src/test/resources/garmin/GarminDevice.xml");
-        DeviceDocument d = DeviceDocument.Factory.parse(garminXMLFile);
-        GarminDeviceBrowser gbrowser = new GarminDeviceBrowser(uploadService);
-        assertDeviceFieldsEmpty(gbrowser); // assert initialization with empty fields
+        DeviceDocument deviceDocument = DeviceDocument.Factory.parse(garminXMLFile);
+        GarminDeviceBrowser garminBrowser = new GarminDeviceBrowser(uploadService);
+        assertDeviceFieldsEmpty(garminBrowser); // assert initialization with empty fields
 
         // when
-        EventBus.publish(EventType.DEVICE_INFO_AVAILABLE, d.getDevice()); // simulate new garmin device connection
+        EventBus.publish(EventType.DEVICE_INFO_AVAILABLE, deviceDocument.getDevice()); // simulate new garmin device connection
 
         // then - assert it has fields correctly filled-in
 
         waitUntilAsserted(Duration.ofSeconds(1), () -> {
-            assertThat(gbrowser.getLblPartNoValue().getText()).isEqualTo("006-B3445-00");
-            assertThat(gbrowser.getLblModelDescriptionValue().getText()).isEqualTo("eTrex 32x");
-            assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEqualTo("270");
-            assertThat(gbrowser.getLblSerialNoValue().getText()).isEqualTo("3403532495");
+            assertThat(garminBrowser.getPartNumber().getText()).isEqualTo(GARMIN_PART_NUMBER + "006-B3445-00");
+            assertThat(garminBrowser.getModel().getText()).isEqualTo(GARMIN_MODEL +"eTrex 32x");
+            assertThat(garminBrowser.getSoftwareVersion().getText()).isEqualTo(GARMIN_SOFTWARE_VERSION + "270");
+            assertThat(garminBrowser.getSerialNumber().getText()).isEqualTo(GARMIN_SERIAL_NUMBER + "3403532495");
         });
 
     }
@@ -58,12 +59,12 @@ class GarminDeviceBrowserTest extends BaseTest {
         assertDeviceFieldsEmpty(gbrowser);
     }
 
-    private static void assertDeviceFieldsEmpty(GarminDeviceBrowser gbrowser) {
+    private static void assertDeviceFieldsEmpty(GarminDeviceBrowser garminBrowser) {
         waitUntilAsserted(Duration.ofSeconds(1), () -> {
-            assertThat(gbrowser.getLblPartNoValue().getText()).isEmpty();
-            assertThat(gbrowser.getLblModelDescriptionValue().getText()).isEmpty();
-            assertThat(gbrowser.getLblSoftwareVerValue().getText()).isEmpty();
-            assertThat(gbrowser.getLblSerialNoValue().getText()).isEmpty();
+            assertThat(garminBrowser.getPartNumber().getText()).isEqualTo(GARMIN_PART_NUMBER);
+            assertThat(garminBrowser.getModel().getText()).isEqualTo(GARMIN_MODEL);
+            assertThat(garminBrowser.getSoftwareVersion().getText()).isEqualTo(GARMIN_SOFTWARE_VERSION);
+            assertThat(garminBrowser.getSerialNumber().getText()).isEqualTo(GARMIN_SERIAL_NUMBER);
         });
     }
 
