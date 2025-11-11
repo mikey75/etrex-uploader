@@ -14,7 +14,6 @@ import net.wirelabs.jmaps.map.cache.db.DBCache;
 import net.wirelabs.jmaps.map.cache.files.DirectoryBasedCache;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import net.wirelabs.jmaps.map.painters.Painter;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -73,7 +72,7 @@ class MapPanelTest extends BaseTest {
 
         EventBus.publish(EventType.MAP_HOME_CHANGED, newMapHome);
 
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> assertThat(mp.mapHome).isEqualTo(newMapHome));
+        waitUntilAsserted(Duration.ofSeconds(3),() -> assertThat(mp.mapHome).isEqualTo(newMapHome));
     }
 
     @Test
@@ -85,7 +84,7 @@ class MapPanelTest extends BaseTest {
         EventBus.publish(EventType.TRACK_COLOR_CHANGED, newRouteColor);
 
         // then
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> assertThat(mp.getRoutePainter().getRouteColor()).isEqualTo(newRouteColor));
+        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(mp.getRoutePainter().getRouteColor()).isEqualTo(newRouteColor));
     }
 
     @Test
@@ -94,7 +93,7 @@ class MapPanelTest extends BaseTest {
 
         EventBus.publish(EventType.ROUTE_LINE_WIDTH_CHANGED, newLineWidth);
 
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> assertThat(mp.getRoutePainter().getRouteLineWidth()).isEqualTo(newLineWidth));
+        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(mp.getRoutePainter().getRouteLineWidth()).isEqualTo(newLineWidth));
     }
 
     @Test
@@ -163,12 +162,12 @@ class MapPanelTest extends BaseTest {
         coords.add(new Coordinate(22.49108, 51.2329));
         EventBus.publish(EventType.MAP_DISPLAY_TRACK, coords);
 
-        Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> assertThat(mp.getRoutePainter().getObjects()).isNotEmpty());
+        waitUntilAsserted(Duration.ofSeconds(2), () -> assertThat(mp.getRoutePainter().getObjects()).isNotEmpty());
 
         // now reset map, this should clear all painters
         EventBus.publish(EventType.MAP_RESET, Constants.DEFAULT_MAP_HOME_LOCATION);
 
-        Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
             for (Painter<MapViewer> p : mp.mapViewer.getUserOverlays()) {
                 assertThat(p.getObjects()).isEmpty();
             }
@@ -185,7 +184,7 @@ class MapPanelTest extends BaseTest {
         EventBus.publish(EventType.MAP_CHANGED, mapFile);
 
 
-        Awaitility.waitAtMost(Duration.ofSeconds(2)).untilAsserted(() -> {
+        waitUntilAsserted(Duration.ofSeconds(2), () -> {
             assertThat(mp.mapViewer.getCurrentMap().getMapName()).isEqualTo("OSM Cycle");
             assertThat(mp.mapViewer.getCurrentMap().getMapCopyrightAttribution()).isEqualTo("CyclOSM | Map data © OpenStreetMap contributors");
             assertThat(mp.mapViewer.getCurrentMap().getLayers()).hasSize(1);
@@ -239,7 +238,7 @@ class MapPanelTest extends BaseTest {
 
 
     private void checkCoords(Collection<Coordinate> coords) {
-        Awaitility.waitAtMost(Duration.ofSeconds(3)).untilAsserted(() -> assertThat(mp.getRoutePainter().getObjects()).isNotEmpty());
+        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(mp.getRoutePainter().getObjects()).isNotEmpty());
         for (Coordinate coord : coords) {
             boolean contains = mp.getRoutePainter().getObjects().stream()
                     .anyMatch(c -> c.getLatitude() == coord.getLatitude() && c.getLongitude() == coord.getLongitude());
