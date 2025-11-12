@@ -39,7 +39,6 @@ public class UserAccountPanel extends BasePanel {
 
     private final StravaClient stravaClient;
     private final JButton btnSettings = new JButton("Settings");
-    private final StravaConfiguration configuration;
     private final JLabel lblYtdRides = new JLabel("YTD rides:");
     private final JLabel lblYtdDist = new JLabel("YTD distance (km):");
     private final JLabel lblYtdTime = new JLabel("YTD time (hrs):");
@@ -53,8 +52,7 @@ public class UserAccountPanel extends BasePanel {
     public UserAccountPanel(StravaClient stravaClient) {
         super("My profile","","[grow][]","[][][][][][][][][][][][grow][grow,bottom]");
         this.stravaClient = stravaClient;
-        this.configuration = stravaClient.getStravaConfiguration();
-        apiUsagePanel = new ApiUsagePanel(configuration);
+        apiUsagePanel = new ApiUsagePanel(stravaClient.getStravaConfiguration());
         initVisualComponent();
         ThreadUtils.runAsync(() -> {
             getUserAccountData();
