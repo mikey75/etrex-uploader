@@ -4,7 +4,6 @@ package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.account;
 import com.strava.model.ActivityStats;
 import com.strava.model.DetailedAthlete;
 import lombok.extern.slf4j.Slf4j;
-import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
 import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.utils.DateAndUnitConversionUtil;

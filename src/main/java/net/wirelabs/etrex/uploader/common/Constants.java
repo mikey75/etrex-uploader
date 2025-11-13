@@ -24,7 +24,7 @@ public class Constants {
             SystemUtils.getJmapsVersion()
     );
     // strava stuff
-    public static final String STRAVA_DEFAULT_APP_ACCESS_SCOPE = "activity:read,activity:write,read_all";
+    public static final String STRAVA_ACCESS_SCOPE = "activity:read,activity:write,read_all";
     public static final String STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
     public static final String STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
     public static final String STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
