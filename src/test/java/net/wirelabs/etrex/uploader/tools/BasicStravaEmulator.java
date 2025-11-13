@@ -64,7 +64,7 @@ public class BasicStravaEmulator extends LocalWebServer {
         String rawBody = readBody(exchange);
         Map<String, Object> bodyData = getBodyData(contentType, rawBody);
 
-        String response = "";
+        String response;
         log.info("[Auth] authHeader: {}", authHeader);
         log.info("[Query] queryParams: {}", queryParams);
         log.info("[Body] body: {}", bodyData);
@@ -149,7 +149,7 @@ public class BasicStravaEmulator extends LocalWebServer {
     }
 
     private String updateActivity(String rawBody) throws IOException {
-        String response = "";
+        String response;
         // get updatable activity object from request i.e. what we sent
         UpdatableActivity activity = JsonUtil.deserialize(rawBody, UpdatableActivity.class);
 

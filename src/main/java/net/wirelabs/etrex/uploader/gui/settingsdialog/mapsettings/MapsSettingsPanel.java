@@ -32,13 +32,6 @@ public class MapsSettingsPanel extends BasePanel {
     private final ChooseMapComboBox mapsCombo = new ChooseMapComboBox();
     @Getter
     private final ChooseCacheComboBox cacheCombo = new ChooseCacheComboBox();
-    private final JLabel lblDefaultMap = new JLabel("Default map:");
-    private final JLabel lblTilerThreads = new JLabel("Threads:");
-    private final JLabel lblColor = new JLabel("Track color:");
-    private final JLabel lblMapHomeLat = new JLabel("Map home latitude:");
-    private final JLabel lblMapHomeLon = new JLabel("Map home longitude:");
-    private final JLabel lblTileCacheType = new JLabel("Tile cache type:");
-
     private final JTextField threads = new JTextField();
     @Getter
     private final JTextField mapHomeLat = new JTextField();
@@ -46,14 +39,21 @@ public class MapsSettingsPanel extends BasePanel {
     private final JTextField mapHomeLon = new JTextField();
     @Getter
     private final ColorChooserTextField colorChooserTextField;
-    final JTextField routeLineWidth = new JTextField();
-    private final JLabel lblTrkWidth = new JLabel("Track width:");
 
+    final JTextField routeLineWidth = new JTextField();
 
     public MapsSettingsPanel(AppConfiguration configuration) {
         super("Maps","","[][][][grow]","[][][grow]");
         this.configuration = configuration;
         this.colorChooserTextField = new ColorChooserTextField(configuration.getMapTrackColor());
+
+        JLabel lblDefaultMap = new JLabel("Default map:");
+        JLabel lblTilerThreads = new JLabel("Threads:");
+        JLabel lblColor = new JLabel("Track color:");
+        JLabel lblMapHomeLat = new JLabel("Map home latitude:");
+        JLabel lblMapHomeLon = new JLabel("Map home longitude:");
+        JLabel lblTileCacheType = new JLabel("Tile cache type:");
+        JLabel lblTrkWidth = new JLabel("Track width:");
 
         add(lblDefaultMap, cell(0,0).alignX(TRAILING));
         add(mapsCombo, cell(1,0).growX());

@@ -12,14 +12,16 @@ import java.util.stream.Stream;
 
 import static net.wirelabs.etrex.uploader.tools.BaseTest.waitUntilAsserted;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.slf4j.Logger.*;
 
 public class LogVerifier {
 
     private final ListAppender<ILoggingEvent> loggingEventListAppender = new ListAppender<>();
     private final List<ILoggingEvent> logMessages = loggingEventListAppender.list;
-    private final Logger logger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+
 
     public LogVerifier() {
+        Logger logger = (Logger) LoggerFactory.getLogger(ROOT_LOGGER_NAME);
         loggingEventListAppender.start();
         logger.addAppender(loggingEventListAppender);
         waitUntilAsserted(Duration.ofSeconds(1) , loggingEventListAppender::isStarted);

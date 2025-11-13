@@ -41,8 +41,7 @@ public class MapPanel extends BaseEventAwarePanel {
     final MapViewer mapViewer = new MapViewer();
     @Getter
     private final transient RoutePainter routePainter;
-    private final OverlayEnabler overlayEnabler;
-    private final GarminLogo garminLogo = new GarminLogo();
+
     transient Coordinate mapHome;
     private final transient TrackParser trackParser;
     final ChooseMapComboBox mapSelector = new ChooseMapComboBox();
@@ -53,7 +52,9 @@ public class MapPanel extends BaseEventAwarePanel {
         this.mapHome = new Coordinate(configuration.getMapHomeLongitude(),configuration.getMapHomeLatitude());
         this.routePainter = new RoutePainter(configuration);
         this.trackParser = new TrackParser();
-        this.overlayEnabler = new OverlayEnabler(mapViewer, routePainter);
+
+        GarminLogo garminLogo = new GarminLogo();
+        OverlayEnabler overlayEnabler = new OverlayEnabler(mapViewer, routePainter);
 
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);

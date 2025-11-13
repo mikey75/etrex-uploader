@@ -23,9 +23,6 @@ public class SettingsDialog extends BaseDialog {
 	private final AppConfiguration appConfiguration;
 	private final StravaConfiguration stravaConfiguration;
 	private final LogViewerDialog logViewerDialog = new LogViewerDialog();
-	private final JButton viewLogs = new JButton("View logs");
-	private final JButton cancelBtn = new JButton("Cancel");
-	private final JButton saveBtn = new JButton("Save settings");
 
 
 	/**
@@ -46,6 +43,9 @@ public class SettingsDialog extends BaseDialog {
 		add(stravaSettingsPanel, cell(0,1).grow());
 		add(mapsSettingsPanel, cell(0,2).grow());
 
+		JButton viewLogs = new JButton("View logs");
+		JButton cancelBtn = new JButton("Cancel");
+		JButton saveBtn = new JButton("Save settings");
 
 		add(viewLogs, cell(0,3).alignX(RIGHT).flowX());
 		add(saveBtn, cell(0,3).alignX(RIGHT));

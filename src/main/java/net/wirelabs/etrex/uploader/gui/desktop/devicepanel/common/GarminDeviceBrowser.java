@@ -18,7 +18,6 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.io.File;
 import java.util.*;
-import java.util.List;
 
 import static net.wirelabs.etrex.uploader.common.Constants.*;
 import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.*;
