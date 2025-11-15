@@ -108,9 +108,10 @@ class GarminDeviceServiceTest extends BaseTest {
         // when
         addDrive(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
         // then
-        waitUntilAsserted(Duration.ofSeconds(5), () -> {
-            assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsExactly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
-        });
+        waitUntilAsserted(Duration.ofSeconds(5), () ->
+            assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsExactly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO)
+        );
+
 
     }
 

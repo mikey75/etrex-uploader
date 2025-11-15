@@ -15,11 +15,11 @@ import java.util.*;
 @Slf4j
 public class FileTree extends JTree {
 
-    private final FileTreeCellRenderer renderer = new FileTreeCellRenderer();
     private final FileNode treeTop  = new FileNode();
     private final DefaultTreeModel model= new DefaultTreeModel(treeTop);
 
     public FileTree() {
+        FileTreeCellRenderer renderer = new FileTreeCellRenderer();
         setModel(model);
         addTreeExpansionListener(new DirExpansionListener()); // this is responsible for 'interacting with file tree' 
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

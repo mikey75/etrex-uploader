@@ -108,7 +108,7 @@ public class AuthCodeRetriever implements Serializable {
                 .addQueryParam("redirect_uri", redirectURL)
                 .addQueryParam("response_type", "code")
                 .addQueryParam("approval_prompt", "force")
-                .addQueryParam("scope", Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE)
+                .addQueryParam("scope", Constants.STRAVA_ACCESS_SCOPE)
                 .build();
     }
 
