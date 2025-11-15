@@ -1,9 +1,9 @@
 package net.wirelabs.etrex.uploader.strava.utils;
 
-import net.wirelabs.etrex.uploader.utils.NetworkingUtils;
+import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
-import net.wirelabs.etrex.uploader.tools.TestHttpServer;
+import net.wirelabs.eventbus.EventBus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,21 +13,16 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.never;
 
 class StravaUtilTest extends BaseTest {
-
-    private static final List<InetAddress> FAKE_HOST_LIST = getFakeHosts();
-    private static final String NONEXISTING_HOST = "www.nonexistent.pl";
 
     @ParameterizedTest
     @MethodSource("provideFilenames")
@@ -62,89 +57,36 @@ class StravaUtilTest extends BaseTest {
         assertThat(type).isEqualTo("image/png");
 
     }
-
     @Test
-    void checkStravaHostsInaccessible() throws IOException {
+    void shouldPublishUsageInfo() {
 
-        // hosts will not be accessible -> no http server, no port
-        // so setup test with nonexistent, random port
-        int fakeHttpPort = NetworkingUtils.getRandomFreeTcpPort();
-        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
-             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class,CALLS_REAL_METHODS)) {
+        try (MockedStatic<EventBus> evbus = Mockito.mockStatic(EventBus.class)) {
 
-            stravaUtil.when(() -> {
-                int port = StravaUtil.getStravaPort();
-                assertThat(port).isNotEqualTo(fakeHttpPort);
-            }).thenReturn(fakeHttpPort);
+            // if info empty - publish
+            StravaUtil.sendRateLimitInfo(new HashMap<>());
+            evbus.verify(() -> EventBus.publish(eq(EventType.RATELIMIT_INFO_UPDATE),any()),never());
 
-            netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
+            // info not empty - verify event published, and the published info contains the correct data
+            StravaUtil.sendRateLimitInfo(provideHeaders());
+            evbus.verify(() -> EventBus.publish(eq(EventType.RATELIMIT_INFO_UPDATE),argThat(arg -> {
+                Map<String, Integer> map = (Map<String, Integer>) arg;
+                assertThat(map).containsEntry("allowedDaily",2000);
+                assertThat(map).containsEntry("allowed15mins",200);
+                assertThat(map).containsEntry("currentDaily",50);
+                assertThat(map).containsEntry("current15mins",12);
+                return true;
+            })));
 
-            // should log warning, and return false
-            assertThat(StravaUtil.isStravaUp(1000)).isFalse();
-            // should log hosts unavailability
-            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpPort + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpPort + " inaccessible, assume uploads might fail"); // msg from StravaUtil
         }
 
     }
 
-    @Test
-    void checkExceptionAndLogOnUnknownHost() {
-        try (MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class, CALLS_REAL_METHODS)) {
-            stravaUtil.when(() -> {
-                String hostname = StravaUtil.getStravaHostName();
-                assertThat(hostname).isNotEqualTo(NONEXISTING_HOST);
-            }).thenReturn(NONEXISTING_HOST);
-
-            assertThat(StravaUtil.isStravaUp(1000)).isFalse();
-            verifyLogged("Strava or network is down!");
-        }
+    private Map<String, List<String>> provideHeaders() {
+        return Map.of(
+                "x-ratelimit-limit", List.of("200,2000"),
+                "x-ratelimit-usage", List.of("12,50")
+        );
     }
-
-    @Test
-    void testStravaHostAccessible() throws IOException {
-
-        // hosts will be accessible (http server up, alas - we have to run the http port on other than 80 for this
-        // because 80 is root/admin only - so we set up fake server on random port
-        // and force StravaUtil to use that port
-
-        TestHttpServer fakeHttpServer = new TestHttpServer();
-        fakeHttpServer.start();
-
-        try (MockedStatic<NetworkingUtils> netUtils = Mockito.mockStatic(NetworkingUtils.class,CALLS_REAL_METHODS);
-             MockedStatic<StravaUtil> stravaUtil = Mockito.mockStatic(StravaUtil.class, CALLS_REAL_METHODS)) {
-
-            stravaUtil.when(() -> {
-                int port = StravaUtil.getStravaPort();
-                assertThat(port).isNotEqualTo(fakeHttpServer.getListeningPort());
-            }).thenReturn(fakeHttpServer.getListeningPort());
-
-            netUtils.when(() -> NetworkingUtils.getAllIpsForHost(any())).thenReturn(FAKE_HOST_LIST);
-
-            // should return true
-            assertThat(StravaUtil.isStravaUp(1000)).isTrue();
-            // should not log host unavailability
-            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " is unreachable");    // msg from networkingUtils (no http port)
-            verifyNeverLogged(FAKE_HOST_LIST.get(0).getHostAddress() + ":" + fakeHttpServer.getListeningPort() + " inaccessible, assume uploads might fail"); // msg from StravaUtil
-        } finally {
-            fakeHttpServer.stop();
-        }
-    }
-
-    @Test
-    void shouldReturnDefaultPortAndHost() {
-        assertThat(StravaUtil.getStravaHostName()).isEqualTo(StravaUtil.STRAVA_HOST_NAME);
-        assertThat(StravaUtil.getStravaPort()).isEqualTo(StravaUtil.STRAVA_HTTP_PORT);
-    }
-
-    private static List<InetAddress> getFakeHosts() {
-        try {
-            return List.of(InetAddress.getByName("localhost"), InetAddress.getByName("localhost"));
-        } catch (UnknownHostException ex) {
-            return Collections.emptyList();
-        }
-    }
-
 
     private static Stream<Arguments> provideFilenames() {
         return Stream.of(
