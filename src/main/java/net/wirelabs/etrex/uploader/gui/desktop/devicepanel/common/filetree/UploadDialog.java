@@ -2,15 +2,14 @@ package net.wirelabs.etrex.uploader.gui.desktop.devicepanel.common.filetree;
 
 import com.strava.model.SportType;
 import com.strava.model.Upload;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.FileService;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
-import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
@@ -26,14 +25,15 @@ public class UploadDialog extends BaseDialog {
 
 
     private File trackFile;
-    @Setter private int hostCheckupTimeout;
     private final JTextField activityTitleTextField;
     private final JComboBox<SportType> activityTypeCombo;
     private final JTextArea activityDescriptionArea;
     private final JCheckBox commute; // is the activity a commute
     private final JCheckBox virtual; // is the activity a virtual/trainer ride
     private final StravaClient stravaClient;
+
     private final transient FileService fileService;
+    private final transient StravaConnectionChecker stravaConnectionChecker;
 
 
     public UploadDialog(StravaClient stravaClient, FileService fileService) {
@@ -41,6 +41,7 @@ public class UploadDialog extends BaseDialog {
         this.stravaClient = stravaClient;
         this.fileService = fileService;
 
+        stravaConnectionChecker = new StravaConnectionChecker(stravaClient.getStravaConfiguration());
         JScrollPane scrollPane = new JScrollPane();
         JButton btnOk = new JButton("Upload");
         JButton btnCancel = new JButton("Cancel");
@@ -91,12 +92,8 @@ public class UploadDialog extends BaseDialog {
 
     private void uploadFile(File trackFile) {
 
-        if (!StravaUtil.isStravaUp(hostCheckupTimeout)) {
-            log.info("Some of Strava hosts are down or unavailable");
-            SwingUtils.errorMsg("Some of Strava hosts are down or unavailable. Try again!");
-            return;
-        }
         try {
+            stravaConnectionChecker.checkAndContinueIfDown();
             log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -114,7 +111,12 @@ public class UploadDialog extends BaseDialog {
                 handleUnsuccessfulUpload(upload);
             }
         } catch (StravaException e) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             SwingUtils.errorMsg(e.getMessage());
+        } catch (IllegalStateException e) {
+            log.info("{}",e.getMessage());
+        } finally {
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
 

@@ -34,15 +34,11 @@ public class EtrexUploader extends JFrame {
         super(Constants.APPLICATION_IDENTIFICATION);
 
         setupManager.initialize();
-        splash.invoke();
 
         ApplicationStartupContext ctx = setupManager.getAppContext();
-        StravaConnectionChecker connectionChecker = ctx.getStravaConnectionChecker();
 
+        splash.invoke();
         splash.update("Application initialization started ....");
-
-        splash.update("Checking strava status");
-        connectionChecker.checkStravaIsUp();
 
         splash.update("Configuring maps");
         getMapDefinitionFiles(ctx.getAppConfiguration());

@@ -35,7 +35,7 @@ import static net.wirelabs.etrex.uploader.utils.JsonUtil.serialize;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class StravaClientInstrumentation {
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build();
     @Getter
     protected StravaConfiguration stravaConfiguration;
     private StravaConfigUpdater stravaUpdater;
@@ -93,6 +93,7 @@ public abstract class StravaClientInstrumentation {
         HttpRequest request = HttpRequest.newBuilder()
                 .header(getAuthHeader().getKey(), getAuthHeader().getValue())
                 .uri(URI.create(endpointUrl))
+                .timeout(Duration.ofSeconds(60))
                 .GET()
                 .build();
 
@@ -112,6 +113,7 @@ public abstract class StravaClientInstrumentation {
                 .header(getAuthHeader().getKey(), getAuthHeader().getValue())
                 .uri(URI.create(endpointUrl))
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .timeout(Duration.ofSeconds(60))
                 .build();
 
 
@@ -180,6 +182,7 @@ public abstract class StravaClientInstrumentation {
                 .uri(URI.create(baseTokenUrl))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Accept", "application/json")
+                .timeout(Duration.ofSeconds(60))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
     }
@@ -213,6 +216,7 @@ public abstract class StravaClientInstrumentation {
                     .uri(URI.create(uploadsUrl))
                     .header("Content-Type", "multipart/form-data; boundary=" + boundary)
                     .header(getAuthHeader().getKey(), getAuthHeader().getValue())
+                    .timeout(Duration.ofSeconds(60))
                     .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody))
                     .build();
         } catch (IOException e) {

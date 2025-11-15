@@ -23,7 +23,6 @@ class StravaSettingsPanelTest {
         assertThat(panel.activitiesPerPage.getText()).isEqualTo(String.valueOf(stravaConfiguration.getPerPage()));
         assertThat(panel.warnQuotaPercent.getText()).isEqualTo(String.valueOf(stravaConfiguration.getApiUsageWarnPercent()));
         assertThat(panel.usePolylines.isSelected()).isEqualTo(stravaConfiguration.isUsePolyLines());
-        assertThat(panel.checkHostBeforeUpload.isSelected()).isEqualTo(stravaConfiguration.isStravaCheckHostBeforeUpload());
         assertThat(panel.hostTimeout.getText()).isEqualTo(String.valueOf(stravaConfiguration.getStravaCheckTimeout()));
 
 

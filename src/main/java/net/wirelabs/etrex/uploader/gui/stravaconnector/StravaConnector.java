@@ -1,6 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.stravaconnector;
 
 import lombok.Getter;
+import net.wirelabs.etrex.uploader.ApplicationStartupContext;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
@@ -28,13 +30,14 @@ public class StravaConnector extends BaseDialog {
     @Getter
     private final AtomicBoolean oauthStatus = new AtomicBoolean(false);
     private final StravaClient client;
+    private final transient StravaConnectionChecker stravaConnectionChecker;
     @Getter
     private String oauthMessage;
 
-    public StravaConnector(StravaClient client)  {
+    public StravaConnector(ApplicationStartupContext ctx)  {
         super("Connect to strava","","[grow]","[][][][][]");
-        this.client = client;
-
+        this.client = ctx.getStravaClient();
+        this.stravaConnectionChecker = ctx.getStravaConnectionChecker();
         registerExitOnCloseListener();
         registerActionOnClickConnect();
         createVisualComponent();
@@ -80,6 +83,9 @@ public class StravaConnector extends BaseDialog {
 
 
     private void connectWithStrava(ActionEvent ev) {
+        setAlwaysOnTop(false);
+        stravaConnectionChecker.checkAndExitIfDown();
+
         String appId = appIdInput.getText();
         String clientSecret = appSecretInput.getText();
         dispose();
