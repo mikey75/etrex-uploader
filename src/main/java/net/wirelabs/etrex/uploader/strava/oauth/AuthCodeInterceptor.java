@@ -63,7 +63,7 @@ class AuthCodeInterceptor extends LocalWebServer {
     }
 
     boolean scopeOK() {
-        String[] scopes = Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE.split(",");
+        String[] scopes = Constants.STRAVA_ACCESS_SCOPE.split(",");
         for (String s : scopes) {
             if (!getScope().contains(s)) {
                 return false;

@@ -19,9 +19,6 @@ public class LogViewerDialog extends BaseDialog {
 
     public static final String LOG_VIEWER_WINDOW_TITLE = "Application Log viewer";
     private static final Dimension windowSize = new Dimension(800,600);
-    private final JButton closeBtn = new JButton("Close");
-    private final JLabel lblLogfiles = new JLabel("Logfile:");
-    private final JScrollPane scrollPane = new JScrollPane();
     private final JComboBox<String> comboBox = new JComboBox<>();
     private final JTextArea textArea = new JTextArea();
 
@@ -29,6 +26,10 @@ public class LogViewerDialog extends BaseDialog {
     public LogViewerDialog() {
         super(LOG_VIEWER_WINDOW_TITLE,"","[grow]","[][grow][]");
         setSize(windowSize);
+
+        JButton closeBtn = new JButton("Close");
+        JLabel lblLogfiles = new JLabel("Logfile:");
+        JScrollPane scrollPane = new JScrollPane();
 
         add(lblLogfiles, cell(0,0).flowX());
         add(scrollPane, cell(0,1).grow());

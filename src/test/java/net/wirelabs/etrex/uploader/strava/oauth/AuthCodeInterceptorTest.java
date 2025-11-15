@@ -49,7 +49,7 @@ class AuthCodeInterceptorTest extends BaseTest {
                 "&redirect_uri=http://127.0.0.1:" + authCodeRetriever.getPort() +
                 "&response_type=code" +
                 "&approval_prompt=force" +
-                "&scope=" + Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE;
+                "&scope=" + Constants.STRAVA_ACCESS_SCOPE;
 
 
         runGetAuthAndAssertMessage("Timed out waiting for code", null, null);
@@ -73,7 +73,7 @@ class AuthCodeInterceptorTest extends BaseTest {
     void testCorrectCodeInterceptionWithCorrectScope() throws IOException, InterruptedException, StravaException {
 
         HttpRequest requestWithCode = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=" + Constants.STRAVA_DEFAULT_APP_ACCESS_SCOPE))
+                .uri(URI.create("http://127.0.0.1:" + authCodeRetriever.getPort() + "/index.html?aaa=b&code=" + AUTH_CODE + "&scope=" + Constants.STRAVA_ACCESS_SCOPE))
                 .GET()
                 .build();
 

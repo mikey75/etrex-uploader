@@ -11,7 +11,6 @@ import net.wirelabs.etrex.uploader.utils.SwingUtils;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static javax.swing.UIManager.*;

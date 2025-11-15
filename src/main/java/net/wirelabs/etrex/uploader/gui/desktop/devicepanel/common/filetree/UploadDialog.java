@@ -30,14 +30,6 @@ public class UploadDialog extends BaseDialog {
     private final JTextField activityTitleTextField;
     private final JComboBox<SportType> activityTypeCombo;
     private final JTextArea activityDescriptionArea;
-
-    
-    private final JLabel lblActivityName;
-    private final JLabel lblActivityType;
-    private final JLabel lblActivityDescription;
-    private final JScrollPane scrollPane;
-    private final JButton btnOk;
-    private final JButton btnCancel;
     private final JCheckBox commute; // is the activity a commute
     private final JCheckBox virtual; // is the activity a virtual/trainer ride
     private final StravaClient stravaClient;
@@ -48,14 +40,17 @@ public class UploadDialog extends BaseDialog {
         super("Upload","","[grow]","[][][][][][grow][][]");
         this.stravaClient = stravaClient;
         this.fileService = fileService;
-        lblActivityName = new JLabel("Name");
-        lblActivityDescription = new JLabel("Description");
-        lblActivityType = new JLabel("Activity Type");
-        scrollPane = new JScrollPane();
+
+        JScrollPane scrollPane = new JScrollPane();
+        JButton btnOk = new JButton("Upload");
+        JButton btnCancel = new JButton("Cancel");
+
+        JLabel lblActivityName = new JLabel("Name");
+        JLabel lblActivityDescription = new JLabel("Description");
+        JLabel lblActivityType = new JLabel("Activity Type");
+
         activityTitleTextField = new JTextField();
         activityDescriptionArea = new JTextArea();
-        btnOk = new JButton("Upload");
-        btnCancel = new JButton("Cancel");
         activityTypeCombo = new JComboBox<>(SportType.values());
         commute = new JCheckBox("Commuting ride");
         virtual = new JCheckBox("Virtual/Trainer ride");
