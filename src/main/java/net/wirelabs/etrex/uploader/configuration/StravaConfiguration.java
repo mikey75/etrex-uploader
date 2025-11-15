@@ -38,7 +38,7 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
     private boolean usePolyLines;
     private int perPage;
     private int apiUsageWarnPercent;
-    private boolean stravaCheckHostBeforeUpload;
+
     private int uploadStatusWaitSeconds;
 
     public StravaConfiguration(String configFileName) {
@@ -56,7 +56,6 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         usePolyLines = Boolean.parseBoolean(properties.getProperty(STRAVA_USE_POLYLINES, Constants.TRUE));
         perPage = Integer.parseInt(properties.getProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(Constants.STRAVA_ACTIVITIES_PER_PAGE)));
         apiUsageWarnPercent = Integer.parseInt(properties.getProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(Constants.STRAVA_API_USAGE_WARN_PERCENT)));
-        stravaCheckHostBeforeUpload = Boolean.parseBoolean(properties.getProperty(STRAVA_CHECK_HOST_BEFORE_UPLOAD,Constants.TRUE));
         uploadStatusWaitSeconds = Integer.parseInt(properties.getProperty(STRAVA_UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(Constants.UPLOAD_STATUS_WAIT_SECONDS)));
         authCodeTimeout = Integer.parseInt(properties.getProperty(AUTH_CODE_TIMEOUT_SECONDS, String.valueOf(Constants.AUTH_CODE_TIMEOUT_SECONDS)));
         if (!configFileExists()) {
@@ -80,7 +79,6 @@ public class StravaConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(STRAVA_USE_POLYLINES, String.valueOf(usePolyLines));
         properties.setProperty(STRAVA_ACTIVITIES_PER_PAGE, String.valueOf(perPage));
         properties.setProperty(STRAVA_API_USAGE_WARN_PERCENT, String.valueOf(apiUsageWarnPercent));
-        properties.setProperty(STRAVA_CHECK_HOST_BEFORE_UPLOAD, String.valueOf(stravaCheckHostBeforeUpload));
         properties.setProperty(STRAVA_UPLOAD_STATUS_WAIT_SECONDS, String.valueOf(uploadStatusWaitSeconds));
         properties.setProperty(AUTH_CODE_TIMEOUT_SECONDS, String.valueOf(authCodeTimeout));
         storePropertiesToFile();

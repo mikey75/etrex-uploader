@@ -18,7 +18,7 @@ public class StravaSettingsPanel extends BasePanel {
     final JTextField activitiesPerPage = new JTextField();
     final JTextField warnQuotaPercent = new JTextField();
     final JCheckBox usePolylines = new JCheckBox("Use activity polyline to draw tracks (faster)");
-    final JCheckBox checkHostBeforeUpload = new JCheckBox("Check if strava is up on startup and before upload");
+
     final JTextField hostTimeout = new JTextField();
 
 
@@ -44,9 +44,8 @@ public class StravaSettingsPanel extends BasePanel {
         add(warnQuotaPercent, cell(1,2).growX());
         add(usePolylines, cell(1,3));
 
-        add(checkHostBeforeUpload, cell(1,4).alignX(TRAILING));
-        add(lblHostTimeout, cell(1,5).alignX(TRAILING));
-        add(hostTimeout, cell(1,5).growX());
+        add(lblHostTimeout, cell(1,4).alignX(TRAILING));
+        add(hostTimeout, cell(1,4).growX());
 
         loadConfiguration();
     }
@@ -57,7 +56,6 @@ public class StravaSettingsPanel extends BasePanel {
         warnQuotaPercent.setText(String.valueOf(configuration.getApiUsageWarnPercent()));
         usePolylines.setSelected(configuration.isUsePolyLines());
         hostTimeout.setText(String.valueOf(configuration.getStravaCheckTimeout()));
-        checkHostBeforeUpload.setSelected(configuration.isStravaCheckHostBeforeUpload());
     }
 
     public void updateConfiguration() {
@@ -66,7 +64,6 @@ public class StravaSettingsPanel extends BasePanel {
         configuration.setApiUsageWarnPercent(Integer.parseInt(warnQuotaPercent.getText()));
         configuration.setUsePolyLines(usePolylines.isSelected());
         configuration.setStravaCheckTimeout(Integer.parseInt(hostTimeout.getText()));
-        configuration.setStravaCheckHostBeforeUpload(checkHostBeforeUpload.isSelected());
     }
 
 

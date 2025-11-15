@@ -8,13 +8,8 @@ import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.eventbus.EventBus;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URLConnection;
 import java.util.*;
-
-import static net.wirelabs.etrex.uploader.utils.NetworkingUtils.getAllIpsForHost;
-import static net.wirelabs.etrex.uploader.utils.NetworkingUtils.isHostTcpPortReachable;
 
 /*
  * Created 12/10/22 by Michał Szwaczko (mikey@wirelabs.net)
@@ -28,8 +23,6 @@ public class StravaUtil {
     public static final String CURRENT_DAILY = "currentDaily";
     public static final String CURRENT_15MINS = "current15mins";
 
-    public static final String STRAVA_HOST_NAME = "www.strava.com";
-    public static final int STRAVA_HTTP_PORT = 80;
 
     public static String guessUploadFileFormat(File file) throws StravaException {
 
@@ -70,41 +63,5 @@ public class StravaUtil {
         }
     }
 
-    /**
-     * Checks if ipv4 strava hosts are available for http connection
-     *
-     * @return yes or no
-     */
-    public static boolean isStravaUp(int hostTimeout) {
-
-        List<InetAddress> allStravaIpv4Hosts;
-
-        try {
-            allStravaIpv4Hosts = getAllIpsForHost(getStravaHostName());
-
-            for (InetAddress stravaHost : allStravaIpv4Hosts) {
-                String host = stravaHost.getHostAddress();
-                // if one of the hosts is unreachable - false
-                if (!isHostTcpPortReachable(host, getStravaPort(), hostTimeout)) {
-                    log.warn("{}:{} inaccessible, assume uploads might fail", host, getStravaPort());
-                    return false;
-                }
-            }
-            // all hosts reachable
-            return true;
-
-        } catch (IOException e) {
-            log.error("Strava or network is down!");
-            return false;
-        }
-    }
-
-    public static int getStravaPort() {
-        return STRAVA_HTTP_PORT;
-    }
-
-    public static String getStravaHostName() {
-        return STRAVA_HOST_NAME;
-    }
 }
 
