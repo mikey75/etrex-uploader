@@ -81,11 +81,20 @@ public class MapPanel extends BaseEventAwarePanel {
             mapViewer.setSecondaryTileCache(new DBCache());
             return;
         }
+        // redis client from RedisCache throws IllegalStateException
+        // when unable to connect (i.e. redis unavailable or badly configured)
+        // log this as warning and set up default cache
         if (cacheType.equals(Constants.REDIS_CACHE)) {
-            mapViewer.setSecondaryTileCache(new RedisCache(configuration.getRedisHost(), configuration.getRedisPort(), Duration.ofDays(30),100));
-            return;
+            try {
+                mapViewer.setSecondaryTileCache(new RedisCache(configuration.getRedisHost(), configuration.getRedisPort(), Duration.ofDays(30), 100));
+                return;
+            } catch (IllegalStateException e) {
+                // since it's not the error per se - show infoMsg (after the app fully shows main window)
+                SwingUtilities.invokeLater(() -> SwingUtils.infoMsg("Redis is unavailable. \nApplication will continue with default cache"));
+            }
         }
-        log.info("Tile cache badly configured: setting default - {}", Constants.DEFAULT_TILE_CACHE_TYPE);
+        // set default cache
+        log.warn("Tile cache badly configured: setting default - {}", Constants.DEFAULT_TILE_CACHE_TYPE);
         mapViewer.setSecondaryTileCache(new DirectoryBasedCache());
         configuration.setCacheType(Constants.DEFAULT_TILE_CACHE_TYPE);
         configuration.save();
