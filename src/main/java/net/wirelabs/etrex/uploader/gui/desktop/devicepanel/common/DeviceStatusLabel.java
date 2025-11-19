@@ -21,7 +21,7 @@ public class DeviceStatusLabel extends JLabel {
     private void printBar(List<File> deviceList) {
         if (deviceList.isEmpty()) {
             dotProgress.append(".");
-            setText("waiting" + dotProgress);
+            setText("Status: waiting" + dotProgress);
             if (dotProgress.length() > 3) {
                 dotProgress.setLength(0);
             }

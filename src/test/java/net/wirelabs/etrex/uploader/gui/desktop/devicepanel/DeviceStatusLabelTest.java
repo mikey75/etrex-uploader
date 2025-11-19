@@ -18,9 +18,9 @@ class DeviceStatusLabelTest extends BaseTest {
 
         DeviceStatusLabel l = new DeviceStatusLabel(Collections.emptyList());
         // max 4 dots, wait 3 seconds because every dot is printed in 500 ms intervals
-        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(l.getText()).isEqualTo("waiting...."));
+        waitUntilAsserted(Duration.ofSeconds(3), () -> assertThat(l.getText()).isEqualTo("Status: waiting...."));
         // check if it resets (after 4 dots already printed it should be max 1 sec
-        waitUntilAsserted(Duration.ofSeconds(1), () -> assertThat(l.getText()).isEqualTo("waiting."));
+        waitUntilAsserted(Duration.ofSeconds(1), () -> assertThat(l.getText()).isEqualTo("Status: waiting."));
     }
 
     @Test
