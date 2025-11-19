@@ -40,7 +40,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
     @Getter
     private final JLabel softwareVersion = new JLabel(GARMIN_SOFTWARE_VERSION);
     @Getter
-    private final JLabel deviceStatus = new JLabel(GARMIN_STATUS);
+    private final JLabel deviceStatus = new DeviceStatusLabel(garminDrives);
 
     public GarminDeviceBrowser(UploadService uploadService) {
         super("Garmin device","","[grow]","[][][][][][][grow]");
@@ -115,7 +115,7 @@ public class GarminDeviceBrowser extends BaseEventAwarePanel {
         softwareVersion.setText(GARMIN_SOFTWARE_VERSION + modelInfo.getSoftwareVersion());
         partNumber.setText(GARMIN_PART_NUMBER + modelInfo.getPartNumber());
         serialNumber.setText(GARMIN_SERIAL_NUMBER + deviceInfo.getId());
-        deviceStatus.setText("Connected");
+        deviceStatus.setText(GARMIN_STATUS + "Connected");
     }
 
     @Override
