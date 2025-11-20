@@ -1,9 +1,8 @@
 package net.wirelabs.etrex.uploader.gui.desktop.stravapanel.activitiestable;
 
 
-import com.strava.model.LatLng;
-import com.strava.model.StreamSet;
-import com.strava.model.SummaryActivity;
+import com.strava.model.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.configuration.StravaConfiguration;
@@ -21,9 +20,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
-import java.util.Collection;
+import java.awt.image.*;
 import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_DISPLAY_TRACK;
 import static net.wirelabs.etrex.uploader.common.EventType.MAP_RESET;
@@ -42,6 +41,12 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     private final StravaConfiguration configuration;
     private int page = 1;
 
+    @Getter
+    private static final Map<Long, DetailedActivity> detailedActivityCache = new HashMap<>();
+    @Getter
+    private static final Map<String, BufferedImage> photoCache = new HashMap<>();
+    @Getter
+    private static final Map<String,List<PhotosSummaryPrimary>> photoUrlsCache = new HashMap<>();
 
     public StravaActivitiesPanel(StravaClient stravaClient) {
         super("Strava", "","[grow][]","[grow][grow]");
@@ -79,7 +84,7 @@ public class StravaActivitiesPanel extends BaseEventAwarePanel {
     }
 
     private void applyMouseListenerToActivityTitleColumn() {
-        StravaActivityIconClickListener activityClickListener = new StravaActivityIconClickListener(activitiesTable, 16, 16);
+        StravaActivityIconClickListener activityClickListener = new StravaActivityIconClickListener(activitiesTable,stravaClient, 16, 16);
         activitiesTable.addMouseListener(activityClickListener);
         activitiesTable.addMouseMotionListener(activityClickListener);
     }

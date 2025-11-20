@@ -55,7 +55,7 @@ public class ActivitiesTableModel extends AbstractTableModel {
         data = new Object[activities.size()][columnNames.length];
         for (SummaryActivity act : activities) {
             data[rowIdx][0] = act.getName();
-            data[rowIdx][1] = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(act.getStartDateLocal());
+            data[rowIdx][1] = DateAndUnitConversionUtil.offsetDateTimeToLocalAsString(act.getStartDateLocal(),false);
             data[rowIdx][2] = act.getSportType();
             data[rowIdx][3] = DateAndUnitConversionUtil.secondsToTimeAsString(act.getElapsedTime());
             data[rowIdx][4] = act.getDistance() / 1000;
