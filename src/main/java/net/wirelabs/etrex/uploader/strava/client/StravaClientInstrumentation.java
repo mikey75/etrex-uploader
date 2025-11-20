@@ -23,9 +23,7 @@ import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Duration;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static net.wirelabs.etrex.uploader.utils.HttpUtils.*;
@@ -38,7 +36,7 @@ public abstract class StravaClientInstrumentation {
     @Getter
     protected StravaConfiguration stravaConfiguration;
     private StravaConfigUpdater stravaUpdater;
-
+    @Getter
     protected String activitiesUrl;
     protected String athleteUrl;
     protected String athletesUrl;
@@ -297,4 +295,5 @@ public abstract class StravaClientInstrumentation {
         exchangeAuthCodeForAccessToken(appId, clientSecret, code);
         authCodeRetriever.shutdown();
     }
-}
+
+  }
