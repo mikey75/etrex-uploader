@@ -137,7 +137,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
 
         GarminUtils.getGarminDeviceXmlFile(drive).ifPresent(deviceXmlFile -> {
             try {
-                DeviceDocument garminInfo = DeviceDocument.Factory.parse(deviceXmlFile.toFile());
+                DeviceDocument garminInfo = DeviceDocument.Factory.parse(deviceXmlFile);
                 publishFoundHardwareInfo(garminInfo.getDevice());
             } catch (IOException | XmlException e) {
                 log.warn("Can't parse {} on drive {}", Constants.GARMIN_DEVICE_XML, drive);

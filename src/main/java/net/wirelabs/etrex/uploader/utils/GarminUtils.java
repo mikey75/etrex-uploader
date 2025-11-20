@@ -6,24 +6,36 @@ import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.Constants;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class GarminUtils {
+    /**
+     * Find garmin device info xml file
+     * Checks two levels deep from root dir
+     *
+     * @param root - root dir to start from
+     * @return Optional.of(file) or empty
+     */
+    public static Optional<File> getGarminDeviceXmlFile(File root) {
+        File[] level1 = root.listFiles();
+        if (level1 == null) return Optional.empty();
 
-    public static Optional<Path> getGarminDeviceXmlFile(File drive) {
-        try (Stream<Path> walk = Files.walk(drive.toPath(), 2)) {
-            Stream<Path> result = walk.filter(f -> f.toFile().getName().equals(Constants.GARMIN_DEVICE_XML));
-            return result.findFirst();
-        } catch (IOException e) {
-            log.warn("I/O exception looking for GarminDevice.xml file", e);
+        for (File file : level1) {
+            if (file.isFile() && file.getName().equals(Constants.GARMIN_DEVICE_XML)) {
+                return Optional.of(file);
+            }
+            if (file.isDirectory()) {
+                File[] children = file.listFiles();
+                if (children == null) continue;
+                for (File child : children) {
+                    if (child.isFile() && child.getName().equals(Constants.GARMIN_DEVICE_XML)) {
+                        return Optional.of(child);
+                    }
+                }
+            }
         }
         return Optional.empty();
     }
-    
 }
