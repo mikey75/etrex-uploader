@@ -60,7 +60,6 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.setShowAttribution(true);
         mapViewer.setZoom(Constants.DEFAULT_MAP_START_ZOOM);
         mapViewer.setHome(mapHome);
-        mapViewer.setImageCacheSize(32000);
         setSecondaryTileCache(configuration.getCacheType());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
         mapViewer.addUserOverlay(routePainter);
