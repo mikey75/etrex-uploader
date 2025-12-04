@@ -10,7 +10,6 @@ import net.wirelabs.etrex.uploader.gui.desktop.DesktopPanel;
 import net.wirelabs.etrex.uploader.gui.desktop.devicepanel.GarminAndStoragePanel;
 import net.wirelabs.etrex.uploader.gui.desktop.mappanel.MapPanel;
 import net.wirelabs.etrex.uploader.gui.desktop.stravapanel.StravaPanel;
-import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.utils.FileUtils;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.utils.SystemUtils;

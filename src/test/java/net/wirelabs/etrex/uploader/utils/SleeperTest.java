@@ -33,13 +33,13 @@ class SleeperTest extends BaseTest {
         thread.start();
 
         // wait for start
-        waitUntilAsserted(Duration.ofSeconds(1), thread::isAlive);
+        waitUntilAsserted(Duration.ofSeconds(1), () -> assertThat(thread.isAlive()).isTrue());
 
         // interrupt
         thread.interrupt();
 
         // wait for interruption
-        waitUntilAsserted(Duration.ofSeconds(1), thread::isInterrupted);
+        waitUntilAsserted(Duration.ofSeconds(1), () -> assertThat(thread.isInterrupted()).isTrue());
 
         // assert log
         verifyLogged("Error sleeping");

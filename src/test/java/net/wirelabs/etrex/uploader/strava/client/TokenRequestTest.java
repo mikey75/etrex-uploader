@@ -20,14 +20,16 @@ class TokenRequestTest extends BaseTest {
     private static final String STRAVA_CONFIG = "src/test/resources/config/good-strava.properties";
     private static final String APP_CONFIG = "src/test/resources/config/test.properties";
 
-    private static final StravaConfiguration config = new StravaConfiguration(STRAVA_CONFIG);
+    private static final StravaConfiguration stravaConfig = new StravaConfiguration(STRAVA_CONFIG);
     private static final AppConfiguration appConfig = new AppConfiguration(APP_CONFIG);
-    private static final StravaClient client = new StravaClient(updateConfig(), appConfig);
 
-    private static StravaConfiguration updateConfig() {
-        config.setBaseTokenUrl(TOKEN_URL);
-        config.setBaseUrl(BASE_URL);
-        return config;
+    private final StravaClient client;
+
+    public TokenRequestTest() {
+
+        stravaConfig.setBaseTokenUrl(TOKEN_URL);
+        stravaConfig.setBaseUrl(BASE_URL);
+        client = new StravaClient(stravaConfig,appConfig);
     }
 
     @Test

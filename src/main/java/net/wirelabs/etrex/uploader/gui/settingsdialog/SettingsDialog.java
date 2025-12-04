@@ -72,7 +72,7 @@ public class SettingsDialog extends BaseDialog {
 	}
 
 	private void cancelDialog() {
-		// on cancel button click -> check if look and feel was changed
+		// on cancel button click -> check if the look and feel was changed
 		// if true -> reset to default and dispose dialog/window
 		try {
 			String currentLaf = String.valueOf(applicationSettingsPanel.getLookAndFeelSelector().getSelectedItem());

@@ -27,7 +27,7 @@ class ConfigurationPropertyKeys {
     static final String STRAVA_API_USAGE_WARN_PERCENT     = "strava.api.usage.warn.percent";
     static final String STRAVA_UPLOAD_STATUS_WAIT_SECONDS = "strava.upload.status.wait.seconds";
     static final String STRAVA_USE_POLYLINES              = "strava.use.polylines"; // use polylines instead of real track data
-    static final String STRAVA_CHECK_HOST_BEFORE_UPLOAD   = "strava.check.host.before.upload"; // whether to check strava status before update
+
     static final String STRAVA_CHECK_HOST_TIMEOUT         = "strava.check.host.timeout";       // time to wait for strava host to be http available
     static final String STRAVA_TOKEN_URL                  = "strava.base.token.url";
     static final String STRAVA_API_BASE_URL               = "strava.base.url";

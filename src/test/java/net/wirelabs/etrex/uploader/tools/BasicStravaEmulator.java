@@ -1,5 +1,6 @@
 package net.wirelabs.etrex.uploader.tools;
 
+import com.google.gson.reflect.TypeToken;
 import com.strava.model.DetailedActivity;
 import com.strava.model.SummaryActivity;
 import com.strava.model.UpdatableActivity;
@@ -11,6 +12,7 @@ import net.wirelabs.etrex.uploader.strava.utils.LocalWebServer;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -19,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static net.wirelabs.etrex.uploader.utils.HttpUtils.*;
-import static net.wirelabs.etrex.uploader.utils.JsonUtil.deserialize;
 
 @Slf4j
 public class BasicStravaEmulator extends LocalWebServer {
@@ -117,20 +118,22 @@ public class BasicStravaEmulator extends LocalWebServer {
 
     private static Map<String, Object> getBodyData(String contentType, String rawBody) {
         Map<String,Object> bodyData = new HashMap<>();
+        Type bodyDataType = new TypeToken<Map<String, Object>>(){}.getType();
+
         if (contentType != null) {
             if (contentType.contains(ContentTypes.JSON)) {
-                bodyData = deserialize(rawBody, Map.class);
+                bodyData = JsonUtil.deserialize(rawBody, bodyDataType);
             } else if (contentType.contains(ContentTypes.FORM)) {
                 Map<String, String> form = parseQueryParams(rawBody);
                 if (form.containsKey("payload")) {
-                    bodyData = deserialize(form.get("payload"), Map.class);
+                    bodyData = JsonUtil.deserialize(form.get("payload"), bodyDataType);
                 } else {
                     bodyData.putAll(form);
                 }
             } else if (contentType.contains(ContentTypes.MULTIPART_FORM)) {
                 Map<String, String> form = parseMultipartFormData(contentType, rawBody);
                 if (form.containsKey("payload")) {
-                    bodyData = deserialize(form.get("payload"), Map.class);
+                    bodyData = JsonUtil.deserialize(form.get("payload"),  bodyDataType);
                 } else {
                     bodyData.putAll(form);
                 }
@@ -184,7 +187,7 @@ public class BasicStravaEmulator extends LocalWebServer {
             List<SummaryActivity> activities = new ArrayList<>();
             for (File f : files) {
                 String fs = getSingleFileResponse(f.getPath());
-                activities.add(deserialize(fs, SummaryActivity.class));
+                activities.add(JsonUtil.deserialize(fs, SummaryActivity.class));
             }
             response = JsonUtil.serialize(activities);
         }
