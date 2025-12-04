@@ -129,6 +129,22 @@ class GarminDeviceServiceTest extends BaseTest {
     }
 
     @Test
+    void shouldDetectTwoGarminDrivesAndRemoveOne() {
+        //given
+        startAndAssertStarted();
+        // when
+        addDrive(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO);
+        // then
+        waitUntilAsserted(Duration.ofSeconds(5), () ->
+                assertThat(garminDeviceService.getRegisteredRoots()).hasSize(2).containsExactly(GARMIN_DRIVE_ONE, GARMIN_DRIVE_TWO)
+        );
+        removeDrive(GARMIN_DRIVE_TWO);
+        waitUntilAsserted(Duration.ofSeconds(5), () ->
+                assertThat(garminDeviceService.getRegisteredRoots()).hasSize(1).containsExactly(GARMIN_DRIVE_ONE)
+        );
+    }
+
+    @Test
     void shouldNotRegisterDriveIfNotGarmin() {
         // given
         startAndAssertStarted();

@@ -12,6 +12,7 @@ import net.wirelabs.etrex.uploader.strava.client.token.RefreshTokenResponse;
 import net.wirelabs.etrex.uploader.strava.client.token.TokenResponse;
 import net.wirelabs.etrex.uploader.strava.oauth.AuthCodeRetriever;
 import net.wirelabs.etrex.uploader.strava.utils.StravaUtil;
+import net.wirelabs.etrex.uploader.utils.JsonUtil;
 import net.wirelabs.etrex.uploader.utils.UrlBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,8 +29,6 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import static net.wirelabs.etrex.uploader.utils.HttpUtils.*;
-import static net.wirelabs.etrex.uploader.utils.JsonUtil.deserialize;
-import static net.wirelabs.etrex.uploader.utils.JsonUtil.serialize;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -99,14 +98,14 @@ public abstract class StravaClientInstrumentation {
 
 
         String result = executeRequest(request);
-        return deserialize(result, type);
+        return JsonUtil.deserialize(result, type);
     }
 
     public <T> T makePutRequest(String endpointUrl, Object body, Class<T> type) throws StravaException {
 
         refreshTokenIfExpired();
 
-        String jsonBody = serialize(body);
+        String jsonBody = JsonUtil.serialize(body);
 
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -118,7 +117,7 @@ public abstract class StravaClientInstrumentation {
 
 
         String result = executeRequest(request);
-        return deserialize(result, type);
+        return JsonUtil.deserialize(result, type);
 
     }
 
@@ -133,7 +132,7 @@ public abstract class StravaClientInstrumentation {
         if (!authCode.isEmpty()) {
             HttpRequest tokenRequest = createTokenRequest(appId, clientSecret, authCode);
             String response = executeRequest(tokenRequest);
-            TokenResponse tokenResponse = deserialize(response, TokenResponse.class);
+            TokenResponse tokenResponse = JsonUtil.deserialize(response, TokenResponse.class);
             log.info("Got tokens!");
             stravaUpdater.updateToken(tokenResponse);
             stravaUpdater.updateCredentials(appId, clientSecret);
@@ -171,7 +170,7 @@ public abstract class StravaClientInstrumentation {
                 log.info("Refreshing token");
                 HttpRequest request = createRefreshTokenRequest(stravaConfiguration.getStravaAppId(), stravaConfiguration.getStravaClientSecret(), stravaConfiguration.getStravaRefreshToken());
                 String response = executeRequest(request);
-                RefreshTokenResponse refreshTokenResponse = deserialize(response, RefreshTokenResponse.class);
+                RefreshTokenResponse refreshTokenResponse = JsonUtil.deserialize(response, RefreshTokenResponse.class);
                 stravaUpdater.refreshExpired(refreshTokenResponse);
             }
         }
@@ -196,7 +195,7 @@ public abstract class StravaClientInstrumentation {
         refreshTokenIfExpired();
 
         String result = executeRequest(request);
-        return deserialize(result, Upload.class);
+        return JsonUtil.deserialize(result, Upload.class);
 
     }
 

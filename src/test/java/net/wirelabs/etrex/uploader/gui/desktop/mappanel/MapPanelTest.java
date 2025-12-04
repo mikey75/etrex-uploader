@@ -227,7 +227,7 @@ class MapPanelTest extends BaseTest {
     void TestMapSelector() {
 
         File[] mapFiles = mp.mapSelector.getConfiguredMapFiles();
-        // default map file in test config is null so it should set first map from the list
+        // default map file in test config is null, so it should set first map from the list
         // which is osm cycle. but the selector should contain declared maps
 
         assertThat(Arrays.stream(mapFiles).toList()).containsExactlyInAnyOrder(map1, map2);

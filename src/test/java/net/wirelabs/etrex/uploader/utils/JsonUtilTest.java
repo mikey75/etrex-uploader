@@ -1,8 +1,12 @@
 package net.wirelabs.etrex.uploader.utils;
 
+import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Type;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,6 +46,21 @@ class JsonUtilTest {
         assertThat(p2Serialized).isEqualToIgnoringWhitespace(json);
     }
 
+    @Test
+    void shouldDeserializeParametrizedType() {
+        String json = """
+                {
+                  "name": "Alice",
+                  "active": true
+                }
+                """;
+        Type expectedType = new TypeToken<Map<String, Object>>(){}.getType();
+        Map<String,Object> expectedObject = JsonUtil.deserialize(json,expectedType);
+        assertThat(expectedObject).isInstanceOf(Map.class)
+                .containsEntry("name","Alice")
+                .containsEntry("active",true);
+
+    }
 }
 // todo turn it into a record after global dependency lib version updates
 @Getter
