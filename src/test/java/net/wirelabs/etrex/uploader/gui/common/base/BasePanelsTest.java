@@ -50,6 +50,23 @@ class BasePanelsTest {
     }
 
     @Test
+    void shouldInitializeFullyCustomEventAwarePanel() {
+        TestEventAwarePanel p = new TestEventAwarePanel("Przyczłap do Bulbulatora","insets 2","[2][2]","[grow]");
+        assertThat(p).isInstanceOf(BaseEventAwarePanel.class);
+        assertThat(p.getBorder()).isNotNull();
+        assertThat(((TitledBorder) p.getBorder()).getTitle()).isEqualTo("Przyczłap do Bulbulatora");
+        assertNonDefaultLayout((MigLayout) p.getLayout(),"insets 2","[2][2]","[grow]");
+    }
+
+    @Test
+    void shouldInitializeFullyCustomEventAwarePanelWithoutTitleBorder() {
+        TestEventAwarePanel p = new TestEventAwarePanel("","[][]","[fill]");
+        assertThat(p).isInstanceOf(BaseEventAwarePanel.class);
+        assertThat(p.getBorder()).isNull();
+        assertNonDefaultLayout((MigLayout) p.getLayout(),"","[][]","[fill]");
+    }
+
+    @Test
     void shouldInitializeBaseTitledDialog() {
         BaseDialog d = new BaseDialog("Bulbulator dialog");
         assertThat(d.getTitle()).isEqualTo("Bulbulator dialog");
@@ -68,6 +85,13 @@ class BasePanelsTest {
         assertThat(d.getLayoutConstraints()).isEqualTo("");
         assertThat(d.getColumnConstraints()).isEqualTo("[grow]");
         assertThat(d.getRowConstraints()).isEqualTo("[grow]");
+
+    }
+    private static void assertNonDefaultLayout(MigLayout d, String layoutConstraints, String columnConstraints, String rowConstraints) {
+        assertThat(d).isNotNull();
+        assertThat(d.getLayoutConstraints()).isEqualTo(layoutConstraints);
+        assertThat(d.getColumnConstraints()).isEqualTo(columnConstraints);
+        assertThat(d.getRowConstraints()).isEqualTo(rowConstraints);
 
     }
 
