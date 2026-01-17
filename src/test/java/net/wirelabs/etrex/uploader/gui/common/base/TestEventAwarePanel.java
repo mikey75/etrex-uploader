@@ -20,6 +20,14 @@ class TestEventAwarePanel extends BaseEventAwarePanel {
         super(title);
     }
 
+    TestEventAwarePanel(String layoutConstraints, String columnConstraints, String rowConstraints) {
+        super(layoutConstraints, columnConstraints,rowConstraints);
+    }
+
+    TestEventAwarePanel(String title, String layoutConstraints, String columnConstraints, String rowConstraints) {
+        super(title, layoutConstraints,columnConstraints,rowConstraints);
+    }
+
     @Override
     protected void onEvent(Event event) {
         textField.setText((String) event.getPayload());
