@@ -47,7 +47,7 @@ class GarminDeviceServiceTest extends BaseTest {
         when(testApplicationConfiguration.getStorageRoot()).thenReturn(Paths.get(Constants.DEFAULT_LOCAL_STORE));
 
         RootsProvider mockRootsProvider = Mockito.spy(new RootsProvider());
-        doReturn(roots).when(mockRootsProvider).getRoots();
+        doAnswer(inv -> new ArrayList<>(roots)).when(mockRootsProvider).getRoots();
 
         garminDeviceService = Mockito.spy(new GarminDeviceService(mockRootsProvider, testApplicationConfiguration));
     }

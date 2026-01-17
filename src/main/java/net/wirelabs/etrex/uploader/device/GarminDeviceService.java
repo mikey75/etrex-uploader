@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -32,7 +33,7 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     @Getter
     private final RootsProvider rootsProvider;
     @Getter
-    private final List<File> registeredRoots = new ArrayList<>();
+    private final List<File> registeredRoots = new CopyOnWriteArrayList<>();
     private final AppConfiguration appConfiguration;
 
     // constructor with custom provider
@@ -57,8 +58,10 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     public void run() {
 
         log.info("Starting Garmin device discovery thread");
-        AtomicReference<List<File>> roots = new AtomicReference<>(rootsProvider.getRoots());
 
+        AtomicReference<List<File>> roots = new AtomicReference<>();
+
+        roots.set(snapshotRoots());
         // registration of anything already connected
         log.info("Registering already connected drives");
         registerAlreadyConnected(roots.get());
@@ -66,20 +69,23 @@ public class GarminDeviceService extends BaseStoppableRunnable {
         // listen for and register new connections 
         log.info("Listening for new drives");
 
-        loopUntilStopped(()-> {
-            roots.set(rootsProvider.getRoots());
-            findAndRegisterNewRoots(roots.get());
-            findAndUnregisterMissingRoots(roots.get());
+        loopUntilStopped(() -> {
+            List<File> currentRoots = snapshotRoots();
+            findAndRegisterNewRoots(currentRoots);
+            findAndUnregisterMissingRoots(currentRoots);
             Sleeper.sleepMillis(appConfiguration.getDeviceDiscoveryDelay());
         });
 
         log.info("Device observer stopped");
 
     }
+    private List<File> snapshotRoots() {
+        return new ArrayList<>(rootsProvider.getRoots());
+    }
 
     private void findAndUnregisterMissingRoots(List<File> roots) {
-
-        ListUtils.findElementsOfANotPresentInB(registeredRoots, roots)
+        List<File> registeredSnapshot = List.copyOf(registeredRoots);
+        ListUtils.findElementsOfANotPresentInB(registeredSnapshot, roots)
                 .forEach(this::unregisterDrive);
     }
 
@@ -98,10 +104,10 @@ public class GarminDeviceService extends BaseStoppableRunnable {
     }
 
     void unregisterDrive(File drive) {
-
-        registeredRoots.remove(drive);
-        EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, drive);
-        log.info("Garmin drive {} disconnected", drive);
+        if (registeredRoots.remove(drive)) {
+            EventBus.publish(EventType.DEVICE_DRIVE_UNREGISTERED, drive);
+            log.info("Garmin drive {} disconnected", drive);
+        }
     }
 
     void registerDrive(File drive) {
