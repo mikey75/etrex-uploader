@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.wirelabs.etrex.uploader.gui.desktop.stravapanel.activitiestable.StravaActivitiesPanel.*;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 
 @Slf4j
@@ -30,15 +31,14 @@ public class ActivityDetailsDialog extends BaseDialog {
 
     public ActivityDetailsDialog(SummaryActivity selectedActivity, StravaClient stravaClient) {
         super("Activity Details", "","[49%:n:49%][49%:n:49%]","[30px:n:50px][20%:n:20%][50%:n:50%][20%:n:20%,grow]");
-//        super("Activity Details","", "[49%:n:49%][49%:n:49%]", "[30px:n:50px][30%:n:30%,grow][grow]");
         setMinimumSize(new Dimension(1024, 768));
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.selectedActivity = selectedActivity;
         this.stravaClient = stravaClient;
-        add(descriptionPanel, "cell 0 1,grow");
-        add(detailsPanel, "cell 1 1,grow");
-        add(photosPanel, "cell 0 2 2 1,grow");
-        add(elevationGraphPanel, "cell 0 3 2 1,grow");
+        add(descriptionPanel, cell(0,1).grow());
+        add(detailsPanel, cell(1,1).grow());
+        add(photosPanel, cell(0,2,2,1).grow());
+        add(elevationGraphPanel, cell(0,3,2,1).grow());
         SwingUtils.centerComponent(this);
         setVisible(true);
     }
