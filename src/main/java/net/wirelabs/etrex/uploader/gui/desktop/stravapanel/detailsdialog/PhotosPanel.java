@@ -5,6 +5,7 @@ import net.wirelabs.etrex.uploader.gui.common.base.BasePanel;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
+import net.wirelabs.etrex.uploader.utils.ThreadUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -35,7 +36,7 @@ public class PhotosPanel extends BasePanel {
     public void getPhotos(StravaClient stravaClient, Long id, int size) {
 
         contentScrollPanel.add(statusLabel);
-        SwingUtilities.invokeLater(() -> {
+        ThreadUtils.runAsync(() -> {
             try {
 
                 List<PhotosSummaryPrimary> photos = getAndCachePhotoUrls(stravaClient, id, String.valueOf(size));

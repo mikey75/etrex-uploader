@@ -14,6 +14,12 @@ public class ElevationChartPanel extends BasePanel {
 
     private List<Float> elevations = Collections.emptyList();
 
+    private static final Color BLACK_ALPHA60 = new Color(0,0,0,60);
+    private static final Color BLACK_ALPHA170 = new Color(0, 0, 0, 170);
+    private static final Color WHITISH = new Color(220,220,220);
+    private static final Color GRADIENT_HIGH = new Color(100, 150, 255, 160);
+    private static final Color GRADIENT_LOW = new Color(100, 150, 255, 40);
+
     private int hoverIndex = -1;
     private float minElevation;
     private float maxElevation;
@@ -108,7 +114,7 @@ public class ElevationChartPanel extends BasePanel {
 
 
         // draw grid y-axis
-        g2.setColor(new Color(220, 220, 220));
+        g2.setColor(WHITISH);
         g2.setFont(getFont().deriveFont(10f));
 
         for (int i = 0; i <= GRID_LINES; i++) {
@@ -125,7 +131,7 @@ public class ElevationChartPanel extends BasePanel {
             int labelWidth = g2.getFontMetrics().stringWidth(label);
             g2.setColor(Color.DARK_GRAY);
             g2.drawString(label, PADDING - labelWidth - 5, y + 4);
-            g2.setColor(new Color(220, 220, 220));
+            g2.setColor(WHITISH);
         }
 
 
@@ -164,10 +170,7 @@ public class ElevationChartPanel extends BasePanel {
                 0, PADDING,
                 0, (float) PADDING + usableHeight,
                 new float[]{0f, 1f},
-                new Color[]{
-                        new Color(100, 150, 255, 160), // near line
-                        new Color(100, 150, 255, 40)   // near bottom
-                }
+                new Color[]{GRADIENT_HIGH,GRADIENT_LOW}
         );
 
         g2.setPaint(gradient);
@@ -196,7 +199,7 @@ public class ElevationChartPanel extends BasePanel {
             int y = mapElevationToY(elevations.get(hoverIndex), usableHeight);
 
             // vertical guide line
-            g2.setColor(new Color(0, 0, 0, 60));
+            g2.setColor(BLACK_ALPHA60);
             g2.drawLine(x, PADDING, x, PADDING + usableHeight);
 
             // dot
@@ -221,10 +224,8 @@ public class ElevationChartPanel extends BasePanel {
                 boxY = y + 8;
             }
 
-            g2.setColor(new Color(0, 0, 0, 170));
-            g2.fillRoundRect(boxX, boxY,
-                    textWidth + 8, textHeight + 4,
-                    8, 8);
+            g2.setColor(BLACK_ALPHA170);
+            g2.fillRoundRect(boxX, boxY, textWidth + 8, textHeight + 4, 8, 8);
 
             g2.setColor(Color.WHITE);
             g2.drawString(text, boxX + 4, boxY + fm.getAscent() + 2);
@@ -233,14 +234,11 @@ public class ElevationChartPanel extends BasePanel {
         // axis border
         g2.setColor(Color.GRAY);
         g2.drawRect(PADDING, PADDING, usableWidth, usableHeight);
-
         g2.dispose();
     }
 
     private int mapElevationToY(float elevation, int usableHeight) {
-        float normalized =
-                (elevation - minElevation) / (maxElevation - minElevation);
-
+        float normalized = (elevation - minElevation) / (maxElevation - minElevation);
         // invert Y-axis
         return PADDING + Math.round((1f - normalized) * usableHeight);
     }
