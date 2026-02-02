@@ -23,7 +23,7 @@ public class ActivityDetailsDialog extends BaseDialog {
 
 
     private final DetailsPanel detailsPanel = new DetailsPanel();
-    private final DesctiptionPanel descriptionPanel = new DesctiptionPanel();
+    private final DescriptionPanel descriptionPanel = new DescriptionPanel();
     private final PhotosPanel photosPanel  = new PhotosPanel();
     private final ElevationChartPanel elevationGraphPanel = new ElevationChartPanel();
     private final SummaryActivity selectedActivity;
