@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.List;
 
 import static net.wirelabs.etrex.uploader.gui.desktop.stravapanel.activitiestable.StravaActivitiesPanel.*;
+import static net.wirelabs.etrex.uploader.utils.MigComponentConstraintsWrapper.cell;
 
 
 public class PhotosPanel extends BasePanel {
@@ -27,7 +28,7 @@ public class PhotosPanel extends BasePanel {
 
     public PhotosPanel() {
         super("Photos");
-        add(scrollPane, "cell 0 0, growx, alignx left, growy, aligny top");
+        add(scrollPane, cell(0,0).growX().alignX("left").growY().alignY("top"));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         setVisible(true);
 
@@ -48,7 +49,7 @@ public class PhotosPanel extends BasePanel {
                 }
 
                 List<Map<String, String>> m = photos.stream().map(PhotosSummaryPrimary::getUrls).toList();
-                List<String> urls = m.stream().map(x -> x.get(String.valueOf(size))).toList();
+                List<String> urls = m.stream().map(x -> x.get(String.valueOf(size))).filter(Objects::nonNull).toList();
 
                 int i = 0;
                 for (String url : urls) {
@@ -56,7 +57,7 @@ public class PhotosPanel extends BasePanel {
                     JLabel imageLabel = new JLabel();
                     imageLabel.setIcon(new ImageIcon(img));
                     // 4 images in a row
-                    contentScrollPanel.add(imageLabel, "cell " + i % 4 + " " + i++ / 4);
+                    contentScrollPanel.add(imageLabel, cell(i % 4, i++ / 4));
 
                 }
 
@@ -64,7 +65,7 @@ public class PhotosPanel extends BasePanel {
                 revalidate();
                 repaint();
             } catch (IOException | StravaException e) {
-                SwingUtils.errorMsg(e.getMessage());
+                SwingUtils.errorMsg("Error loading photos\n" + e.getMessage());
             }
 
         });
