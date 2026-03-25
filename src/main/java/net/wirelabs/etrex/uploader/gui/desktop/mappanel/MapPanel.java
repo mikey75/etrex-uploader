@@ -54,7 +54,8 @@ public class MapPanel extends BaseEventAwarePanel {
         this.trackParser = new TrackParser();
 
         GarminLogo garminLogo = new GarminLogo();
-        OverlayEnabler overlayEnabler = new OverlayEnabler(mapViewer, routePainter);
+        OverlayEnabler overlayEnabler = new OverlayEnabler(mapViewer);
+        overlayEnabler.addPainter(routePainter, "Route/Track", true, true);
 
         mapViewer.setShowCoordinates(true);
         mapViewer.setShowAttribution(true);
@@ -62,9 +63,8 @@ public class MapPanel extends BaseEventAwarePanel {
         mapViewer.setHome(mapHome);
         setSecondaryTileCache(configuration.getCacheType());
         mapViewer.setTilerThreads(configuration.getTilerThreads());
-        mapViewer.addUserOverlay(routePainter);
         mapViewer.addMouseListener(new SelectHomeLocationListener(mapViewer, configuration));
-        mapViewer.add(overlayEnabler.getShowOverlaysCheckbox(), cell(0,0));
+        mapViewer.add(overlayEnabler,cell(0,0));
         mapViewer.add(garminLogo,cell(0,1));
         add(mapViewer, cell(0,0).grow());
         configureMapSelector();
