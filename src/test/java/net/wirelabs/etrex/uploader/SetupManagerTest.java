@@ -22,6 +22,7 @@ class SetupManagerTest extends BaseTest {
     @BeforeEach
     void before() {
         manager = spy(new SetupManager());
+        doNothing().when(manager).checkStravaIsUp(); // do not check real strava hosts in tests
         doNothing().when(manager).runStravaConnector(); // don't display - it's a modal dialog and will halt the test
     }
 
