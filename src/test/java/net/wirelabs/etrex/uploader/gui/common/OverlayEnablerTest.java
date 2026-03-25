@@ -16,7 +16,7 @@ class OverlayEnablerTest {
     private OverlayEnabler overlayEnabler;
 
     @BeforeEach
-    void shouldDisableAndEnableOverlays() {
+    void beforeEach() {
         // init
         mapViewer = Mockito.spy(new MapViewer());
         testPainter1 = Mockito.spy(new TestPainter1());
