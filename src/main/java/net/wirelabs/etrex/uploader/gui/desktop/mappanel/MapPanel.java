@@ -9,6 +9,8 @@ import net.wirelabs.etrex.uploader.gui.desktop.GarminLogo;
 import net.wirelabs.etrex.uploader.gui.desktop.mappanel.painters.RoutePainter;
 import net.wirelabs.etrex.uploader.gui.desktop.mappanel.painters.StatsHunterPainter;
 import net.wirelabs.etrex.uploader.parsers.TrackParser;
+import net.wirelabs.etrex.uploader.statshunters.StatsHuntersHelper;
+import net.wirelabs.etrex.uploader.utils.NetworkingUtils;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseEventAwarePanel;
@@ -43,6 +45,7 @@ public class MapPanel extends BaseEventAwarePanel {
     @Getter
     private final transient RoutePainter routePainter;
     private final transient StatsHunterPainter statsHuntersPainter;
+    private final transient StatsHuntersHelper statsHuntersHelper;
 
     transient Coordinate mapHome;
     private final transient TrackParser trackParser;
@@ -53,7 +56,8 @@ public class MapPanel extends BaseEventAwarePanel {
         this.configuration = configuration;
         this.mapHome = new Coordinate(configuration.getMapHomeLongitude(),configuration.getMapHomeLatitude());
         this.routePainter = new RoutePainter(configuration);
-        this.statsHuntersPainter = new StatsHunterPainter(configuration);
+        this.statsHuntersHelper = new StatsHuntersHelper(NetworkingUtils.getBasicHttpClient());
+        this.statsHuntersPainter = new StatsHunterPainter(configuration, statsHuntersHelper);
         this.trackParser = new TrackParser();
 
         GarminLogo garminLogo = new GarminLogo();

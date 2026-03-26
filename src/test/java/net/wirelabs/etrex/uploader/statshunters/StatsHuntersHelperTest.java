@@ -6,6 +6,7 @@ import net.wirelabs.etrex.uploader.statshunters.model.Tile;
 import net.wirelabs.etrex.uploader.statshunters.model.TileData;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.etrex.uploader.tools.StatsHuntersEmulator;
+import net.wirelabs.etrex.uploader.utils.NetworkingUtils;
 import net.wirelabs.jmaps.map.geo.Coordinate;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
@@ -13,12 +14,13 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StatsHuntersHelperTest extends BaseTest {
 
-    StatsHuntersHelper helper = new StatsHuntersHelper();
+    final StatsHuntersHelper helper = new StatsHuntersHelper(NetworkingUtils.getBasicHttpClient());
 
     @Test
     void shouldConvertTileToSquare() {
@@ -36,7 +38,7 @@ class StatsHuntersHelperTest extends BaseTest {
         //
         // so we use 9205,5461 as args
 
-        QuadVertexPolygon p = helper.tileToSquare(9205,5461);
+        QuadVertexPolygon p = QuadVertexPolygonFactory.tileToGeoPolygon(9205,5461);
         checkConversion(p);
     }
 
@@ -63,11 +65,11 @@ class StatsHuntersHelperTest extends BaseTest {
         Coordinate bottomRight = new Coordinate(20,20);
         // easy math - square defined by diagoonal of 10,10-20,20
         // would have (10,10) (20,10) (20,20) (10,20) vertices
-        QuadVertexPolygon result = helper.squareFromDiagonal(topLeft,bottomRight);
-        assertThat(result.topLeft().getLongitude()).isEqualTo(10);
-        assertThat(result.topRight().getLongitude()).isEqualTo(20);
-        assertThat(result.bottomLeft().getLongitude()).isEqualTo(10);
-        assertThat(result.bottomRight().getLongitude()).isEqualTo(20);
+        QuadVertexPolygon result = QuadVertexPolygonFactory.geoDiagonalToGeoPolygon(topLeft,bottomRight);
+        assertThat(result.getTopLeft().getLongitude()).isEqualTo(10);
+        assertThat(result.getTopRight().getLongitude()).isEqualTo(20);
+        assertThat(result.getBottomLeft().getLongitude()).isEqualTo(10);
+        assertThat(result.getBottomRight().getLongitude()).isEqualTo(20);
     }
 
     @Test
@@ -75,10 +77,10 @@ class StatsHuntersHelperTest extends BaseTest {
         StatsHuntersEmulator emulator = new StatsHuntersEmulator();
         emulator.start();
 
-        String json = helper.getStatsHuntersJson("http://localhost:"+ emulator.getListeningPort() +"/good");
-        assertThat(json).isNotEmpty();
+        Optional<String> json = helper.getStatsHuntersJson("http://localhost:"+ emulator.getListeningPort() +"/good");
+        assertThat(json).isPresent();
 
-        TileData tileData = new Gson().fromJson(json, TileData.class);
+        TileData tileData = new Gson().fromJson(json.get(), TileData.class);
         assertThat(tileData.getTiles()).isNotEmpty();
         assertThat(tileData.getSquare()).isNotNull();
         assertThat(tileData.getCluster()).isNotEmpty();
@@ -100,15 +102,15 @@ class StatsHuntersHelperTest extends BaseTest {
 
         // (3000,4500) should be outside,
         // but (9216,5466) should be inside
-        QuadVertexPolygon outside = helper.tileToSquare(3000,4500);
-        QuadVertexPolygon inside = helper.tileToSquare(9216, 5466);
+        QuadVertexPolygon outside = QuadVertexPolygonFactory.tileToGeoPolygon(3000,4500);
+        QuadVertexPolygon inside = QuadVertexPolygonFactory.tileToGeoPolygon(9216, 5466);
 
-        QuadVertexPolygon max = helper.convertSquareToGeoMaxSquare(maxSquare);
-        assertThat(helper.isSquareInsideMaxSquare(inside,max)).isTrue();
-        assertThat(helper.isSquareInsideMaxSquare(outside,max)).isFalse();
+        QuadVertexPolygon max = QuadVertexPolygonFactory.squareToMaxGeoSquare(maxSquare);
+        assertThat(inside.isInside(max)).isTrue();
+        assertThat(outside.isInside(max)).isFalse();
     }
 
-    private static void checkConversion(QuadVertexPolygon p) {
+    private void checkConversion(QuadVertexPolygon p) {
 
         // since it is (yet) a mathematically speaking square,
         // longitudes for top and bottom point pairs should be the same,
@@ -120,22 +122,22 @@ class StatsHuntersHelperTest extends BaseTest {
         // longitudes first
         double expectedLongitude = 22.2584;
         // left
-        assertThat(p.topLeft().getLongitude()).isEqualTo(expectedLongitude, precision);
-        assertThat(p.bottomLeft().getLongitude()).isEqualTo(expectedLongitude, precision);
+        assertThat(p.getTopLeft().getLongitude()).isEqualTo(expectedLongitude, precision);
+        assertThat(p.getBottomLeft().getLongitude()).isEqualTo(expectedLongitude, precision);
         // right
         expectedLongitude = 22.2803;
-        assertThat(p.topRight().getLongitude()).isEqualTo(expectedLongitude, precision);
-        assertThat(p.bottomRight().getLongitude()).isEqualTo(expectedLongitude, precision);
+        assertThat(p.getTopRight().getLongitude()).isEqualTo(expectedLongitude, precision);
+        assertThat(p.getBottomRight().getLongitude()).isEqualTo(expectedLongitude, precision);
 
         // now latitudes
         double expectedLatitude = 51.3306;
         // top
-        assertThat(p.topLeft().getLatitude()).isEqualTo(expectedLatitude, precision);
-        assertThat(p.topRight().getLatitude()).isEqualTo(expectedLatitude, precision);
+        assertThat(p.getTopLeft().getLatitude()).isEqualTo(expectedLatitude, precision);
+        assertThat(p.getTopRight().getLatitude()).isEqualTo(expectedLatitude, precision);
         // bottom
         expectedLatitude = 51.3168;
-        assertThat(p.bottomLeft().getLatitude()).isEqualTo(expectedLatitude, precision);
-        assertThat(p.bottomRight().getLatitude()).isEqualTo(expectedLatitude, precision);
+        assertThat(p.getBottomLeft().getLatitude()).isEqualTo(expectedLatitude, precision);
+        assertThat(p.getBottomRight().getLatitude()).isEqualTo(expectedLatitude, precision);
     }
 
 }
