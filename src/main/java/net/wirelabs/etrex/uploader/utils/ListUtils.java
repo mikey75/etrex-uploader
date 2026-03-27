@@ -40,8 +40,9 @@ public class ListUtils {
      * @return collection of elements of listA not present in listB
      */
     public static <T> Collection<T> findElementsOfANotPresentInB(List<T> listA, List<T> listB) {
+        Set<T> setFromListB = new HashSet<>(listB);
         return listA.stream()
-                .filter(f -> !listB.contains(f))
+                .filter(element -> !setFromListB.contains(element))
                 .toList();
     }
 
