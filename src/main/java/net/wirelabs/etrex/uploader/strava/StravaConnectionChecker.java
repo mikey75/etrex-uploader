@@ -40,7 +40,7 @@ public class StravaConnectionChecker {
 
     private void doCheck(boolean exit) {
         log.info("Starting Strava status check");
-        if (isStravaUp(configuration.getStravaCheckTimeout())) {
+        if (isStravaUp()) {
             log.info("Strava is up and running!");
         } else {
             String main = "Strava seems to be down. ";
@@ -83,4 +83,13 @@ public class StravaConnectionChecker {
             return false;
         }
     }
+
+    /**
+     * Just return if strava is up, no other helper
+     * @return true or false of strava availability
+     */
+    public boolean isStravaUp() {
+        return isStravaUp(configuration.getStravaCheckTimeout());
+    }
+
 }
