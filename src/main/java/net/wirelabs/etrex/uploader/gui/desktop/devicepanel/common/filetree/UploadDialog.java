@@ -5,11 +5,11 @@ import com.strava.model.Upload;
 import lombok.extern.slf4j.Slf4j;
 import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.common.FileService;
-import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
-import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.common.base.BaseDialog;
+import net.wirelabs.etrex.uploader.strava.StravaConnectionChecker;
 import net.wirelabs.etrex.uploader.strava.StravaException;
 import net.wirelabs.etrex.uploader.strava.client.StravaClient;
+import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.eventbus.EventBus;
 
 import javax.swing.*;
@@ -41,7 +41,6 @@ public class UploadDialog extends BaseDialog {
         this.stravaClient = stravaClient;
         this.fileService = fileService;
 
-        stravaConnectionChecker = new StravaConnectionChecker(stravaClient.getStravaConfiguration());
         JScrollPane scrollPane = new JScrollPane();
         JButton btnOk = new JButton("Upload");
         JButton btnCancel = new JButton("Cancel");
@@ -50,8 +49,11 @@ public class UploadDialog extends BaseDialog {
         JLabel lblActivityDescription = new JLabel("Description");
         JLabel lblActivityType = new JLabel("Activity Type");
 
+        stravaConnectionChecker = new StravaConnectionChecker(stravaClient.getStravaConfiguration());
         activityTitleTextField = new JTextField();
         activityDescriptionArea = new JTextArea();
+        activityDescriptionArea.setLineWrap(true);
+        activityDescriptionArea.setWrapStyleWord(true);
         activityTypeCombo = new JComboBox<>(SportType.values());
         commute = new JCheckBox("Commuting ride");
         virtual = new JCheckBox("Virtual/Trainer ride");
@@ -91,9 +93,12 @@ public class UploadDialog extends BaseDialog {
     }
 
     private void uploadFile(File trackFile) {
-
+        if (!stravaConnectionChecker.isStravaUp()) {
+            SwingUtils.errorMsg("Strava is down. Uploads impossible!");
+            dispose();
+            return;
+        }
         try {
-            stravaConnectionChecker.checkAndContinueIfDown();
             log.info("Starting upload of {}", trackFile.getAbsolutePath());
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -113,8 +118,6 @@ public class UploadDialog extends BaseDialog {
         } catch (StravaException e) {
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             SwingUtils.errorMsg(e.getMessage());
-        } catch (IllegalStateException e) {
-            log.info("{}",e.getMessage());
         } finally {
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
