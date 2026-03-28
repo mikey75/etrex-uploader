@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.*;
+import java.net.http.HttpClient;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,5 +43,9 @@ public class NetworkingUtils {
         try (ServerSocket serverSocket = new ServerSocket(0)) {
             return serverSocket.getLocalPort();
         }
+    }
+
+    public static HttpClient getBasicHttpClient() {
+        return HttpClient.newHttpClient();
     }
 }

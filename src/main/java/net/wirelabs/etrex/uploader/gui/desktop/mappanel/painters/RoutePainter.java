@@ -1,4 +1,4 @@
-package net.wirelabs.etrex.uploader.gui.desktop.mappanel.common;
+package net.wirelabs.etrex.uploader.gui.desktop.mappanel.painters;
 
 
 import lombok.Getter;
@@ -68,8 +68,6 @@ public class RoutePainter extends Painter<MapViewer> {
 
         }
     }
-
-
 
     public void clearRoute() {
         getObjects().clear();

@@ -2,8 +2,6 @@ package net.wirelabs.etrex.uploader.configuration;
 
 import net.wirelabs.etrex.uploader.common.Constants;
 import net.wirelabs.etrex.uploader.common.EventType;
-import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
-import net.wirelabs.etrex.uploader.configuration.SortedProperties;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.Event;
 import net.wirelabs.eventbus.EventBus;
@@ -113,6 +111,7 @@ class AppConfigurationTest extends BaseTest {
         assertThat(c.getRedisHost()).isEqualTo(Constants.DEFAULT_REDIS_HOST);
         assertThat(c.getRedisPort()).isEqualTo(Constants.DEFAULT_REDIS_PORT);
         assertThat(c.getRedisPoolSize()).isEqualTo(Constants.DEFAULT_REDIS_POOLSIZE);
+        assertThat(c.getStatsHuntersUrl()).isEqualTo(Constants.EMPTY_STRING);
     }
 
     @Test

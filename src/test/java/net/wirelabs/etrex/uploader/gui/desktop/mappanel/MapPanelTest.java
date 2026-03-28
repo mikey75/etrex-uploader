@@ -6,7 +6,7 @@ import net.wirelabs.etrex.uploader.common.EventType;
 import net.wirelabs.etrex.uploader.configuration.AppConfiguration;
 import net.wirelabs.etrex.uploader.utils.SwingUtils;
 import net.wirelabs.etrex.uploader.gui.EtrexUploader;
-import net.wirelabs.etrex.uploader.gui.desktop.mappanel.common.RoutePainter;
+import net.wirelabs.etrex.uploader.gui.desktop.mappanel.painters.RoutePainter;
 import net.wirelabs.etrex.uploader.tools.BaseTest;
 import net.wirelabs.eventbus.EventBus;
 import net.wirelabs.jmaps.map.MapViewer;
