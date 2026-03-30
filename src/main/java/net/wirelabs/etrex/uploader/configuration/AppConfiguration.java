@@ -43,6 +43,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
     private String redisHost;
     private int redisPort;
     private int redisPoolSize;
+    private String statsHuntersUrl;
 
     public AppConfiguration(String configFile) {
         super(configFile);
@@ -66,6 +67,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         redisHost = properties.getProperty(REDIS_HOST, Constants.DEFAULT_REDIS_HOST);
         redisPort = Integer.parseInt(properties.getProperty(REDIS_PORT, String.valueOf(Constants.DEFAULT_REDIS_PORT)));
         redisPoolSize = Integer.parseInt(properties.getProperty(REDIS_POOL_SIZE, String.valueOf(Constants.DEFAULT_REDIS_POOLSIZE)));
+        statsHuntersUrl = properties.getProperty(STATSHUNTERS_URL, Constants.EMPTY_STRING);
 
         if (!configFileExists()) {
             log.info("Saving new config file with default values");
@@ -94,6 +96,7 @@ public class AppConfiguration extends PropertiesBasedConfiguration {
         properties.setProperty(REDIS_HOST, redisHost);
         properties.setProperty(REDIS_PORT, String.valueOf(redisPort));
         properties.setProperty(REDIS_POOL_SIZE, String.valueOf(redisPoolSize));
+        properties.setProperty(STATSHUNTERS_URL, statsHuntersUrl);
         storePropertiesToFile();
 
     }

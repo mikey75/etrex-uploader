@@ -47,4 +47,6 @@ class ConfigurationPropertyKeys {
     static final String REDIS_PORT                        = "redis.port";
     static final String REDIS_POOL_SIZE                   = "redis.poolsize";
 
+    // stats hunters
+    static final String STATSHUNTERS_URL                  = "statshunters.url"; // this is url with token
 }
